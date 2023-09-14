@@ -25,7 +25,8 @@ const Catalog = () => {
         createTypeMode,
         setCreateTypeMode,
         updateTypeMode,
-        setUpdateTypeMode
+        setUpdateTypeMode,
+        serverDomain
     } = React.useContext(AuthContext);
 
     const onChangeBrand = (id) => {
@@ -36,7 +37,7 @@ const Catalog = () => {
         setIsLoading(true);
         axios
             .get(
-                `http://localhost:3001/api/type`,
+                `${serverDomain}api/type`,
             )
             .then((res) => {
                 setCatalogItems(res.data);
@@ -49,7 +50,7 @@ const Catalog = () => {
         setIsLoading(true);
         axios
             .get(
-                `http://localhost:3001/api/category`,
+                `${serverDomain}api/category`,
             )
             .then((res) => {
                 setCategories(res.data);
@@ -60,7 +61,7 @@ const Catalog = () => {
     
     const removeType = (id) => {
         if (window.confirm('Tem certeza de que deseja excluir o tipo?')) {
-            axios.delete(`http://localhost:3001/api/type?id=${id}`)
+            axios.delete(`${serverDomain}api/type?id=${id}`)
                 .then(() => {
                     window.alert('O tipo foi excluído com sucesso!');
                 });      
@@ -71,7 +72,7 @@ const Catalog = () => {
 
     React.useEffect(() => {
         if (typeId) {
-            axios.get(`http://localhost:3001/api/type/${typeId}`)
+            axios.get(`${serverDomain}api/type/${typeId}`)
                 .then((res) => {
                     setTypeItem(res.data);
                 }); 
@@ -135,7 +136,7 @@ const Catalog = () => {
 
                                             <Link to={`/${camelize(catalogItem.name)}`}>
                                                 <div className="item-catalog__image">
-                                                    <img src={'http://localhost:3001/' + catalogItem.img} alt="category" />
+                                                    <img src={`${serverDomain}` + catalogItem.img} alt="category" />
                                                 </div>                                                 
                                             </Link>
                                         </div>

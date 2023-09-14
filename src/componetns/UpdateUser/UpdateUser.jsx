@@ -11,7 +11,7 @@ const UpdateUser = ({userId}) => {
     const inputRef = React.useRef();
     const navigate = useNavigate();
 
-    const { setIsAuth, setUpdateUserMode } = React.useContext(AuthContext);
+    const { setIsAuth, setUpdateUserMode, serverDomain } = React.useContext(AuthContext);
     const [username, setUsername] = React.useState('');
     const [surname, setSurname] = React.useState('');    
     const [phone, setPhone] = React.useState('');
@@ -33,7 +33,7 @@ const UpdateUser = ({userId}) => {
 
     React.useEffect(() => {
         if (emailValue !== user.email) {
-            axios.get(`http://localhost:3001/api/user?email=${emailValue}`)
+            axios.get(`${serverDomain}api/user?email=${emailValue}`)
                 .then((res) => {
                     setExistingUser(...res.data);                        
                 });            

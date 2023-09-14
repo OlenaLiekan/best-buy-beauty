@@ -4,9 +4,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Thumbs } from "swiper";
 
 import "../scss/navigation.scss";
+import { AuthContext } from "../context";
 
 const ProductCardSlider = ({ img, slides }) => {
     const [thumbsSwiper, setThumbsSwiper] = React.useState(null);
+    const { serverDomain } = React.useContext(AuthContext);
     return (
         <>
             <div className="images-product__thumbs thumbs-images">
@@ -21,7 +23,7 @@ const ProductCardSlider = ({ img, slides }) => {
                         <SwiperSlide>
                             <div className="thumbs-images__slide slide-thumbs">
                                 <div className="slide-thumbs__media">
-                                    <img src={'http://localhost:3001/' + img} alt="slide"/>                                  
+                                    <img src={`${serverDomain}` + img} alt="slide"/>                                  
                                 </div>
                             </div>          
                         </SwiperSlide>
@@ -30,7 +32,7 @@ const ProductCardSlider = ({ img, slides }) => {
                                 <SwiperSlide key={i} value={slideImg}>
                                     <div className="thumbs-images__slide slide-thumbs">
                                         <div className="slide-thumbs__media">
-                                            <img src={'http://localhost:3001/' + slideImg.slideImg} alt="slide"/>                                    
+                                            <img src={`${serverDomain}` + slideImg.slideImg} alt="slide"/>                                    
                                         </div>
                                     </div>          
                                 </SwiperSlide>                            
@@ -89,7 +91,7 @@ const ProductCardSlider = ({ img, slides }) => {
                         <SwiperSlide>
                             <div className="images-product__slide slide-product">
                                 <div className="slide-product__media">
-                                    <img src={'http://localhost:3001/' + img} alt="slide"/>                                    
+                                    <img src={`${serverDomain}` + img} alt="slide"/>                                    
                                 </div>
                             </div>                        
                         </SwiperSlide>
@@ -98,7 +100,7 @@ const ProductCardSlider = ({ img, slides }) => {
                                 <SwiperSlide key={index} value={slideImg}>
                                     <div className="images-product__slide slide-product">
                                         <div className="slide-product__media">
-                                            <img src={'http://localhost:3001/' + slideImg.slideImg} alt="slide"/>                                    
+                                            <img src={`${serverDomain}` + slideImg.slideImg} alt="slide"/>                                    
                                         </div>
                                     </div>                        
                                 </SwiperSlide>                            

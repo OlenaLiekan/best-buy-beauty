@@ -16,14 +16,14 @@ const UserLogIn = () => {
     const [emailValue, setEmailValue] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [passValue, setPassValue] = React.useState('');
-    const { setIsAuth} = React.useContext(AuthContext);
+    const {setIsAuth, serverDomain} = React.useContext(AuthContext);
 
     React.useEffect(() => {
             async function fetchUser() {
                 try {
                     const { data } = await axios
                         .get(
-                            `http://localhost:3001/api/user?email=${emailValue}`,
+                            `${serverDomain}api/user?email=${emailValue}`,
                         );
                     setUser(data[0]);
                 } catch (error) {

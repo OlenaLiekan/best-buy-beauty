@@ -1,14 +1,16 @@
 import React from 'react';
 import styles from './ReviewItem.module.scss';
 import axios from 'axios';
+import { AuthContext } from '../../context';
 
 const ReviewItem = ({ name, userId, userName, productId, createdAt }) => {
 
     const [productReviews, setProductReviews] = React.useState([]);
+    const { serverDomain } = React.useContext(AuthContext);
 
     React.useEffect(() => {
         if (productId) {
-            axios.get(`http://localhost:3001/api/review?productId=${productId}`)
+            axios.get(`${serverDomain}api/review?productId=${productId}`)
                 .then((res) => {
                     setProductReviews(res.data);            
                 }); 

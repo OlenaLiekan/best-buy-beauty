@@ -26,7 +26,7 @@ const ProductPage = ({type}) => {
     const { brandId, sort, currentPage } = useSelector((state) => state.filter);
 
     const { searchValue } = React.useContext(SearchContext);
-    const { isAuth, adminMode, createProductMode, setCreateProductMode } = React.useContext(AuthContext);
+    const { isAuth, adminMode, createProductMode, setCreateProductMode, serverDomain } = React.useContext(AuthContext);
 
     const [items, setItems] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(true); 
@@ -51,7 +51,7 @@ const ProductPage = ({type}) => {
             const typeId = type.id ? `&typeId=${type.id}` : '';
 
             const search = searchValue ? `&name=${searchValue}` : '';
-            axios.get(`http://localhost:3001/api/product?info&page=${currentPage}&limit=12${typeId}${brandCategory}&sort=${sortBy}&order=${order}${search}`)
+            axios.get(`${serverDomain}api/product?info&page=${currentPage}&limit=12${typeId}${brandCategory}&sort=${sortBy}&order=${order}${search}`)
             .then((res) => {
                 setItems(res.data.rows);
             });

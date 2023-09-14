@@ -9,6 +9,7 @@ import { SearchContext } from '../../App';
 import { setSearch } from "../../redux/slices/filterSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context";
 
 
 const Search = () => { 
@@ -17,6 +18,7 @@ const Search = () => {
     const [value, setValue] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(true); 
     const { searchValue, setSearchValue } = React.useContext(SearchContext);
+    const { serverDomain } = React.useContext(AuthContext);
 
     const inputRef = React.useRef();
     const dispatch = useDispatch();
@@ -47,7 +49,7 @@ const Search = () => {
             setIsLoading(true);
                 axios
                 .get(
-                    `http://localhost:3001/api/product?name=${searchValue}`,
+                    `${serverDomain}api/product?name=${searchValue}`,
                 )
                 .then((res) => {
                     if (res.data.count > 0) {
@@ -64,7 +66,7 @@ const Search = () => {
         setIsLoading(true);
         axios
             .get(
-                `http://localhost:3001/api/type`,
+                `${serverDomain}api/type`,
             )
             .then((res) => {
                 setTypes(res.data);

@@ -5,18 +5,20 @@ import { Link } from "react-router-dom";
 import { scrollTop } from "../js/script";
 import ProductBlock from "./ProductBlock";
 import Skeleton from "./Skeleton";
+import { AuthContext } from "../context";
 
 const BestSellersBlock = () => {
 
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const { serverDomain } = React.useContext(AuthContext);
   const path = 'produtos';
 
   React.useEffect(() => {
     setIsLoading(true);
     const sortBy = 'rating';        
     const order = 'DESC';
-    axios.get(`http://localhost:3001/api/product?sort=${sortBy}&order=${order}`)
+    axios.get(`${serverDomain}api/product?sort=${sortBy}&order=${order}`)
       .then((res) => {
         setItems(res.data.rows);
         setIsLoading(false);

@@ -21,7 +21,7 @@ const UpdateProduct = ({id, obj}) => {
     const [name, setName] = React.useState('');
     const [code, setCode] = React.useState('');
     const [price, setPrice] = React.useState(0);
-    const { setUpdateProductMode } = React.useContext(AuthContext);
+    const { setUpdateProductMode, serverDomain } = React.useContext(AuthContext);
     const [info, setInfo] = React.useState([]);
     const [slide, setSlide] = React.useState([]);
     const [objSlides, setObjSlides] = React.useState([]);
@@ -113,14 +113,14 @@ const UpdateProduct = ({id, obj}) => {
     }
 
     React.useEffect(() => {
-        axios.get('http://localhost:3001/api/brand')
+        axios.get(`${serverDomain}api/brand`)
             .then((res) => {
                 setBrands(res.data);
             });
     }, []);
 
     React.useEffect(() => {
-        axios.get('http://localhost:3001/api/type')
+        axios.get(`${serverDomain}api/type`)
             .then((res) => {
                 setTypes(res.data.slice(1));
             });

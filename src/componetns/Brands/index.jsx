@@ -1,17 +1,19 @@
 import React from 'react'
 import styles from "./Brands.module.scss";
 import axios from 'axios';
+import { AuthContext } from '../../context';
 
 function Brands({ type, brandId, onChangeBrand }) {
 
   const [brands, setBrands] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const { serverDomain } = React.useContext(AuthContext);
 
   React.useEffect(() => {
     setIsLoading(true); 
     axios
       .get(
-        `http://localhost:3001/api/brand`,
+        `${serverDomain}api/brand`,
       )
       .then((res) => {
         setBrands(res.data);

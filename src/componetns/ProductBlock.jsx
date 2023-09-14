@@ -9,10 +9,10 @@ const ProductBlock = ({path, id, info, name, rating, isLashes, price, brandId, i
     const navigate = useNavigate();
 
     const [brands, setBrands] = React.useState([]);
-    const { isAuth, adminMode, setUpdateProductMode } = React.useContext(AuthContext);
+    const { isAuth, adminMode, setUpdateProductMode, serverDomain } = React.useContext(AuthContext);
 
     React.useEffect(() => {
-        axios.get('http://localhost:3001/api/brand')
+        axios.get(`${serverDomain}api/brand`)
             .then((res) => {
                 setBrands(res.data);
             });
@@ -20,7 +20,7 @@ const ProductBlock = ({path, id, info, name, rating, isLashes, price, brandId, i
 
     const removeProduct = () => {
         if (window.confirm('Tem certeza de que deseja excluir o produto?')) {
-        axios.delete(`http://localhost:3001/api/product?id=${id}`)
+        axios.delete(`${serverDomain}api/product?id=${id}`)
             .then(() => {
                 window.alert('O produto foi excluído com sucesso!');
                 navigate('/auth');
@@ -50,7 +50,7 @@ const ProductBlock = ({path, id, info, name, rating, isLashes, price, brandId, i
                     </svg>                                                
                 </div>
                 <div onClick={() => navigate(`${path}`)} className="item-product__image">
-                    <img src={'http://localhost:3001/' + img} alt="product"/>
+                    <img src={`${serverDomain}` + img} alt="product"/>
                 </div>  
                 <div className="item-product__info">
                     <div className="item-product__top">

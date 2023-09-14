@@ -3,12 +3,13 @@ import ProductItem from '../componetns/ProductItem';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '../componetns/Loader';
+import { AuthContext } from '../context';
 
 
 const ProductCard = ({type}) => {
     const [item, setItem] = React.useState({});
     const [isLoading, setIsLoading] = React.useState(true); 
-
+    const { serverDomain } = React.useContext(AuthContext);
     const navigate = useNavigate();
     const {id} = useParams(); 
 
@@ -17,7 +18,7 @@ const ProductCard = ({type}) => {
         async function fetchProduct() {
             const { data } = await axios
                 .get(
-                    `http://localhost:3001/api/product/`+ id,
+                    `${serverDomain}api/product/`+ id,
             );
             if (data) {
                 setItem(data);

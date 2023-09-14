@@ -7,7 +7,7 @@ import { fetchAndUpdateType } from '../../http/productAPI';
 
 const UpdateType = ({typeItem}) => {
 
-    const { setUpdateTypeMode } = React.useContext(AuthContext);    
+    const { setUpdateTypeMode, serverDomain } = React.useContext(AuthContext);    
     const navigate = useNavigate();
     const inputRef = React.useRef();
     const [visibility, setVisibility] = React.useState(false);
@@ -51,7 +51,7 @@ const UpdateType = ({typeItem}) => {
     }
 
     React.useEffect(() => {
-        axios.get(`http://localhost:3001/api/category`)
+        axios.get(`${serverDomain}api/category`)
             .then((res) => {
                 setCategories(res.data);
             });

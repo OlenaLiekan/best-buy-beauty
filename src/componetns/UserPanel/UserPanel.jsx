@@ -39,13 +39,14 @@ const UserPanel = ({ user }) => {
         createAddressMode,
         setCreateAddressMode,
         updatePassMode,
-        setUpdatePassMode
+        setUpdatePassMode,
+        serverDomain
     } = React.useContext(AuthContext);
 
 
     React.useEffect(() => {
         setIsLoading(true);
-        axios.get(`http://localhost:3001/api/user/${user.id}`)
+        axios.get(`${serverDomain}api/user/${user.id}`)
             .then((res) => {
                 setCurrentUser(res.data);
                 setOrders(res.data.order);                    
@@ -64,7 +65,7 @@ const UserPanel = ({ user }) => {
     const removeUser = () => {
         const access = window.prompt('Tem certeza de que deseja excluir sua conta? Depois de excluído, você não poderá restaurá-lo. Para excluir, escreva SIM na caixa abaixo.', '');
         if (access && access.toLowerCase() === 'sim') {
-            axios.delete(`http://localhost:3001/api/user?id=${user.id}`)
+            axios.delete(`${serverDomain}api/user?id=${user.id}`)
                 .then(() => {
                     window.alert('A conta excluída com sucesso!');
                     localStorage.removeItem('user');

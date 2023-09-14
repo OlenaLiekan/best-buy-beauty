@@ -7,12 +7,14 @@ import axios from "axios";
 import { camelize } from "../../js/script";
 import { setBrandId } from "../../redux/slices/filterSlice";
 import { useDispatch } from "react-redux";
+import { AuthContext } from "../../context";
 
 const MenuHeader = () => {
 
     const [menuList, setMenuList] = React.useState([]); 
     const [menuItems, setMenuItems] = React.useState([]);
     const [activeItem, setActiveItem] = React.useState(0);
+    const { serverDomain } = React.useContext(AuthContext);
 
     const dispatch = useDispatch();
 
@@ -21,7 +23,7 @@ const MenuHeader = () => {
     };
 
     React.useEffect(() => {
-        axios.get(`http://localhost:3001/api/category`)
+        axios.get(`${serverDomain}api/category`)
             .then((res) => {
                 setMenuList(res.data);
             });
@@ -29,7 +31,7 @@ const MenuHeader = () => {
 
     React.useEffect(() => {
         if (activeItem > 0) {
-            axios.get(`http://localhost:3001/api/type?categoryId=${activeItem}`)
+            axios.get(`${serverDomain}api/type?categoryId=${activeItem}`)
                 .then((res) => {
                     setMenuItems(res.data);
                 }); 

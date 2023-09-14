@@ -4,6 +4,7 @@ import { checkedCheckbox } from '../js/script';
 import axios from 'axios';
 import debounce from 'lodash.debounce';
 import { registration } from '../http/userAPI.js';
+import { AuthContext } from '../context';
 
 const Registration = () => {
 
@@ -19,13 +20,14 @@ const Registration = () => {
     const [checkPass, setCheckPass] = React.useState('');
     const [checkPassValue, setCheckPassValue] = React.useState('');
     const [currentUser, setUser] = React.useState({});
+    const { serverDomain } = React.useContext(AuthContext);
     
     React.useEffect(() => {
         async function fetchUser() {
             try {
                 const { data } = await axios
                     .get(
-                        `http://localhost:3001/api/user?email=${emailValue}`,
+                        `${serverDomain}api/user?email=${emailValue}`,
                 );
                 if (data) {
                     setUser(data);

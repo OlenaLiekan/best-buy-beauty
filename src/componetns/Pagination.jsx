@@ -3,9 +3,11 @@ import ReactPaginate from 'react-paginate';
 import axios from 'axios';
 import { SearchContext } from '../App';
 import { useSelector } from 'react-redux';
+import { AuthContext } from '../context';
 
 const Pagination = ({type, onChangePage }) => {
   const { searchValue } = React.useContext(SearchContext);
+  const { serverDomain } = React.useContext(AuthContext);
   const { brandId, currentPage } = useSelector((state) => state.filter);
   const [itemsCount, setItemsCount] = React.useState(0);
   const totalContent = itemsCount;
@@ -20,7 +22,7 @@ const Pagination = ({type, onChangePage }) => {
     const typeId = type.id ? `&typeId=${type.id}` : '';
     axios
       .get(
-          `http://localhost:3001/api/product?${company}${typeId}${search}`,
+          `${serverDomain}api/product?${company}${typeId}${search}`,
       )
       .then((res) => {
         setItemsCount(res.data.count);          

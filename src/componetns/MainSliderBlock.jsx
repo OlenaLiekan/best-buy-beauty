@@ -15,13 +15,13 @@ import SliderSkeleton from "./SliderSkeleton";
 
 const MainSliderBlock = () => {
 
-  const { isAuth, adminMode, createSlideMode, setCreateSlideMode } = React.useContext(AuthContext);
+  const { isAuth, adminMode, createSlideMode, setCreateSlideMode, serverDomain } = React.useContext(AuthContext);
   const [slides, setSlides] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     setIsLoading(true);
-    axios.get(`http://localhost:3001/api/slide`)
+    axios.get(`${serverDomain}api/slide`)
       .then((res) => {
         setSlides(res.data);
         setIsLoading(false);
@@ -30,7 +30,7 @@ const MainSliderBlock = () => {
 
   const removeSlide = (id) => {
     if (window.confirm('Tem certeza de que deseja excluir o slide?')) {
-      axios.delete(`http://localhost:3001/api/slide?id=${id}`)
+      axios.delete(`${serverDomain}api/slide?id=${id}`)
         .then(() => {
           window.alert('O slide foi excluído com sucesso!');
 
@@ -71,7 +71,7 @@ const MainSliderBlock = () => {
                               <path d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z" />
                             </svg>
                           </div>
-                          {isLoading ? <SliderSkeleton/> : <img src={`http://localhost:3001/` + slide.img} alt="slide" /> }
+                          {isLoading ? <SliderSkeleton/> : <img src={`${serverDomain}` + slide.img} alt="slide" /> }
                         </Link>
                       </div>
                     </div>

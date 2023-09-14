@@ -21,7 +21,7 @@ const CreateProduct = () => {
     const [name, setName] = React.useState('');
     const [code, setCode] = React.useState('');
     const [price, setPrice] = React.useState('');
-    const { setCreateProductMode } = React.useContext(AuthContext);
+    const { setCreateProductMode, serverDomain } = React.useContext(AuthContext);
     const [info, setInfo] = React.useState([]);
     const [slide, setSlide] = React.useState([]);
     const [img, setImg] = React.useState(null);
@@ -93,14 +93,14 @@ const CreateProduct = () => {
     }
 
     React.useEffect(() => {
-        axios.get('http://localhost:3001/api/brand')
+        axios.get(`${serverDomain}api/brand`)
             .then((res) => {
                 setBrands(res.data);
             });
     }, []);
 
     React.useEffect(() => {
-        axios.get('http://localhost:3001/api/type')
+        axios.get(`${serverDomain}api/type`)
             .then((res) => {
                 setTypes(res.data.slice(1));
             });

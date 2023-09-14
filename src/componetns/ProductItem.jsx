@@ -32,7 +32,7 @@ const ProductItem = ({ obj, id, info, text, slide, typeId, rating, isLashes, bra
     const [productRatings, setProductRatings] = React.useState([]);
     const [index, setIndex] = React.useState('');
 
-    const { isAuth, adminMode, updateProductMode } = React.useContext(AuthContext);
+    const { isAuth, adminMode, updateProductMode, serverDomain } = React.useContext(AuthContext);
 
     const data = localStorage.getItem("user");
     const user = JSON.parse(data);
@@ -45,7 +45,7 @@ const ProductItem = ({ obj, id, info, text, slide, typeId, rating, isLashes, bra
 
     React.useEffect(() => {
         if (id) {
-            axios.get(`http://localhost:3001/api/rating?productId=${id}`)
+            axios.get(`${serverDomain}api/rating?productId=${id}`)
                 .then((res) => {
                     setProductRatings(res.data);
                 });
@@ -53,7 +53,7 @@ const ProductItem = ({ obj, id, info, text, slide, typeId, rating, isLashes, bra
     }, [id]);
 
     React.useEffect(() => {
-        axios.get('http://localhost:3001/api/brand')
+        axios.get(`${serverDomain}api/brand`)
             .then((res) => {
                 setBrands(res.data);
             });
@@ -64,7 +64,7 @@ const ProductItem = ({ obj, id, info, text, slide, typeId, rating, isLashes, bra
     const company = companyNames.find((companyName, i) => i + 1 === brandId);
 
     React.useEffect(() => {
-        axios.get('http://localhost:3001/api/type')
+        axios.get(`${serverDomain}api/type`)
             .then((res) => {
                 setTypes(res.data);
             });

@@ -21,13 +21,13 @@ import axios from 'axios';
 import { camelize } from '../js/script';
 
 const AppRoutes = () => {
-    const { isAuth, adminMode } = React.useContext(AuthContext);
+    const { isAuth, serverDomain } = React.useContext(AuthContext);
     const [types, setTypes] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(true);
 
     React.useEffect(() => {
         setIsLoading(true);
-        axios.get(`http://localhost:3001/api/type`)
+        axios.get(`${serverDomain}api/type`)
             .then((res) => {
                 setTypes(res.data);
             });

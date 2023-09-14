@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const CreateType = () => {
 
-    const { setCreateTypeMode } = React.useContext(AuthContext);    
+    const { setCreateTypeMode, serverDomain } = React.useContext(AuthContext);    
     const navigate = useNavigate();
     const inputRef = React.useRef();
     const [visibility, setVisibility] = React.useState(false);
@@ -43,7 +43,7 @@ const CreateType = () => {
     }
 
     React.useEffect(() => {
-        axios.get(`http://localhost:3001/api/category`)
+        axios.get(`${serverDomain}api/category`)
             .then((res) => {
                 setCategories(res.data);
             });

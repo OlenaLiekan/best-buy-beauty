@@ -6,6 +6,7 @@ import { clearItems } from '../redux/slices/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../http/userAPI';
 import axios from 'axios';
+import { AuthContext } from '../context';
 
 const PopupSubmitForm = ({totalCount}) => {
 
@@ -13,6 +14,8 @@ const PopupSubmitForm = ({totalCount}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+
+    const { serverDomain } = React.useContext(AuthContext);
     const [users, setUsers] = React.useState([]);
     const [username, setUsername] = React.useState('');
     const [surname, setSurname] = React.useState('');    
@@ -55,14 +58,14 @@ const PopupSubmitForm = ({totalCount}) => {
     }, [mainData]);
 
     React.useEffect(() => {
-        axios.get(`http://localhost:3001/api/user?role=USER`)
+        axios.get(`${serverDomain}api/user?role=USER`)
             .then((res) => {
                 setUsers(res.data);
             });
     }, []);
 
     React.useEffect(() => {
-        axios.get(`http://localhost:3001/api/user/${user.id}`)
+        axios.get(`${serverDomain}api/user/${user.id}`)
             .then((res) => {
                 setAddresses(res.data.address);
             });        
