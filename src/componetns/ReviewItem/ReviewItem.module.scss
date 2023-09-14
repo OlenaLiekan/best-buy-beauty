@@ -1,0 +1,58 @@
+.item {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    gap: 20px;
+    padding: 20px 0 0 0;
+    border: 2px solid #f7f6f6;
+    box-shadow: 8px 8px 8px #d9d9d92b;
+}
+
+.top {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.userName {
+    font-weight: 600;
+    padding-left: 20px;
+    color: #AD902B;
+}
+
+.date {
+    align-self: flex-end;
+    font-size: 10px;
+    font-weight: 500;
+    padding-right: 20px;
+    color: #484848;
+}
+
+.body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;    
+    background-color: #fff;    
+    padding: 20px;
+    border-radius: 0 0 20px 20px;
+}
+
+.rating {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.ratingStar {
+    fill: #e8c445;
+}
+
+.text {
+
+
+}
+

@@ -1,0 +1,122 @@
+.updateBrand {
+    position: relative;
+    margin: 0 auto;
+    max-width: 400px;
+    border: 2px solid #7f766a;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 5px 5px 5px #7f766a52;
+    margin-bottom: 100px;
+
+    @media(max-width: 371.98px) {
+        width: 250px;
+    }
+
+    svg {
+        fill: #7f766a;
+        transition: all 0.6s ease 0s;
+
+        &:hover {
+            fill: #252525;
+        }
+    }
+}
+
+.formBrand {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    @media(max-width: 371.98px) {
+        gap: 15px;
+    }
+}
+
+.formInput {
+    font-size: 13px;
+    height: 32px;
+    border: 2px solid #dcdcdc;
+    border-radius: 20px;
+    padding: 0 10px;
+    outline: none;
+
+    &:not(:last-child) {
+        margin-right: 15px;
+    }
+
+    @media (max-width: 579.98px) {
+        font-size: 12px;
+        margin-right: 0;
+    }
+}
+
+.formInput {
+    max-width: 240px;
+}
+
+.formFile {
+    max-width: 260px;
+    font-size: 14px;
+    color: #AD912B;
+    cursor: pointer;
+
+    @media (max-width: 579.98px) {
+        font-size: 12px;
+    }
+}
+
+.line {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    @media (max-width: 579.98px) {
+        flex-direction: column;
+        gap: 8px;
+        align-items: start;
+    }
+}
+
+.label {
+    font-size: 14px;
+    font-weight: 500;
+    margin-right: 10px;
+
+    @media (max-width: 579.98px) {
+        font-size: 12px;
+        margin-right: 0;
+    }
+}
+
+
+.button {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+    color: #7f766a;
+    padding: 15px 20px;
+    border-radius: 20px;
+    border: 2px solid #7f766a;
+    background-color: #fff;
+    outline: none;
+    transition: all 0.6s ease 0s;
+    box-shadow: 3px 3px 3px #7f766a3e;
+
+    &:hover {
+        color: #fff;
+        border: 2px solid #252525;
+        background-color: #252525;
+    }
+
+    @media (max-width: 579.98px) {
+        font-size: 16px;
+    }
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 1.6rem;
+    cursor: pointer;
+}

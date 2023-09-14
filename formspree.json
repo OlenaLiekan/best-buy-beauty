@@ -1,0 +1,9 @@
+{
+  "forms": {
+    "xqkoljrq": {
+      "name": "Popup Submit Form",
+      "actions": [{ "type": "email", "to": "melioraspero24@gmail.com" }],
+      "fields": {"email": {"required": "true", "type": "email"}}
+    }
+  }
+}

@@ -1,0 +1,12 @@
+.clearIcon {
+    width: 10px;
+    fill: #252525;
+    position: absolute;
+    top: 13px;
+    right: 15px;
+    cursor: pointer;
+    @media (max-width: 767.98px) {
+        top: 10px;
+        right: 10px;
+    }
+}
