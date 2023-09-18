@@ -28,7 +28,7 @@ function App() {
 
   const [isLoading, setLoading] = React.useState(true);
 
-  const serverDomain = 'https://bbb-server.netlify.app/.netlify/functions/';
+  const serverDomain = 'https://bbb-server.netlify.app/';
 
   React.useEffect(() => {
     if (localStorage.getItem('auth', 'true')) {
