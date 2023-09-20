@@ -50,7 +50,7 @@ const ProductBlock = ({path, id, info, name, rating, isLashes, price, brandId, i
                     </svg>                                                
                 </div>
                 <div onClick={() => navigate(`${path}`)} className="item-product__image">
-                    <img src={`${serverDomain}/static/` + img} alt="product"/>
+                    <img src={`${serverDomain}static/` + img} alt="product"/>
                 </div>  
                 <div className="item-product__info">
                     <div className="item-product__top">

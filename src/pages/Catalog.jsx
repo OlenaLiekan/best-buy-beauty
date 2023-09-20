@@ -136,7 +136,7 @@ const Catalog = () => {
 
                                             <Link to={`/${camelize(catalogItem.name)}`}>
                                                 <div className="item-catalog__image">
-                                                    <img src={`${serverDomain}/static/` + catalogItem.img} alt="category" />
+                                                    <img src={`${serverDomain}static/` + catalogItem.img} alt="category" />
                                                 </div>                                                 
                                             </Link>
                                         </div>
