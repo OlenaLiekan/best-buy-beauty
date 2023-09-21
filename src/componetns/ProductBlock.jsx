@@ -9,7 +9,7 @@ const ProductBlock = ({path, id, info, name, rating, isLashes, price, brandId, i
     const navigate = useNavigate();
 
     const [brands, setBrands] = React.useState([]);
-    const { isAuth, adminMode, setUpdateProductMode, serverDomain } = React.useContext(AuthContext);
+    const { isAuth, adminMode, setUpdateProductMode, serverDomain, imagesCloud } = React.useContext(AuthContext);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/brand`)
@@ -50,7 +50,7 @@ const ProductBlock = ({path, id, info, name, rating, isLashes, price, brandId, i
                     </svg>                                                
                 </div>
                 <div onClick={() => navigate(`${path}`)} className="item-product__image">
-                    <img src={`${serverDomain}static/` + img} alt="product"/>
+                    <img src={`${imagesCloud}static/` + img} alt="product"/>
                 </div>  
                 <div className="item-product__info">
                     <div className="item-product__top">

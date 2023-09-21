@@ -26,7 +26,8 @@ const Catalog = () => {
         setCreateTypeMode,
         updateTypeMode,
         setUpdateTypeMode,
-        serverDomain
+        serverDomain,
+        imagesCloud
     } = React.useContext(AuthContext);
 
     const onChangeBrand = (id) => {
@@ -136,7 +137,7 @@ const Catalog = () => {
 
                                             <Link to={`/${camelize(catalogItem.name)}`}>
                                                 <div className="item-catalog__image">
-                                                    <img src={`${serverDomain}static/` + catalogItem.img} alt="category" />
+                                                    <img src={`${imagesCloud}static/` + catalogItem.img} alt="category" />
                                                 </div>                                                 
                                             </Link>
                                         </div>

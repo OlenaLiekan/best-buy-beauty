@@ -40,7 +40,8 @@ const UserPanel = ({ user }) => {
         setCreateAddressMode,
         updatePassMode,
         setUpdatePassMode,
-        serverDomain
+        serverDomain,
+        imagesCloud
     } = React.useContext(AuthContext);
 
 
@@ -197,7 +198,7 @@ const UserPanel = ({ user }) => {
                                                         <div className={styles.productTop}>{i.title}</div>
                                                     <div className={styles.productBottom}>
                                                         <div className={styles.productImage}>
-                                                            <img src={i.img ? `http://localhost:3001/`+ i.img : `http://localhost:3001/noImg.png`} alt="product"/>
+                                                            <img src={i.img ? `${imagesCloud}/static/`+ i.img : `${imagesCloud}/static/noImg.png`} alt="product"/>
                                                         </div>                                                        
                                                         <div className={styles.productInfo}>
                                                             {i.description.split('\n').map((paragraph, index) => 
