@@ -77,6 +77,7 @@ function App() {
           updatePassMode,
           setUpdatePassMode,
           serverDomain,
+          imagesCloud,
         }}
       >
         <SearchContext.Provider value={{ searchValue, setSearchValue }}>
