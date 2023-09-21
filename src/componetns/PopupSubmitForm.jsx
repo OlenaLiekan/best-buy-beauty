@@ -65,11 +65,13 @@ const PopupSubmitForm = ({totalCount}) => {
     }, []);
 
     React.useEffect(() => {
-        axios.get(`${serverDomain}api/user/${user.id}`)
-            .then((res) => {
-                setAddresses(res.data.address);
-            });        
-    }, []);
+        if (user) {
+            axios.get(`${serverDomain}api/user/${user.id}`)
+                .then((res) => {
+                    setAddresses(res.data.address);
+                });              
+        }
+    }, [user]);
 
     React.useEffect(() => {
         if (addresses.length) {
