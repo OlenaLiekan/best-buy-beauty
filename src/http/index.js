@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 const $host = axios.create({
-  baseURL: 'https://bbb-server.netlify.app/',
+  baseURL: 'https://bbb-server-a6ji.onrender.com/',
 });
 
 const $authHost = axios.create({
-  baseURL: 'https://bbb-server.netlify.app/',
+  baseURL: 'https://bbb-server-a6ji.onrender.com/',
 });
 
 const authInterceptor = config => {

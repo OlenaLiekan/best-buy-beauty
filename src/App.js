@@ -28,7 +28,7 @@ function App() {
 
   const [isLoading, setLoading] = React.useState(true);
 
-  const serverDomain = 'https://bbb-server.netlify.app/';
+  const serverDomain = 'https://bbb-server-a6ji.onrender.com/';
   const imagesCloud = 'https://res.cloudinary.com/bestbuybeautycloud/image/upload/v1695298243/';
 
   React.useEffect(() => {
