@@ -25,14 +25,15 @@ const UserLogIn = () => {
                         .get(
                             `${serverDomain}api/user?email=${emailValue}`,
                         );
-                    setUser(data[0]);
+                    setUser(data);
+
                 } catch (error) {
                     window.alert('User não encontrado!');
                     navigate('/login');
                 }
             }
             window.scrollTo(0, 0);
-        fetchUser();
+            fetchUser();       
     }, [emailValue]);     
 
     const handleFormSubmit = async (e) => {
@@ -45,7 +46,7 @@ const UserLogIn = () => {
             setIsAuth(true);
             const userData = JSON.stringify(currentUser);   
             localStorage.setItem("user", userData); 
-            navigate('/auth'); 
+            navigate('/auth');                 
         } catch (error) {
             setError(true);
         }
