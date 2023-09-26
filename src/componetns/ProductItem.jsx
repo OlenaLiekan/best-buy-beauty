@@ -17,13 +17,13 @@ const ProductItem = ({ obj, id, info, text, slide, typeId, rating, isLashes, bra
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [activeCurl, setActiveCurl] = React.useState('');
+    const [activeCurl, setActiveCurl] = React.useState(null);
     const [curl, setCurl] = React.useState({});
     const [curlArr, setCurlArr] = React.useState([]);
-    const [activeThickness, setActiveThickness] = React.useState('');
+    const [activeThickness, setActiveThickness] = React.useState(null);
     const [thickness, setThickness] = React.useState({});
     const [thicknessArr, setThicknessArr] = React.useState([]);
-    const [activeLength, setActiveLength] = React.useState('');
+    const [activeLength, setActiveLength] = React.useState(null);
     const [lengthArr, setLengthArr] = React.useState([]);
     const [lengthP, setLengthP] = React.useState({});
     const [brands, setBrands] = React.useState([]);
@@ -132,11 +132,7 @@ const ProductItem = ({ obj, id, info, text, slide, typeId, rating, isLashes, bra
     }, [isLashes]);
 
     React.useEffect(() => {
-        if (activeCurl && activeLength && activeThickness) {
-            setIndex(id + curlArr[activeCurl] + thicknessArr[activeThickness] + lengthArr[activeLength]);            
-        } else {
-            setIndex('');
-        }
+        setIndex(id + curlArr[activeCurl] + thicknessArr[activeThickness] + lengthArr[activeLength]);            
     }, [id, activeCurl, activeLength, activeThickness]);
     
     const paragraphs = text.length ? text[0].text.split('\r\n') : '';
@@ -245,17 +241,23 @@ const ProductItem = ({ obj, id, info, text, slide, typeId, rating, isLashes, bra
                         {price != 0
                             ?
                             <div className="product-card__actions">
-                                <div className="product-card__quantity quantity">
-                                    <button onClick={onClickMinus} className="quantity__minus">-</button>
-                                    <div className="quantity__text">{isLashes ? lashesCount : addedCount}</div>
-                                    <button onClick={onClickAdd} className="quantity__plus">+</button>
-                                </div>                              
-                                <button onClick={showCart} className="checkout">
-                                    Comprar
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                        <path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z" />
-                                    </svg>
-                                </button>
+                                {!isLashes || activeCurl !== null && activeLength !== null && activeThickness !== null
+                                    ?
+                                    <>
+                                        <div className="product-card__quantity quantity">
+                                            <button onClick={onClickMinus} className="quantity__minus">-</button>
+                                            <div className="quantity__text">{isLashes ? lashesCount : addedCount}</div>
+                                            <button onClick={onClickAdd} className="quantity__plus">+</button>
+                                        </div>                                  
+                                        <button onClick={showCart} className="checkout">
+                                            Comprar
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                <path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z" />
+                                            </svg>
+                                        </button>
+                                    </>   
+                                : 'Selecione opções para adicionar item ao carrinho.'    
+                                }
                             </div>       
                             :
                             ''
