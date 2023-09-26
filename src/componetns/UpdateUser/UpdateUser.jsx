@@ -35,7 +35,7 @@ const UpdateUser = ({userId}) => {
         if (emailValue !== user.email) {
             axios.get(`${serverDomain}api/user?email=${emailValue}`)
                 .then((res) => {
-                    setExistingUser(...res.data);                        
+                    setExistingUser(res.data);                        
                 });            
         }
     }, [emailValue]);
