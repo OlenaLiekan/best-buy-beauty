@@ -17,13 +17,13 @@ const ProductItem = ({ obj, id, info, text, slide, typeId, rating, isLashes, bra
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [activeCurl, setActiveCurl] = React.useState(0);
+    const [activeCurl, setActiveCurl] = React.useState('');
     const [curl, setCurl] = React.useState({});
     const [curlArr, setCurlArr] = React.useState([]);
-    const [activeThickness, setActiveThickness] = React.useState(0);
+    const [activeThickness, setActiveThickness] = React.useState('');
     const [thickness, setThickness] = React.useState({});
     const [thicknessArr, setThicknessArr] = React.useState([]);
-    const [activeLength, setActiveLength] = React.useState(0);
+    const [activeLength, setActiveLength] = React.useState('');
     const [lengthArr, setLengthArr] = React.useState([]);
     const [lengthP, setLengthP] = React.useState({});
     const [brands, setBrands] = React.useState([]);
@@ -132,7 +132,11 @@ const ProductItem = ({ obj, id, info, text, slide, typeId, rating, isLashes, bra
     }, [isLashes]);
 
     React.useEffect(() => {
-        setIndex(id + curlArr[activeCurl] + thicknessArr[activeThickness] + lengthArr[activeLength]);
+        if (activeCurl && activeLength && activeThickness) {
+            setIndex(id + curlArr[activeCurl] + thicknessArr[activeThickness] + lengthArr[activeLength]);            
+        } else {
+            setIndex('');
+        }
     }, [id, activeCurl, activeLength, activeThickness]);
     
     const paragraphs = text.length ? text[0].text.split('\r\n') : '';
