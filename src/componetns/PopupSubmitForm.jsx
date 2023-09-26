@@ -15,7 +15,7 @@ const PopupSubmitForm = ({totalCount}) => {
     const navigate = useNavigate();
 
 
-    const { serverDomain } = React.useContext(AuthContext);
+    const { serverDomain, isAuth } = React.useContext(AuthContext);
     const [users, setUsers] = React.useState([]);
     const [username, setUsername] = React.useState('');
     const [surname, setSurname] = React.useState('');    
@@ -71,7 +71,7 @@ const PopupSubmitForm = ({totalCount}) => {
                     setAddresses(res.data.address);
                 });              
         }
-    }, [user]);
+    }, [isAuth]);
 
     React.useEffect(() => {
         if (addresses.length) {
