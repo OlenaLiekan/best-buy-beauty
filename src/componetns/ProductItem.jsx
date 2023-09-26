@@ -17,13 +17,13 @@ const ProductItem = ({ obj, id, info, text, slide, typeId, rating, isLashes, bra
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [activeCurl, setActiveCurl] = React.useState('');
+    const [activeCurl, setActiveCurl] = React.useState(0);
     const [curl, setCurl] = React.useState({});
     const [curlArr, setCurlArr] = React.useState([]);
-    const [activeThickness, setActiveThickness] = React.useState('');
+    const [activeThickness, setActiveThickness] = React.useState(0);
     const [thickness, setThickness] = React.useState({});
     const [thicknessArr, setThicknessArr] = React.useState([]);
-    const [activeLength, setActiveLength] = React.useState('');
+    const [activeLength, setActiveLength] = React.useState(0);
     const [lengthArr, setLengthArr] = React.useState([]);
     const [lengthP, setLengthP] = React.useState({});
     const [brands, setBrands] = React.useState([]);
