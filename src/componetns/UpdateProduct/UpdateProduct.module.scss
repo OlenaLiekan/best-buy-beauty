@@ -58,6 +58,9 @@
     @media(max-width: 579.98px) {
         width: 240px;
     }
+    @media(max-width: 371.98px) {
+        width: 190px;
+    }
 }
 
 .formInputSmall {
@@ -195,7 +198,7 @@
 
 .close {
     position: absolute;
-    top: 20px;
+    top: 15px;
     right: 20px;
     font-size: 1.6rem;
     cursor: pointer;
