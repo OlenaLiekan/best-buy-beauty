@@ -189,7 +189,7 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
                         onChange={onChangeCountry}/>
                 </div>
                 <div className={styles.formLine}>
-                    <label htmlFor="user-region-input" className={styles.formLabel}>Província</label>
+                    <label htmlFor="user-region-input" className={styles.formLabel}>Concelho</label>
                     <input required id="user-region-input" tabIndex="10" autoComplete="off" type="text" name="region" data-error="Error" className={styles.formInput}
                         ref={inputRef}
                         value={region}

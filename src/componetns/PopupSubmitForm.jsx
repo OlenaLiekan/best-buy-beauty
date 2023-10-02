@@ -260,7 +260,7 @@ const PopupSubmitForm = ({totalCount}) => {
                                 onChange={onChangeCountry}/>
                         </div>
                         <div className="popup-form__line">
-                            <label htmlFor="user-region-input" className="popup-form__label">Província</label>
+                            <label htmlFor="user-region-input" className="popup-form__label">Concelho</label>
                             <input required id="user-region-input" tabIndex="10" autoComplete="off" type="text" name="region" data-error="Error" className="popup-form__input"
                                 ref={inputRef}
                                 value={region}

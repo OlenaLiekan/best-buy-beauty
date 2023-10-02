@@ -54,6 +54,16 @@ export function menuInit() {
         window.scrollTo(0, 0);
         bodyLockToggle();
         document.documentElement.classList.toggle('menu-open');
+      } else if (
+        bodyLockStatus &&
+        !e.target.closest('.icon-menu') &&
+        !e.target.closest('.menu-button') &&
+        !e.target.closest('.list-sub-menu__back') &&
+        !e.target.closest('.sub-menu__item')
+      ) {
+        document.documentElement.classList.remove('menu-open');
+        subMenu.classList.remove('sub-menu-open');
+        bodyUnlock();
       }
       if (bodyLockStatus && e.target.closest('.icon-menu__text_show')) {
         document.documentElement.classList.remove('menu-open');
