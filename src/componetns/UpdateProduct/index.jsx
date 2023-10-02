@@ -53,7 +53,7 @@ const UpdateProduct = ({id, obj}) => {
     }, [obj, brands, types]);
 
     const success = () => {
-        window.alert('Novo produtos adicionado com sucesso!');
+        window.alert('Dados do produto atualizados com sucesso!');
         setUpdateProductMode(false);  
         navigate('/auth');
         window.scrollTo(0, 0);  
