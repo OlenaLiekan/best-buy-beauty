@@ -23,7 +23,7 @@ const ProductCardSlider = ({ img, slides }) => {
                         <SwiperSlide>
                             <div className="thumbs-images__slide slide-thumbs">
                                 <div className="slide-thumbs__media">
-                                    <img src={`${serverDomain}` + img} alt="slide"/>                                  
+                                    <img src={`${imagesCloud}` + img} alt="slide"/>                                  
                                 </div>
                             </div>          
                         </SwiperSlide>
@@ -32,7 +32,7 @@ const ProductCardSlider = ({ img, slides }) => {
                                 <SwiperSlide key={i} value={slideImg}>
                                     <div className="thumbs-images__slide slide-thumbs">
                                         <div className="slide-thumbs__media">
-                                            <img src={`${serverDomain}` + slideImg.slideImg} alt="slide"/>                                    
+                                            <img src={`${imagesCloud}` + slideImg.slideImg} alt="slide"/>                                    
                                         </div>
                                     </div>          
                                 </SwiperSlide>                            
@@ -91,7 +91,7 @@ const ProductCardSlider = ({ img, slides }) => {
                         <SwiperSlide>
                             <div className="images-product__slide slide-product">
                                 <div className="slide-product__media">
-                                    <img src={`${serverDomain}` + img} alt="slide"/>                                    
+                                    <img src={`${imagesCloud}` + img} alt="slide"/>                                    
                                 </div>
                             </div>                        
                         </SwiperSlide>
@@ -100,7 +100,7 @@ const ProductCardSlider = ({ img, slides }) => {
                                 <SwiperSlide key={index} value={slideImg}>
                                     <div className="images-product__slide slide-product">
                                         <div className="slide-product__media">
-                                            <img src={`${serverDomain}` + slideImg.slideImg} alt="slide"/>                                    
+                                            <img src={`${imagesCloud}` + slideImg.slideImg} alt="slide"/>                                    
                                         </div>
                                     </div>                        
                                 </SwiperSlide>                            

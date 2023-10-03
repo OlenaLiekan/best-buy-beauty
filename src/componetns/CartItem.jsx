@@ -7,7 +7,7 @@ import { AuthContext } from '../context';
 
 const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, company, lengthArr, thicknessArr, curlArr, count }) => { 
 
-    const { imagesCloud, serverDomain } = React.useContext(AuthContext);
+    const { imagesCloud } = React.useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -53,7 +53,7 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
             <div className="item-cart__content">
                 <div className="item-cart__product-block">
                     <div onClick={handleClick} className="item-cart__image">
-                        <img src={`${serverDomain}` + img} alt="product"/>
+                        <img src={`${imagesCloud}` + img} alt="product"/>
                     </div>
                     <div className="item-cart__info info-cart">
                         <div className="info-cart__titles">

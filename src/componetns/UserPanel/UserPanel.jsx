@@ -198,7 +198,7 @@ const UserPanel = ({ user }) => {
                                                         <div className={styles.productTop}>{i.title}</div>
                                                     <div className={styles.productBottom}>
                                                         <div className={styles.productImage}>
-                                                            <img src={i.img ? `${serverDomain}`+ i.img : `${serverDomain}noImg.png`} alt="product"/>
+                                                            <img src={i.img ? `${imagesCloud}`+ i.img : `${imagesCloud}noImg.png`} alt="product"/>
                                                         </div>                                                        
                                                         <div className={styles.productInfo}>
                                                             {i.description.split('\n').map((paragraph, index) => 
