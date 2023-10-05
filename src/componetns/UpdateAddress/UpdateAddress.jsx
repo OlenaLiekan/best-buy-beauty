@@ -126,10 +126,10 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
         const formData = new FormData();
         const id = userId;
         formData.set('updatedAddressId', addressId);
-        formData.set('firstName', username);
-        formData.set('lastName', surname);
-        formData.set('email', email);
-        formData.set('phone', phone);
+        formData.set('upFirstName', username);
+        formData.set('upLastName', surname);
+        formData.set('upEmail', email);
+        formData.set('upPhone', phone);
         formData.set('company', company);            
         formData.set('firstAddress', firstAddress);
         formData.set('secondAddress', secondAddress);

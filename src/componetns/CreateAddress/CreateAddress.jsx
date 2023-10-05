@@ -100,10 +100,10 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
         const formData = new FormData();
         const id = userId;
         formData.append('userId', id);
-        formData.append('firstName', username);
-        formData.append('lastName', surname);
-        formData.append('email', email);
-        formData.append('phone', phone);
+        formData.append('crFirstName', username);
+        formData.append('crLastName', surname);
+        formData.append('crEmail', email);
+        formData.append('crPhone', phone);
         formData.append('company', company);            
         formData.append('firstAddress', firstAddress);
         formData.append('secondAddress', secondAddress);
