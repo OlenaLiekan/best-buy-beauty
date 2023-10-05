@@ -3,7 +3,7 @@ import styles from './CreateAddress.module.scss';
 import { updateUser } from '../../http/userAPI';
 import { AuthContext } from '../../context';
 
-const CreateAddress = ({userId}) => {
+const CreateAddress = ({userId, addressId, existingMainAddress}) => {
 
     const inputRef = React.useRef();
 
@@ -16,10 +16,12 @@ const CreateAddress = ({userId}) => {
     const [secondAddress, setSecondAddress] = React.useState('');
     const [city, setCity] = React.useState('');
     const [region, setRegion] = React.useState('');
-    const [country, setCountry] = React.useState('');
+    const [country, setCountry] = React.useState('Portugal');
     const [postalCode, setPostalCode] = React.useState('');
     const [company, setCompany] = React.useState('');
     const [checked, setChecked] = React.useState(false);
+    const [visibleList, setVisibleList] = React.useState(false);
+    const countries = ['Portugal', 'Outro'];
 
     const onChangeCompany = (event) => { 
         setCompany(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
@@ -34,7 +36,7 @@ const CreateAddress = ({userId}) => {
     };
 
     const onChangePhone = (event) => { 
-        setPhone(event.target.value);
+        setPhone(event.target.value.slice(0, 13));
     };
 
     const onChangeEmail = (event) => { 
@@ -53,24 +55,39 @@ const CreateAddress = ({userId}) => {
         setCity(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
     };
 
-    const onChangeCountry = (event) => { 
-        setCountry(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
-    };
-
     const onChangeRegion = (event) => { 
         setRegion(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
     };
 
     const onChangePostalCode = (event) => { 
-        setPostalCode(event.target.value);            
+        if (event.target.value.length > 4) {
+            setPostalCode(event.target.value.slice(0, 4) + '-' + event.target.value.slice(5, 8));
+        } else {
+            setPostalCode(event.target.value);              
+        }
     };
 
     const checkedCheckbox = () => {
-        if (!checked) {
+        if (!checked && !existingMainAddress) {
             setChecked(true);
+        } else if (!checked && existingMainAddress) {
+            window.alert('Você já tem um endereço principal. Edite-o, limpe a propriedade de prioridade para selecionar outro endereço como principal.');
         } else {
-            setChecked(false);
+            setChecked(false);            
         }
+    }
+
+    const showCountries = () => {
+        if (!visibleList) {
+            setVisibleList(true);
+        } else {
+            setVisibleList(false);
+        }
+    }
+
+    const closeList = (countryName) => {
+        setCountry(countryName);
+        setVisibleList(false);
     }
 
     const success = () => {
@@ -120,7 +137,7 @@ const CreateAddress = ({userId}) => {
                     <input id="user-company-input" tabIndex="3" autoComplete="off" type="text" name="company" data-error="Error" className={styles.formInput}
                         ref={inputRef}
                         value={company}
-                        onChange={onChangeCompany}/>
+                        onChange={onChangeCompany} />
                 </div>
                 <div className={styles.formLine}>
                     <label htmlFor="user-contact-input" className={styles.formLabel}>Telefone</label>
@@ -157,13 +174,21 @@ const CreateAddress = ({userId}) => {
                         value={city}
                         onChange={onChangeCity}/>
                 </div>
-                <div className={styles.formLine}>
-                    <label htmlFor="user-country-input" className={styles.formLabel}>País</label>
-                    <input required id="user-country-input" tabIndex="9" autoComplete="off" type="text" name="country" data-error="Error" className={styles.formInput}
-                        ref={inputRef}
-                        value={country}
-                        onChange={onChangeCountry}/>
+                <div className={styles.formLineSelect}>
+                        <label htmlFor="user-country-input" className={styles.formLabel}>País</label>
+                        <input readOnly required onClick={showCountries} id="user-country-input" tabIndex="9" autoComplete="off" type="text" name="country" data-error="Error" className={styles.formInputSelect}
+                            ref={inputRef}
+                            value={country} />
+                        <svg onClick={showCountries} className={visibleList ? styles.rotate : ''} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                            <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
+                        </svg>
+                        <ul className={visibleList ? styles.countriesList : styles.hidden}>
+                            {countries.map((countryName, i) => 
+                                <li onClick={() => closeList(countryName) } key={i} className={styles.countryItem}>{countryName}</li>
+                            )}
+                        </ul>
                 </div>
+
                 <div className={styles.formLine}>
                     <label htmlFor="user-region-input" className={styles.formLabel}>Concelho</label>
                     <input required id="user-region-input" tabIndex="10" autoComplete="off" type="text" name="region" data-error="Error" className={styles.formInput}
@@ -173,7 +198,7 @@ const CreateAddress = ({userId}) => {
                 </div>
                 <div className={styles.formLine}>
                     <label htmlFor="user-postal-code-input" className={styles.formLabel}>Código postal/ZIP</label>
-                    <input required id="user-postal-code-input" tabIndex="11" autoComplete="off" type="text" name="postal-code" data-error="Error" className={styles.formInput}
+                    <input required id="user-postal-code-input" tabIndex="11" autoComplete="off" type="text" name="postal-code" placeholder='0000-000' data-error="Error" className={styles.formInput}
                         ref={inputRef}
                         value={postalCode}
                         onChange={onChangePostalCode}/>

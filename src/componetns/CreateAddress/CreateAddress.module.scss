@@ -14,7 +14,8 @@
     gap: 12px;
 }
 
-.formLine {
+.formLine, 
+.formLineSelect {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -26,6 +27,34 @@
         justify-content: flex-start;
         gap: 5px;
     }
+}
+
+.formLineSelect {
+    position: relative;
+    user-select: none;
+    svg {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        z-index: 2;
+        cursor: pointer;
+        transition: fill 0.4s ease 0s;
+        &:hover {
+            fill: #AD912B;
+        }
+        @media(max-width: 479.98px) {
+            left: 170px;
+            top: 30px;
+        }
+        @media(max-width: 379.98px) {
+            left: 150px;
+            top: 26px;
+        }
+    }
+}
+
+.rotate {
+    transform: rotate(-180deg);
 }
 
 .formLineCheckbox {
@@ -80,7 +109,8 @@
     }
 }
 
-.formInput {
+.formInput,
+.formInputSelect {
     font-size: 14px;
     padding: 8px 12px;
     border-radius: 20px;
@@ -90,6 +120,11 @@
     @media(max-width: 379.98px) {
         font-size: 12px;
     }
+}
+
+.formInputSelect {
+    cursor: pointer;
+    z-index: 2;
 }
 
 .formInputCheckbox {
@@ -119,4 +154,46 @@
     @media(max-width: 379.98px) {
         font-size: 14px;
     }
+}
+
+.countriesList {
+    position: absolute;
+    top: 18px;
+    right: 0;
+    width: 193px;
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    background-color: #fafafa;
+    border: 1.5px solid #9c9c9c;
+    border-radius: 0 0 20px 20px;
+    color: #484848;
+    z-index: 1;
+    @media(max-width: 479.98px) {
+        left: 0;
+        top: 34px;
+    }
+    @media(max-width: 379.98px) {
+        width: 174px;
+    }
+}
+
+.countryItem {
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 10px;
+    transition: all 0.4s ease 0s;
+    cursor: pointer;
+    &:hover {
+        background-color: #9c9c9c0d;
+        color: #AD912B;
+    }
+    @media(max-width: 379.98px) {
+        font-size: 12px;
+    }
+}
+
+.hidden {
+    display: none;
 }

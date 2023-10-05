@@ -24,6 +24,7 @@ const ProductBlock = ({path, id, info, name, rating, isLashes, price, brandId, i
             .then(() => {
                 window.alert('O produto foi excluído com sucesso!');
                 navigate('/auth');
+                window.scrollTo(0, 0);
         })      
         } else {
         window.alert('Cancelar exclusão.');

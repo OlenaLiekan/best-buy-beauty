@@ -20,6 +20,8 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
     const [postalCode, setPostalCode] = React.useState('');
     const [company, setCompany] = React.useState('');
     const [checked, setChecked] = React.useState(false);
+    const [visibleList, setVisibleList] = React.useState(false);
+    const countries = ['Portugal', 'Outro'];
 
     if (!existingMainAddress) {
         existingMainAddress = { id: addressId };
@@ -36,12 +38,16 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
             setFirstAddress(currentAddress.firstAddress);
             setSecondAddress(currentAddress.secondAddress ? currentAddress.secondAddress : secondAddress);
             setCity(currentAddress.city);
-            setCountry(currentAddress.country);
+            setCountry(!country ? currentAddress.country : country);
             setRegion(currentAddress.region);
             setPostalCode(currentAddress.postalCode);
             setChecked(currentAddress.mainAddress);            
         }
     }, [addressId]);
+
+    React.useEffect(() => {
+        console.log(country);
+    }, [country]);
 
     const onChangeCompany = (event) => { 
         setCompany(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
@@ -56,7 +62,7 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
     };
 
     const onChangePhone = (event) => { 
-        setPhone(event.target.value);
+        setPhone(event.target.value.slice(0, 13));
     };
 
     const onChangeEmail = (event) => { 
@@ -75,16 +81,16 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
         setCity(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
     };
 
-    const onChangeCountry = (event) => { 
-        setCountry(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
-    };
-
     const onChangeRegion = (event) => { 
         setRegion(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
     };
 
     const onChangePostalCode = (event) => { 
-        setPostalCode(event.target.value);            
+        if (event.target.value.length > 4) {
+            setPostalCode(event.target.value.slice(0, 4) + '-' + event.target.value.slice(5, 8));
+        } else {
+            setPostalCode(event.target.value);              
+        }           
     };
 
     const checkedCheckbox = () => {
@@ -95,6 +101,19 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
         } else {
             setChecked(false);            
         }
+    }
+
+    const showCountries = () => {
+        if (!visibleList) {
+            setVisibleList(true);
+        } else {
+            setVisibleList(false);
+        }
+    }
+
+    const closeList = (countryName) => {
+        setCountry(countryName);
+        setVisibleList(false);
     }
 
     const success = () => {
@@ -181,12 +200,19 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
                         value={city}
                         onChange={onChangeCity}/>
                 </div>
-                <div className={styles.formLine}>
+                <div className={styles.formLineSelect}>
                     <label htmlFor="user-country-input" className={styles.formLabel}>País</label>
-                    <input required id="user-country-input" tabIndex="9" autoComplete="off" type="text" name="country" data-error="Error" className={styles.formInput}
+                    <input readOnly required onClick={showCountries} id="user-country-input" tabIndex="9" autoComplete="off" type="text" name="country" data-error="Error" className={styles.formInputSelect}
                         ref={inputRef}
-                        value={country}
-                        onChange={onChangeCountry}/>
+                        value={country} />
+                    <svg onClick={showCountries} className={visibleList ? styles.rotate : ''} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                        <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
+                    </svg>
+                    <ul className={visibleList ? styles.countriesList : styles.hidden}>
+                        {countries.map((countryName, i) => 
+                            <li onClick={() => closeList(countryName) } key={i} className={styles.countryItem}>{countryName}</li>
+                        )}
+                    </ul>
                 </div>
                 <div className={styles.formLine}>
                     <label htmlFor="user-region-input" className={styles.formLabel}>Concelho</label>
@@ -197,7 +223,7 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
                 </div>
                 <div className={styles.formLine}>
                     <label htmlFor="user-postal-code-input" className={styles.formLabel}>Código postal/ZIP</label>
-                    <input required id="user-postal-code-input" tabIndex="11" autoComplete="off" type="text" name="postal-code" data-error="Error" className={styles.formInput}
+                    <input required id="user-postal-code-input" tabIndex="11" autoComplete="off" type="text" name="postal-code" placeholder='0000-000' data-error="Error" className={styles.formInput}
                         ref={inputRef}
                         value={postalCode}
                         onChange={onChangePostalCode}/>

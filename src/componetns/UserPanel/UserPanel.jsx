@@ -108,6 +108,9 @@ const UserPanel = ({ user }) => {
     const success = (id) => {
         window.alert('Endereço excluído com sucesso!');
         setDeletedAddressId(id);
+        if (mainAddress) {
+            setVisibleMain(true);
+        }
         window.scrollTo(0, 0);
     }
 
@@ -234,7 +237,7 @@ const UserPanel = ({ user }) => {
                                 {allOrders ? 'Ocultar arquivo' : 'Mostre tudo'}
                             </button>
                         </div>
-                        {createAddressMode && activeOption === 1 ? <CreateAddress userId={currentUser.id} /> : ''}
+                        {createAddressMode && activeOption === 1 ? <CreateAddress existingMainAddress={mainAddress} userId={currentUser.id} /> : ''}
                         <div className={activeOption === 1 && !updateAddressMode ? styles.userInfo : styles.hidden}>
                             {!createAddressMode
                                 ? 
@@ -264,10 +267,15 @@ const UserPanel = ({ user }) => {
                                             </ul>
                                             <div className={styles.userAddress}>
                                                 <h3 onClick={activeMain} className={styles.addressTitle}>
-                                                    Endereço:
-                                                    <svg className={visibleMain ? styles.rotate : ''} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
-                                                        <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
-                                                    </svg>
+                                                        Endereço:
+                                                    {restAddresses.length
+                                                        ?
+                                                        <svg className={visibleMain ? styles.rotate : ''} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                                            <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
+                                                        </svg>   
+                                                        :
+                                                        ''        
+                                                    }
                                                 </h3>
                                                 <div className={visibleMain ? styles.paragraphs : styles.hidden}>
                                                     <p className={styles.addressLine}>{mainAddress.firstName} {mainAddress.lastName}</p>
@@ -329,10 +337,10 @@ const UserPanel = ({ user }) => {
                         <div className={!updateUserMode && activeOption === 2 && !updatePassMode && activeOption === 2 ? styles.actions : styles.hidden}>
                             <ul className={styles.userInfoTop}>
                                 <li className={styles.infoLine}>
-                                    {currentUser.firstName + ' ' + currentUser.lastName}
+                                    {user.firstName + ' ' + user.lastName}
                                 </li>
-                                <li className={styles.infoLine}>{currentUser.email}</li>
-                                <li className={styles.infoLine}>{currentUser.phone}</li>
+                                <li className={styles.infoLine}>{user.email}</li>
+                                <li className={styles.infoLine}>{user.phone}</li>
                             </ul>
                             <button onClick={editData} className={styles.changeData}>Alterar dados</button>
                             <button onClick={updatePass} className={styles.changePassword}>Alterar a senha</button>
