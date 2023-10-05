@@ -8,7 +8,7 @@ import { AuthContext } from "../context";
 
 const ProductCardSlider = ({ img, slides }) => {
     const [thumbsSwiper, setThumbsSwiper] = React.useState(null);
-    const { imagesCloud, serverDomain } = React.useContext(AuthContext);
+    const { imagesCloud } = React.useContext(AuthContext);
     return (
         <>
             <div className="images-product__thumbs thumbs-images">
