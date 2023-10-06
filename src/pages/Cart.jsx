@@ -8,12 +8,40 @@ import PopupSubmitForm from '../componetns/PopupSubmitForm';
 import CartItem from '../componetns/CartItem';
 import CartEmpty from '../componetns/CartEmpty';
 import { clearItems } from '../redux/slices/cartSlice';
+import axios from 'axios';
+import { AuthContext } from '../context';
 
 const Cart = () => { 
     const dispatch = useDispatch();
     const { totalPrice, items } = useSelector((state) => state.cart);
+    const { serverDomain } = React.useContext(AuthContext);
     const totalCount = items.reduce((sum, item) => sum + item.count, 0);
+    const [deliveryPrices, setDeliveryPrices] = React.useState([]);
+    const [deliveryPrice, setDeliveryPrice] = React.useState('0.00');
     //const isMounted = React.useRef(false);
+
+    React.useEffect(() => {
+        axios.get(`${serverDomain}api/delivery`)
+            .then((res) => {
+                setDeliveryPrices(res.data);
+            });
+    }, []);
+
+    React.useEffect(() => {
+        if (deliveryPrices.length) {
+            const oneProduct = deliveryPrices.find((delivery) => delivery.type === 'Um produto');
+            const moreProducts = deliveryPrices.find((delivery) => delivery.type === 'Mais produtos');
+            const freeDelivery = deliveryPrices.find((delivery) => delivery.type === 'Entrega grátis');
+            if (totalCount === 1 && totalPrice < freeDelivery.requiredSum) {
+                setDeliveryPrice(oneProduct.price);
+            } else if (totalCount > 1 && totalPrice < freeDelivery.requiredSum) {
+                setDeliveryPrice(moreProducts.price);
+            } else {
+                setDeliveryPrice(freeDelivery.price);
+            }                 
+        }
+    }, [totalCount, totalPrice, deliveryPrices]);
+
 
     const onClickClear = () => { 
         if (window.confirm('Tem certeza de que deseja esvaziar o carrinho?')) {
@@ -37,7 +65,7 @@ const Cart = () => {
 
     return (
         <div className="main__cart cart">
-            <PopupSubmitForm totalCount={totalCount} />
+            <PopupSubmitForm totalCount={totalCount} deliveryPrice={deliveryPrice} />
             <div className="cart__container">
                 <div className="cart__content">
                     <div className="cart__header header-cart">
@@ -67,9 +95,11 @@ const Cart = () => {
                                     Quantidade total: {totalCount}
                                 </div>
                                 <div className="total__sum">
-                                    Montante total: {totalPrice.toFixed(2)} €
+                                    <div>Custo de entrega: {deliveryPrice} €</div>
+                                    <div>Montante total: {(+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2)} €</div>
                                 </div>
-                            </div>
+                            </div>               
+
                             <div className="bottom-cart__actions">
                                 <Link to="/catalog" onClick={scrollTop} className="go-shopping scroll-top">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z"/></svg>

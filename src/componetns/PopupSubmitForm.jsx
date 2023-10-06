@@ -8,7 +8,7 @@ import { updateUser } from '../http/userAPI';
 import axios from 'axios';
 import { AuthContext } from '../context';
 
-const PopupSubmitForm = ({totalCount}) => {
+const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
 
     const inputRef = React.useRef();
     const dispatch = useDispatch();
@@ -146,7 +146,9 @@ const PopupSubmitForm = ({totalCount}) => {
         +
         '\n\nQuantidade total: ' + totalCount
         +
-        '\nMontante total: ' + totalPrice.toFixed(2) + ' €'
+        '\nCusto de entrega: ' + deliveryPrice + ' €'
+        +
+        '\nMontante total: ' + (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2) + ' €'
     ;
     
     React.useEffect(() => {
@@ -165,7 +167,8 @@ const PopupSubmitForm = ({totalCount}) => {
         formData.append('userId', id);
         formData.append('items', JSON.stringify(items));
         formData.append('quantity', totalCount);
-        formData.append('sum', totalPrice.toFixed(2));
+        formData.append('deliveryPrice', deliveryPrice);
+        formData.append('sum', (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2));
         updateUser(formData, id);
         localStorage.setItem('orderId', orderNumber ? (+orderNumber) + 1 : '');            
         dispatch(

@@ -7,6 +7,7 @@
 .form {
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 .formTitle {
@@ -119,6 +120,62 @@
         svg {
             font-size: 16px;
         }
+    }
+}
+
+.deliveryBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    h4 {
+        text-align: center;
+        font-size: 18px;
+        font-weight: 500;
+        text-decoration: underline;
+    }
+}
+
+.deliveryItems {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.deliveryItem {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.deliveryTitle {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.deliveryPrice {
+    font-size: 16px;
+    color: #AD912B;
+}
+
+.upBtn {
+    display: flex;
+    justify-content: center;
+    padding: 15px 20px;
+    border-radius: 20px;
+    background-color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    color: #48d1c1;
+    border: 2px solid #48d1c1;
+    box-shadow: 3px 3px 3px #9c9c9c56;
+    transition: all 0.6s ease 0s;
+
+    &:hover {
+        color: #fff;
+        border: 2px solid #48d1c1;
+        background-color: #48d1c1;
     }
 }
 
