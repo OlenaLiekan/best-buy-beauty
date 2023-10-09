@@ -2,12 +2,15 @@ import React from 'react'
 import styles from "./Brands.module.scss";
 import axios from 'axios';
 import { AuthContext } from '../../context';
+import BrandsSkeleton from '../BrandsSkeleton';
 
 function Brands({ type, brandId, onChangeBrand }) {
 
   const [brands, setBrands] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const { serverDomain } = React.useContext(AuthContext);
+
+  const skeletons = [...new Array(6)].map((_, index) => <BrandsSkeleton key={index} />);
 
   React.useEffect(() => {
     setIsLoading(true); 
@@ -29,13 +32,21 @@ function Brands({ type, brandId, onChangeBrand }) {
             Todos
           </button>
         </li>
-        {brands.map((brandName) => (
-          <li key={brandName.id} onClick={() => onChangeBrand(brandName.id)} className={brandId === brandName.id ? "active" : ""} >
-                <button className={styles.brandProducts}>
-                  {brandName.name}
-                </button>
+        {!isLoading
+          ?
+          brands.map((brandName) => (
+            <li key={brandName.id} onClick={() => onChangeBrand(brandName.id)} className={brandId === brandName.id ? "active" : ""} >
+                  <button className={styles.brandProducts}>
+                    {brandName.name}
+                  </button>
+              </li>
+          ))
+          :
+          skeletons.map((skeleton, i) => 
+            <li key={i}>
+                <BrandsSkeleton />
             </li>
-        ))
+          )  
         }
       </ul>  
   );

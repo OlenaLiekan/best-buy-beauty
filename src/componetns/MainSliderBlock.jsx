@@ -61,7 +61,7 @@ const MainSliderBlock = () => {
                 speed={2000}
                 loop={true}
               >
-                {slides.map((slide) =>
+                {slides.length ? slides.map((slide) =>
                   <SwiperSlide key={slide.id}>
                     <div className="block-main__slide slide-main-block">
                       <div className="slide-main-block__content">
@@ -82,6 +82,14 @@ const MainSliderBlock = () => {
                     </div>
                   </SwiperSlide>
                 )
+                  :
+                  <div className="block-main__slide slide-main-block">
+                    <div className="slide-main-block__content">
+                      <div className="slide-main-block__image">
+                        <SliderSkeleton />                        
+                      </div>
+                    </div>
+                  </div>
                 }
               </Swiper>
             </div>

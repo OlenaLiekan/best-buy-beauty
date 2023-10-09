@@ -2145,9 +2145,16 @@
     display: flex;
 }
 
+.titles-product {
+    display: flex;
+    gap: 20px;
+    overflow: auto;
+}
+
 .description-product {
     display: flex;
     max-width: 700px;
+    min-height: 200px;
     width: 100%;
     flex-direction: column;
     border-radius: 20px;
@@ -2160,18 +2167,30 @@
         margin: 0 auto;
     }
     &__title {
-        font-size: 22px;
+        font-size: 20px;
+        white-space: nowrap;
         font-weight: 500;
         position: relative;
         margin-bottom: 30px;
-        &::after {
-            content: "";
-            position: absolute;
-            width: 148px;
-            height: 2px;
-            top: 35px;
-            left: 0;
-            background-color: #2525258f;
+        cursor: pointer;
+        color: #585858;
+        &_active {
+            color: #252525;
+            &::after {
+                content: "";
+                position: absolute;
+                width: 100%;
+                height: 2px;
+                top: 34px;
+                left: 0;
+                background-color: #AD902B;
+                @media(max-width: 579.98px) {
+                    top: 28px;
+                }
+            }
+        }
+        @media(max-width: 579.98px) {
+            font-size: 18px;
         }
     }
     &__text {
@@ -2179,6 +2198,12 @@
         line-height: 1.44;
         &:not(:last-child) {
             margin-bottom: 15px;
+        }
+        &_hidden {
+            display: none;
+        }
+        @media(max-width: 579.98px) {
+            font-size: 14px;
         }
     }
 }
@@ -2588,6 +2613,34 @@
             flex-direction: column;
             align-items: flex-start;
         }
+        &_select {
+            position: relative;
+            user-select: none;
+        
+            svg {
+                position: absolute;
+                right: 10px;
+                top: 10px;
+                z-index: 2;
+                cursor: pointer;
+                transition: fill 0.4s ease 0s;
+        
+                &:hover {
+                    fill: #AD912B;
+                }
+        
+                @media(max-width: 579.98px) {
+                    right: 10px;
+                    top: 34px;
+                }
+            }
+        }
+    }
+    &_rotate {
+        transform: rotate(-180deg);
+    }
+    &_hidden {
+        display: none;
     }
     .popup-line__textarea {
         flex-direction: column;
@@ -2606,6 +2659,73 @@
         height: 33px;
         @media(max-width: 579.98px) {
             width: 100%;
+        }
+        &_select {
+            cursor: pointer;
+            z-index: 2;
+        }
+    }
+    &__list {
+        position: absolute;
+        top: 18px;
+        right: 0;
+        width: 50%;
+        height: 90px;
+        display: flex;
+        flex-direction: column;
+        padding-top: 20px;
+        background-color: #fafafa;
+        border: 2px solid #D9D9D9;
+        border-radius: 0 0 20px 20px;
+        color: #484848;
+        z-index: 1;
+        @media(max-width: 579.98px) {
+            width: 100%;            
+            left: 0;
+            top: 40px;
+        }
+
+        &_hidden {
+            display: none;
+        }
+    }
+    &__item {
+        font-size: 14px;
+        font-weight: 500;
+        padding: 8px 10px;
+        transition: all 0.4s ease 0s;
+        cursor: pointer;
+    
+        &:hover {
+            background-color: #9c9c9c0d;
+            color: #AD912B;
+        }
+    }
+    &__select {
+        position: relative;
+        user-select: none;
+    
+        svg {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            z-index: 2;
+            cursor: pointer;
+            transition: fill 0.4s ease 0s;
+    
+            &:hover {
+                fill: #AD912B;
+            }
+    
+            @media(max-width: 479.98px) {
+                left: 170px;
+                top: 30px;
+            }
+    
+            @media(max-width: 379.98px) {
+                left: 150px;
+                top: 26px;
+            }
         }
     }
     &__textarea {

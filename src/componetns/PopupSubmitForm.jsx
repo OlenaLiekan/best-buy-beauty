@@ -31,6 +31,8 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
     const [company, setCompany] = React.useState('');
     const [addresses, setAddresses] = React.useState([]);
     const [mainData, setMainData] = React.useState({});
+    const [visibleList, setVisibleList] = React.useState(false);
+    const countries = ['Portugal', 'Outro'];
 
     const data = localStorage.getItem('user');
     const user = JSON.parse(data);
@@ -51,7 +53,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
             setFirstAddress(mainData.firstAddress);
             setSecondAddress(mainData.secondAddress ? mainData.secondAddress : secondAddress);
             setCity(mainData.city);
-            setCountry(mainData.country);
+            setCountry(mainData.country ? mainData.country : 'Portugal');
             setRegion(mainData.region);
             setPostalCode(mainData.postalCode);
         }
@@ -111,16 +113,29 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
         setCity(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
     };
 
-    const onChangeCountry = (event) => { 
-        setCountry(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
-    };
+    const showCountries = () => {
+        if (!visibleList) {
+            setVisibleList(true);
+        } else {
+            setVisibleList(false);
+        }
+    }
+
+    const closeList = (countryName) => {
+        setCountry(countryName);
+        setVisibleList(false);
+    }
 
     const onChangeRegion = (event) => { 
         setRegion(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
     };
 
     const onChangePostalCode = (event) => { 
-        setPostalCode(event.target.value);            
+        if (event.target.value.length > 4) {
+            setPostalCode(event.target.value.slice(0, 4) + '-' + event.target.value.slice(5, 8));
+        } else {
+            setPostalCode(event.target.value);              
+        }
     };
 
     const { items, totalPrice } = useSelector((state) => state.cart);
@@ -163,7 +178,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
 
     const submitForm = () => {
         const formData = new FormData();
-        const id = user.id;
+        const id = user ? user.id : 0;
         formData.append('userId', id);
         formData.append('items', JSON.stringify(items));
         formData.append('quantity', totalCount);
@@ -255,12 +270,19 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
                                 value={city}
                                 onChange={onChangeCity}/>
                         </div>
-                        <div className="popup-form__line">
+                        <div className="popup-form__line popup-form__line_select">
                             <label htmlFor="user-country-input" className="popup-form__label">País</label>
-                            <input required id="user-country-input" tabIndex="9" autoComplete="off" type="text" name="country" data-error="Error" className="popup-form__input"
+                            <input readOnly required onClick={showCountries} id="user-country-input" tabIndex="9" autoComplete="off" type="text" name="country" data-error="Error" className="popup-form__input popup-form__input_select"
                                 ref={inputRef}
-                                value={country}
-                                onChange={onChangeCountry}/>
+                                value={country} />
+                            <svg onClick={showCountries} className={visibleList ? 'popup-form_rotate' : ''} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
+                            </svg>
+                            <ul className={visibleList ? 'popup-form__list' : 'popup-form__list_hidden'}>
+                                {countries.map((countryName, i) => 
+                                    <li onClick={() => closeList(countryName) } key={i} className={'popup-form__item'}>{countryName}</li>
+                                )}
+                            </ul>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-region-input" className="popup-form__label">Concelho</label>

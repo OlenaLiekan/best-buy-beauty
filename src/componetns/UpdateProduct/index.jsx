@@ -29,6 +29,8 @@ const UpdateProduct = ({id, obj}) => {
     const [images, setImages] = React.useState([]);
     const [isLashes, setIsLashes] = React.useState(false);
     const [text, setText] = React.useState('');
+    const [applying, setApplying] = React.useState('');
+    const [compound, setCompound] = React.useState('');
     const [deletedSlideId, setDeletedSlideId] = React.useState([]);
 
     React.useEffect(() => {
@@ -38,7 +40,9 @@ const UpdateProduct = ({id, obj}) => {
         setTypeId(obj.typeId);
         setBrandId(obj.brandId);
         setIsLashes(obj.isLashes);
-        setText(obj.text[0] ? obj.text[0].text : 'Ai, a descrição não foi encontrada.');
+        setText(obj.text[0] ? obj.text[0].text : '');
+        setApplying(obj.applying[0] ? obj.applying[0].text : '');
+        setCompound(obj.compound[0] ? obj.compound[0].text : '');
         setInfo(obj.info ? obj.info : info);
         setImg(obj.img);
         setObjSlides(obj.slide);
@@ -77,6 +81,14 @@ const UpdateProduct = ({id, obj}) => {
 
     const onChangeText = (e) => {
         setText(e.target.value);
+    }
+
+    const onChangeApplying = (e) => {
+        setApplying(e.target.value);
+    }
+
+    const onChangeCompound = (e) => {
+        setCompound(e.target.value);
     }
 
     const addInfo = () => {
@@ -173,6 +185,12 @@ const UpdateProduct = ({id, obj}) => {
         formData.set('brandId', brandId);
         formData.set('typeId', typeId);
         formData.set('text', text);
+        if (applying) {
+            formData.append('applying', applying);            
+        }
+        if (compound) {
+            formData.append('compound', compound);            
+        }
         if (deletedSlideId) {
             formData.append('deletedSlideId', JSON.stringify(deletedSlideId));            
         }
@@ -311,6 +329,16 @@ const UpdateProduct = ({id, obj}) => {
                     value={text}
                     onChange={onChangeText}
                 />
+                <label htmlFor="product-applying" className={styles.label}>Método de uso:</label>
+                <textarea id="product-applying" tabIndex='15' className={styles.textarea}
+                    ref={inputRef}
+                    value={applying}
+                    onChange={onChangeApplying} />
+                <label htmlFor="product-compound" className={styles.label}>Ingredientes:</label>
+                <textarea id="product-compound" tabIndex='16' className={styles.textarea}
+                    ref={inputRef}
+                    value={compound}
+                    onChange={onChangeCompound}/>
                 <button type='submit' tabIndex='15' className={styles.button}>Atualizar produto</button>
             </form>            
         </div>

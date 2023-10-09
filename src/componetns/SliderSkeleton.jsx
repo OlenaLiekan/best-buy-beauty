@@ -7,8 +7,8 @@ const SliderSkeleton = (props) => (
     className="skeletons"
     speed={2}
     width={1920}
-    height={500}
-    viewBox="0 0 1920 500"
+    height={400}
+    viewBox="0 0 1920 400"
     backgroundColor="#f3f3f3"
     foregroundColor="#ecebeb"
     {...props}

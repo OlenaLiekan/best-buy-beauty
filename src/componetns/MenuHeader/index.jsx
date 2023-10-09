@@ -8,6 +8,7 @@ import { camelize } from "../../js/script";
 import { setBrandId } from "../../redux/slices/filterSlice";
 import { useDispatch } from "react-redux";
 import { AuthContext } from "../../context";
+import MenuSkeleton from "../MenuSkeleton";
 
 const MenuHeader = () => {
 
@@ -15,6 +16,8 @@ const MenuHeader = () => {
     const [menuItems, setMenuItems] = React.useState([]);
     const [activeItem, setActiveItem] = React.useState(0);
     const { serverDomain } = React.useContext(AuthContext);
+
+    const skeletons = [...new Array(6)].map((_, index) => <MenuSkeleton key={index} />);
 
     const dispatch = useDispatch();
 
@@ -48,7 +51,7 @@ const MenuHeader = () => {
                 <nav className="menu__body">
                 <Link to="/catalog" className="icon-menu__text icon-menu__text_show">Catalogo</Link>                     
                     <ul className="menu__list">
-                        {menuList.map((item) => 
+                        {menuList.length ? menuList.map((item) => 
                             <li key={item.id} value={item.name} onClick={() => setActiveItem(item.id)} className="menu__item item-menu">
                                 {
                                     item.subMenu
@@ -69,7 +72,14 @@ const MenuHeader = () => {
                                     </div>
                                 }
                             </li>
-                        )}
+                        )
+                        :                     
+                        skeletons.map((skeleton, i) => 
+                            <li key={i}>
+                                <MenuSkeleton />
+                            </li>
+                        )        
+                    }
                     </ul>
                 </nav>
             </div>

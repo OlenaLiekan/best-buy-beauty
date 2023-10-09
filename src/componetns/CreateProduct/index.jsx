@@ -28,6 +28,8 @@ const CreateProduct = () => {
     const [images, setImages] = React.useState([]);
     const [isLashes, setIsLashes] = React.useState(false);
     const [text, setText] = React.useState('');
+    const [applying, setApplying] = React.useState('');
+    const [compound, setCompound] = React.useState('');
 
     const success = () => {
         window.alert('Novo produtos adicionado com sucesso!');
@@ -79,6 +81,14 @@ const CreateProduct = () => {
 
     const onChangeText = (e) => {
         setText(e.target.value);
+    }
+
+    const onChangeApplying = (e) => {
+        setApplying(e.target.value);
+    }
+
+    const onChangeCompound = (e) => {
+        setCompound(e.target.value);
     }
 
     React.useEffect(() => {
@@ -155,6 +165,12 @@ const CreateProduct = () => {
         formData.append('img', img);
         formData.append('info', JSON.stringify(info));
         formData.append('text', text);
+        if (applying) {
+            formData.append('applying', applying);            
+        }
+        if (compound) {
+            formData.append('compound', compound);            
+        }
         formData.append('isLashes', isLashes);
         images.forEach((file) => {
             formData.append('slide', file);
@@ -266,7 +282,17 @@ const CreateProduct = () => {
                 <textarea required id="product-about" tabIndex='14' className={styles.textarea}
                     ref={inputRef}
                     value={text}
-                    onChange={onChangeText}/>
+                    onChange={onChangeText} />
+                <label htmlFor="product-applying" className={styles.label}>Método de uso:</label>
+                <textarea id="product-applying" tabIndex='15' className={styles.textarea}
+                    ref={inputRef}
+                    value={applying}
+                    onChange={onChangeApplying} />
+                <label htmlFor="product-compound" className={styles.label}>Ingredientes:</label>
+                <textarea id="product-compound" tabIndex='16' className={styles.textarea}
+                    ref={inputRef}
+                    value={compound}
+                    onChange={onChangeCompound}/>
                 <button type='submit' tabIndex='15' className={styles.button}>Criar produto</button>
             </form>            
         </div>

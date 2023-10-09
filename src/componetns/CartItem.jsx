@@ -100,7 +100,7 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
                         <div className="quantity__text">{count}</div>
                         <button onClick={onClickPlus} className="quantity__plus">+</button>
                     </div>
-                    <div className="item-cart__price">{price} €</div>
+                    <div className="item-cart__price">{(price*count).toFixed(2)} €</div>
                     <button onClick={onClickRemove} className="item-cart__delete">+</button>                                        
                 </div>
             </div>

@@ -12,7 +12,7 @@ import ReviewItem from './ReviewItem';
 import NewReview from './NewReview';
 import { setCurrentPage } from '../redux/slices/filterSlice';
 
-const ProductItem = ({ obj, id, info, text, slide, typeId, rating, isLashes, brandId, name, code, price, img}) => {
+const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, brandId, name, code, price, img}) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -31,6 +31,9 @@ const ProductItem = ({ obj, id, info, text, slide, typeId, rating, isLashes, bra
     const [userRate, setUserRate] = React.useState({});
     const [productRatings, setProductRatings] = React.useState([]);
     const [index, setIndex] = React.useState('');
+    const [activeTitle, setActiveTitle] = React.useState(0);
+
+    const tabs = ['Descrição', 'Método de uso', 'Ingredientes'];
 
     const { isAuth, adminMode, updateProductMode, serverDomain } = React.useContext(AuthContext);
 
@@ -136,6 +139,8 @@ const ProductItem = ({ obj, id, info, text, slide, typeId, rating, isLashes, bra
     }, [id, activeCurl, activeLength, activeThickness]);
     
     const paragraphs = text.length ? text[0].text.split('\r\n') : '';
+    const paragraphsApplying = applying.length ? applying[0].text.split('\r\n') : '';
+    const paragraphsCompound = compound.length ? compound[0].text.split('\r\n') : '';
 
     return (
         <div className="product-card__content">
@@ -250,7 +255,7 @@ const ProductItem = ({ obj, id, info, text, slide, typeId, rating, isLashes, bra
                                             <button onClick={onClickAdd} className="quantity__plus">+</button>
                                         </div>                                  
                                         <button onClick={showCart} className="checkout">
-                                            Comprar
+                                            Confira
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                                 <path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z" />
                                             </svg>
@@ -274,17 +279,39 @@ const ProductItem = ({ obj, id, info, text, slide, typeId, rating, isLashes, bra
                     ''
                 }    
                 <div className="product-card__description description-product">
-                    <h3 className="description-product__title">
-                        Descrição
-                    </h3>
+                    <div className="product-card__titles titles-product">
+                        {tabs.map((tab, i) => 
+                            <h3 key={i} onClick={() => setActiveTitle(i)} className={activeTitle === i ? 'description-product__title description-product__title_active' : 'description-product__title'}>
+                                {tab}
+                            </h3>                        
+                        )}
+                    </div>
                     {text.length
                         ? 
                         paragraphs.map((p, i) => 
-                            <p key={i} className="description-product__text">
+                            <p key={i} className={activeTitle === 0 ? 'description-product__text' : 'description-product__text_hidden'}>
                                 {p}
                             </p>                        
                         )
-                        : 'Ai, a descrição não foi encontrada.'                        
+                        : ''                        
+                    }
+                    {applying.length
+                        ? 
+                        paragraphsApplying.map((p, i) => 
+                            <p key={i} className={activeTitle === 1 ? 'description-product__text' : 'description-product__text_hidden'}>
+                                {p}
+                            </p>                        
+                        )
+                        : ''                        
+                    }
+                    {compound.length
+                        ? 
+                        paragraphsCompound.map((p, i) => 
+                            <p key={i} className={activeTitle === 2 ? 'description-product__text' : 'description-product__text_hidden'}>
+                                {p}
+                            </p>                        
+                        )
+                        : ''                        
                     }
                 </div>
             </div>
