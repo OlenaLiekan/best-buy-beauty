@@ -212,8 +212,9 @@ const UserPanel = ({ user }) => {
                                                 </li>                                                    
                                                 )}
                                             </ul>
-                                            <div className={styles.total}>
+                                                <div className={styles.total}>
                                                 <div>Quantidade total: {order.quantity}</div>
+                                                <div>Custo de entrega: {order.deliveryPrice} €</div>        
                                                 <div>Montante total: {order.sum} €</div>                                                
                                             </div>
                                         </div>
