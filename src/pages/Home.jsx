@@ -8,8 +8,8 @@ const Home = ({types}) => {
     return (
       <div className="main__content">
         <MainSliderBlock />
-        <BrandsBlock />
         <BestSellersBlock types={types} />
+        <BrandsBlock />
       </div>
     );
 };
