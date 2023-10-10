@@ -41,7 +41,9 @@ const UpdateBrand = ({brandItem}) => {
         const id = brandItem.id;
         const formData = new FormData();
         formData.set('name', name);
-        formData.set('img', img);
+        if (img) {
+            formData.set('img', img);            
+        }
         updateBrand(formData, id).then(data => success());
     }
 
@@ -60,7 +62,7 @@ const UpdateBrand = ({brandItem}) => {
                 </div>
                 <div className={styles.line}>
                     <label htmlFor="brand-file" className={styles.label}>Imagem:</label>
-                    <input id="brand-file" required tabIndex="6" type='file' className={styles.formFile}
+                    <input id="brand-file" tabIndex="6" type='file' className={styles.formFile}
                         onChange={selectFile}
                     />                   
                 </div>

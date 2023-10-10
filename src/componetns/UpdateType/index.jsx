@@ -72,8 +72,12 @@ const UpdateType = ({typeItem}) => {
         const formData = new FormData();
         const id = typeItem.id;
         formData.set('name', name);
-        formData.set('img', img);
-        formData.set('category', categoryId);
+        if (img) {
+            formData.set('img', img);            
+        }
+        if (categoryId) {
+            formData.set('category', categoryId);            
+        }
         fetchAndUpdateType(formData, id).then(data => success());
     }
 
@@ -110,7 +114,7 @@ const UpdateType = ({typeItem}) => {
                 </svg> 
                 <div className={styles.line}>
                     <label htmlFor="type-file" className={styles.label}>Imagem:</label>
-                    <input id="type-file" required tabIndex="3" type='file' className={styles.formFile}
+                    <input id="type-file" tabIndex="3" type='file' className={styles.formFile}
                         onChange={selectFile}
                     />                    
                 </div>
