@@ -26,7 +26,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
     const [secondAddress, setSecondAddress] = React.useState('');
     const [city, setCity] = React.useState('');
     const [region, setRegion] = React.useState('');
-    const [country, setCountry] = React.useState('');
+    const [country, setCountry] = React.useState('Portugal');
     const [postalCode, setPostalCode] = React.useState('');
     const [company, setCompany] = React.useState('');
     const [addresses, setAddresses] = React.useState([]);
@@ -53,7 +53,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
             setFirstAddress(mainData.firstAddress);
             setSecondAddress(mainData.secondAddress ? mainData.secondAddress : secondAddress);
             setCity(mainData.city);
-            setCountry(mainData.country ? mainData.country : 'Portugal');
+            setCountry(mainData.country ? mainData.country : country);
             setRegion(mainData.region);
             setPostalCode(mainData.postalCode);
         }

@@ -165,12 +165,8 @@ const CreateProduct = () => {
         formData.append('img', img);
         formData.append('info', JSON.stringify(info));
         formData.append('text', text);
-        if (applying) {
-            formData.append('applying', applying);            
-        }
-        if (compound) {
-            formData.append('compound', compound);            
-        }
+        formData.append('applying', applying);            
+        formData.append('compound', compound);            
         formData.append('isLashes', isLashes);
         images.forEach((file) => {
             formData.append('slide', file);

@@ -185,12 +185,8 @@ const UpdateProduct = ({id, obj}) => {
         formData.set('brandId', brandId);
         formData.set('typeId', typeId);
         formData.set('text', text);
-        if (applying) {
-            formData.append('applying', applying);            
-        }
-        if (compound) {
-            formData.append('compound', compound);            
-        }
+        formData.append('applying', applying);            
+        formData.append('compound', compound);            
         if (deletedSlideId) {
             formData.append('deletedSlideId', JSON.stringify(deletedSlideId));            
         }

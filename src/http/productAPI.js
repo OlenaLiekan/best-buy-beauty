@@ -11,7 +11,7 @@ export const fetchTypes = async () => {
 };
 
 export const fetchAndUpdateType = async (type, id) => {
-  const { data } = await $authHost.put('api/type/' + id, type);
+  const { data } = await $authHost.patch('api/type/' + id, type);
   return data;
 };
 
@@ -26,7 +26,7 @@ export const fetchBrands = async () => {
 };
 
 export const updateBrand = async (brand, id) => {
-  const { data } = await $authHost.put('api/brand/' + id, brand);
+  const { data } = await $authHost.patch('api/brand/' + id, brand);
   return data;
 };
 

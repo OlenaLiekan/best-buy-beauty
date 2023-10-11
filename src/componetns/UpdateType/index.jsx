@@ -13,14 +13,17 @@ const UpdateType = ({typeItem}) => {
     const [visibility, setVisibility] = React.useState(false);
     const [categories, setCategories] = React.useState([]);
     const [name, setName] = React.useState('');
-    const [categoryId, setCategoryId] = React.useState(1);
-    const [categoryName, setCategoryName] = React.useState('Selecione a Categoria');
+    const [categoryId, setCategoryId] = React.useState('');
+    const [categoryName, setCategoryName] = React.useState('');
     const [img, setImg] = React.useState(null);
+    const [currentCategory, setCurrentCategory] = React.useState('');
 
     React.useEffect(() => {
         setName(typeItem.name); 
         const category = categories.find(category => category.id === typeItem.categoryId);
         if (category) {
+            setCurrentCategory(category);
+            setCategoryId(category.id);
             setCategoryName(category.name ? category.name : categoryName);            
         }
     }, [typeItem, categories]);
@@ -46,6 +49,7 @@ const UpdateType = ({typeItem}) => {
 
     const hideOptions = (id, name) => {
         setCategoryId(id);
+        console.log(id);
         setCategoryName(name);
         setVisibility(false);        
     }
@@ -57,7 +61,10 @@ const UpdateType = ({typeItem}) => {
             });
     }, []);
 
-    const submenuCategories = categories.filter((category) => category.subMenu);
+    let submenuCategories = categories.filter((category) => category.subMenu);
+    if (!currentCategory.subMenu) {
+        submenuCategories = [...submenuCategories, currentCategory];        
+    }
 
     const onChangeName = (e) => {
         setName(e.target.value);
@@ -75,9 +82,7 @@ const UpdateType = ({typeItem}) => {
         if (img) {
             formData.set('img', img);            
         }
-        if (categoryId) {
-            formData.set('category', categoryId);            
-        }
+        formData.set('categoryId', categoryId);            
         fetchAndUpdateType(formData, id).then(data => success());
     }
 

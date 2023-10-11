@@ -19,6 +19,7 @@ const SubMenuHeader = ({ menuItems }) => {
     return ( 
         <div className="bottom-header__sub-menu sub-menu-bottom-header sub-menu">
             <nav className="sub-menu__body">
+                <div className="sub-menu__all">Ver Tudo</div>
                 <ul className="sub-menu__list list-sub-menu">
                     {menuItems ? menuItems.map((type) => 
                         <li key={type.id} value={type.name} onClick={menuInit} className="sub-menu__item item-sub-menu">

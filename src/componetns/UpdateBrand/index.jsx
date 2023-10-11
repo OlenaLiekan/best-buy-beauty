@@ -14,7 +14,7 @@ const UpdateBrand = ({brandItem}) => {
     const [name, setName] = React.useState('');
 
     React.useEffect(() => {
-        setName(brandItem.name);          
+        setName(brandItem.name);   
     }, [brandItem]);
 
     const success = () => {
