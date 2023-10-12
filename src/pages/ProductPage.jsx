@@ -44,19 +44,19 @@ const ProductPage = ({type}) => {
     } 
 
     React.useEffect(() => {
-            setIsLoading(true);
-            const sortBy = sort.sortProperty.replace('-', '');        
-            const order = sort.sortProperty.includes('-') ? 'ASC' : 'DESC';
-            const brandCategory = brandId === 0 ? '' : `&brandId=${brandId}`;
-            const typeId = type.id ? `&typeId=${type.id}` : '';
+        setIsLoading(true);
+        const sortBy = sort.sortProperty.replace('-', '');        
+        const order = sort.sortProperty.includes('-') ? 'ASC' : 'DESC';
+        const brandCategory = brandId === 0 ? '' : `&brandId=${brandId}`;
+        const typeId = type.id ? `&typeId=${type.id}` : '';
 
-            const search = searchValue ? `&name=${searchValue}` : '';
-            axios.get(`${serverDomain}api/product?info&page=${currentPage}&limit=12${typeId}${brandCategory}&sort=${sortBy}&order=${order}${search}`)
-            .then((res) => {
-                setItems(res.data.rows);
-            });
-            setIsLoading(false);
-            window.scrollTo(0, 0);
+        const search = searchValue ? `&name=${searchValue}` : '';
+        axios.get(`${serverDomain}api/product?info&page=${currentPage}&limit=12${typeId}${brandCategory}&sort=${sortBy}&order=${order}${search}`)
+        .then((res) => {
+            setItems(res.data.rows);
+        });
+        setIsLoading(false);
+        window.scrollTo(0, 0);            
     }, [brandId, sort, currentPage, searchValue, type.id]);
 
     React.useEffect(() => {
@@ -78,6 +78,7 @@ const ProductPage = ({type}) => {
                     <Brands type={type} brandId={brandId} products={items} onChangeBrand={onChangeBrand}/>
                     <Sort arrItem={type} />
                     {isAuth && adminMode && createProductMode ? <CreateProduct /> : ''}
+                    <h1 className='product-main__type'>{type.id > 0 ? type.name : 'Todos os produtos'}</h1>
                     <div className="product-main__items">
                         <div className={isAuth && adminMode && !createProductMode ? "item-product" : "item-product_hidden"}>
                         <div className='item-product__add'>
