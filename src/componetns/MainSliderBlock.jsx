@@ -3,7 +3,7 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../context";
 import "../scss/navigation.scss";
@@ -19,6 +19,8 @@ const MainSliderBlock = () => {
   const [slides, setSlides] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
+  const navigate = useNavigate();
+
   React.useEffect(() => {
     setIsLoading(true);
     axios.get(`${serverDomain}api/slide`)
@@ -26,15 +28,16 @@ const MainSliderBlock = () => {
         setSlides(res.data);
         setIsLoading(false);
       });
-  }, []);
+  }, [serverDomain]);
 
   const removeSlide = (id) => {
     if (window.confirm('Tem certeza de que deseja excluir o slide?')) {
       axios.delete(`${serverDomain}api/slide?id=${id}`)
         .then(() => {
           window.alert('O slide foi excluído com sucesso!');
-
-      })      
+        })
+      navigate('/auth');
+      window.scrollTo(0, 0);      
     } else {
       window.alert('Cancelar exclusão.');
     }
@@ -67,7 +70,7 @@ const MainSliderBlock = () => {
                       <div className="slide-main-block__content">
                         {isLoading
                           ?
-                            <img src={`${imagesCloud}` + 'noSlide.png'} />
+                            <img src={`${imagesCloud}noSlide.png`} alt="slide" />
                           : 
                           <Link to="#" className="slide-main-block__image">
                             <div className={isAuth && adminMode ? 'slide-main-block__actions' : 'slide-main-block__actions_hidden'}>

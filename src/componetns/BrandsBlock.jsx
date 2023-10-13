@@ -10,6 +10,7 @@ import "swiper/scss";
 import CreateBrand from "./CreateBrand";
 import UpdateBrand from "./UpdateBrand";
 import SliderSkeleton from "./SliderSkeleton";
+import { SearchContext } from "../App";
 
 const BrandsBlock = () => {
 
@@ -23,13 +24,14 @@ const BrandsBlock = () => {
     setUpdateCompanyMode, serverDomain, imagesCloud
   } = React.useContext(AuthContext);
 
+  const { setCategoryTypes } = React.useContext(SearchContext);
+
   const [brands, setBrands] = React.useState([]);
   const [brandItem, setBrandItem] = React.useState({});
   const [id, setId] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(true);
   const dispatch = useDispatch();
   const slidesCount = Math.ceil(brands.length / 3);
-  let start = 0;
 
   const skeletons = [...new Array(3)].map((_, index) => <SliderSkeleton key={index} />);
 
@@ -40,7 +42,7 @@ const BrandsBlock = () => {
         setBrands(res.data);
         setIsLoading(false);
       });
-  }, []);
+  }, [serverDomain]);
 
   React.useEffect(() => {
     if (id) {
@@ -53,10 +55,11 @@ const BrandsBlock = () => {
           setCreateCompanyMode(false);
       }                 
     }
-  }, [id]);
+  }, [id, brandItem, serverDomain, setCreateCompanyMode, setUpdateCompanyMode]);
   
   const onChangeBrand = (brandId) => {
     dispatch(setBrandId(brandId));
+    setCategoryTypes([]);
     navigate(`/produtos`);
   }
 

@@ -28,6 +28,8 @@ function App() {
 
   const [isLoading, setLoading] = React.useState(true);
 
+  const [categoryTypes, setCategoryTypes] = React.useState([]);
+
   const serverDomain = 'https://bbb-server-a6ji.onrender.com/';
   const imagesCloud =
     'https://res.cloudinary.com/bestbuybeautycloud/image/upload/v1695298243/static/';
@@ -81,7 +83,9 @@ function App() {
           imagesCloud,
         }}
       >
-        <SearchContext.Provider value={{ searchValue, setSearchValue }}>
+        <SearchContext.Provider
+          value={{ searchValue, setSearchValue, categoryTypes, setCategoryTypes }}
+        >
           <AppRoutes />
         </SearchContext.Provider>
       </AuthContext.Provider>

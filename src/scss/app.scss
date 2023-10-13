@@ -1758,6 +1758,10 @@
     gap: 8px;
     font-weight: 500;
     color: #7f766a;
+    @media(max-width: 479.98px) {
+        font-size: 12px;
+        gap: 5px;
+    }
     .empty-star {
         fill: #e8c54554;
     }
@@ -2048,11 +2052,8 @@
         @media (max-width: 579.98px) {
             height: 300px;
         }
-        @media (max-width: 479.98px) {
-            height: 260px;
-        }
-        @media (max-width: 319.98px) {
-            height: 220px;
+        @media (max-width: 371.98px) {
+            height: 280px;
         }
     }
 }

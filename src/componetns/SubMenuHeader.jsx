@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
 import { menuInit, camelize } from "../js/script";
-import { setBrandId } from "../redux/slices/filterSlice";
+import { setBrandId, setCurrentPage } from "../redux/slices/filterSlice";
 import { useDispatch } from "react-redux";
 import MenuSkeleton from "./MenuSkeleton";
+import { SearchContext } from "../App";
 
 const SubMenuHeader = ({ menuItems }) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const { setCategoryTypes } = useContext(SearchContext);
 
     const skeletons = [...new Array(4)].map((_, index) => <MenuSkeleton key={index} />);
 
@@ -18,7 +21,15 @@ const SubMenuHeader = ({ menuItems }) => {
     }
 
     const showCategoryTypes = () => {
+        setCategoryTypes(menuItems); 
+        onChangeBrand(0);
+        dispatch(setCurrentPage(1));
         navigate('/produtos');
+    }
+
+    const showType = () => {
+        setCategoryTypes([]);
+        onChangeBrand(0);
     }
 
     return ( 
@@ -28,7 +39,7 @@ const SubMenuHeader = ({ menuItems }) => {
                 <ul className="sub-menu__list list-sub-menu">
                     {menuItems ? menuItems.map((type) => 
                         <li key={type.id} value={type.name} onClick={menuInit} className="sub-menu__item item-sub-menu">
-                            <Link to={`/${camelize(type.name)}`} onClick={() => onChangeBrand(0)} className="item-sub-menu__link" >
+                            <Link to={`/${camelize(type.name)}`} onClick={showType} className="item-sub-menu__link" >
                                 {type.name}
                             </Link>
                         </li>  

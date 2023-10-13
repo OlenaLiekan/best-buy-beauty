@@ -17,20 +17,25 @@ const AdminPanel = () => {
     const { serverDomain } = React.useContext(AuthContext);
     const navigate = useNavigate();
     const [deliveries, setDeliveries] = React.useState([]);
+    const [editPricesMode, setEditPricesMode] = React.useState(false);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/delivery`)
             .then((res) => {
                 setDeliveries(res.data);
             });
-    }, []);
+    }, [serverDomain]);
 
     React.useEffect(() => {
         if (path) {
             navigate(`/${path}`);
             window.scrollTo(0, 0);
         }
-    }, [path]);
+    }, [path, navigate]);
+
+    const editDeliveryPrices = () => {
+        setEditPricesMode(true);
+    }
 
     return (
         <div className={styles.actions}>
@@ -46,24 +51,35 @@ const AdminPanel = () => {
                     )}
                 </div>
             </form>
+            
             {deliveries.length
                 ?
                 <div className={styles.deliveryBlock}>
                     <h4>Valor da entrega</h4>
-                    <div className={styles.deliveryItems}>
-                        {deliveries.map((delivery, i) => 
-                            <div key={i} className={styles.deliveryItem}>
-                                <div className={styles.deliveryTitle}>
-                                    {delivery.type}: 
-                                </div>
-                                <div className={styles.deliveryPrice}>
-                                    {delivery.price === '0.00' ? '' : delivery.price + ' €'}
-                                    {delivery.requiredSum === '0.00' ? '' : ` num total de ${delivery.requiredSum} €`}
-                                </div>
-                            </div>                    
-                        )}
-                    </div>
-                    <button type='button' className={styles.upBtn}>Atualizar</button>
+                    {!editPricesMode
+                        ?
+                        <>
+                            <div className={styles.deliveryItems}>
+                                {deliveries.map((delivery, i) =>
+                                    <div key={i} className={styles.deliveryItem}>
+                                        <div className={styles.deliveryTitle}>
+                                            {delivery.type}:
+                                        </div>
+                                        <div className={styles.deliveryPrice}>
+                                            {delivery.price === '0.00' ? '' : delivery.price + ' €'}
+                                            {delivery.requiredSum === '0.00' ? '' : ` num total de ${delivery.requiredSum} €`}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            <button type='button' onClick={editDeliveryPrices} className={styles.upBtn}>Atualizar</button>
+                        </>
+                        :
+                        <form className={styles.deliveryForm}>
+                           <button type='button' className={styles.upBtn}>Confirme</button> 
+                           <button type='button' onClick={() => setEditPricesMode(false)} className={styles.cancelBtn}>Cancelar</button> 
+                        </form>
+                    }
                 </div>
                 :
                 ''

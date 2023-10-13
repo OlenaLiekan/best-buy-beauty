@@ -23,16 +23,13 @@ import { camelize } from '../js/script';
 const AppRoutes = () => {
     const { isAuth, serverDomain } = React.useContext(AuthContext);
     const [types, setTypes] = React.useState([]);
-    const [isLoading, setIsLoading] = React.useState(true);
 
     React.useEffect(() => {
-        setIsLoading(true);
         axios.get(`${serverDomain}api/type`)
             .then((res) => {
                 setTypes(res.data);
             });
-        setIsLoading(false);
-    }, []);
+    }, [serverDomain]);
 
     return (
         <Routes>
