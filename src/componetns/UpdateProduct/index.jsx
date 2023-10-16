@@ -39,7 +39,7 @@ const UpdateProduct = ({id, obj}) => {
         setCode(obj.code);
         setPrice(obj.price);
         setTypeId(obj.typeId);
-        setCategoryId(obj.categoryId);
+        setCategoryId(obj.categoryId ? obj.categoryId : 0);
         setBrandId(obj.brandId);
         setIsLashes(obj.isLashes);
         setText(obj.text[0] ? obj.text[0].text : '');
@@ -180,8 +180,9 @@ const UpdateProduct = ({id, obj}) => {
 
     React.useEffect(() => {
         if (typeId) {
-            const currentType = types.find((type) => type.id === typeId);
-            setCategoryId(currentType.categoryId);
+            const currentType = types.filter((type) => type.id === typeId);
+            const id = currentType[0].categoryId;
+            setCategoryId(id);
         }
     }, [typeId, types]); 
 

@@ -4,6 +4,8 @@ import axios from 'axios';
 import styles from './AdminPanel.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context';
+import { setCategoryId } from '../../redux/slices/filterSlice';
+import { useDispatch } from 'react-redux';
 
 const AdminPanel = () => {
 
@@ -16,6 +18,7 @@ const AdminPanel = () => {
     const [path, setPath] = React.useState('');
     const { serverDomain } = React.useContext(AuthContext);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [deliveries, setDeliveries] = React.useState([]);
     const [editPricesMode, setEditPricesMode] = React.useState(false);
 
@@ -28,10 +31,15 @@ const AdminPanel = () => {
 
     React.useEffect(() => {
         if (path) {
+            if (path === 'produtos') {
+                dispatch(setCategoryId(0));
+                localStorage.removeItem('categoryId');
+                localStorage.removeItem('subItems');
+            }
             navigate(`/${path}`);
             window.scrollTo(0, 0);
         }
-    }, [path, navigate]);
+    }, [path, navigate, dispatch]);
 
     const editDeliveryPrices = () => {
         setEditPricesMode(true);

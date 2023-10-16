@@ -156,9 +156,11 @@ const CreateProduct = () => {
     }, [typeName]);
 
     React.useEffect(() => {
-        if (typeId) {
+        if (typeId && types) {
             const currentType = types.find((type) => type.id === typeId);
-            setCategoryId(currentType.categoryId);
+            const id = currentType ? currentType.categoryId : 0;
+            setCategoryId(id);
+            console.log(id);
         }
     }, [typeId, types]); 
 
