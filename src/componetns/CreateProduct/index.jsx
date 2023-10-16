@@ -13,6 +13,7 @@ const CreateProduct = () => {
     const [brands, setBrands] = React.useState([]);
     const [types, setTypes] = React.useState([]);
     const [typeId, setTypeId] = React.useState(1);
+    const [categoryId, setCategoryId] = React.useState(0);
     const [brandId, setBrandId] = React.useState(1);
     const [typeName, setTypeName] = React.useState('Selecione o tipo');
     const [brandName, setBrandName] = React.useState('Selecione a marca');
@@ -107,14 +108,14 @@ const CreateProduct = () => {
             .then((res) => {
                 setBrands(res.data);
             });
-    }, []);
+    }, [serverDomain]);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/type`)
             .then((res) => {
                 setTypes(res.data.slice(1));
             });
-    }, []);
+    }, [serverDomain]);
 
     const toggleBrandOptions = () => {
         if (brandsVisibility) {
@@ -154,12 +155,20 @@ const CreateProduct = () => {
         }
     }, [typeName]);
 
+    React.useEffect(() => {
+        if (typeId) {
+            const currentType = types.find((type) => type.id === typeId);
+            setCategoryId(currentType.categoryId);
+        }
+    }, [typeId, types]); 
+
     const pushProduct = (e) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('name', name);
         formData.append('code', code);
         formData.append('price', price);
+        formData.append('categoryId', categoryId);
         formData.append('brandId', brandId);
         formData.append('typeId', typeId);
         formData.append('img', img);

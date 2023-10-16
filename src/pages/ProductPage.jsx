@@ -23,14 +23,15 @@ const ProductPage = ({type}) => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { brandId, sort, currentPage } = useSelector((state) => state.filter);
+    const { categoryId, brandId, sort, currentPage } = useSelector((state) => state.filter);
 
-    const { searchValue, categoryTypes} = React.useContext(SearchContext);
+    const { searchValue } = React.useContext(SearchContext);
     const { isAuth, adminMode, createProductMode, setCreateProductMode, serverDomain } = React.useContext(AuthContext);
 
     const [items, setItems] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(true);
-    const [typeId, setTypeId] = React.useState('');
+
+    const [subItems, setSubItems] = React.useState([]);
 
     const onChangeBrand = (id) => {
         dispatch(setBrandId(id));
@@ -45,33 +46,37 @@ const ProductPage = ({type}) => {
     } 
 
     React.useEffect(() => {
+        if (categoryId && localStorage.getItem('subItems')) {
+            const data = JSON.parse(localStorage.getItem('subItems'));
+            setSubItems(data);
+        }
+    }, [categoryId, serverDomain]);
+
+    React.useEffect(() => {
         setIsLoading(true);
         const sortBy = sort.sortProperty.replace('-', '');        
         const order = sort.sortProperty.includes('-') ? 'ASC' : 'DESC';
         const brandCategory = brandId === 0 ? '' : `&brandId=${brandId}`;
         const search = searchValue ? `&name=${searchValue}` : '';
-        if (categoryTypes.length) {
-            const typesId = categoryTypes.map((categoryType) => categoryType.id);
-            const stringTypes = typesId.map((item) => '&typeId=' + item).join('');
-            setTypeId(stringTypes);
-        } 
-        const option = type.id > 0 ? `&typeId=${type.id}` : ''; 
-        axios.get(`${serverDomain}api/product?info&page=${currentPage}&limit=12${typeId}${option}${brandCategory}&sort=${sortBy}&order=${order}${search}`)
+        const typeId = type.id ? `&typeId=${type.id}` : ''; 
+        const category = categoryId ? `&categoryId=${categoryId}` : '';
+        axios.get(`${serverDomain}api/product?info&page=${currentPage}&limit=12${category}${typeId}${brandCategory}&sort=${sortBy}&order=${order}${search}`)
         .then((res) => {
             setItems(res.data.rows);
         });
         setIsLoading(false);
-        window.scrollTo(0, 0);            
-    }, [brandId, sort, currentPage, searchValue, type.id, typeId, type, categoryTypes, serverDomain]);
+        window.scrollTo(0, 0);             
+    }, [categoryId, brandId, sort, currentPage, searchValue, type.id, serverDomain]);
 
     React.useEffect(() => {
         const queryString = qs.stringify({
             sortProperty: sort.sortProperty,
+            categoryId,
             brandId,
             currentPage,
         });
         navigate(`?${queryString}`);
-    }, [brandId, currentPage, sort.sortProperty, navigate]);
+    }, [categoryId, brandId, currentPage, sort.sortProperty, navigate]);
     
     const products = items.map((item) => <div key={item.id}><ProductBlock text={item.text} info={item.info} path={`/${camelize(type.name)}/${item.id}`} {...item} /></div>);
     const skeletons = [...new Array(12)].map((_, index) => <Skeleton key={index} />);
@@ -83,13 +88,13 @@ const ProductPage = ({type}) => {
                     <Brands type={type} brandId={brandId} products={items} onChangeBrand={onChangeBrand}/>
                     <Sort arrItem={type} />
                     {isAuth && adminMode && createProductMode ? <CreateProduct /> : ''}
-                    {categoryTypes.length
+                    {categoryId
                         ?
                         <h2 className='product-main__type'>
-                        {categoryTypes.map((categoryType) => 
-                            categoryType.name + ' / '
-                        )}
-                        </h2>   
+                            {subItems.map((subItem) =>
+                                subItem.name + ' / '                  
+                            )}
+                        </h2> 
                         :
                         <h1 className='product-main__type'>
                             {type.id > 0 ? type.name : 'Todos os produtos'}

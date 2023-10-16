@@ -13,6 +13,7 @@ const UpdateProduct = ({id, obj}) => {
     const [brands, setBrands] = React.useState([]);
     const [types, setTypes] = React.useState([]);
     const [typeId, setTypeId] = React.useState(1);
+    const [categoryId, setCategoryId] = React.useState(0);
     const [brandId, setBrandId] = React.useState(1);
     const [typeName, setTypeName] = React.useState('Selecione o tipo');
     const [brandName, setBrandName] = React.useState('Selecione a marca');
@@ -38,6 +39,7 @@ const UpdateProduct = ({id, obj}) => {
         setCode(obj.code);
         setPrice(obj.price);
         setTypeId(obj.typeId);
+        setCategoryId(obj.categoryId);
         setBrandId(obj.brandId);
         setIsLashes(obj.isLashes);
         setText(obj.text[0] ? obj.text[0].text : '');
@@ -54,7 +56,7 @@ const UpdateProduct = ({id, obj}) => {
         if (type) {
             setTypeName(type.name);            
         } 
-    }, [obj, brands, types]);
+    }, [obj, brands, types, info]);
 
     const success = () => {
         window.alert('Dados do produto atualizados com sucesso!');
@@ -129,14 +131,14 @@ const UpdateProduct = ({id, obj}) => {
             .then((res) => {
                 setBrands(res.data);
             });
-    }, []);
+    }, [serverDomain]);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/type`)
             .then((res) => {
                 setTypes(res.data.slice(1));
             });
-    }, []);
+    }, [serverDomain]);
 
     const toggleBrandOptions = () => {
         if (brandsVisibility) {
@@ -176,17 +178,26 @@ const UpdateProduct = ({id, obj}) => {
         }
     }, [typeName]);
 
+    React.useEffect(() => {
+        if (typeId) {
+            const currentType = types.find((type) => type.id === typeId);
+            setCategoryId(currentType.categoryId);
+        }
+    }, [typeId, types]); 
+
     const updateProductItem = (e) => {
         e.preventDefault();
         const formData = new FormData();
         formData.set('name', name);
         formData.set('code', code);
         formData.set('price', price);
+        formData.append('categoryId', categoryId);
         formData.set('brandId', brandId);
         formData.set('typeId', typeId);
         formData.set('text', text);
         formData.append('applying', applying);            
-        formData.append('compound', compound);            
+        formData.append('compound', compound);  
+        formData.append('isLashes', isLashes);
         if (deletedSlideId) {
             formData.append('deletedSlideId', JSON.stringify(deletedSlideId));            
         }
@@ -295,7 +306,7 @@ const UpdateProduct = ({id, obj}) => {
                 {objSlides ? 
                     objSlides.map((s) => 
                         <div key={s.id} className={styles.imgBox}> 
-                            <img src={ s.slideImg ? `${imagesCloud}` + s.slideImg : ''} />  
+                            <img src={ s.slideImg ? `${imagesCloud}` + s.slideImg : ''} alt='slide'/>  
                             <svg onClick={() => removeImage(s.id)} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                                 <path d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z" />
                             </svg>

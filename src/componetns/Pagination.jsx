@@ -5,37 +5,31 @@ import { SearchContext } from '../App';
 import { useSelector } from 'react-redux';
 import { AuthContext } from '../context';
 
-const Pagination = ({type, onChangePage }) => {
-  const { searchValue, categoryTypes } = React.useContext(SearchContext);
+const Pagination = ({type, onChangePage}) => {
+  const { searchValue } = React.useContext(SearchContext);
   const { serverDomain } = React.useContext(AuthContext);
-  const { brandId, currentPage } = useSelector((state) => state.filter);
+  const { categoryId, brandId, currentPage } = useSelector((state) => state.filter);
   const [itemsCount, setItemsCount] = React.useState(0);
-  const [typeId, setTypeId] = React.useState('');
 
-  const totalContent = itemsCount;
   const contentPerPage = 12;
-  const totalPages = totalContent ? Math.ceil(totalContent / contentPerPage) : 1;
+  const totalPages = itemsCount ? Math.ceil(itemsCount / contentPerPage) : 1;
   const forcePage = currentPage - 1;
 
   React.useEffect(() => {
     const company = brandId > 0 ? `brandId=${brandId}` : '';
     const search = searchValue ? `&name=${searchValue}` : '';
-    if (categoryTypes.length) {
-        const typesId = categoryTypes.map((categoryType) => categoryType.id);
-        const stringTypes = typesId.map((item) => '&typeId=' + item).join('');
-        setTypeId(brandId === 0 ? stringTypes.slice(1) : stringTypes);
-    }
-    const option = type.id > 0 ? `&typeId=${type.id}` : ''; 
+    const typeId = type.id ? `&typeId=${type.id}` : ''; 
+    const category = categoryId ? `&categoryId=${categoryId}` : '';
     axios
       .get(
-          `${serverDomain}api/product?${company}${option}${typeId}${search}`,
+          `${serverDomain}api/product?${company}${category}${typeId}${search}`,
       )
       .then((res) => {
         setItemsCount(res.data.count);          
     });
     window.scrollTo(0, 0);
-  }, [ type.id, typeId, brandId, searchValue, categoryTypes, serverDomain ]);
-
+  }, [type, categoryId, brandId, searchValue, serverDomain]);
+  
   return (
 
       <ReactPaginate

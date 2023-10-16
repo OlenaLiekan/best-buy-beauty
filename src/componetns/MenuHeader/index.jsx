@@ -5,7 +5,7 @@ import SubMenuHeader from "../SubMenuHeader";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { camelize } from "../../js/script";
-import { setBrandId } from "../../redux/slices/filterSlice";
+import { setBrandId, setCategoryId } from "../../redux/slices/filterSlice";
 import { useDispatch } from "react-redux";
 import { AuthContext } from "../../context";
 import MenuSkeleton from "../MenuSkeleton";
@@ -23,6 +23,9 @@ const MenuHeader = () => {
 
     const onChangeBrand = (id) => {
         dispatch(setBrandId(id));
+        localStorage.removeItem('categoryId');
+        localStorage.removeItem('subItems');        
+        dispatch(setCategoryId(id));
     };
 
     React.useEffect(() => {
@@ -30,7 +33,7 @@ const MenuHeader = () => {
             .then((res) => {
                 setMenuList(res.data);
             });
-    }, []);
+    }, [serverDomain]);
 
     React.useEffect(() => {
         if (activeItem > 0) {
@@ -39,7 +42,7 @@ const MenuHeader = () => {
                     setMenuItems(res.data);
                 }); 
         }   
-    }, [activeItem]);
+    }, [activeItem, serverDomain]);
 
     return ( 
         <>
@@ -83,7 +86,7 @@ const MenuHeader = () => {
                     </ul>
                 </nav>
             </div>
-            <SubMenuHeader menuItems={menuItems} />
+            <SubMenuHeader menuItems={menuItems} categoryId={activeItem} />
         </>
     );
 };

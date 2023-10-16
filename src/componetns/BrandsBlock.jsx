@@ -3,14 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper";
-import { setBrandId } from '../redux/slices/filterSlice';
+import { setBrandId, setCategoryId } from '../redux/slices/filterSlice';
 import { AuthContext } from "../context";
 import axios from "axios";
 import "swiper/scss";
 import CreateBrand from "./CreateBrand";
 import UpdateBrand from "./UpdateBrand";
 import SliderSkeleton from "./SliderSkeleton";
-import { SearchContext } from "../App";
 
 const BrandsBlock = () => {
 
@@ -24,7 +23,6 @@ const BrandsBlock = () => {
     setUpdateCompanyMode, serverDomain, imagesCloud
   } = React.useContext(AuthContext);
 
-  const { setCategoryTypes } = React.useContext(SearchContext);
 
   const [brands, setBrands] = React.useState([]);
   const [brandItem, setBrandItem] = React.useState({});
@@ -58,8 +56,10 @@ const BrandsBlock = () => {
   }, [id, brandItem, serverDomain, setCreateCompanyMode, setUpdateCompanyMode]);
   
   const onChangeBrand = (brandId) => {
+    dispatch(setCategoryId(0));
+    localStorage.removeItem('categoryId');
+    localStorage.removeItem('subItems');
     dispatch(setBrandId(brandId));
-    setCategoryTypes([]);
     navigate(`/produtos`);
   }
 

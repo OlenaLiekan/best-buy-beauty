@@ -24,7 +24,7 @@ const BestSellersBlock = () => {
         setIsLoading(false);
       });
     scrollTop();
-  }, []);
+  }, [serverDomain]);
       
   const products = items.map((item) =>
     <div key={item.id}
