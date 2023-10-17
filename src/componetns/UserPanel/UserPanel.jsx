@@ -3,11 +3,11 @@ import styles from './UserPanel.module.scss';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context';
-import CreateAddress from '../CreateAddress/CreateAddress';
-import UpdateAddress from '../UpdateAddress/UpdateAddress';
+import CreateAddress from '../UX/Popups/CreateAddress/CreateAddress';
+import UpdateAddress from '../UX/Popups/UpdateAddress/UpdateAddress';
 import { updateUser } from '../../http/userAPI';
-import UpdateUser from '../UpdateUser/UpdateUser';
-import UpdatePassword from '../UpdatePassword/UpdatePassword';
+import UpdateUser from '../UX/Popups/UpdateUser/UpdateUser';
+import UpdatePassword from '../UX/Popups/UpdatePassword/UpdatePassword';
 
 const UserPanel = ({ user }) => {
 
@@ -54,7 +54,7 @@ const UserPanel = ({ user }) => {
                 setAddresses(res.data.address);
                 setIsLoading(false);
             });
-    }, [deletedAddressId, updateAddressMode, createAddressMode]);
+    }, [deletedAddressId, updateAddressMode, createAddressMode, serverDomain, user.id]);
 
     React.useEffect(() => {
         if (addresses.length) {
@@ -351,7 +351,7 @@ const UserPanel = ({ user }) => {
                         {updatePassMode && activeOption === 2 ? <UpdatePassword userId={currentUser.id} /> : '' }
                         <button
                             onClick={cancelEditData}
-                            className={activeOption === 2 && updateUserMode || activeOption === 2 && updatePassMode
+                            className={(activeOption === 2 && updateUserMode) || (activeOption === 2 && updatePassMode)
                                 ?
                                 styles.cancelBtn
                                 :

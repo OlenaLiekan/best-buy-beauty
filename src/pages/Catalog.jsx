@@ -2,14 +2,14 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import Loader from '../componetns/Loader';
+import Loader from '../componetns/UI/Loader';
 import NotFoundProduct from '../componetns/NotFoundProduct';
 import { camelize } from '../js/script';
 import { useDispatch } from 'react-redux';
 import { setBrandId } from '../redux/slices/filterSlice';
 import { AuthContext } from '../context';
-import CreateType from '../componetns/CreateType';
-import UpdateType from '../componetns/UpdateType';
+import CreateType from '../componetns/UX/Popups/CreateType';
+import UpdateType from '../componetns/UX/Popups/UpdateType';
 
 const Catalog = () => { 
 
@@ -45,7 +45,7 @@ const Catalog = () => {
                 setIsLoading(false);
             });
         window.scrollTo(0, 0);
-    }, []);
+    }, [serverDomain]);
     
     React.useEffect(() => {
         setIsLoading(true);
@@ -58,7 +58,7 @@ const Catalog = () => {
                 setIsLoading(false);
             });
         window.scrollTo(0, 0);
-    }, []);
+    }, [serverDomain]);
     
     const removeType = (id) => {
         if (window.confirm('Tem certeza de que deseja excluir o tipo?')) {
@@ -83,7 +83,7 @@ const Catalog = () => {
                 window.scrollTo(0, 0);
             }                 
         }
-    }, [typeId]);
+    }, [typeId, serverDomain, setCreateTypeMode, setUpdateTypeMode, typeItem]);
 
     const createModeOn = () => {
         setCreateTypeMode(true);

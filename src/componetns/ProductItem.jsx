@@ -1,15 +1,15 @@
 import React from 'react';
 
 import { useNavigate, Link } from 'react-router-dom';
-import ProductCardSlider from './ProductCardSlider';
+import ProductCardSlider from './UX/ProductCardSlider';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem, minusItem } from '../redux/slices/cartSlice';
 import { camelize } from '../js/script';
 import axios from 'axios';
-import UpdateProduct from './UpdateProduct';
+import UpdateProduct from './UX/Popups/UpdateProduct';
 import { AuthContext } from '../context';
 import ReviewItem from './ReviewItem';
-import NewReview from './NewReview';
+import NewReview from './UX/Popups/NewReview';
 import { setCurrentPage } from '../redux/slices/filterSlice';
 
 const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, brandId, name, code, price, img}) => {
@@ -44,7 +44,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
         if (user) {
             setUserRate(productRatings.find((productRating) => productRating.userId === user.id));
         }
-    }, [user]);
+    }, [user, productRatings]);
 
     React.useEffect(() => {
         if (id) {
@@ -53,14 +53,14 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                     setProductRatings(res.data);
                 });
         }
-    }, [id]);
+    }, [id, serverDomain]);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/brand`)
             .then((res) => {
                 setBrands(res.data);
             });
-    }, []);
+    }, [serverDomain]);
 
 
     const companyNames = brands.map((brand) => brand.name);
@@ -71,7 +71,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
             .then((res) => {
                 setTypes(res.data);
             });
-    }, []);
+    }, [serverDomain]);
 
     const typeNames = types.map((type) => camelize(type.name));
     const path = typeNames.find((typeName, i) => i === typeId);
@@ -132,11 +132,11 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
             setLengthArr((Object.values(info).find((obj) => obj.title === 'Tamanho')).description.split(','));
             setLengthP(Object.values(info).find((obj) => obj.title === 'Tamanho'));
         }       
-    }, [isLashes]);
+    }, [isLashes, info]);
 
     React.useEffect(() => {
         setIndex(id + curlArr[activeCurl] + thicknessArr[activeThickness] + lengthArr[activeLength]);            
-    }, [id, activeCurl, activeLength, activeThickness]);
+    }, [id, activeCurl, activeLength, activeThickness, curlArr, thicknessArr, lengthArr]);
     
     const paragraphs = text.length ? text[0].text.split('\r\n') : '';
     const paragraphsApplying = applying.length ? applying[0].text.split('\r\n') : '';
@@ -243,10 +243,10 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                 }
                             </div> 
                         </div> 
-                        {price != 0
+                        {price !== 0
                             ?
                             <div className="product-card__actions">
-                                {!isLashes || activeCurl !== null && activeLength !== null && activeThickness !== null
+                                {!isLashes || (activeCurl !== null && activeLength !== null && activeThickness !== null)
                                     ?
                                     <>
                                         <div className="product-card__quantity quantity">

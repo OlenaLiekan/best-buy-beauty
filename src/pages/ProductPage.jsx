@@ -6,17 +6,17 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Pagination from '../componetns/Pagination';
-import Brands from '../componetns/Brands';
-import Sort from '../componetns/Sort';
+import Pagination from '../componetns/UX/Pagination';
+import Brands from '../componetns/UX/Brands';
+import Sort from '../componetns/UX/Sort';
 import { AuthContext } from '../context';
 
 import ProductBlock from "../componetns/ProductBlock";
-import Skeleton from "../componetns/Skeleton";
+import Skeleton from "../componetns/UI/Skeletons/Skeleton";
 
 import { setBrandId, setCurrentPage } from '../redux/slices/filterSlice';
 import NotFoundProduct from '../componetns/NotFoundProduct';
-import CreateProduct from '../componetns/CreateProduct';
+import CreateProduct from '../componetns/UX/Popups/CreateProduct';
 import { SearchContext } from '../App';
 
 const ProductPage = ({type}) => {

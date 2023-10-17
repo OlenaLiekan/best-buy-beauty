@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import MenuHeader from './MenuHeader';
-import Search from './Search';
+import MenuHeader from './UX/MenuHeader';
+import Search from './UX/Search';
 import { AuthContext } from '../context';
 
 import { useSelector } from 'react-redux';
@@ -30,7 +30,7 @@ const Header = () => {
         <div className="body-header__container">
           <Link to="/" className="body-header__logo header-logo">
             <div className="header-logo__image">
-              <img src={logoImg} />
+              <img src={logoImg} alt='logo' />
             </div>
             <h3 className="body-header__text">Best Buy Beauty</h3>
           </Link>

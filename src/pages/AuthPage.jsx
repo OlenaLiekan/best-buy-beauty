@@ -11,18 +11,6 @@ const AuthPage = () => {
     const navigate = useNavigate();
     const data = localStorage.getItem("user");
     const user = JSON.parse(data);
-
-    const initLogout = () => {
-        if (adminMode) {
-            setAdminMode(false);
-            localStorage.removeItem("adminMode", "true");
-        }
-        localStorage.removeItem('user');
-        setIsAuth(false);    
-        localStorage.removeItem('auth');
-        localStorage.removeItem('date');
-        navigate("/login");
-    }
     
     React.useEffect(() => {
         if (user.role === "ADMIN") {
@@ -40,10 +28,18 @@ const AuthPage = () => {
             const loginDate = localStorage.getItem("date");        
             let result = Date.now() - loginDate;
                 if ( result > 86399998) {
-                    initLogout();
+                    if (adminMode) {
+                        setAdminMode(false);
+                        localStorage.removeItem("adminMode", "true");
+                    }
+                    localStorage.removeItem('user');
+                    setIsAuth(false);    
+                    localStorage.removeItem('auth');
+                    localStorage.removeItem('date');
+                    navigate("/login");
                 } 
         }
-    }, [isAuth, createMode, updateMode, adminMode]);
+    }, [isAuth, createMode, updateMode, adminMode, user.role, setAdminMode, navigate, setIsAuth]);
 
     return (
         <div className="main__account account-main">

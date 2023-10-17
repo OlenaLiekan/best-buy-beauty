@@ -21,6 +21,7 @@ const AdminPanel = () => {
     const dispatch = useDispatch();
     const [deliveries, setDeliveries] = React.useState([]);
     const [editPricesMode, setEditPricesMode] = React.useState(false);
+    const [activeDelivery, setActiveDelivery] = React.useState(0);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/delivery`)
@@ -84,7 +85,22 @@ const AdminPanel = () => {
                         </>
                         :
                         <form className={styles.deliveryForm}>
-                           <button type='button' className={styles.upBtn}>Confirme</button> 
+                            <div className={styles.formLine}>
+                                <ul className={styles.deliveriesList}>
+                                    {deliveries.map((delivery, i) => 
+                                        <li className={i === activeDelivery ? styles.deliveryTypeActive : styles.deliveryType} key={i} onClick={() => setActiveDelivery(i)}>{delivery.type}</li>
+                                    )}
+                                </ul>
+                            </div>
+                            <div className={styles.formLine}> 
+                                <label>Preço:</label>
+                                <input/>
+                            </div>
+                            <div className={styles.formLine}>
+                                <label>Montante total:</label>
+                                <input/>
+                            </div>
+                           <button type='submit' className={styles.upBtn}>Confirme</button> 
                            <button type='button' onClick={() => setEditPricesMode(false)} className={styles.cancelBtn}>Cancelar</button> 
                         </form>
                     }

@@ -2,7 +2,7 @@ import React from 'react';
 import ProductItem from '../componetns/ProductItem';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import Loader from '../componetns/Loader';
+import Loader from '../componetns/UI/Loader';
 import { AuthContext } from '../context';
 
 
@@ -30,7 +30,7 @@ const ProductCard = ({type}) => {
         }
         window.scrollTo(0, 0);
         fetchProduct();
-    }, [id]);   
+    }, [id, navigate, serverDomain]);   
 
     return (
         <div className="main__product-card product-card">

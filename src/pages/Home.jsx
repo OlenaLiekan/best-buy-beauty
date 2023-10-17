@@ -1,8 +1,8 @@
 import React from 'react';
 
 import BestSellersBlock from '../componetns/BestSellersBlock';
-import BrandsBlock from '../componetns/BrandsBlock';
-import MainSliderBlock from '../componetns/MainSliderBlock';
+import BrandsBlock from '../componetns/UX/BrandsBlock';
+import MainSliderBlock from '../componetns/UX/MainSliderBlock';
 
 const Home = ({types}) => { 
     return (

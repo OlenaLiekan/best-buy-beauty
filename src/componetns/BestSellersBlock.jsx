@@ -4,7 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { scrollTop } from "../js/script";
 import ProductBlock from "./ProductBlock";
-import Skeleton from "./Skeleton";
+import Skeleton from "./UI/Skeletons/Skeleton";
 import { AuthContext } from "../context";
 
 const BestSellersBlock = () => {

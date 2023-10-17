@@ -13,7 +13,6 @@ const Registration = () => {
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');    
     const [phone, setPhone] = React.useState('');
-    const [phoneValue, setPhoneValue] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [emailValue, setEmailValue] = React.useState('');
     const [password, setPass] = React.useState('');
@@ -37,7 +36,7 @@ const Registration = () => {
         }
         window.scrollTo(0, 0);
         fetchUser();
-    }, [emailValue]); 
+    }, [emailValue, serverDomain]); 
 
     const createAccount = async (e) => {
         e.preventDefault();
@@ -52,24 +51,15 @@ const Registration = () => {
     }
 
 
-    const updateEmailValue = React.useCallback(
-        debounce((str) => {
-            setEmailValue(str);
-        }, 600),
+    const updateEmailValue = React.useCallback((str) =>
+        debounce(setEmailValue(str), 600),
         [],
     );
 
-    const updatePhoneValue = React.useCallback(
-        debounce((str) => {
-            setPhoneValue(str);
-        }, 600),
-        [],
-    );
-
-    const updateCheckPassValue = React.useCallback(
-        debounce((str) => {
-            setCheckPassValue(str);
-        }, 600),
+    const updateCheckPassValue = React.useCallback((str) =>
+        debounce(
+            setCheckPassValue(str)
+        , 600),
         [],
     );
 
@@ -83,7 +73,6 @@ const Registration = () => {
 
     const onChangePhone = (event) => { 
         setPhone(event.target.value);
-        updatePhoneValue(event.target.value);
     };
 
     const onChangeEmail = (event) => { 
@@ -156,7 +145,7 @@ const Registration = () => {
                                 value={checkPass}
                                 onChange={onChangeCheckPass}/> 
                         </div>
-                        <div className={checkPass && password !== checkPass ? 'form-login__line form-login__line_error _error' : "form-login__line form-login__line_error" }>
+                        <div className={checkPassValue && password !== checkPassValue ? 'form-login__line form-login__line_error _error' : "form-login__line form-login__line_error" }>
                             As senhas não correspondem.
                         </div>
                         <div className="form-login__text">

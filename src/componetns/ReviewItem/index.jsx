@@ -15,7 +15,7 @@ const ReviewItem = ({ name, userId, userName, productId, createdAt }) => {
                     setProductReviews(res.data);            
                 }); 
         }
-    }, [productId]);
+    }, [productId, serverDomain]);
 
     const productReview = productReviews ? productReviews.find((review) => userId === review.userId && productId === review.productId) : '';
 

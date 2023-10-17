@@ -34,7 +34,7 @@ const UserLogIn = () => {
             }
             window.scrollTo(0, 0);
             fetchUser();       
-    }, [emailValue]);     
+    }, [emailValue, navigate, serverDomain]);     
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
@@ -52,17 +52,17 @@ const UserLogIn = () => {
         }
     }
 
-    const updateEmailValue = React.useCallback(
-        debounce((str) => {
-            setEmailValue(str);
-        }, 600),
+    const updateEmailValue = React.useCallback((str) =>
+        debounce(
+            setEmailValue(str)
+        , 600),
         [],
     );
 
-    const updatePassValue = React.useCallback(
-        debounce((str) => {
-            setPassValue(str);
-        }, 600),
+    const updatePassValue = React.useCallback((str) =>
+        debounce(
+            setPassValue(str)
+        , 600),
         [],
     );
 
@@ -96,7 +96,7 @@ const UserLogIn = () => {
                                 value={email}
                                 onChange={onChangeInputEmail} />                            
                         </div>
-                        <div className={currentUser && !emailValue.length || currentUser && emailValue.length ? "form-login__line form-login__line_err" : "form-login__line form-login__line_err _error"}>
+                        <div className={(currentUser && !emailValue.length) || (currentUser && emailValue.length) ? "form-login__line form-login__line_err" : "form-login__line form-login__line_err _error"}>
                             E-mail inválido!
                         </div>
                         <div className="form-login__line">

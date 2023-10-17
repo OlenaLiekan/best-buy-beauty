@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { popupInit, scrollTop } from '../js/script';
 
-import PopupSubmitForm from '../componetns/PopupSubmitForm';
-import CartItem from '../componetns/CartItem';
+import PopupSubmitForm from '../componetns/UX/Popups/PopupSubmitForm';
+import CartItem from '../componetns/UX/CartItem';
 import CartEmpty from '../componetns/CartEmpty';
 import { clearItems } from '../redux/slices/cartSlice';
 import axios from 'axios';
@@ -25,7 +25,7 @@ const Cart = () => {
             .then((res) => {
                 setDeliveryPrices(res.data);
             });
-    }, []);
+    }, [serverDomain]);
 
     React.useEffect(() => {
         if (deliveryPrices.length) {

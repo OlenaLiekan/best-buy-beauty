@@ -16,7 +16,7 @@ const ProductBlock = ({path, id, info, name, rating, isLashes, price, brandId, i
             .then((res) => {
                 setBrands(res.data);
             });
-    }, []);
+    }, [serverDomain]);
 
     const removeProduct = () => {
         if (window.confirm('Tem certeza de que deseja excluir o produto?')) {
