@@ -32,6 +32,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const [productRatings, setProductRatings] = React.useState([]);
     const [index, setIndex] = React.useState('');
     const [activeTitle, setActiveTitle] = React.useState(0);
+    const [isWarning, setIsWarning] = React.useState(false);
 
     const tabs = ['Descrição', 'Método de uso', 'Ingredientes'];
 
@@ -80,6 +81,8 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
         if (isLashes ? lashesCount : addedCount) {
             window.scrollTo(0, 0);
             navigate('/cart');
+        } else {
+            setIsWarning(true);
         }
     };
 
@@ -89,22 +92,25 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const lashesCount = lashesItem ? lashesItem.count : 0;
 
     const onClickAdd = () => {
-            const item = {
-                id,
-                name,
-                info,               
-                code,
-                price,
-                company,
-                img,
-                path,
-                isLashes,
-                curlArr: curlArr[activeCurl],
-                thicknessArr: thicknessArr[activeThickness],
-                lengthArr: lengthArr[activeLength],
-                index
-            };
-            dispatch(addItem(item));           
+        if (isWarning) {
+            setIsWarning(false);
+        }
+        const item = {
+            id,
+            name,
+            info,               
+            code,
+            price,
+            company,
+            img,
+            path,
+            isLashes,
+            curlArr: curlArr[activeCurl],
+            thicknessArr: thicknessArr[activeThickness],
+            lengthArr: lengthArr[activeLength],
+            index
+        };
+        dispatch(addItem(item));           
     };
 
     const onClickMinus = () => { 
@@ -242,10 +248,17 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                 'Verifique com o gerente.'    
                                 }
                             </div> 
-                        </div> 
+                        </div>
+                        {isWarning
+                            ?
+                            <div className='product-card__warning'>Selecione a quantidade de mercadorias!</div>
+                            :
+                            ''
+                        } 
                         {price !== 0
                             ?
                             <div className="product-card__actions">
+
                                 {!isLashes || (activeCurl !== null && activeLength !== null && activeThickness !== null)
                                     ?
                                     <>

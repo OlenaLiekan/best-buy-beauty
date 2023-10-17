@@ -66,6 +66,14 @@ const AdminPanel = () => {
         setDeliverySum(event.target.value);            
     };
 
+    const cancelEdit = () => {
+        setEditPricesMode(false);
+        setActiveDelivery(0);
+        setDeliveryId('');
+        setDeliveryPrice('');
+        setDeliverySum('');
+    }
+
     const success = () => {
         window.alert('Condições alteradas com sucesso!');
         setEditPricesMode(false);
@@ -119,7 +127,7 @@ const AdminPanel = () => {
                         </>
                         :
                         <form onSubmit={updateConditions} className={styles.deliveryForm}>
-                            <div className={styles.formLine}>
+                            <div className={styles.formLineList}>
                                 <ul className={styles.deliveriesList}>
                                     {deliveries.map((delivery, i) => 
                                         <li className={i === activeDelivery ? styles.deliveryTypeActive : styles.deliveryType} key={i} onClick={() => setDelivery(i, delivery.id)}>{delivery.type}</li>
@@ -142,8 +150,8 @@ const AdminPanel = () => {
                                     onChange={onChangeSum}
                                 />
                             </div>
-                           <button type='submit' className={styles.upBtn}>Confirme</button> 
-                           <button type='button' onClick={() => setEditPricesMode(false)} className={styles.cancelBtn}>Cancelar</button> 
+                           <button type='submit' className={styles.subBtn}>Confirme</button> 
+                           <button type='button' onClick={cancelEdit} className={styles.cancelBtn}>Cancelar</button> 
                         </form>
                     }
                 </div>

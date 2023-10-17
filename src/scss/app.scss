@@ -1866,6 +1866,11 @@
         max-width: 350px;
         line-height: 1.2;
     }
+    &__warning {
+        color: #AD902B;
+        font-weight: 600;
+        line-height: 1.2;
+    }
     &__aside {
         display: flex;
         flex-direction: column;

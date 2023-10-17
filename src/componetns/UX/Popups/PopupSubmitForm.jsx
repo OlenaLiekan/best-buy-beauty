@@ -67,13 +67,13 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
     }, [serverDomain]);
 
     React.useEffect(() => {
-        if (user) {
+        if (user.id) {
             axios.get(`${serverDomain}api/user/${user.id}`)
                 .then((res) => {
                     setAddresses(res.data.address);
                 });              
         }
-    }, [isAuth, serverDomain, user]);
+    }, [isAuth, serverDomain, user.id]);
 
     React.useEffect(() => {
         if (addresses.length) {
