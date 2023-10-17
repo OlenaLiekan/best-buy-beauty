@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context';
 import { setCategoryId } from '../../redux/slices/filterSlice';
 import { useDispatch } from 'react-redux';
+import { updateDelivery } from '../../http/productAPI';
 
 const AdminPanel = () => {
 
@@ -17,18 +18,24 @@ const AdminPanel = () => {
     ];
     const [path, setPath] = React.useState('');
     const { serverDomain } = React.useContext(AuthContext);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const inputRef = React.useRef();
+
     const [deliveries, setDeliveries] = React.useState([]);
     const [editPricesMode, setEditPricesMode] = React.useState(false);
     const [activeDelivery, setActiveDelivery] = React.useState(0);
+    const [deliveryId, setDeliveryId] = React.useState('');
+    const [deliveryPrice, setDeliveryPrice] = React.useState('');
+    const [deliverySum, setDeliverySum] = React.useState('');
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/delivery`)
             .then((res) => {
                 setDeliveries(res.data);
             });
-    }, [serverDomain]);
+    }, [serverDomain, editPricesMode]);
 
     React.useEffect(() => {
         if (path) {
@@ -42,8 +49,35 @@ const AdminPanel = () => {
         }
     }, [path, navigate, dispatch]);
 
+    const setDelivery = (index, id) => {
+        setActiveDelivery(index);
+        setDeliveryId(id);
+    }
+
     const editDeliveryPrices = () => {
         setEditPricesMode(true);
+    }
+
+    const onChangePrice = (event) => { 
+        setDeliveryPrice(event.target.value);            
+    };
+
+    const onChangeSum = (event) => { 
+        setDeliverySum(event.target.value);            
+    };
+
+    const success = () => {
+        window.alert('Condições alteradas com sucesso!');
+        setEditPricesMode(false);
+    }
+
+    const updateConditions = (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        const id = deliveryId;
+        formData.set('price', deliveryPrice);
+        formData.set('requiredSum', deliverySum);                     
+        updateDelivery(formData, id).then(data => success());
     }
 
     return (
@@ -84,21 +118,29 @@ const AdminPanel = () => {
                             <button type='button' onClick={editDeliveryPrices} className={styles.upBtn}>Atualizar</button>
                         </>
                         :
-                        <form className={styles.deliveryForm}>
+                        <form onSubmit={updateConditions} className={styles.deliveryForm}>
                             <div className={styles.formLine}>
                                 <ul className={styles.deliveriesList}>
                                     {deliveries.map((delivery, i) => 
-                                        <li className={i === activeDelivery ? styles.deliveryTypeActive : styles.deliveryType} key={i} onClick={() => setActiveDelivery(i)}>{delivery.type}</li>
+                                        <li className={i === activeDelivery ? styles.deliveryTypeActive : styles.deliveryType} key={i} onClick={() => setDelivery(i, delivery.id)}>{delivery.type}</li>
                                     )}
                                 </ul>
                             </div>
                             <div className={styles.formLine}> 
-                                <label>Preço:</label>
-                                <input/>
+                                <label htmlFor="delivery-price" className={styles.deliveryLabel}>Preço:</label>
+                                <input required id="delivery-price" className={styles.deliveryInput} placeholder='0.00'
+                                    ref={inputRef}
+                                    value={deliveryPrice}
+                                    onChange={onChangePrice}
+                                />
                             </div>
                             <div className={styles.formLine}>
-                                <label>Montante total:</label>
-                                <input/>
+                                <label htmlFor="delivery-sum" className={styles.deliveryLabel}>Montante total:</label>
+                                <input required id="delivery-sum" className={styles.deliveryInput} placeholder='0.00'
+                                    ref={inputRef}
+                                    value={deliverySum}
+                                    onChange={onChangeSum}
+                                />
                             </div>
                            <button type='submit' className={styles.upBtn}>Confirme</button> 
                            <button type='button' onClick={() => setEditPricesMode(false)} className={styles.cancelBtn}>Cancelar</button> 
