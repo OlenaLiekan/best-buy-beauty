@@ -41,7 +41,6 @@ const CreateProduct = () => {
 
     const selectFile = (event) => {
         setImg(event.target.files[0]);
-        console.log(img);
     }
 
     const onChangeName = (e) => {
@@ -160,7 +159,6 @@ const CreateProduct = () => {
             const currentType = types.find((type) => type.id === typeId);
             const id = currentType ? currentType.categoryId : 0;
             setCategoryId(id);
-            console.log(id);
         }
     }, [typeId, types]); 
 

@@ -274,7 +274,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                             </svg>
                                         </button>
                                     </>   
-                                : 'Selecione opções para adicionar item ao carrinho.'    
+                                : <div className='product-card__warning'>Selecione opções para adicionar item ao carrinho.</div>   
                                 }
                             </div>       
                             :

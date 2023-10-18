@@ -179,9 +179,9 @@ const UpdateProduct = ({id, obj}) => {
     }, [typeName]);
 
     React.useEffect(() => {
-        if (typeId) {
-            const currentType = types.filter((type) => type.id === typeId);
-            const id = currentType[0].categoryId;
+        if (typeId && types.length) {
+            const currentType = types.find((type) => type.id === typeId);
+            const id = currentType.categoryId;
             setCategoryId(id);
         }
     }, [typeId, types]); 

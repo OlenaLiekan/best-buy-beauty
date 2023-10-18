@@ -1779,6 +1779,8 @@
     justify-content: flex-start;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
+    overflow: hidden;
     .next,
     .previous,
     &__page {        
@@ -1802,6 +1804,10 @@
             width: 34px;
             height: 34px;
             border-radius: 50%;
+            @media(max-width: 379.98px) {
+                width: 30px;
+                height: 30px;
+            }
         }
     }
     &__page {        

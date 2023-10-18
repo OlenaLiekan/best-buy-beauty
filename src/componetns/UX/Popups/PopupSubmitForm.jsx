@@ -205,7 +205,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
                     Fechar
                 </button>
                 <div className="popup-cart__body">
-                    <form onSubmit={handleSubmit} id="form" className="popup-cart__form popup-form">
+                    <form onSubmit={handleSubmit} className="popup-cart__form popup-form">
                         <div className="popup-form__text">
                             Por favor, deixe seus dados para fazer um pedido.
                         </div>
