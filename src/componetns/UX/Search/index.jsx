@@ -30,9 +30,12 @@ const Search = () => {
         inputRef.current.focus();
     };
 
-    const updateSearchValue = React.useCallback((str) =>
-        debounce(setSearchValue(str), 500),
-    [setSearchValue]);
+    const updateSearchValue = React.useCallback(
+        debounce((str) => {
+            setSearchValue(str);
+        }, 500),
+        [],
+    );
 
     const onChangeInput = (event) => { 
         dispatch(setSearch());
@@ -93,6 +96,7 @@ const Search = () => {
                     </svg>
                 </div>
                 <input
+                    id="searchInput"
                     ref={inputRef}
                     value={value}
                     onChange={onChangeInput}

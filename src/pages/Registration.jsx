@@ -51,15 +51,17 @@ const Registration = () => {
     }
 
 
-    const updateEmailValue = React.useCallback((str) =>
-        debounce(setEmailValue(str), 600),
+    const updateEmailValue = React.useCallback(
+        debounce((str) => {
+            setEmailValue(str);
+        }, 600),
         [],
     );
 
-    const updateCheckPassValue = React.useCallback((str) =>
-        debounce(
-            setCheckPassValue(str)
-        , 600),
+    const updateCheckPassValue = React.useCallback(
+        debounce((str) => {
+           setCheckPassValue (str);
+        }, 600),
         [],
     );
 

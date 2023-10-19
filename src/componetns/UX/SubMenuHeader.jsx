@@ -32,16 +32,18 @@ const SubMenuHeader = ({ menuItems, categoryId }) => {
             <nav className="sub-menu__body">
                 <div className="sub-menu__all" onClick={showCategoryTypes}>Ver Tudo</div>
                 <ul className="sub-menu__list list-sub-menu">
-                    {menuItems ? menuItems.map((type) => 
-                        <li key={type.id} value={type.name} onClick={menuInit} className="sub-menu__item item-sub-menu">
-                            <Link to={`/${camelize(type.name)}`} onClick={() => onChangeBrandCategory(0)} className="item-sub-menu__link" >
-                                {type.name}
-                            </Link>
-                        </li>  
-                    )
+                    {menuItems.length
+                        ?
+                        menuItems.map((type) => 
+                            <li key={type.id} value={type.name} onClick={menuInit} className="sub-menu__item item-sub-menu">
+                                <Link to={`/${camelize(type.name)}`} onClick={() => onChangeBrandCategory(0)} className="item-sub-menu__link" >
+                                    {type.name}
+                                </Link>
+                            </li>  
+                        )
                         :
                         skeletons.map((skeleton, i) => 
-                            <li key={i}>
+                            <li key={i} className="sub-menu__skeleton">
                                 <MenuSkeleton/>
                             </li>
                         )  

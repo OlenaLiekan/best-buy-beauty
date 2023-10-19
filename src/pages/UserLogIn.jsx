@@ -52,17 +52,17 @@ const UserLogIn = () => {
         }
     }
 
-    const updateEmailValue = React.useCallback((str) =>
-        debounce(
-            setEmailValue(str)
-        , 600),
+    const updateEmailValue = React.useCallback(
+        debounce((str) => {
+            setEmailValue(str);
+        }, 600),
         [],
     );
 
-    const updatePassValue = React.useCallback((str) =>
-        debounce(
-            setPassValue(str)
-        , 600),
+    const updatePassValue = React.useCallback(
+        debounce((str) => {
+            setPassValue(str);
+        }, 600),
         [],
     );
 

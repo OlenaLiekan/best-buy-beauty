@@ -53,8 +53,9 @@ const UpdateUser = ({userId}) => {
     };
 
     const updateEmailValue = React.useCallback(
-        (str) => 
-            debounce(setEmailValue(str), 600),
+        debounce((str) => {
+            setEmailValue(str);
+        }, 600),
         [],
     );
 

@@ -246,8 +246,8 @@ const UpdateProduct = ({id, obj}) => {
                     />
                 </div>
                 <div className={styles.line}>
-                    <label htmlFor="product-brand" className={styles.label}>Marca:</label>
-                    <div onClick={toggleBrandOptions} id="product-brand" required tabIndex="4" className={styles.formSelectBrands}>
+                    <span className={styles.label}>Marca:</span>
+                    <div onClick={toggleBrandOptions} required tabIndex="4" className={styles.formSelectBrands}>
                         {brandName}
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                             <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
@@ -261,8 +261,8 @@ const UpdateProduct = ({id, obj}) => {
                         </div>                        
                         : ''
                     }
-                    <label htmlFor="product-type" className={styles.label}>Tipo:</label>
-                    <div onClick={toggleTypeOptions} id="product-type" required tabIndex="5" className={styles.formSelectTypes}>
+                    <span className={styles.label}>Tipo:</span>
+                    <div onClick={toggleTypeOptions} required tabIndex="5" className={styles.formSelectTypes}>
                         {typeName}
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                             <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
@@ -285,13 +285,13 @@ const UpdateProduct = ({id, obj}) => {
                 </div>
                 {info.map((i) => 
                     <div className={styles.line} key={i.id}>
-                        <label htmlFor="info-product_title" className={styles.label}>Propriedade:</label>
-                        <input id="info-product_title" tabIndex="7" type='text' className={styles.formInputSmall}
+                        <label htmlFor={'info-product_title' + i.id} className={styles.label}>Propriedade:</label>
+                        <input id={'info-product_title' + i.id} tabIndex="7" type='text' className={styles.formInputSmall}
                             value={i.title}
                             onChange={(e) => changeInfo('title', e.target.value, i.id)}
                         /> 
-                        <label htmlFor="info-product_description" className={styles.label}>Significado:</label>
-                        <input id="info-product_description" tabIndex="8" type='text' className={styles.formInputSmall}
+                        <label htmlFor={'info-product_description' + i.id } className={styles.label}>Significado:</label>
+                        <input id={'info-product_description' + i.id } tabIndex="8" type='text' className={styles.formInputSmall}
                             value={i.description}
                             onChange={(e) => changeInfo('description', e.target.value, i.id)}
                         />

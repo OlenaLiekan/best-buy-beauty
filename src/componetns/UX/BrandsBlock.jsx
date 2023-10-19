@@ -31,8 +31,6 @@ const BrandsBlock = () => {
   const dispatch = useDispatch();
   const slidesCount = Math.ceil(brands.length / 3);
 
-  const skeletons = [...new Array(3)].map((_, index) => <SliderSkeleton key={index} />);
-
   React.useEffect(() => {
     setIsLoading(true);
     axios.get(`${serverDomain}api/brand`)
@@ -204,11 +202,9 @@ const BrandsBlock = () => {
                   <SwiperSlide>                 
                     <div className="block-companies__slide slide-companies-block">
                       <div className="slide-companies-block__content">
-                        {skeletons.map((item, i) => 
-                          <div key={i} className="slide-companies-block__image">
-                            <SliderSkeleton  />
-                          </div>
-                        )}
+                        <div className="slide-companies-block__image">
+                          <SliderSkeleton  />                          
+                        </div>
                       </div>
                     </div></SwiperSlide>
                 }
