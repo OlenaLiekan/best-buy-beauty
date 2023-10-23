@@ -72,18 +72,18 @@ const Catalog = () => {
     }
 
     React.useEffect(() => {
-        if (typeId) {
+        if (typeId > 0) {
             axios.get(`${serverDomain}api/type/${typeId}`)
                 .then((res) => {
-                    setTypeItem(res.data);
+                    if (res.data) {
+                        setTypeItem(res.data);
+                        setUpdateTypeMode(true);
+                        setCreateTypeMode(false);
+                        window.scrollTo(0, 0);                          
+                    }
                 }); 
-            if (typeItem) {
-                setUpdateTypeMode(true);
-                setCreateTypeMode(false);
-                window.scrollTo(0, 0);
-            }                 
         }
-    }, [typeId, serverDomain, setCreateTypeMode, setUpdateTypeMode, typeItem]);
+    }, [typeId, serverDomain, setCreateTypeMode, setUpdateTypeMode ]);
 
     const createModeOn = () => {
         setCreateTypeMode(true);

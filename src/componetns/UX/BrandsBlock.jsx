@@ -43,15 +43,15 @@ const BrandsBlock = () => {
   React.useEffect(() => {
     if (id) {
       axios.get(`${serverDomain}api/brand/${id}`)
-          .then((res) => {
-              setBrandItem(res.data);
-          }); 
-      if (brandItem) {
-          setUpdateCompanyMode(true);
-          setCreateCompanyMode(false);
-      }                 
+        .then((res) => {
+          if (res.data) {
+            setBrandItem(res.data); 
+            setUpdateCompanyMode(true);
+            setCreateCompanyMode(false);            
+          }
+        });              
     }
-  }, [id, brandItem, serverDomain, setCreateCompanyMode, setUpdateCompanyMode]);
+  }, [id, serverDomain, setCreateCompanyMode, setUpdateCompanyMode]);
   
   const onChangeBrand = (brandId) => {
     dispatch(setCategoryId(0));
@@ -103,11 +103,14 @@ const BrandsBlock = () => {
                   ?
                   <Swiper
                     modules={[Autoplay]}
-                    autoplay={true}
+                    autoplay={{
+                      delay: 7000,
+                      disableOnInteraction: false
+                    }}
                     loop={true}                  
                     spaceBetween={20}
                     slidesPerView={1}
-                    speed={3000}
+                    speed={2000}
                 >
                     <SwiperSlide>                 
                       <div className="block-companies__slide slide-companies-block">

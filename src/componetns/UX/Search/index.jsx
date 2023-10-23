@@ -11,24 +11,29 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context";
 
-
 const Search = () => { 
     const [items, setItems] = React.useState([]);
     const [types, setTypes] = React.useState([]);
+    const [brands, setBrands] = React.useState([]);
     const [value, setValue] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(true); 
     const { searchValue, setSearchValue } = React.useContext(SearchContext);
-    const { serverDomain } = React.useContext(AuthContext);
+    const { serverDomain, imagesCloud } = React.useContext(AuthContext);
 
     const inputRef = React.useRef();
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const clearValue = () => {
+        setSearchValue('');
+        setValue('');
+    };
+
     const onClickClear = () => {
         setSearchValue('');
         setValue('');
-        inputRef.current.focus();
-    };
+        inputRef.current.focus();        
+    }
 
     const updateSearchValue = React.useCallback(
         debounce((str) => {
@@ -63,21 +68,28 @@ const Search = () => {
     }, [searchValue, serverDomain]);
 
     React.useEffect(() => {
-        setIsLoading(true);
+        axios.get(`${serverDomain}api/brand`)
+            .then((res) => {
+                setBrands(res.data);
+            });
+    }, [serverDomain]);
+
+    const companyNames = brands.map((brand) => brand.name);
+
+    React.useEffect(() => {
         axios
             .get(
                 `${serverDomain}api/type`,
             )
             .then((res) => {
                 setTypes(res.data);
-                setIsLoading(false);
             });
         window.scrollTo(0, 0);
     }, [serverDomain]);
 
     const showProduct = (typeId, id) => {
         const path = types.find((type) => type.id === typeId);
-        navigate(`/${camelize(path.name)}/${id}`);
+        navigate(`/${camelize(path.name)}/${id}`); 
     }
 
     return (
@@ -100,6 +112,7 @@ const Search = () => {
                     ref={inputRef}
                     value={value}
                     onChange={onChangeInput}
+                    onBlur={clearValue}
                     className="search-header__input"
                     autoComplete="off" type="text"
                     placeholder="Procurar"
@@ -122,14 +135,23 @@ const Search = () => {
                 )}
             </form>
             {
-                value ?
+                value || items.length ?
                     <div className="search-header__results">
                         <div className="search-header__body">
                             <ul className="search-header__list search-list">
                                 {isLoading ? '' : items.map((item) =>
-                                    <div key={item.code} value={item.name} onClick={onClickClear} >
-                                        <li onClick={() => showProduct(item.typeId, item.id)} className="search-list__item">
-                                            {item.name}
+                                    <div onClick={() => showProduct(item.typeId, item.id)} key={item.id} value={item.name} >
+                                        <li className="search-list__item item-search">
+                                            <div className="item-search__image">
+                                                <img src={`${imagesCloud}` + item.img} alt="product preview" />
+                                            </div>
+                                            <div className="item-search__info">
+                                                <h2>{item.name}</h2>
+                                                {companyNames.find((companyName, i) =>
+                                                    i + 1 === item.brandId
+                                                )}
+                                                <span>{item.price} €</span>
+                                            </div>
                                         </li>                                        
                                     </div>
                                 )

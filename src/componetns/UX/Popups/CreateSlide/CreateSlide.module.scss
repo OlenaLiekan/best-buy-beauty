@@ -40,12 +40,31 @@
     }
 }
 
+.formInput {
+    font-size: 13px;
+    height: 32px;
+    border: 2px solid #dcdcdc;
+    border-radius: 20px;
+    padding: 0 10px;
+    outline: none;
+    width: 90%;
+    &:not(:last-child) {
+        margin-right: 15px;
+    }
+
+    @media (max-width: 579.98px) {
+        font-size: 12px;
+        margin-right: 0;
+        width: 100%;
+    }
+}
+
 .line {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-
-    @media (max-width: 579.98px) {
+    gap: 10px;
+    @media (max-width: 379.98px) {
         flex-direction: column;
         gap: 8px;
         align-items: start;

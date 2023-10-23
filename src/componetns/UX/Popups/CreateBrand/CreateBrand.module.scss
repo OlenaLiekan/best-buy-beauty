@@ -40,7 +40,7 @@
     border-radius: 20px;
     padding: 0 10px;
     outline: none;
-
+    max-width: 240px;
     &:not(:last-child) {
         margin-right: 15px;
     }
@@ -49,10 +49,6 @@
         font-size: 12px;
         margin-right: 0;
     }
-}
-
-.formInput {
-    max-width: 240px;
 }
 
 .formFile {

@@ -6,9 +6,11 @@ import { useNavigate } from 'react-router-dom';
 
 const CreateSlide = () => {
 
+    const inputRef = React.useRef();
     const navigate = useNavigate();
     const { setCreateSlideMode } = React.useContext(AuthContext);
     const [img, setImg] = React.useState(null);
+    const [url, setUrl] = React.useState('');
 
     const success = () => {
         window.alert('Novo slide adicionado com sucesso!');
@@ -21,6 +23,10 @@ const CreateSlide = () => {
         setImg(event.target.files[0]);
     }
 
+    const onChangeUrl = (event) => {
+        setUrl(event.target.value);
+    }
+
     const closeCreatePopup = () => {
         setCreateSlideMode(false);
     }
@@ -29,6 +35,7 @@ const CreateSlide = () => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('img', img);
+        formData.append('url', url)
         createSlide(formData).then(data => success());
     }
 
@@ -43,7 +50,14 @@ const CreateSlide = () => {
                     <input id="slide-file" required tabIndex="1" type='file' className={styles.formFile}
                         onChange={selectFile}/>                    
                 </div>
-                <button type='submit' tabIndex='2' className={styles.button}>Criar slide</button>
+                <div className={styles.line}>
+                    <label htmlFor="slide-url" className={styles.label}>Url:</label>
+                    <input id="slide-url" required tabIndex="2" type='text' className={styles.formInput}
+                        ref={inputRef}    
+                        value={url}
+                        onChange={onChangeUrl} />                    
+                </div>
+                <button type='submit' tabIndex='3' className={styles.button}>Criar slide</button>
             </form>            
         </div>
     );

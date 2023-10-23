@@ -34,8 +34,8 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
     const [visibleList, setVisibleList] = React.useState(false);
     const countries = ['Portugal', 'Outro'];
 
-    const data = localStorage.getItem('user');
-    const user = JSON.parse(data);
+    const data = localStorage.getItem('user') ? localStorage.getItem('user') : '';
+    const user = data ? JSON.parse(data) : '';
 
     React.useEffect(() => {
         if (user && !mainData) {
@@ -44,20 +44,20 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
             setPhone(user.phone);
             setEmail(user.email);
         }
-        if (user && mainData) {
+        if (user.id && mainData) {
             setUsername(mainData.firstName);
             setSurname(mainData.lastName);
             setPhone(mainData.phone);
             setEmail(mainData.email);
             setCompany(mainData.company ? mainData.company : company);
             setFirstAddress(mainData.firstAddress);
-            setSecondAddress(mainData.secondAddress ? mainData.secondAddress : secondAddress);
+            setSecondAddress(mainData.secondAddress ? mainData.secondAddress : '');
             setCity(mainData.city);
-            setCountry(mainData.country ? mainData.country : country);
+            setCountry(mainData.country ? mainData.country : 'Portugal');
             setRegion(mainData.region);
             setPostalCode(mainData.postalCode);
         }
-    }, [mainData, company, country, user, secondAddress]);
+    }, [mainData, company, country, user.id, user, secondAddress]);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/user?role=USER`)
@@ -71,8 +71,9 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
             axios.get(`${serverDomain}api/user/${user.id}`)
                 .then((res) => {
                     setAddresses(res.data.address);
-                });              
+                });                       
         }
+        
     }, [isAuth, serverDomain, user.id]);
 
     React.useEffect(() => {
