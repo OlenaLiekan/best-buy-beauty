@@ -35,6 +35,11 @@ export const createSlide = async slide => {
   return data;
 };
 
+export const updateSlide = async (slide, id) => {
+  const { data } = await $authHost.patch('api/slide/' + id, slide);
+  return data;
+};
+
 export const fetchSlides = async () => {
   const { data } = await $host.get('api/slide');
   return data;

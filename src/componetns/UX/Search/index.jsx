@@ -24,10 +24,14 @@ const Search = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const clearValue = () => {
-        setSearchValue('');
-        setValue('');
+    const clearValueWithDelay = () => {
+        setTimeout(clearValue, 500);         
     };
+
+    const clearValue = () => {
+        setValue('');        
+        setSearchValue('');   
+    }
 
     const onClickClear = () => {
         setSearchValue('');
@@ -112,7 +116,7 @@ const Search = () => {
                     ref={inputRef}
                     value={value}
                     onChange={onChangeInput}
-                    onBlur={clearValue}
+                    onBlur={clearValueWithDelay}
                     className="search-header__input"
                     autoComplete="off" type="text"
                     placeholder="Procurar"
@@ -134,34 +138,33 @@ const Search = () => {
                     </svg>
                 )}
             </form>
-            {
-                value || items.length ?
-                    <div className="search-header__results">
-                        <div className="search-header__body">
-                            <ul className="search-header__list search-list">
-                                {isLoading ? '' : items.map((item) =>
-                                    <div onClick={() => showProduct(item.typeId, item.id)} key={item.id} value={item.name} >
-                                        <li className="search-list__item item-search">
-                                            <div className="item-search__image">
-                                                <img src={`${imagesCloud}` + item.img} alt="product preview" />
-                                            </div>
-                                            <div className="item-search__info">
-                                                <h2>{item.name}</h2>
-                                                {companyNames.find((companyName, i) =>
-                                                    i + 1 === item.brandId
-                                                )}
-                                                <span>{item.price} €</span>
-                                            </div>
-                                        </li>                                        
-                                    </div>
-                                )
-                                }
-                                {!items.length ? <li className="search-list__item_none">Produto não encontrado</li> : '' }
-                            </ul>                            
-                        </div>
+            {value || items.length ?
+                <div className='search-header__results'>
+                    <div className="search-header__body">
+                        <ul className="search-header__list search-list">
+                            {isLoading ? '' : items.map((item) =>
+                                <div onClick={() => showProduct(item.typeId, item.id)} key={item.id} value={item.name} >
+                                    <li className="search-list__item item-search">
+                                        <div className="item-search__image">
+                                            <img src={`${imagesCloud}` + item.img} alt="product preview" />
+                                        </div>
+                                        <div className="item-search__info">
+                                            <h2>{item.name}</h2>
+                                            {companyNames.find((companyName, i) =>
+                                                i + 1 === item.brandId
+                                            )}
+                                            <span>{item.price} €</span>
+                                        </div>
+                                    </li>
+                                </div>
+                            )
+                            }
+                            {!isLoading && !items.length ? <li className="search-list__item_none">Produto não encontrado</li> : ''}
+                        </ul>
                     </div>
-                    :
-                    ''
+                </div>
+                :
+                ''
             }
         </div>
     );

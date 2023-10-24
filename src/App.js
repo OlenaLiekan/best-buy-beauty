@@ -16,6 +16,7 @@ function App() {
   const [createCompanyMode, setCreateCompanyMode] = React.useState(false);
   const [createTypeMode, setCreateTypeMode] = React.useState(false);
 
+  const [updateSlideMode, setUpdateSlideMode] = React.useState(false);
   const [updateProductMode, setUpdateProductMode] = React.useState(false);
   const [updateCompanyMode, setUpdateCompanyMode] = React.useState(false);
   const [updateTypeMode, setUpdateTypeMode] = React.useState(false);
@@ -63,6 +64,8 @@ function App() {
           setCreateCompanyMode,
           createTypeMode,
           setCreateTypeMode,
+          updateSlideMode,
+          setUpdateSlideMode,
           updateProductMode,
           setUpdateProductMode,
           updateCompanyMode,

@@ -231,24 +231,19 @@
         position: absolute;
         top: 130px;
         left: 0;
-        width: 100vw;
-        height: 450px;
-        overflow: hidden;   
+        width: 100vw;        
+        max-height: 100vh;
+        overflow: auto;   
         background-color: #ffffff;
         border-top: none;
-        z-index: 3;
-        @media(max-width: 991.98px) {
-            height: 350px;
-        }
+        z-index: 3;            
+        box-shadow: 5px 5px 5px #7f756a0f;
+        padding: 10px 0;
         @media(max-width: 767.98px) {
             top: 100px;
-            height: 270px;
         }
         @media(max-width: 579.98px) {
-            min-height: 200px;
-            height: auto;
             border-bottom: 2px solid #7f766a44;
-            box-shadow: 5px 5px 5px #7f756a0f;
         }
     }
     &__body {
@@ -1123,6 +1118,7 @@
         top: 20px;
         left: 20px;
         display: flex;
+        align-items: center;
         gap: 20px;
         z-index: 2;
         background-color: #25252563;
@@ -1134,7 +1130,13 @@
         svg {
             fill: #fff;
             font-size: 1.2rem;
+            cursor: pointer; 
+            transition: transform 0.6s ease 0s;       
+            &:hover {
+                transform: scale(1.2);
+            }
         }
+
     }
     &__image {
         display: block;
