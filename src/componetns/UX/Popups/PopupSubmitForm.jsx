@@ -14,9 +14,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-
     const { serverDomain, isAuth } = React.useContext(AuthContext);
-    const [users, setUsers] = React.useState([]);
     const [username, setUsername] = React.useState('');
     const [surname, setSurname] = React.useState('');    
     const [phone, setPhone] = React.useState('');
@@ -60,20 +58,12 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
     }, [mainData, company, country, user.id, user, secondAddress]);
 
     React.useEffect(() => {
-        axios.get(`${serverDomain}api/user?role=USER`)
-            .then((res) => {
-                setUsers(res.data);
-            });
-    }, [serverDomain]);
-
-    React.useEffect(() => {
         if (user.id) {
             axios.get(`${serverDomain}api/user/${user.id}`)
                 .then((res) => {
                     setAddresses(res.data.address);
                 });                       
         }
-        
     }, [isAuth, serverDomain, user.id]);
 
     React.useEffect(() => {
@@ -165,17 +155,8 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
         '\nCusto de entrega: ' + deliveryPrice + ' €'
         +
         '\nMontante total: ' + (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2) + ' €'
-    ;
+        ;
     
-    React.useEffect(() => {
-        if (users.length) {
-            const prevOrder = users.map((user) => user.order[user.order.length - 1]); 
-            if (prevOrder) {
-                setOrderNumber(prevOrder[0].id);           
-            } 
-        }
-
-    }, [users, orderNumber]);
 
     const submitForm = () => {
         const formData = new FormData();
@@ -185,13 +166,12 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
         formData.append('quantity', totalCount);
         formData.append('deliveryPrice', deliveryPrice);
         formData.append('sum', (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2));
-        updateUser(formData, id);
-        localStorage.setItem('orderId', orderNumber ? (+orderNumber) + 1 : '');            
+        updateUser(formData, id);       
         dispatch(
             clearItems()
-        ); 
+        );         
         navigate('/success');
-        window.scrollTo(0, 0);            
+        window.scrollTo(0, 0); 
     } 
 
     const [state, handleSubmit] = useForm("xqkoljrq");
