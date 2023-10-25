@@ -67,7 +67,7 @@ const UpdateType = ({typeItem}) => {
     }
 
     const onChangeName = (e) => {
-        setName(e.target.value.trim());
+        setName(e.target.value);
     }
 
     const selectFile = (event) => {
@@ -78,7 +78,7 @@ const UpdateType = ({typeItem}) => {
         e.preventDefault();
         const formData = new FormData();
         const id = typeItem.id;
-        formData.set('name', name);
+        formData.set('name', name.trim());
         if (img) {
             formData.set('img', img);            
         }

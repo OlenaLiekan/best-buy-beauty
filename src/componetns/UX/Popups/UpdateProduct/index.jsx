@@ -74,11 +74,11 @@ const UpdateProduct = ({id, obj}) => {
     }
 
     const onChangeCode = (e) => {
-        setCode(e.target.value);
+        setCode(e.target.value.trim());
     }
 
     const onChangePrice = (e) => {
-        setPrice(e.target.value);
+        setPrice(e.target.value.trim());
     }
 
     const onChangeText = (e) => {

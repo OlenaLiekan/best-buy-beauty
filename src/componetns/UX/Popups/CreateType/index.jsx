@@ -52,7 +52,7 @@ const CreateType = () => {
     const submenuCategories = categories.filter((category) => category.subMenu);
 
     const onChangeName = (e) => {
-        setName(e.target.value.trim());
+        setName(e.target.value);
     }
 
     const selectFile = (event) => {
@@ -62,7 +62,7 @@ const CreateType = () => {
     const pushType = (e) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append('name', name);
+        formData.append('name', name.trim());
         formData.append('img', img);
         formData.append('categoryId', categoryId);
         createType(formData).then(data => success());

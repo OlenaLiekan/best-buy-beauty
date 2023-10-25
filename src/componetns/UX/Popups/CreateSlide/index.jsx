@@ -33,7 +33,7 @@ const CreateSlide = () => {
 
     const pushSlide = (e) => {
         e.preventDefault();
-        const newUrl = url.split('/#').join('');
+        const newUrl = url.split('#').pop();
         const formData = new FormData();
         formData.append('img', img);
         formData.append('url', newUrl);
