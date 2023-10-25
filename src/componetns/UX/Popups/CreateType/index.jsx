@@ -52,7 +52,7 @@ const CreateType = () => {
     const submenuCategories = categories.filter((category) => category.subMenu);
 
     const onChangeName = (e) => {
-        setName(e.target.value);
+        setName(e.target.value.trim());
     }
 
     const selectFile = (event) => {

@@ -24,7 +24,7 @@ const CreateSlide = () => {
     }
 
     const onChangeUrl = (event) => {
-        setUrl(event.target.value);
+        setUrl(event.target.value.trim());
     }
 
     const closeCreatePopup = () => {
@@ -33,9 +33,10 @@ const CreateSlide = () => {
 
     const pushSlide = (e) => {
         e.preventDefault();
+        const newUrl = url.split('/#').join('');
         const formData = new FormData();
         formData.append('img', img);
-        formData.append('url', url)
+        formData.append('url', newUrl);
         createSlide(formData).then(data => success());
     }
 
