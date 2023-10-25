@@ -14,7 +14,7 @@ const UserPanel = ({ user }) => {
     const navigate = useNavigate();
 
     const [currentUser, setCurrentUser] = React.useState({});
-    const [activeIndex, setActiveIndex] = React.useState('');
+    const [activeIndex, setActiveIndex] = React.useState(0);
     const [activeOption, setActiveOption] = React.useState(0);
     const [activeAddress, setActiveAddress] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(true);

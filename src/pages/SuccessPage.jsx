@@ -78,7 +78,7 @@ const SuccessPage = () => {
                         </div>
                         {user
                             ?
-                            <Link to='#' className='body-success__button checkout'>Ver a minha compra</Link>
+                            <Link to='/auth' className='body-success__button checkout'>Ver a minha compra</Link>
                             :
                             <Link to="/" onClick={scrollTop} className="body-success__button go-shopping scroll-top">
                                 Voltar à página inicial

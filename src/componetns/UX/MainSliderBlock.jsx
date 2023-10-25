@@ -14,6 +14,9 @@ import CreateSlide from "./Popups/CreateSlide";
 import SliderSkeleton from "../UI/Skeletons/SliderSkeleton";
 import UpdateSlide from "./Popups/UpdateSlide";
 
+import { setCategoryId } from "../../redux/slices/filterSlice";
+import { useDispatch } from "react-redux";
+
 const MainSliderBlock = () => {
 
   const { isAuth, adminMode, createSlideMode, updateSlideMode, setCreateSlideMode, setUpdateSlideMode, serverDomain, imagesCloud } = React.useContext(AuthContext);
@@ -23,6 +26,7 @@ const MainSliderBlock = () => {
   const [isLoading, setIsLoading] = React.useState(true);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -64,6 +68,12 @@ const MainSliderBlock = () => {
       setId('');
     }
   }, [updateSlideMode]);
+
+  const goToUrl = () => {
+    localStorage.removeItem('categoryId');
+    localStorage.removeItem('subItems');        
+    dispatch(setCategoryId(0));
+  }
 
   return (
       <section className="main__block block-main">
@@ -108,7 +118,7 @@ const MainSliderBlock = () => {
                               </svg>  
                             </div>
                             <Link to={`${slide.url}`}>
-                              <img src={`${imagesCloud}` + slide.img} alt="slide" />
+                              <img onClick={goToUrl} src={`${imagesCloud}` + slide.img} alt="slide" />
                             </Link>
                           </div>
                         }

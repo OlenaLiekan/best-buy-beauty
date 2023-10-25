@@ -296,13 +296,13 @@
 .updateAddressBtn,
 .changeData,
 .showOrders {
-    color: #7f766a;
-    border: 2px solid #7f766a;
+    color: #1560BD;
+    border: 2px solid #1560BD;
     box-shadow: 3px 3px 3px #4848481b;
 
     &:hover {
         color: #fff;
-        background-color: #7f766a;
+        background-color: #1560BD;
     }
 }
 
@@ -384,7 +384,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 20px;    
-    color: #7f766a;
+    color: #484848;
     font-weight: 500;
     @media(max-width: 379.98px) {
         font-size: 13px;
@@ -398,14 +398,14 @@
     align-items: center;
     padding: 10px 12px;
     border-radius: 15px;
-    border: 2px solid #7f766a;
+    border: 2px solid #1560BD;
     box-shadow: 3px 3px 3px #4848481b;
     font-weight: 600;
     transition: all 0.6s ease 0s;
-    fill: #7f766a;
+    fill: #1560BD;
     &:hover {
         fill: #fff;
-        background-color: #7f766a;
+        background-color: #1560BD;
     }
 }
 
