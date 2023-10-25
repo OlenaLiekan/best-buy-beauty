@@ -1,19 +1,38 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import successImg from "../assets/img/success/001.png";
 import { scrollTop } from '../js/script';
+import { AuthContext } from '../context';
+
+import axios from 'axios';
 
 const SuccessPage = () => {
+
+    const { serverDomain } = React.useContext(AuthContext);
+    const [paymentDetails, setPaymentDetails] = React.useState('');
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const data = localStorage.getItem('user') ? localStorage.getItem('user') : '';
     const user = data ? JSON.parse(data) : '';
 
     const orderId = localStorage.getItem('orderId');
+    const orderDate = localStorage.getItem('orderDate');
+    const orderTotal = localStorage.getItem('orderTotal');
+
+    React.useEffect(() => {
+        setIsLoading(true);
+        axios.get(`${serverDomain}api/payment/1`)
+            .then((res) => {
+                setPaymentDetails(res.data);
+                setIsLoading(false);
+            });
+    }, [serverDomain]);      
 
     const scrollToContacts = () => {
         window.scrollTo(0, document.body.scrollHeight);
     }
+
+
 
     return (
         <div className="main__success success-main">
@@ -37,11 +56,11 @@ const SuccessPage = () => {
                         <div className='body-success__block bottom-line'>
                             <div className='body-success__line'>
                                 <div>IBAN</div>
-                                <div>PT50003501070000793883090</div>
+                                <div>{paymentDetails && !isLoading ? paymentDetails.iban : 'Carregando...'}</div>
                             </div>
                             <div className='body-success__line'>
                                 <div>Nome</div>
-                                <div>Svitlana Yefanova</div>
+                                <div>{paymentDetails && !isLoading ? paymentDetails.recipient : 'Carregando...'}</div>
                             </div>                            
                         </div>
                         <p className="body-success__text">
@@ -64,7 +83,7 @@ const SuccessPage = () => {
                                     Data do pedido
                                 </div>
                                 <div>
-                                    15/10/2023
+                                    {orderDate}
                                 </div>
                             </div>
                             <div className='body-success__line'>
@@ -72,7 +91,7 @@ const SuccessPage = () => {
                                     Valor total
                                 </div>
                                 <div>
-                                    125,91 €
+                                    {orderTotal} €
                                 </div>
                             </div>                            
                         </div>

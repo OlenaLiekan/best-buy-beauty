@@ -18,6 +18,7 @@ const Cart = () => {
     const totalCount = items.reduce((sum, item) => sum + item.count, 0);
     const [deliveryPrices, setDeliveryPrices] = React.useState([]);
     const [deliveryPrice, setDeliveryPrice] = React.useState('0.00');
+    const [orderNumber, setOrderNumber] = React.useState('');
     //const isMounted = React.useRef(false);
 
     React.useEffect(() => {
@@ -63,9 +64,17 @@ const Cart = () => {
         return <CartEmpty />
     }
 
+    const showPopup = () => {
+        const result = new Date();
+        const date = result.toISOString().slice(2, 10).split('-').join('');
+        const time = result.toLocaleTimeString().split(':').join('');
+        setOrderNumber(date + time);
+        popupInit();
+    }
+
     return (
         <div className="main__cart cart">
-            <PopupSubmitForm totalCount={totalCount} deliveryPrice={deliveryPrice} />
+            <PopupSubmitForm totalCount={totalCount} orderNumber={orderNumber} deliveryPrice={deliveryPrice} />
             <div className="cart__container">
                 <div className="cart__content">
                     <div className="cart__header header-cart">
@@ -105,7 +114,7 @@ const Cart = () => {
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z"/></svg>
                                     Voltar às compras
                                 </Link>
-                                <button onClick={popupInit} type="button" className="button__submit checkout">
+                                <button onClick={showPopup} type="button" className="button__submit checkout">
                                     Começar a comprar
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg>
                                 </button>

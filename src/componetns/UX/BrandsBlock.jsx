@@ -35,7 +35,7 @@ const BrandsBlock = () => {
     setIsLoading(true);
     axios.get(`${serverDomain}api/brand`)
       .then((res) => {
-        setBrands(res.data);
+        setBrands(res.data.filter((obj) => obj.id !== 30));
         setIsLoading(false);
       });
   }, [serverDomain]);

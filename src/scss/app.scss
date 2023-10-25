@@ -2262,7 +2262,7 @@ $redColor: #cd0000;
         gap: 5px;
         li {
             cursor: pointer;
-            border: 2px solid #7f756a79;
+            border: 2px solid $mainColor;
             border-radius: 20px;
             padding: 5px 10px;
             text-align: center;
@@ -2271,7 +2271,8 @@ $redColor: #cd0000;
             white-space: nowrap;
             &:hover {
                 color: #fff;
-                background-color: #7f756a;
+                border: 2px solid $mainColor;
+                background-color: $mainColor;
             } 
         }
     }
@@ -2287,7 +2288,7 @@ $redColor: #cd0000;
 .activeThick,
 .activeCurl {
     color: #fff;
-    background-color: #7f756a;
+    background-color: $mainColor;
 }
 
 .curl__select,

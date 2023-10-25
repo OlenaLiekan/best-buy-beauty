@@ -8,7 +8,7 @@ import { updateUser } from '../../../http/userAPI';
 import axios from 'axios';
 import { AuthContext } from '../../../context';
 
-const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
+const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
 
     const inputRef = React.useRef();
     const dispatch = useDispatch();
@@ -19,7 +19,6 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
     const [surname, setSurname] = React.useState('');    
     const [phone, setPhone] = React.useState('');
     const [email, setEmail] = React.useState('');
-    const [orderNumber, setOrderNumber] = React.useState('');
     const [firstAddress, setFirstAddress] = React.useState('');
     const [secondAddress, setSecondAddress] = React.useState('');
     const [city, setCity] = React.useState('');
@@ -49,7 +48,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
             setEmail(mainData.email);
             setCompany(mainData.company ? mainData.company : company);
             setFirstAddress(mainData.firstAddress);
-            setSecondAddress(mainData.secondAddress ? mainData.secondAddress : '');
+            setSecondAddress(mainData.secondAddress ? mainData.secondAddress : secondAddress);
             setCity(mainData.city);
             setCountry(mainData.country ? mainData.country : 'Portugal');
             setRegion(mainData.region);
@@ -132,7 +131,9 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
     const { items, totalPrice } = useSelector((state) => state.cart);
 
     const order = items.map((item, index) => (
-        (index > 0 ? '\n\n' : '') + (index + 1) + '. ' + item.name
+        ('Pedido: ' + orderNumber + '\n\n' 
+        +
+        index > 0 ? '\n\n' : '') + (index + 1) + '. ' + item.name
         +
         '\nMarca: ' + item.company
         +
@@ -166,7 +167,12 @@ const PopupSubmitForm = ({totalCount, deliveryPrice}) => {
         formData.append('quantity', totalCount);
         formData.append('deliveryPrice', deliveryPrice);
         formData.append('sum', (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2));
-        updateUser(formData, id);       
+        updateUser(formData, id);   
+        localStorage.setItem('orderId', orderNumber);
+        const date = new Date();
+        const today = date.toDateString();
+        localStorage.setItem('orderDate', today);
+        localStorage.setItem('orderTotal', (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2));
         dispatch(
             clearItems()
         );         
