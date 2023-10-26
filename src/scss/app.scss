@@ -12,10 +12,6 @@ $headerLineColor: #f1ede7;
 $whiteColor: #ffffff;
 $goldColor: #AD912B;
 
-$submitColor: #efe779;
-$yellowColor: #f3e848;
-$redColor: #cd0000;
-
 #root {
     @media(max-width: 991.98px) {
         min-height: 100vh;        
@@ -1663,6 +1659,7 @@ $redColor: #cd0000;
     li {
         text-align: right;
         padding: 8px 32px 8px 20px;
+        cursor: pointer;
         &:hover {
             color: #AD902B;
             background-color: #f7f7f77f;
@@ -3028,6 +3025,11 @@ $redColor: #cd0000;
     align-items: center;
     justify-content: center;
     gap: 20px;
+    &__svg {
+        font-size: 180px;
+        fill: $decorColor;
+        margin-bottom: 30px;
+    }
     &__block {
         display: flex;
         flex-direction: column;
@@ -3134,6 +3136,7 @@ $redColor: #cd0000;
         }    
         @media(max-width: 767.98px) {
             font-size: 20px;
+            margin-left: 16px;
         }
         @media(max-width: 371.98px) {
             font-size: 18px;
@@ -3170,7 +3173,7 @@ $redColor: #cd0000;
         fill: $footerDecor;
         transition: fill 0.3s ease 0s;
         &:hover {
-            fill: #252525;
+            fill: #484848;
         }
     } 
 }
@@ -3214,12 +3217,15 @@ $redColor: #cd0000;
 }
 
 .bottom-footer {
+    display: flex;
+    gap: 20px;        
+    justify-content: center;
+    align-items: center;
     &__text {
         font-size: 14px;
         font-weight: 500;
         padding: 40px 0;
         color: $footerDecor;
-        text-align: center;
     }
 }
 
