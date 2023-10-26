@@ -188,7 +188,7 @@ const UserPanel = ({ user }) => {
                                  <li key={order.id} className={styles.ordersItem}>
                                     <div className={styles.orderInfo}>
                                         <h4 onClick={() => setActiveIndex(index)} className={activeIndex === index ? styles.orderTitleGold : styles.orderTitle}>
-                                            <span>№ {order.id}</span>
+                                            <span>№ {order.orderNumber}</span>
                                                 {order.createdAt.replace('T', ' ').slice(0, 19)}    
                                                 <svg className={activeIndex === index ? styles.rotate : styles.chevron} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                                                 <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
@@ -198,14 +198,16 @@ const UserPanel = ({ user }) => {
                                             <ul className={styles.productsList}>
                                                 {order.item.map((i, pos) => 
                                                 <li key={i.id} className={styles.productsItem}>
-                                                        <div className={styles.productTop}>{i.title}</div>
+                                                    <div className={styles.productTop}>
+                                                        {i.title}
+                                                    </div>
                                                     <div className={styles.productBottom}>
                                                         <div className={styles.productImage}>
                                                             <img src={i.img ? `${imagesCloud}`+ i.img : `${imagesCloud}noImg.png`} alt="product"/>
                                                         </div>                                                        
                                                         <div className={styles.productInfo}>
                                                             {i.description.split('\n').map((paragraph, index) => 
-                                                                <p key={index} className={styles.infoLine}>{paragraph}</p>                                                             
+                                                                <p key={index} className={styles.infoProductLine}>{paragraph}</p>                                                             
                                                             )}    
                                                         </div>
                                                     </div>

@@ -131,9 +131,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     const { items, totalPrice } = useSelector((state) => state.cart);
 
     const order = items.map((item, index) => (
-        ('Pedido: ' + orderNumber + '\n\n' 
-        +
-        index > 0 ? '\n\n' : '') + (index + 1) + '. ' + item.name
+        (index > 0 ? '\n\n' : '') + (index + 1) + '. ' + item.name
         +
         '\nMarca: ' + item.company
         +
@@ -156,6 +154,8 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         '\nCusto de entrega: ' + deliveryPrice + ' €'
         +
         '\nMontante total: ' + (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2) + ' €'
+        +
+        '\n\nPedido № ' + orderNumber
         ;
     
 
@@ -167,6 +167,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         formData.append('quantity', totalCount);
         formData.append('deliveryPrice', deliveryPrice);
         formData.append('sum', (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2));
+        formData.append('orderNumber', orderNumber);
         updateUser(formData, id);   
         localStorage.setItem('orderId', orderNumber);
         const date = new Date();
@@ -198,35 +199,35 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-name-input" className="popup-form__label">Primeiro Nome</label>
-                            <input required id="user-name-input" tabIndex="1" autoComplete="off" type="text" name="name" data-error="Error" placeholder='Nome' className="popup-form__input _req"
+                            <input required id="user-name-input" tabIndex="1" autoComplete="off" type="text" name="Nome" data-error="Error" placeholder='Nome' className="popup-form__input _req"
                                 ref={inputRef}
                                 value={username}
                                 onChange={onChangeUsername}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-surname-input" className="popup-form__label">Último Nome</label>
-                            <input required id="user-surname-input" tabIndex="2" autoComplete="off" type="text" name="surname" data-error="Error" placeholder="Sobrenome" className="popup-form__input"
+                            <input required id="user-surname-input" tabIndex="2" autoComplete="off" type="text" name="Sobrenome" data-error="Error" placeholder="Sobrenome" className="popup-form__input"
                                 ref={inputRef}
                                 value={surname}
                                 onChange={onChangeSurname}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-company-input" className="popup-form__label">Empresa</label>
-                            <input id="user-company-input" tabIndex="3" autoComplete="off" type="text" name="company" data-error="Error" className="popup-form__input"
+                            <input id="user-company-input" tabIndex="3" autoComplete="off" type="text" name="Empresa" data-error="Error" className="popup-form__input"
                                 ref={inputRef}
                                 value={company}
                                 onChange={onChangeCompany}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-contact-input" className="popup-form__label">Telefone</label>
-                            <input required id="user-contact-input" tabIndex="4" autoComplete="off" type="tel" pattern="[+]{1}[0-9]{12}" name="contact" data-error="Error" placeholder="+351XXXXXXXXXX" className="popup-form__input _req"
+                            <input required id="user-contact-input" tabIndex="4" autoComplete="off" type="tel" pattern="[+]{1}[0-9]{12}" name="Telefone" data-error="Error" placeholder="+351XXXXXXXXXX" className="popup-form__input _req"
                                 ref={inputRef}
                                 value={phone}
                                 onChange={onChangePhone}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-email-input" className="popup-form__label">E-mail</label>
-                            <input required id="user-email-input" tabIndex="5" autoComplete="off" type="email" name="email" data-error="Error" placeholder="example@email.com" className="popup-form__input _req _email" 
+                            <input required id="user-email-input" tabIndex="5" autoComplete="off" type="email" name="E-mail" data-error="Error" placeholder="example@email.com" className="popup-form__input _req _email" 
                                 ref={inputRef}
                                 value={email}
                                 onChange={onChangeEmail}/>
@@ -238,28 +239,28 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-f-address-input" className="popup-form__label">Morada №1</label>
-                            <input required id="user-f-address-input" tabIndex="6" autoComplete="off" type="text" name="firstAddress" data-error="Error" className="popup-form__input"
+                            <input required id="user-f-address-input" tabIndex="6" autoComplete="off" type="text" name="Morada_1" data-error="Error" className="popup-form__input"
                                 ref={inputRef}
                                 value={firstAddress}
                                 onChange={onChangeFAddress}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-s-address-input" className="popup-form__label">Morada №2</label>
-                            <input id="user-s-address-input" tabIndex="7" autoComplete="off" type="text" name="secondAddress" data-error="Error" className="popup-form__input"
+                            <input id="user-s-address-input" tabIndex="7" autoComplete="off" type="text" name="Morada_2" data-error="Error" className="popup-form__input"
                                 ref={inputRef}
                                 value={secondAddress}
                                 onChange={onChangeSAddress}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-city-input" className="popup-form__label">Cidade</label>
-                            <input required id="user-city-input" tabIndex="8" autoComplete="off" type="text" name="city" data-error="Error" className="popup-form__input"
+                            <input required id="user-city-input" tabIndex="8" autoComplete="off" type="text" name="Cidade" data-error="Error" className="popup-form__input"
                                 ref={inputRef}
                                 value={city}
                                 onChange={onChangeCity}/>
                         </div>
                         <div className="popup-form__line popup-form__line_select">
                             <label htmlFor="user-country-input" className="popup-form__label">País</label>
-                            <input readOnly required onClick={showCountries} id="user-country-input" tabIndex="9" autoComplete="off" type="text" name="country" data-error="Error" className="popup-form__input popup-form__input_select"
+                            <input readOnly required onClick={showCountries} id="user-country-input" tabIndex="9" autoComplete="off" type="text" name="País" data-error="Error" className="popup-form__input popup-form__input_select"
                                 ref={inputRef}
                                 value={country} />
                             <svg onClick={showCountries} className={visibleList ? 'popup-form_rotate' : ''} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
@@ -273,26 +274,26 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-region-input" className="popup-form__label">Concelho</label>
-                            <input required id="user-region-input" tabIndex="10" autoComplete="off" type="text" name="region" data-error="Error" className="popup-form__input"
+                            <input required id="user-region-input" tabIndex="10" autoComplete="off" type="text" name="Concelho" data-error="Error" className="popup-form__input"
                                 ref={inputRef}
                                 value={region}
                                 onChange={onChangeRegion}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-postal-code-input" className="popup-form__label">Código postal/ZIP</label>
-                            <input required id="user-postal-code-input" tabIndex="11" autoComplete="off" type="text" name="postal-code" data-error="Error" className="popup-form__input"
+                            <input required id="user-postal-code-input" tabIndex="11" autoComplete="off" type="text" name="Código_postal/ZIP" data-error="Error" className="popup-form__input"
                                 ref={inputRef}
                                 value={postalCode}
                                 onChange={onChangePostalCode}/>
                         </div>
                         <div className="popup-form__line">
                             <label hidden htmlFor="order" className="popup-form__label">Ordem: </label>
-                            <textarea hidden id="order" readOnly name="order" value={order} className="popup-form__textarea _order"/>                            
+                            <textarea hidden id="order" readOnly name="Ordem" value={order} className="popup-form__textarea _order"/>                            
                         </div>
 
                         <div className="popup-form__line popup-line__textarea">
                             <label htmlFor="user-comment" className="popup-form__label">Comente</label>
-                            <textarea id="user-comment" tabIndex="12" className="popup-form__textarea" name="comment" placeholder='Ola! Aqui você pode deixar suas dúvidas ou desejos.' cols="10" rows="5" maxLength="150"/> 
+                            <textarea id="user-comment" tabIndex="12" className="popup-form__textarea" name="Comente" placeholder='Ola! Aqui você pode deixar suas dúvidas ou desejos.' cols="10" rows="5" maxLength="150"/> 
                             <ValidationError 
                                 prefix="Comment" 
                                 field="comment"

@@ -1336,6 +1336,9 @@ $redColor: #cd0000;
         &:hover {
             text-decoration: underline;
         }
+        @media(max-width: 479.98px) {
+            font-size: 16px;
+        }
     }
     svg {
         width: 10px;
