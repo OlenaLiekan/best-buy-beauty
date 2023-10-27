@@ -6,7 +6,7 @@ import Loader from '../componetns/UI/Loader';
 import NotFoundProduct from '../componetns/NotFoundProduct';
 import { camelize } from '../js/script';
 import { useDispatch } from 'react-redux';
-import { setBrandId } from '../redux/slices/filterSlice';
+import { setBrandId, setCategoryId } from '../redux/slices/filterSlice';
 import { AuthContext } from '../context';
 import CreateType from '../componetns/UX/Popups/CreateType';
 import UpdateType from '../componetns/UX/Popups/UpdateType';
@@ -96,6 +96,12 @@ const Catalog = () => {
         }
     }, [updateTypeMode]);
 
+    const showProducts = () => {
+        localStorage.removeItem('categoryId');
+        localStorage.removeItem('subItems');        
+        dispatch(setCategoryId(''));
+    }
+
 
     return (
         <div className="main__catalog catalog">
@@ -135,13 +141,13 @@ const Catalog = () => {
                                             </h3> 
                                             )}  
 
-                                            <Link to={`/${camelize(catalogItem.name)}`}>
+                                            <Link to={`/${camelize(catalogItem.name)}`} onClick={showProducts}>
                                                 <div className="item-catalog__image">
                                                     <img src={`${imagesCloud}` + catalogItem.img} alt="category" />
                                                 </div>                                                 
                                             </Link>
                                         </div>
-                                        <Link to={`/${camelize(catalogItem.name)}`}>
+                                        <Link to={`/${camelize(catalogItem.name)}`} onClick={showProducts}>
                                             <h2 className="item-catalog__title">
                                                 {catalogItem.name}
                                             </h2>                                            

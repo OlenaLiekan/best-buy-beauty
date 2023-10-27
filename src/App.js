@@ -27,6 +27,8 @@ function App() {
   const [updateUserMode, setUpdateUserMode] = React.useState(false);
   const [updatePassMode, setUpdatePassMode] = React.useState(false);
 
+  const [imgViewerMode, setImgViewerMode] = React.useState(false);
+
   const [isLoading, setLoading] = React.useState(true);
 
   const serverDomain = 'https://bbb-server-a6ji.onrender.com/';
@@ -80,6 +82,8 @@ function App() {
           setUpdateUserMode,
           updatePassMode,
           setUpdatePassMode,
+          imgViewerMode,
+          setImgViewerMode,
           serverDomain,
           imagesCloud,
         }}

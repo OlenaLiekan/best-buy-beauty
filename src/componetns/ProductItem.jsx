@@ -149,7 +149,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const paragraphsCompound = compound.length ? compound[0].text.split('\r\n') : '';
 
     return (
-        <div className="product-card__content">
+        <div className='product-card__content'>
             <div className="product-card__go-back go-back">
                 <Link to={`/${path}`} className='go-back__link'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">

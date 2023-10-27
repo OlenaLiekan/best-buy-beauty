@@ -49,12 +49,12 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
             setCompany(mainData.company ? mainData.company : company);
             setFirstAddress(mainData.firstAddress);
             setSecondAddress(mainData.secondAddress ? mainData.secondAddress : secondAddress);
+            setCountry((mainData.country && mainData.country === country) ? mainData.country : country);
             setCity(mainData.city);
-            setCountry(mainData.country ? mainData.country : 'Portugal');
             setRegion(mainData.region);
             setPostalCode(mainData.postalCode);
         }
-    }, [mainData, company, country, user.id, user, secondAddress]);
+    }, [mainData, company, country, user.id, user, secondAddress, visibleList]);
 
     React.useEffect(() => {
         if (user.id) {

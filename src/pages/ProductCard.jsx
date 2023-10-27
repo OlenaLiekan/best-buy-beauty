@@ -6,7 +6,7 @@ import Loader from '../componetns/UI/Loader';
 import { AuthContext } from '../context';
 
 
-const ProductCard = ({type}) => {
+const ProductCard = () => {
     const [item, setItem] = React.useState({});
     const [isLoading, setIsLoading] = React.useState(true); 
     const { serverDomain } = React.useContext(AuthContext);

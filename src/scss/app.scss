@@ -1967,6 +1967,9 @@ $goldColor: #AD912B;
         @media (max-width: 991.98px) {
             padding: 20px 0;
         }
+        &_shadow {
+            background-color: #252525;
+        }
     }
     &__error { 
         color: #AD902B;
@@ -2033,9 +2036,10 @@ $goldColor: #AD912B;
         } 
     }
 }
-.go-back {
+.go-back {        
+    align-self: flex-end;
     &__link {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         justify-content: flex-end;
         gap: 10px;
@@ -2154,6 +2158,7 @@ $goldColor: #AD912B;
         position: relative;      
         width: 100%;
         height: 330px;
+        cursor: pointer;
         img {
             position: absolute;
             width: 100%;
