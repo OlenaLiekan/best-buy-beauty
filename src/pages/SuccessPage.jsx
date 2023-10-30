@@ -38,7 +38,7 @@ const SuccessPage = () => {
         <div className="main__success success-main">
             <div className="success-main__container">
                 <div className="success-main__content">
-                    {!orderId
+                    {orderId
                         ? 
                         <>
                             <h2 className="success-main__title">

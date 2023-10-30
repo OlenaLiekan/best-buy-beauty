@@ -33,6 +33,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const [index, setIndex] = React.useState('');
     const [activeTitle, setActiveTitle] = React.useState(0);
     const [isWarning, setIsWarning] = React.useState(false);
+    const [popupSlides, setPopupSlides] = React.useState([]);
 
     const tabs = ['Descrição', 'Método de uso', 'Ingredientes'];
 
@@ -148,6 +149,18 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const paragraphsApplying = applying.length ? applying[0].text.split('\r\n') : '';
     const paragraphsCompound = compound.length ? compound[0].text.split('\r\n') : '';
 
+    React.useEffect(() => {
+        let props = [];
+        props = [...props, img];
+        if (slide) {
+            slide.map((s) => {
+                props = [...props, s.slideImg];
+            });
+        }
+        setPopupSlides(props); 
+
+    }, [img, slide]);
+
     return (
         <div className='product-card__content'>
             <div className="product-card__go-back go-back">
@@ -162,7 +175,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                 {isAuth && adminMode && updateProductMode ? <UpdateProduct obj={obj} id={id} /> : ''}
                 <div className="images-product__wrapper">
                     <div className="product-card__images images-product">
-                        <ProductCardSlider img={img} slides={slide} />                                
+                        <ProductCardSlider img={img} slides={slide} popupSlides={popupSlides} />                                
                     </div>
                     <div className="product-card__aside">
                         <div className="product-card__info info-product">

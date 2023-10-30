@@ -7,7 +7,7 @@ import "../../scss/navigation.scss";
 import { AuthContext } from "../../context";
 import ProductImg from "./Popups/ProductImg/ProductImg";
 
-const ProductCardSlider = ({ img, slides }) => {
+const ProductCardSlider = ({ img, slides, popupSlides }) => {
     const [thumbsSwiper, setThumbsSwiper] = React.useState(null);
     const { imagesCloud, imgViewerMode, setImgViewerMode } = React.useContext(AuthContext);
 
@@ -58,7 +58,7 @@ const ProductCardSlider = ({ img, slides }) => {
                         }
                     </Swiper>
                 </div>
-                { productImg && imgViewerMode ? <ProductImg productImg = { productImg } /> : ''}
+                {productImg && imgViewerMode ? <ProductImg productImg={productImg} img={img} slides={slides} popupSlides={popupSlides} /> : ''}
             </div>
             <div className="images-product__slider">
                 <div className="images-product__swiper">                

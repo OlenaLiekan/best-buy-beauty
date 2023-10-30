@@ -772,6 +772,14 @@ $goldColor: #AD912B;
         position: relative;
         width: 240px;
         height: 240px;
+        @media (max-width: 767.98px) {
+            width: 200px;
+            height: 200px;
+        }
+        @media (max-width: 479.98px) {
+            width: 180px;
+            height: 180px;
+        }
         img {
             position: absolute;
             width: 100%;
@@ -1842,6 +1850,10 @@ $goldColor: #AD912B;
     &_hidden {
         display: none;
     }
+}
+
+.sizes_hidden {
+    display: none;
 }
 
 .skeleton {
