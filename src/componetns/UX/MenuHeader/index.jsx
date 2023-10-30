@@ -48,11 +48,11 @@ const MenuHeader = () => {
         <>
             <div className="menu__link">
                 <button onClick={menuInit} type="button" className="menu__icon icon-menu"><span></span></button>
-                <Link to="/catalog" className="icon-menu__text icon-menu__text_hidden">Catalogo</Link>              
+                <Link to="/catalog" className="icon-menu__text icon-menu__text_hidden">Catálogo</Link>              
             </div>
             <div className="bottom-header__menu menu-bottom-header menu">
                 <nav className="menu__body">
-                <Link to="/catalog" className="icon-menu__text icon-menu__text_show">Catalogo</Link>                     
+                <Link to="/catalog" className="icon-menu__text icon-menu__text_show">Catálogo</Link>                     
                     <ul className="menu__list">
                         {menuList.length ? menuList.map((item) => 
                             <li key={item.id} value={item.name} onClick={() => setActiveItem(item.id)} className="menu__item item-menu">
