@@ -6,7 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context';
 import { setCategoryId } from '../../redux/slices/filterSlice';
 import { useDispatch } from 'react-redux';
-import { updateDelivery, updatePayment } from '../../http/productAPI';
+import { updateDelivery, updateLogo, updatePayment } from '../../http/productAPI';
+import Loader from '../UI/Loader';
+import LogoLoader from '../UI/Skeletons/LogoSkeleton';
+import LogoTextLoader from '../UI/Skeletons/LogoTextSkeleton';
 
 const AdminPanel = () => {
 
@@ -14,10 +17,10 @@ const AdminPanel = () => {
         { name: 'Tipo', path: 'catalog' },
         { name: 'Produto', path: 'produtos' },
         { name: 'Marca', path: ' ' },
-        { name: 'Slide', path: ' ' }
+        { name: 'Slide', path: ' ' },
     ];
     const [path, setPath] = React.useState('');
-    const { serverDomain } = React.useContext(AuthContext);
+    const { serverDomain, imagesCloud } = React.useContext(AuthContext);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -26,6 +29,7 @@ const AdminPanel = () => {
     const [deliveries, setDeliveries] = React.useState([]);
     const [editPricesMode, setEditPricesMode] = React.useState(false);
     const [editPaymentDataMode, setEditPaymentDataMode] = React.useState(false);
+    const [editLogoMode, setEditLogoMode] = React.useState(false);    
     const [activeDelivery, setActiveDelivery] = React.useState(0);
     const [deliveryId, setDeliveryId] = React.useState('');
     const [deliveryPrice, setDeliveryPrice] = React.useState('');
@@ -34,7 +38,20 @@ const AdminPanel = () => {
     const [iban, setIban] = React.useState('');
     const [paymentDetails, setPaymentDetails] = React.useState('');
     const [recipient, setRecipient] = React.useState('');
+    const [logoName, setLogoName] = React.useState('');
+    const [logoImg, setLogoImg] = React.useState(null);
+    const [logo, setLogo] = React.useState('');
+    const [logoLoading, setLogoLoading] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(false);
+
+    React.useEffect(() => {
+        setLogoLoading(true);
+        axios.get(`${serverDomain}api/logo/1`)
+        .then((res) => {
+            setLogo(res.data);
+            setLogoLoading(false);
+        })
+    }, [serverDomain, editLogoMode]);
 
     React.useEffect(() => {
         setIsLoading(true);
@@ -60,7 +77,6 @@ const AdminPanel = () => {
     }, [serverDomain, editPricesMode]);
 
 
-
     React.useEffect(() => {
         if (path) {
             if (path === 'produtos') {
@@ -73,17 +89,26 @@ const AdminPanel = () => {
         }
     }, [path, navigate, dispatch]);
 
+    React.useEffect(() => {
+        if (!logoLoading && logo) {
+            setLogoImg(logo.img);
+            setLogoName(logo.logoName);
+        }
+    }, [logoLoading, logo]);
+
     const setDelivery = (index, id) => {
         setActiveDelivery(index);
         setDeliveryId(id);
     }
 
     const editDeliveryPrices = () => {
+        setEditLogoMode(false);
         setEditPaymentDataMode(false);
         setEditPricesMode(true);
     }
 
     const editPaymentData = () => {
+        setEditLogoMode(false);
         setEditPricesMode(false);
         setEditPaymentDataMode(true);
     }
@@ -104,6 +129,14 @@ const AdminPanel = () => {
         setRecipient(event.target.value);            
     };
 
+    const onChangeLogoName = (event) => {
+        setLogoName(event.target.value);
+    }
+
+    const selectFile = (event) => {
+        setLogoImg(event.target.files[0]);
+    }
+
     const cancelEdit = () => {
         if (editPricesMode) {
             setEditPricesMode(false);
@@ -117,6 +150,11 @@ const AdminPanel = () => {
             setIban('');
             setRecipient('');
         }
+        if (editLogoMode) {
+            setEditLogoMode(false);
+            setLogoName('');
+            setLogoImg(null);
+        }
     }
 
     const success = () => {
@@ -127,7 +165,11 @@ const AdminPanel = () => {
         if (editPaymentDataMode) {
             window.alert('Detalhes de pagamento alterados com sucesso!');
             setEditPaymentDataMode(false);            
-        }       
+        }   
+        if (editLogoMode) {
+            window.alert('Logotipo atualizado com sucesso!');
+            setEditLogoMode(false);            
+        }  
     }
 
     const updateConditions = (e) => {
@@ -148,6 +190,15 @@ const AdminPanel = () => {
         updatePayment(formData, paymentId).then(data => success());
     }
 
+    const pushLogo = (e) => {
+        e.preventDefault();
+        const logoId = 1;
+        const formData = new FormData();
+        formData.set('logoImg', logoImg);
+        formData.set('logoName', logoName);
+        updateLogo(formData, logoId).then(data => success());
+    }
+
     const showIban = () => {
         if (!visiblePaymentData) {
             setVisiblePaymentData(true);            
@@ -156,12 +207,57 @@ const AdminPanel = () => {
         }
     }
 
+    const showLogoMenu = () => {
+        setEditLogoMode(true);
+        setEditPricesMode(false);
+        setEditPaymentDataMode(false);
+    }
+
     return (
         <div className={styles.actions}>
+            {!editLogoMode
+                ?
+                <div className={styles.logo}>
+                    <div className={styles.logoBox}>
+                        <div className={styles.logoImg}>
+                            {
+                                !logoLoading && logo
+                                ?
+                                <img src={`${imagesCloud}` + logo.img} alt='logo' />
+                                :
+                                <LogoLoader/>
+                            }
+                        </div>
+                        <svg onClick={showLogoMenu} className={styles.logoAction} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+                            <path d="M370.72 133.28C339.458 104.008 298.888 87.962 255.848 88c-77.458.068-144.328 53.178-162.791 126.85-1.344 5.363-6.122 9.15-11.651 9.15H24.103c-7.498 0-13.194-6.807-11.807-14.176C33.933 94.924 134.813 8 256 8c66.448 0 126.791 26.136 171.315 68.685L463.03 40.97C478.149 25.851 504 36.559 504 57.941V192c0 13.255-10.745 24-24 24H345.941c-21.382 0-32.09-25.851-16.971-40.971l41.75-41.749zM32 296h134.059c21.382 0 32.09 25.851 16.971 40.971l-41.75 41.75c31.262 29.273 71.835 45.319 114.876 45.28 77.418-.07 144.315-53.144 162.787-126.849 1.344-5.363 6.122-9.15 11.651-9.15h57.304c7.498 0 13.194 6.807 11.807 14.176C478.067 417.076 377.187 504 256 504c-66.448 0-126.791-26.136-171.315-68.685L48.97 471.03C33.851 486.149 8 475.441 8 454.059V320c0-13.255 10.745-24 24-24z" />
+                        </svg>
+                    </div>
+                    <div className={styles.logoText}>{!logoLoading && logo ? logo.logoName : <LogoTextLoader/>}</div>
+                </div>
+                :
+                <form onSubmit={pushLogo} className={styles.logoForm}>
+                    <div className={styles.formLogoLine}>
+                        <label htmlFor="logo-file" className={styles.logoLabel}>Imagem:</label>
+                        <input id="logo-file" tabIndex="1" type='file' className={styles.logoFile}
+                            onChange={selectFile}/>                    
+                    </div>
+                    <div className={styles.formLogoLine}>
+                        <label htmlFor="logo-name" className={styles.logoLabel}>Nome:</label>
+                        <input required id="logo-name" tabIndex="2" className={styles.logoInput} placeholder='Nome'
+                            ref={inputRef}
+                            value={logoName}
+                            onChange={onChangeLogoName}
+                        />
+                    </div>
+                    <button type='submit' className={styles.subBtn}>Confirme</button> 
+                    <button type='button' onClick={cancelEdit} className={styles.cancelBtn}>Cancelar</button> 
+                </form>
+            }
             <form className={styles.form}>
                 <h3 className={styles.formTitle}>
                     Onde você gostaria de fazer alterações?
                 </h3>
+                
                 <div className={styles.formBody}>
                     {arr.map((item, i) => 
                         <button key={item.name} value={item.path} onClick={() => setPath(item.path)} className={styles.button}>
@@ -204,7 +300,7 @@ const AdminPanel = () => {
                             </div>
                             <div className={styles.formLine}> 
                                 <label htmlFor="delivery-price" className={styles.deliveryLabel}>Preço:</label>
-                                <input required id="delivery-price" className={styles.deliveryInput} placeholder='0.00'
+                                <input required id="delivery-price" tabIndex="1" className={styles.deliveryInput} placeholder='0.00'
                                     ref={inputRef}
                                     value={deliveryPrice}
                                     onChange={onChangePrice}
@@ -212,7 +308,7 @@ const AdminPanel = () => {
                             </div>
                             <div className={styles.formLine}>
                                 <label htmlFor="delivery-sum" className={styles.deliveryLabel}>Montante total:</label>
-                                <input required id="delivery-sum" className={styles.deliveryInput} placeholder='0.00'
+                                <input required id="delivery-sum" tabIndex="2" className={styles.deliveryInput} placeholder='0.00'
                                     ref={inputRef}
                                     value={deliverySum}
                                     onChange={onChangeSum}
@@ -224,7 +320,7 @@ const AdminPanel = () => {
                     }
                 </div>
                 :
-                ''
+                <Loader/>
             }
             {!isLoading && paymentDetails
                 ?
@@ -272,7 +368,7 @@ const AdminPanel = () => {
                     <form onSubmit={updatePaymentData} className={styles.dataPaymentForm}>
                         <div className={styles.formLinePayment}> 
                             <label htmlFor="payment-data-iban" className={styles.dataPaymentLabel}>IBAN:</label>
-                            <input required id="payment-data-iban" className={styles.dataPaymentInput} placeholder='PT00000000000000000000000'
+                            <input required id="payment-data-iban" tabIndex="1" className={styles.dataPaymentInput} placeholder='PT00000000000000000000000'
                                 ref={inputRef}
                                 value={iban}
                                 onChange={onChangeIban}
@@ -280,7 +376,7 @@ const AdminPanel = () => {
                         </div>
                         <div className={styles.formLinePayment}>
                             <label htmlFor="payment-data-name" className={styles.dataPaymentLabel}>Montante total:</label>
-                            <input required id="payment-data-name" className={styles.dataPaymentInput} placeholder='Nome'
+                            <input required id="payment-data-name" tabIndex="2" className={styles.dataPaymentInput} placeholder='Nome'
                                 ref={inputRef}
                                 value={recipient}
                                 onChange={onChangeRecipient}
@@ -292,7 +388,7 @@ const AdminPanel = () => {
                 }
                 </div> 
                 :
-                ''
+                <Loader/>
             }
         </div>
     );

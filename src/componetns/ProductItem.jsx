@@ -153,7 +153,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
         let props = [];
         props = [...props, img];
         if (slide) {
-            slide.map((s) => {
+            slide.forEach((s) => {
                 props = [...props, s.slideImg];
             });
         }

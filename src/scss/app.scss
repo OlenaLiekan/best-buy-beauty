@@ -1004,6 +1004,7 @@ $goldColor: #AD912B;
         margin-bottom: 15px;
         text-align: center;
         span {
+            white-space: nowrap;
             color: #AD912B;
         }
         @media (max-width: 767.98px) {

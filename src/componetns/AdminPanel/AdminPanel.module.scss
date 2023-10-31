@@ -224,22 +224,36 @@
 }
 
 .deliveryForm,
-.dataPaymentForm {
+.dataPaymentForm,
+.logoForm {
     display: flex;
     flex-direction: column;
     gap: 20px; 
 }
 
+.logoForm {
+    margin-top: 20px;
+}
+
 .formLine, 
-.formLineList {
+.formLineList,
+.formLogoLine {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;   
 }
 
+.formLogoLine {
+    @media(max-width: 479.98px) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
 .formLine,
-.formLinePayment {
+.formLinePayment,
+.formLogoLine {
     padding: 0 15px;    
 }
 
@@ -257,7 +271,8 @@
 }
 
 .deliveryLabel,
-.dataPaymentLabel {
+.dataPaymentLabel,
+.logoLabel {
     font-size: 16px;
     font-weight: 500;
     color: #252525;
@@ -275,6 +290,30 @@
     @media(max-width: 479.98px) {
         width: 50%;
         font-size: 14px;
+    }
+}
+
+.logoInput {
+    padding: 10px 15px;
+    border-bottom: 2px solid #acacacd2;
+    outline: none;
+    font-size: 16px;
+    @media(max-width: 479.98px){
+        width: 100%;   
+        font-size: 14px;     
+    }
+}
+
+.logoFile {
+    display: flex;
+    max-width: 260px;
+    font-size: 14px;
+    color: #AD912B;
+    cursor: pointer;
+
+    @media (max-width: 479.98px) {
+        font-size: 12px;
+        max-width: 240px;
     }
 }
 
@@ -320,6 +359,59 @@
 
 .deliveryTypeActive {
     border: 2px solid #AD912B;
+}
+
+.logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+}
+
+.logoBox {
+    display: flex;
+    position: relative;
+}
+
+.logoImg {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+    img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        object-fit: cover;
+    }
+}
+
+.logoText {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.logoAction {
+    position: absolute;
+    bottom: -8px;
+    right: -15px;
+    width: 40px;
+    height: 40px;
+    background-color: #4545453f;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    fill: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease 0s;
+    &:hover {
+        background-color: #45454551;
+    }
 }
 
 

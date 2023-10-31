@@ -58,7 +58,7 @@ const ProductCardSlider = ({ img, slides, popupSlides }) => {
                         }
                     </Swiper>
                 </div>
-                {productImg && imgViewerMode ? <ProductImg productImg={productImg} img={img} slides={slides} popupSlides={popupSlides} /> : ''}
+                {productImg && imgViewerMode ? <ProductImg productImg={productImg} popupSlides={popupSlides} /> : ''}
             </div>
             <div className="images-product__slider">
                 <div className="images-product__swiper">                

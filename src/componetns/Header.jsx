@@ -5,12 +5,16 @@ import Search from './UX/Search';
 import { AuthContext } from '../context';
 
 import { useSelector } from 'react-redux';
-import logoImg from '../assets/img/logo.jpg';
 import { popupAuth } from '../js/script';
+import axios from 'axios';
+import LogoLoader from './UI/Skeletons/LogoSkeleton';
+import LogoTextLoader from './UI/Skeletons/LogoTextSkeleton';
 
 const Header = () => {
-  const { isAuth, setIsAuth, adminMode, setAdminMode} = React.useContext(AuthContext);
+  const { isAuth, setIsAuth, adminMode, setAdminMode, imagesCloud, serverDomain} = React.useContext(AuthContext);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [logo, setLogo] = React.useState('');
   const logout = () => {
     if (adminMode) {
       setAdminMode(false);
@@ -24,15 +28,31 @@ const Header = () => {
   const { items } = useSelector((state) => state.cart);
   const totalCount = items.reduce((sum, item) => sum + item.count, 0);
 
+  React.useEffect(() => {
+    setIsLoading(true);
+    axios.get(`${serverDomain}api/logo/1`)
+      .then((res) => {
+        setLogo(res.data);
+        setIsLoading(false);
+    })
+  }, [serverDomain]);
+
   return (
     <div className="header">
       <div className="header__boby body-header">
         <div className="body-header__container">
           <Link to="/" className="body-header__logo header-logo">
             <div className="header-logo__image">
-              <img src={logoImg} alt='logo' />
+              {!isLoading && logo
+                ?
+                <img src={`${imagesCloud}` + logo.img} alt='logo' />
+                :
+                <LogoLoader/>
+              }
             </div>
-            <h3 className="body-header__text">Best Buy Beauty</h3>
+            <h3 className="body-header__text">
+              {!isLoading && logo ? logo.logoName : <LogoTextLoader/>}
+            </h3>
           </Link>
           <Search />
           <div className="body-header__actions">

@@ -2,18 +2,26 @@ import React from 'react';
 import { AuthContext } from '../../../../context';
 import styles from './ProductImg.module.scss';
 import { SwiperSlide, Swiper } from 'swiper/react';
+import { Navigation, Pagination } from "swiper";
 
-const ProductImg = ({productImg, img, slides, popupSlides}) => {
+import "../../../../scss/navigation.scss";
+import "swiper/scss";
+import "../../../../scss/pagination.scss";
+
+const ProductImg = ({productImg, popupSlides}) => {
 
     const { imagesCloud, setImgViewerMode } = React.useContext(AuthContext);
 
-    const activeSlide = popupSlides.filter((slide) => slide === productImg);
+    const activeSlide = popupSlides.find((slide) => slide === productImg);
     const nextSlides = popupSlides.filter((slide) => slide !== productImg);
 
     return (
         <div className={styles.popupBlock}>
             <div className={styles.popupImage}>
                 <Swiper
+                    modules={[Navigation, Pagination]}
+                    navigation
+                    pagination={{ clickable: true }}
                     spaceBetween={10}
                     slidesPerView={1}
                     speed={1000}
