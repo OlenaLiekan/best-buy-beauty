@@ -85,7 +85,7 @@ const Footer = () => {
               © {year === currentYear.toString() ? year : year + ' - ' + currentYear}  
             </div>
             <div className="bottom-footer__text">
-              { !logoLoading && logo ? logo.logoName : '' }
+              {!logoLoading && logo ? logo.logoName : ''}
             </div>
           </div>
         </div>
