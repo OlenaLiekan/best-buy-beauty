@@ -73,7 +73,7 @@ const UserPanel = ({ user }) => {
                     setIsAuth(false);
                     localStorage.removeItem('auth');
                     navigate("/login");
-                });     
+                }).catch(err => message());   
         } else {
             window.alert('Cancelar exclusão.');
         }
@@ -114,13 +114,18 @@ const UserPanel = ({ user }) => {
         window.scrollTo(0, 0);
     }
 
+    const message = () => {
+        window.alert('Ocorreu um erro!');        
+    }
+
+
     const removeAddress = (addressId) => {
         if (window.confirm('Tem certeza de que deseja remover o endereço da lista?')) {
             const formData = new FormData();
             const id = currentUser.id;
             formData.set('userId', id);
             formData.append('deletedAddressId', addressId);
-            updateUser(formData, id).then(data => success(addressId));
+            updateUser(formData, id).then(data => success(addressId)).catch(err => message());
        }
     }
 

@@ -73,6 +73,11 @@ const UpdateUser = ({userId}) => {
         navigate('/login');
     }
 
+    const message = () => {
+        window.alert('Ocorreu um erro!');        
+    }
+
+
     const updateUserData = (e) => {
         e.preventDefault();
         if (!existingUser || existingUser.email !== emailValue) {
@@ -83,7 +88,7 @@ const UpdateUser = ({userId}) => {
             formData.set('lastName', surname);
             formData.set('email', email);
             formData.set('phone', phone);
-            updateUser(formData, id).then((data) => success());            
+            updateUser(formData, id).then((data) => success()).catch(err => message());            
         }
     }
     

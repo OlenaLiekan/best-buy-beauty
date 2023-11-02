@@ -117,6 +117,10 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
         window.scrollTo(0, 0);
     }
 
+    const message = () => {
+        window.alert('Ocorreu um erro!');        
+    }
+
     const updateAddress = (e) => {
         e.preventDefault();
         const formData = new FormData();
@@ -134,7 +138,7 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
         formData.set('region', region);
         formData.set('postalCode', postalCode);
         formData.set('mainAddress', checked);
-        updateUser(formData, id).then(data => success());
+        updateUser(formData, id).then(data => success()).catch(err => message());
     }
     
     return (

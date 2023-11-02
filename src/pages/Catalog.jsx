@@ -34,6 +34,10 @@ const Catalog = () => {
         dispatch(setBrandId(id));
     }
 
+    const message = () => {
+        window.alert('Ocorreu um erro!');        
+    }
+
     React.useEffect(() => {
         setIsLoading(true);
         axios
@@ -65,7 +69,7 @@ const Catalog = () => {
             axios.delete(`${serverDomain}api/type?id=${id}`)
                 .then(() => {
                     window.alert('O tipo foi excluído com sucesso!');
-                });      
+                }).catch(err => message());      
         } else {
             window.alert('Cancelar exclusão.');
         }

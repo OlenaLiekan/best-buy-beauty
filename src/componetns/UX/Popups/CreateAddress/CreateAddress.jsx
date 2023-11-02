@@ -95,6 +95,10 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
         window.scrollTo(0, 0);
     }
 
+    const message = () => {
+        window.alert('Ocorreu um erro!');        
+    }
+
     const createNewAddress = (e) => {
         e.preventDefault();
         const formData = new FormData();
@@ -112,7 +116,7 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
         formData.append('region', region);
         formData.append('postalCode', postalCode);
         formData.append('mainAddress', checked);
-        updateUser(formData, id).then(() => success());
+        updateUser(formData, id).then(() => success()).catch(err => message());
     }
     
     return (

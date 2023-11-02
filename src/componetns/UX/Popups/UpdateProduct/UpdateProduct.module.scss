@@ -68,6 +68,11 @@
     max-width: 150px;
 }
 
+.formInputCheckbox {
+    position: absolute;
+    opacity: 0;
+}
+
 .formSelectTypes,
 .formSelectBrands {
     width: 200px;
@@ -117,6 +122,14 @@
     }
 }
 
+.formLineCheckbox {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px 0 0 0;
+}
+
 .imgBox {
     position: relative;
     height: 80px;
@@ -148,7 +161,9 @@
     }
 }
 
-.label {
+.label,
+.formLabelCheckbox,
+.formLabelChecked {
     font-size: 14px;
     font-weight: 500;
     margin-right: 10px;
@@ -156,6 +171,37 @@
     @media (max-width: 579.98px) {
         font-size: 12px;
         margin-right: 0;
+    }
+}
+
+.formLabelCheckbox,
+.formLabelChecked {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+
+    &::before {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #1560BD;
+        background-color: #fff;
+        right: -34px;
+        border-radius: 5px;
+    }
+}
+
+.formLabelChecked {
+    &::after {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-radius: 2px;
+        background-color: #1560BD;
+        right: -30px;
     }
 }
 
@@ -177,10 +223,10 @@
     display: block;
     font-size: 18px;
     font-weight: 600;
-    color: #7f766a;
+    color: #252525;
     padding: 15px 20px;
     border-radius: 20px;
-    border: 2px solid #7f766a;
+    border: 2px solid #1560BD;
     background-color: #fff;
     outline: none;
     box-shadow: 3px 3px 3px #7f766a3e;
@@ -188,8 +234,8 @@
 
     &:hover {
         color: #fff;
-        border: 2px solid #252525;
-        background-color: #252525;
+        border: 2px solid #1560BD;
+        background-color: #1560BD;
     }
 
     @media (max-width: 579.98px) {
@@ -209,8 +255,8 @@
 .slideButton {
     padding: 10px 15px;
     border-radius: 20px;
-    border: 2px solid #7f766a;
-    color: #7f766a;
+    border: 2px solid #252525;
+    color: #252525;
     font-size: 14px;
     font-weight: 600;
     box-shadow: 3px 3px 3px #7f766a3e;
@@ -219,7 +265,7 @@
 
     &:hover {
         color: #fff;
-        background-color: #7f766a;
+        background-color: #252525;
     }
 }
 

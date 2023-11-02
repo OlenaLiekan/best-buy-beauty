@@ -20,6 +20,10 @@ const CreateBrand = () => {
         window.scrollTo(0, 0);
     }
 
+    const message = () => {
+        window.alert('Ocorreu um erro!');        
+    }
+
     const selectFile = (event) => {
         setImg(event.target.files[0]);
     }
@@ -37,7 +41,7 @@ const CreateBrand = () => {
         const formData = new FormData();
         formData.append('name', name);
         formData.append('img', img);
-        createBrand(formData).then(data => success());
+        createBrand(formData).then(data => success()).catch(err => message());
     }
 
     return (

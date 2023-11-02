@@ -33,6 +33,7 @@ const UpdateProduct = ({id, obj}) => {
     const [applying, setApplying] = React.useState('');
     const [compound, setCompound] = React.useState('');
     const [deletedSlideId, setDeletedSlideId] = React.useState([]);
+    const [checked, setChecked] = React.useState(true);
 
     React.useEffect(() => {
         setName(obj.name);
@@ -45,9 +46,10 @@ const UpdateProduct = ({id, obj}) => {
         setText(obj.text[0] ? obj.text[0].text : '');
         setApplying(obj.applying[0] ? obj.applying[0].text : '');
         setCompound(obj.compound[0] ? obj.compound[0].text : '');
-        setInfo(obj.info ? obj.info : info);
+        setInfo(obj.info ? obj.info : []);
         setImg(obj.img);
         setObjSlides(obj.slide);
+        setChecked(obj.available);
         const brand = brands.find(brand => brand.id === obj.brandId);
         if (brand) {
             setBrandName(brand.name);            
@@ -56,13 +58,17 @@ const UpdateProduct = ({id, obj}) => {
         if (type) {
             setTypeName(type.name);            
         } 
-    }, [obj, brands, types, info]);
+    }, [obj, brands, types]);
 
     const success = () => {
         window.alert('Dados do produto atualizados com sucesso!');
         setUpdateProductMode(false);  
         navigate('/auth');
         window.scrollTo(0, 0);  
+    }
+
+    const message = () => {
+        window.alert('Ocorreu um erro!');        
     }
 
     const selectFile = (event) => {
@@ -199,6 +205,7 @@ const UpdateProduct = ({id, obj}) => {
         formData.append('applying', applying);            
         formData.append('compound', compound);  
         formData.append('isLashes', isLashes);
+        formData.append('available', checked);
         if (deletedSlideId) {
             formData.append('deletedSlideId', JSON.stringify(deletedSlideId));            
         }
@@ -209,12 +216,20 @@ const UpdateProduct = ({id, obj}) => {
         images.forEach((file) => {
             formData.append('slide', file);
         });           
-        updateProduct(formData, id).then(data => success());      
+        updateProduct(formData, id).then(data => success()).catch(err => message());      
     }
 
     const removeImage = (id) => {
         setObjSlides(objSlides.filter((s) => s.id !== id));
         setDeletedSlideId([...deletedSlideId, id]);
+    }
+
+    const checkedCheckbox = () => {
+        if (!checked) {
+            setChecked(true);
+        } else {
+            setChecked(false);            
+        }
     }
 
     return (
@@ -223,6 +238,12 @@ const UpdateProduct = ({id, obj}) => {
                 <path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" />
             </svg>
             <form onSubmit={updateProductItem} className={styles.formProduct}>
+                <div className={styles.formLineCheckbox}>
+                    <label onClick={checkedCheckbox} htmlFor="userCheckBox" className={checked ? styles.formLabelChecked : styles.formLabelCheckbox}>
+                        Disponível:
+                    </label>
+                    <input id="userCheckBox" type="checkbox" name="agree" className={styles.formInputCheckbox} /> 
+                </div>     
                 <div className={styles.line}>
                     <label htmlFor="product-name" className={styles.label}>Nome:</label>
                     <input id="product-name" required tabIndex="1" type='text' className={styles.formInput}

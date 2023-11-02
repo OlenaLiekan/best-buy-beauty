@@ -39,6 +39,10 @@ const CreateProduct = () => {
         window.scrollTo(0, 0);  
     }
 
+    const message = () => {
+        window.alert('Ocorreu um erro!');        
+    }
+
     const selectFile = (event) => {
         setImg(event.target.files[0]);
     }
@@ -180,7 +184,7 @@ const CreateProduct = () => {
         images.forEach((file) => {
             formData.append('slide', file);
         });
-        createProduct(formData).then(data => success());      
+        createProduct(formData).then(data => success()).catch(err => message());      
     }
 
     return (

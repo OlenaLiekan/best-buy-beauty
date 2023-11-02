@@ -28,6 +28,10 @@ const MainSliderBlock = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+    const message = () => {
+      window.alert('Ocorreu um erro!');        
+    }
+
   React.useEffect(() => {
     setIsLoading(true);
     axios.get(`${serverDomain}api/slide`)
@@ -55,7 +59,7 @@ const MainSliderBlock = () => {
       axios.delete(`${serverDomain}api/slide?id=${id}`)
         .then(() => {
           window.alert('O slide foi excluído com sucesso!');
-        })
+        }).catch(err => message());
       navigate('/auth');
       window.scrollTo(0, 0);      
     } else {

@@ -19,6 +19,10 @@ const CreateSlide = () => {
         window.scrollTo(0, 0);
     }
 
+    const message = () => {
+        window.alert('Ocorreu um erro!');        
+    }
+
     const selectFile = (event) => {
         setImg(event.target.files[0]);
     }
@@ -37,7 +41,7 @@ const CreateSlide = () => {
         const formData = new FormData();
         formData.append('img', img);
         formData.append('url', newUrl);
-        createSlide(formData).then(data => success());
+        createSlide(formData).then(data => success()).catch(err => message());
     }
 
     return (

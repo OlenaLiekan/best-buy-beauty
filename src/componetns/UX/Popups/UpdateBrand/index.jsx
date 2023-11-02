@@ -24,6 +24,10 @@ const UpdateBrand = ({brandItem}) => {
         window.scrollTo(0, 0);
     }
 
+    const message = () => {
+        window.alert('Ocorreu um erro!');        
+    }
+
     const selectFile = (event) => {
         setImg(event.target.files[0]);
     }
@@ -44,7 +48,7 @@ const UpdateBrand = ({brandItem}) => {
         if (img) {
             formData.set('img', img);            
         }
-        updateBrand(formData, id).then(data => success());
+        updateBrand(formData, id).then(data => success()).catch(err => message());
     }
 
     return (

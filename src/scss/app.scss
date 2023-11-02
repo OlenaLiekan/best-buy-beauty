@@ -1705,7 +1705,7 @@ $goldColor: #AD912B;
 
             &:hover {
                 transform: rotate(-90deg) scale(1.2);
-                fill: #48d1c1;
+                fill: $decorDarkColor;
             }
         }
     }
@@ -2047,6 +2047,19 @@ $goldColor: #AD912B;
                 text-decoration: underline;                
             }
         } 
+    }
+}
+.available {
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+    line-height: 1.2;
+    font-size: 18px;
+    &_true {
+        color: #AD912B;
+    }
+    &_false {
+        color: #b16451;
     }
 }
 .go-back {        
@@ -2994,7 +3007,7 @@ $goldColor: #AD912B;
     }
     &:hover {
         svg {
-            fill: $mainColor;
+            fill: $decorDarkColor;
         }
         color: $mainColor;
         background-color: $whiteColor;

@@ -41,6 +41,11 @@ const UpdatePassword = ({userId}) => {
         navigate('/login');
     }
 
+    const message = () => {
+        window.alert('Ocorreu um erro!');        
+    }
+
+
     const updateUserData = async (e) => {
         e.preventDefault();
         setEmail(user.email);
@@ -51,7 +56,7 @@ const UpdatePassword = ({userId}) => {
                 const id = userId;
                 formData.set('id', id);
                 formData.set('password', newPassword);
-                updateUser(formData, id).then((data) => success());
+                updateUser(formData, id).then((data) => success()).catch(err => message());
             }
         } catch (error) {
             setError(true);

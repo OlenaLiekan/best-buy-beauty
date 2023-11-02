@@ -11,6 +11,10 @@ const ProductBlock = ({path, id, info, name, rating, isLashes, price, brandId, i
     const [brands, setBrands] = React.useState([]);
     const { isAuth, adminMode, setUpdateProductMode, serverDomain, imagesCloud } = React.useContext(AuthContext);
 
+    const message = () => {
+        window.alert('Ocorreu um erro!');        
+    }
+
     React.useEffect(() => {
         axios.get(`${serverDomain}api/brand`)
             .then((res) => {
@@ -20,12 +24,12 @@ const ProductBlock = ({path, id, info, name, rating, isLashes, price, brandId, i
 
     const removeProduct = () => {
         if (window.confirm('Tem certeza de que deseja excluir o produto?')) {
-        axios.delete(`${serverDomain}api/product?id=${id}`)
-            .then(() => {
-                window.alert('O produto foi excluído com sucesso!');
-                navigate('/auth');
-                window.scrollTo(0, 0);
-        })      
+            axios.delete(`${serverDomain}api/product?id=${id}`)
+                .then(() => {
+                    window.alert('O produto foi excluído com sucesso!');
+                    navigate('/auth');
+                    window.scrollTo(0, 0);
+                }).catch(err => message());      
         } else {
         window.alert('Cancelar exclusão.');
         }

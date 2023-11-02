@@ -31,6 +31,10 @@ const BrandsBlock = () => {
   const dispatch = useDispatch();
   const slidesCount = Math.ceil(brands.length / 3);
 
+  const message = () => {
+    window.alert('Ocorreu um erro!');        
+  }
+
   React.useEffect(() => {
     setIsLoading(true);
     axios.get(`${serverDomain}api/brand`)
@@ -67,7 +71,7 @@ const BrandsBlock = () => {
       axios.delete(`${serverDomain}api/brand?id=${id}`)
         .then(() => {
           window.alert('A marca foi excluído com sucesso!');
-        })
+        }).catch(err => message());
       navigate(`/auth`); 
       window.scrollTo(0, 0);
     } else {

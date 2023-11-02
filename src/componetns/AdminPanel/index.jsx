@@ -15,7 +15,7 @@ const AdminPanel = () => {
 
     const arr = [
         { name: 'Tipo', path: 'catalog' },
-        { name: 'Produto', path: 'produtos' },
+        { name: 'Produto', path: 'produtos?sortProperty=rating&categoryId=0&brandId=0&currentPage=1' },
         { name: 'Marca', path: ' ' },
         { name: 'Slide', path: ' ' },
     ];
@@ -43,6 +43,10 @@ const AdminPanel = () => {
     const [logo, setLogo] = React.useState('');
     const [logoLoading, setLogoLoading] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(false);
+
+    const message = () => {
+        window.alert('Ocorreu um erro!');        
+    }
 
     React.useEffect(() => {
         setLogoLoading(true);
@@ -79,7 +83,7 @@ const AdminPanel = () => {
 
     React.useEffect(() => {
         if (path) {
-            if (path === 'produtos') {
+            if (path === 'produtos?sortProperty=rating&categoryId=0&brandId=0&currentPage=1') {
                 dispatch(setCategoryId(0));
                 localStorage.removeItem('categoryId');
                 localStorage.removeItem('subItems');
@@ -178,7 +182,7 @@ const AdminPanel = () => {
         const id = deliveryId;
         formData.set('price', deliveryPrice);
         formData.set('requiredSum', deliverySum);                     
-        updateDelivery(formData, id).then(data => success());
+        updateDelivery(formData, id).then(data => success()).catch(err => message());
     }
 
     const updatePaymentData = (e) => {
@@ -187,7 +191,7 @@ const AdminPanel = () => {
         const formData = new FormData();
         formData.set('iban', iban);
         formData.set('recipient', recipient);                     
-        updatePayment(formData, paymentId).then(data => success());
+        updatePayment(formData, paymentId).then(data => success()).catch(err => message());
     }
 
     const pushLogo = (e) => {
@@ -196,7 +200,7 @@ const AdminPanel = () => {
         const formData = new FormData();
         formData.set('logoImg', logoImg);
         formData.set('logoName', logoName);
-        updateLogo(formData, logoId).then(data => success());
+        updateLogo(formData, logoId).then(data => success()).catch(err => message());
     }
 
     const showIban = () => {
@@ -209,6 +213,7 @@ const AdminPanel = () => {
 
     const showLogoMenu = () => {
         setEditLogoMode(true);
+        window.scrollTo(0, 0);
         setEditPricesMode(false);
         setEditPaymentDataMode(false);
     }

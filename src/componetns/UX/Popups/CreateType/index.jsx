@@ -24,6 +24,10 @@ const CreateType = () => {
         window.scrollTo(0, 0);        
     }
 
+    const message = () => {
+        window.alert('Ocorreu um erro!');        
+    }
+
     const closePopup = () => {
         setCreateTypeMode(false);            
     }
@@ -65,7 +69,7 @@ const CreateType = () => {
         formData.append('name', name.trim());
         formData.append('img', img);
         formData.append('categoryId', categoryId);
-        createType(formData).then(data => success());
+        createType(formData).then(data => success()).catch(err => message());
     }
 
     return (

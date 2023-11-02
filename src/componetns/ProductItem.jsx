@@ -12,7 +12,7 @@ import ReviewItem from './ReviewItem';
 import NewReview from './UX/Popups/NewReview';
 import { setCurrentPage } from '../redux/slices/filterSlice';
 
-const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, brandId, name, code, price, img}) => {
+const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, available, brandId, name, code, price, img}) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -261,6 +261,15 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                 'Verifique com o gerente.'    
                                 }
                             </div> 
+
+                        </div>
+                        <div className="product-card__available available">
+                            {available
+                                ?
+                                <span className='available_true'>Disponível</span>
+                                :
+                                <span className='available_false'>Não disponível</span>
+                            }
                         </div>
                         {isWarning
                             ?
@@ -268,7 +277,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                             :
                             ''
                         } 
-                        {price !== 0
+                        {price !== 0 && available
                             ?
                             <div className="product-card__actions">
 
