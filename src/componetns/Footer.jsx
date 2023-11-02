@@ -1,7 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context";
+import axios from "axios";
 
 const Footer = () => {
+
+  const { serverDomain } = React.useContext(AuthContext);
+  const [logo, setLogo] = React.useState('');
+  const [logoLoading, setLogoLoading] = React.useState(false);
 
   const footerLink = () => {
     window.scrollTo(0, 0);
@@ -11,6 +17,15 @@ const Footer = () => {
 
   const date = new Date();
   const currentYear = date.getFullYear();
+
+  React.useEffect(() => {
+    setLogoLoading(true);
+    axios.get(`${serverDomain}api/logo/1`)
+    .then((res) => {
+        setLogo(res.data);
+        setLogoLoading(false);
+    })
+  }, [serverDomain]);
 
     return (
       <div className="footer">
@@ -70,7 +85,7 @@ const Footer = () => {
               © {year === currentYear.toString() ? year : year + ' - ' + currentYear}  
             </div>
             <div className="bottom-footer__text">
-              Best Buy Beauty
+              {!logoLoading && logo ? logo.logoName : ''}
             </div>
           </div>
         </div>

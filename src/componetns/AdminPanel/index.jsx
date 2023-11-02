@@ -51,10 +51,10 @@ const AdminPanel = () => {
     React.useEffect(() => {
         setLogoLoading(true);
         axios.get(`${serverDomain}api/logo/1`)
-        .then((res) => {
-            setLogo(res.data);
-            setLogoLoading(false);
-        })
+            .then((res) => {
+                setLogo(res.data);
+                setLogoLoading(false);
+            });
     }, [serverDomain, editLogoMode]);
 
     React.useEffect(() => {
