@@ -32,8 +32,7 @@ function App() {
   const [isLoading, setLoading] = React.useState(true);
 
   const serverDomain = 'https://bbb-server-a6ji.onrender.com/';
-  const imagesCloud =
-    'https://res.cloudinary.com/bestbuybeautycloud/image/upload/v1695298243/static/';
+  const imagesCloud = 'https://res.cloudinary.com/bbbptcloud/image/upload/v1699129130/static/';
 
   React.useEffect(() => {
     if (localStorage.getItem('auth', 'true')) {
