@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Loader from '../componetns/UI/Loader';
 import NotFoundProduct from '../componetns/NotFoundProduct';
@@ -13,6 +13,7 @@ import UpdateType from '../componetns/UX/Popups/UpdateType';
 
 const Catalog = () => { 
 
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const [catalogItems, setCatalogItems] = React.useState([]);
     const [categories, setCategories] = React.useState([]);
@@ -69,6 +70,7 @@ const Catalog = () => {
             axios.delete(`${serverDomain}api/type?id=${id}`)
                 .then(() => {
                     window.alert('O tipo foi excluído com sucesso!');
+                    navigate('/auth');
                 }).catch(err => message());      
         } else {
             window.alert('Cancelar exclusão.');
