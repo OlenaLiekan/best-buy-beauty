@@ -14,7 +14,6 @@ const UpdatePassword = ({userId}) => {
     const [newPassword, setNewPassword] = React.useState('');    
     const [checkPassword, setCheckPassword] = React.useState('');
     const [error, setError] = React.useState(false);
-    const [email, setEmail] = React.useState('');
 
     const data = localStorage.getItem('user');
     const user = JSON.parse(data);
@@ -48,8 +47,8 @@ const UpdatePassword = ({userId}) => {
 
     const updateUserData = async (e) => {
         e.preventDefault();
-        setEmail(user.email);
         try {
+            const email = user.email;
             await login(email, password);
             if (newPassword === checkPassword) {
                 const formData = new FormData();

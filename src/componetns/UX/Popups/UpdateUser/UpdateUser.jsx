@@ -23,13 +23,13 @@ const UpdateUser = ({userId}) => {
     const user = JSON.parse(data);
 
     React.useEffect(() => {
-        if (user) {
+        if (user.id) {
             setUsername(user.firstName);
             setSurname(user.lastName);
             setPhone(user.phone);
             setEmail(user.email);         
         }
-    }, [user]);
+    }, [user.id]);
 
     React.useEffect(() => {
         if (emailValue !== user.email) {

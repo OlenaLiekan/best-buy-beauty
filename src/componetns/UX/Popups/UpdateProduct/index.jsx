@@ -89,7 +89,6 @@ const UpdateProduct = ({id, obj}) => {
 
     const onChangeText = (e) => {
         setText(e.target.value);
-        console.log(text);
     }
 
     const onChangeApplying = (e) => {

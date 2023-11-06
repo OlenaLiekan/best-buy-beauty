@@ -35,7 +35,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     const user = data ? JSON.parse(data) : '';
 
     React.useEffect(() => {
-        if (user && !mainData) {
+        if (user.id && !mainData) {
             setUsername(user.firstName);
             setSurname(user.lastName);
             setPhone(user.phone);
@@ -54,7 +54,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
             setRegion(mainData.region);
             setPostalCode(mainData.postalCode);
         }
-    }, [mainData, company, country, user.id, user, secondAddress, visibleList]);
+    }, [mainData, company, country, user.id, secondAddress, visibleList]);
 
     React.useEffect(() => {
         if (user.id) {
