@@ -311,7 +311,7 @@ const UpdateProduct = ({id, obj}) => {
                             value={i.title}
                             onChange={(e) => changeInfo('title', e.target.value, i.id)}
                         /> 
-                        <label htmlFor={'info-product_description' + i.id } className={styles.label}>Significado:</label>
+                        <label htmlFor={'info-product_description' + i.id } className={styles.label}>=</label>
                         <input id={'info-product_description' + i.id } tabIndex="8" type='text' className={styles.formInputSmall}
                             value={i.description}
                             onChange={(e) => changeInfo('description', e.target.value, i.id)}
