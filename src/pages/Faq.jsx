@@ -5,14 +5,14 @@ const Faq = () => {
     const labels = [
         'Seus produtos são de boa qualidade?',
         'Como posso fazer um pedido?',
+        'Como fazer um pagamento?',
         'Fiz um pedido, o que vem a seguir?',
-        'Como fazer um pagamento?'
     ];
     const answers = [
         '- Vendemos produtos que nós mesmos testamos no trabalho e podemos aconselhar nossos clientes. Assim, você pode ter certeza da qualidade.',
         '- Selecione os itens que você gosta e adicione ao carrinho. Faça um pedido pelo carrinho e preencha os dados para feedback.',
-        '- Nosso especialista entrará em contato com você para esclarecer o endereço de entrega e fornecer detalhes de pagamento.',
-        '- Nosso especialista entrará em contato com você para fornecer os detalhes de pagamento.'
+        '- Após preencher o formulário você receberá os dados e o valor do pagamento. Pague as mercadorias usando os dados especificados e notifique-nos do pagamento.',        
+        '- Nosso especialista entrará em contato com você se tivermos alguma dúvida sobre seu pedido. Se o produto estiver em estoque e o pagamento for bem-sucedido, enviaremos seu pedido dentro de 1-3 dias pelo serviço de entrega.'
     ]; 
     
     
