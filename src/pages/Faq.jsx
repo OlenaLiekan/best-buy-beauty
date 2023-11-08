@@ -1,18 +1,35 @@
 import React from 'react';
+import axios from 'axios';
+import { AuthContext } from '../context';
 
 const Faq = () => {
     const [activeIndex, setActiveIndex] = React.useState('');
+    const { serverDomain } = React.useContext(AuthContext);
+    const [freeDelivery, setFreeDelivery] = React.useState([]);
+
+    React.useEffect(() => {
+        axios.get(`${serverDomain}api/delivery`)
+            .then((res) => {
+                setFreeDelivery(res.data.filter((obj) => obj.id === 3)[0]);
+            });
+    }, [serverDomain]);
+
+    const deliveryCondition = freeDelivery ? `(Em valores superiores a ${freeDelivery.requiredSum} €, Envio expresso Grátis)` : '';
+
     const labels = [
-        'Seus produtos são de boa qualidade?',
-        'Como posso fazer um pedido?',
-        'Como fazer um pagamento?',
-        'Fiz um pedido, o que vem a seguir?',
+        'Quanto tempo demora chegar a encomenda?',
+        'Devolução/troca pode ser feito?',
+        'Métodos de pagamento?',
+        'Como escolher uma cola para extensão?',
+        'Pré tratamento e primer são produtos iguais?',
     ];
+
     const answers = [
-        '- Vendemos produtos que nós mesmos testamos no trabalho e podemos aconselhar nossos clientes. Assim, você pode ter certeza da qualidade.',
-        '- Selecione os itens que você gosta e adicione ao carrinho. Faça um pedido pelo carrinho e preencha os dados para feedback.',
-        '- Após preencher o formulário você receberá os dados e o valor do pagamento. Pague as mercadorias usando os dados especificados e notifique-nos do pagamento.',        
-        '- Nosso especialista entrará em contato com você se tivermos alguma dúvida sobre seu pedido. Se o produto estiver em estoque e o pagamento for bem-sucedido, enviaremos seu pedido dentro de 1-3 dias pelo serviço de entrega.'
+        `— Normalmente em correio registado dependendo de CTT 1–3 dias úteis. Expresso 1 dia útil ${deliveryCondition}.`,
+        '— Sim, em caso de defeito de fábrica.',
+        '— MBWay, IBAN, PayPal',        
+        '— Recomendo escolher cola dependente do tempo da secagem, as condições que tem no seu gabinete e a sua velocidade de trabalho. Para iniciantes aconselho escolher a cola mais lenta. Para profissionais mais rápidas. No verão a cola seca mais rápido. Inverno mais devagar. Com alta humidade cola seca mais rápido, com pouca humidade cola seca mais lento.',
+        '— Não, são produtos diferentes.',
     ]; 
     
     
