@@ -8,8 +8,9 @@ import axios from 'axios';
 
 const SuccessPage = () => {
 
-    const { serverDomain } = React.useContext(AuthContext);
-    const [paymentDetails, setPaymentDetails] = React.useState('');
+    const { serverDomain, adminMode } = React.useContext(AuthContext);
+    const [paymentDetails, setPaymentDetails] = React.useState([]);
+    const [mbWayPayments, setMbWayPayments] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(false);
 
     const data = localStorage.getItem('user') ? localStorage.getItem('user') : '';
@@ -18,21 +19,19 @@ const SuccessPage = () => {
     const orderId = localStorage.getItem('orderId');
     const orderDate = localStorage.getItem('orderDate');
     const orderTotal = localStorage.getItem('orderTotal');
+    const clientName = localStorage.getItem('clientName');
+    const clientLastName = localStorage.getItem('clientSurname');
+    const clientPhone = localStorage.getItem('clientPhone');
 
     React.useEffect(() => {
         setIsLoading(true);
-        axios.get(`${serverDomain}api/payment/1`)
+        axios.get(`${serverDomain}api/payment`)
             .then((res) => {
                 setPaymentDetails(res.data);
+                setMbWayPayments(res.data.filter((payment) => payment.type === 'MBway').filter((mbw) => mbw.available));
                 setIsLoading(false);
             });
     }, [serverDomain]);      
-
-    const scrollToContacts = () => {
-        window.scrollTo(0, document.body.scrollHeight);
-    }
-
-
 
     return (
         <div className="main__success success-main">
@@ -42,32 +41,39 @@ const SuccessPage = () => {
                         ? 
                         <>
                             <h2 className="success-main__title">
-                                Confirmação de compra
+                                Olá{clientName ? ', ' + clientName : ''}!
                             </h2>
                             <div className="success-main__body body-success">
                                 <p className="body-success__text body-success__text_gold">
                                     Obrigado pela sua compra!
                                 </p>                        
                                 <p className="body-success__text">
-                                    Estes são os dados de que precisa para realizar o pagamento.
+                                    Começaremos a preparar o seu pedido logo que recebermos a confirmação do pagamento.
                                 </p>
                                 <p className="body-success__text bottom-line">
-                                    Você pode obter conselhos sobre pagamento entrando em contato conosco usando
-                                    <span className='bold link' onClick={scrollToContacts}> os contatos </span>
-                                    para feedback.
+                                    Estes são os dados de que precisa para concluir a compra num multibanco ou online:
                                 </p>
                                 <div className='body-success__block bottom-line'>
                                     <div className='body-success__line'>
                                         <div>IBAN</div>
-                                        <div>{paymentDetails && !isLoading ? paymentDetails.iban : 'Carregando...'}</div>
+                                        <div>{paymentDetails.length && !isLoading ? paymentDetails[0].account : 'Carregando...'}</div>
                                     </div>
                                     <div className='body-success__line'>
                                         <div>Nome</div>
-                                        <div>{paymentDetails && !isLoading ? paymentDetails.recipient : 'Carregando...'}</div>
-                                    </div>                            
+                                        <div>{paymentDetails.length && !isLoading ? paymentDetails[0].recipient : 'Carregando...'}</div>
+                                    </div>      
+                                    {mbWayPayments.length ? mbWayPayments.map((payment, i) => 
+                                        <div key={i} className='body-success__line'>
+                                        <div>MBway</div>
+                                            <div>{payment.account}</div>
+                                    </div>  
+                                    ) : ''}
                                 </div>
                                 <p className="body-success__text">
-                                    Tenha presente que o prazo para realizar o pagamento ê de <span className='bold'>3 dias úteis.</span>
+                                    Tenha presente que terá de realizar o pagamento no máximo <span className='bold'>de 3 dias</span> corridos. Caso contrário, o seu pedido será cancelado.
+                                </p>
+                                <p className="body-success__text">
+                                    Data de entrega estimada 1-5 dias úteis. Após recebermos o pagamento da compra.   
                                 </p>
                                 <h4 className="success-main__subtitle bottom-line">
                                     Dados do pedido
@@ -91,6 +97,17 @@ const SuccessPage = () => {
                                     </div>
                                     <div className='body-success__line'>
                                         <div>
+                                            Envio para o domicílio
+                                        </div>
+                                    </div>
+                                    <p className='body-success__text'>
+                                        {clientName + ' ' + clientLastName}
+                                    </p>
+                                    <p className='body-success__text'>
+                                        Tel.{' ' + clientPhone}
+                                    </p>
+                                    <div className='body-success__line'>
+                                        <div>
                                             Valor total
                                         </div>
                                         <div>
@@ -98,7 +115,7 @@ const SuccessPage = () => {
                                         </div>
                                     </div>                            
                                 </div>
-                                {user
+                                {user && !adminMode
                                     ?
                                     <Link to='/auth' className='body-success__button checkout'>Ver a minha compra</Link>
                                     :

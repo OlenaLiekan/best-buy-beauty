@@ -31,12 +31,17 @@ const AdminPanel = () => {
     const [editPaymentDataMode, setEditPaymentDataMode] = React.useState(false);
     const [editLogoMode, setEditLogoMode] = React.useState(false);    
     const [activeDelivery, setActiveDelivery] = React.useState(0);
-    const [deliveryId, setDeliveryId] = React.useState('');
+    const [deliveryId, setDeliveryId] = React.useState(1);
     const [deliveryPrice, setDeliveryPrice] = React.useState('');
     const [deliverySum, setDeliverySum] = React.useState('');
     const [visiblePaymentData, setVisiblePaymentData] = React.useState(false);
-    const [iban, setIban] = React.useState('');
-    const [paymentDetails, setPaymentDetails] = React.useState('');
+    const [account, setAccount] = React.useState('');
+    const [paymentDetails, setPaymentDetails] = React.useState([]);
+    const [activePayment, setActivePayment] = React.useState(0);
+    const [paymentId, setPaymentId] = React.useState(1);
+    const [mbWayPayments, setMbWayPayments] = React.useState([]);
+    const [mbWay, setMbWay] = React.useState('');
+    const [mbWayAvailable3, setMbwAvailable3] = React.useState(false);
     const [recipient, setRecipient] = React.useState('');
     const [logoName, setLogoName] = React.useState('');
     const [logoImg, setLogoImg] = React.useState(null);
@@ -59,19 +64,24 @@ const AdminPanel = () => {
 
     React.useEffect(() => {
         setIsLoading(true);
-        axios.get(`${serverDomain}api/payment/1`)
+        axios.get(`${serverDomain}api/payment`)
             .then((res) => {
                 setPaymentDetails(res.data);
+                setMbWayPayments(res.data.filter((payment) => payment.id > 1));
                 setIsLoading(false);
             });
     }, [serverDomain, editPaymentDataMode]);    
 
     React.useEffect(() => {
-        if (paymentDetails) {
-            setIban(paymentDetails.iban);
-            setRecipient(paymentDetails.recipient);
+        if (paymentDetails.length) {
+            setAccount(paymentDetails[0].account);
+            setRecipient(paymentDetails[0].recipient);
         }
-    }, [paymentDetails]);
+        if (paymentId > 1) {
+            setMbWay(mbWayPayments.find((mbwp) => mbwp.id === paymentId).account);
+            setMbwAvailable3(mbWayPayments.find((mbwp) => mbwp.id === 4).available);                
+        }
+    }, [paymentDetails, paymentId, mbWayPayments]);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/delivery`)
@@ -79,6 +89,13 @@ const AdminPanel = () => {
                 setDeliveries(res.data);
             });
     }, [serverDomain, editPricesMode]);
+
+    React.useEffect(() => {
+        if (deliveries.length && deliveryId) {
+            setDeliveryPrice(deliveries.find((delivery) => delivery.id === deliveryId).price);
+            setDeliverySum(deliveries.find((delivery) => delivery.id === deliveryId).requiredSum);
+        }
+    }, [deliveryId, deliveries]);
 
 
     React.useEffect(() => {
@@ -105,6 +122,11 @@ const AdminPanel = () => {
         setDeliveryId(id);
     }
 
+    const setPayment = (index, id) => {
+        setActivePayment(index);
+        setPaymentId(id);
+    }
+
     const editDeliveryPrices = () => {
         setEditLogoMode(false);
         setEditPaymentDataMode(false);
@@ -125,13 +147,17 @@ const AdminPanel = () => {
         setDeliverySum(event.target.value);            
     };
 
-    const onChangeIban = (event) => { 
-        setIban(event.target.value);            
+    const onChangeAccount = (event) => { 
+        setAccount(event.target.value);            
     };
 
     const onChangeRecipient = (event) => { 
         setRecipient(event.target.value);            
     };
+
+    const onChangeMbWay = (event) => { 
+        setMbWay(event.target.value);            
+    };  
 
     const onChangeLogoName = (event) => {
         setLogoName(event.target.value);
@@ -151,7 +177,9 @@ const AdminPanel = () => {
         }
         if (editPaymentDataMode) {
             setEditPaymentDataMode(false);    
-            setIban('');
+            setAccount('');
+            setActivePayment(0);
+            setPaymentId('');
             setRecipient('');
         }
         if (editLogoMode) {
@@ -164,11 +192,15 @@ const AdminPanel = () => {
     const success = () => {
         if (editPricesMode) {
             window.alert('Condições alteradas com sucesso!');
-            setEditPricesMode(false);            
+            setEditPricesMode(false); 
+            setDeliveryId(1);
+            setActiveDelivery(0);
         }
         if (editPaymentDataMode) {
             window.alert('Detalhes de pagamento alterados com sucesso!');
-            setEditPaymentDataMode(false);            
+            setEditPaymentDataMode(false); 
+            setPaymentId(1);
+            setActivePayment(0);
         }   
         if (editLogoMode) {
             window.alert('Logotipo atualizado com sucesso!');
@@ -187,11 +219,12 @@ const AdminPanel = () => {
 
     const updatePaymentData = (e) => {
         e.preventDefault();
-        const paymentId = 1;
+        const id = paymentId;
         const formData = new FormData();
-        formData.set('iban', iban);
-        formData.set('recipient', recipient);                     
-        updatePayment(formData, paymentId).then(data => success()).catch(err => message());
+        formData.set('account', paymentId === 1 ? account : mbWay);
+        formData.set('recipient', recipient); 
+        formData.set('available', paymentId === 4 ? mbWayAvailable3 : true);
+        updatePayment(formData, id).then(data => success()).catch(err => message());
     }
 
     const pushLogo = (e) => {
@@ -216,6 +249,15 @@ const AdminPanel = () => {
         window.scrollTo(0, 0);
         setEditPricesMode(false);
         setEditPaymentDataMode(false);
+    }
+
+    const toggleAvailable = () => {
+        if (mbWayAvailable3) {
+            setMbwAvailable3(false);
+        }
+        else {
+            setMbwAvailable3(true);   
+        }
     }
 
     return (
@@ -327,7 +369,7 @@ const AdminPanel = () => {
                 :
                 <Loader/>
             }
-            {!isLoading && paymentDetails
+            {!isLoading && paymentDetails.length
                 ?
                 <div className={styles.dataPaymentBlock}>
                     <h4>Detalhes do pagamento</h4>
@@ -342,9 +384,9 @@ const AdminPanel = () => {
                                     <div className={styles.dataPaymentValue}>
                                         {!visiblePaymentData 
                                             ?
-                                                paymentDetails.iban.slice(0, 2) + '*******************' + paymentDetails.iban.slice(21)
+                                                paymentDetails[0].account.slice(0, 2) + '*******************' + paymentDetails[0].account.slice(21)
                                             :
-                                                paymentDetails.iban}
+                                                paymentDetails[0].account}
                                         {!visiblePaymentData
                                             ?
                                             <svg onClick={showIban} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
@@ -362,31 +404,69 @@ const AdminPanel = () => {
                                         Nome:
                                     </div>
                                     <div className={styles.dataPaymentValue}>
-                                        {paymentDetails.recipient}
+                                        {paymentDetails[0].recipient}
                                     </div>
                                 </div>
+                                {
+                                    mbWayPayments.length
+                                        ? 
+                                        mbWayPayments.map((mbPayment, i) => 
+                                            <div key={i} className={styles.dataPaymentItem}>
+                                                <div className={styles.dataPaymentTitle}>
+                                                    MBway №{i+1}:
+                                                </div>
+                                                <div className={styles.dataPaymentValue}>
+                                                    {mbPayment.available ? mbPayment.account : mbPayment.account + ' (indisponível)'}
+                                                </div>
+                                            </div>  
+                                        )
+                                        :
+                                        ''
+                                }
                             </div>
                             
                             <button type='button' onClick={editPaymentData} className={styles.upBtn}>Atualizar</button>       
                         </>
                     :    
                     <form onSubmit={updatePaymentData} className={styles.dataPaymentForm}>
-                        <div className={styles.formLinePayment}> 
-                            <label htmlFor="payment-data-iban" className={styles.dataPaymentLabel}>IBAN:</label>
-                            <input required id="payment-data-iban" tabIndex="1" className={styles.dataPaymentInput} placeholder='PT00000000000000000000000'
-                                ref={inputRef}
-                                value={iban}
-                                onChange={onChangeIban}
-                            />
+                        <div className={styles.formLineList}>
+                            <ul className={styles.paymentsList}>
+                                {paymentDetails.map((payment, i) => 
+                                    <li className={i === activePayment ? styles.paymentTypeActive : styles.paymentType} key={i} onClick={() => setPayment(i, payment.id)}>{payment.type + (i > 0 ? ' №' + i : '')}</li>
+                                )}
+                            </ul>
                         </div>
-                        <div className={styles.formLinePayment}>
-                            <label htmlFor="payment-data-name" className={styles.dataPaymentLabel}>Montante total:</label>
-                            <input required id="payment-data-name" tabIndex="2" className={styles.dataPaymentInput} placeholder='Nome'
-                                ref={inputRef}
-                                value={recipient}
-                                onChange={onChangeRecipient}
-                            />
-                        </div>
+                        {paymentId <= 1
+                            ?
+                            <>
+                                <div className={styles.formLinePayment}> 
+                                    <label htmlFor="payment-data-iban" className={styles.dataPaymentLabel}>IBAN:</label>
+                                    <input required id="payment-data-iban" tabIndex="1" className={styles.dataPaymentInput} placeholder='PT00000000000000000000000'
+                                        ref={inputRef}
+                                        value={account}
+                                        onChange={onChangeAccount}
+                                    />
+                                </div>
+                                <div className={styles.formLinePayment}>
+                                    <label htmlFor="payment-data-name" className={styles.dataPaymentLabel}>Nome:</label>
+                                    <input required id="payment-data-name" tabIndex="2" className={styles.dataPaymentInput} placeholder='Nome'
+                                        ref={inputRef}
+                                        value={recipient}
+                                        onChange={onChangeRecipient}
+                                    />
+                                </div>                                
+                            </>
+                            :
+                            <div className={styles.formLinePayment}>
+                                <label htmlFor="payment-data-mbw" className={styles.dataPaymentLabel}>MBway: </label>
+                                {paymentId === 4 ? <span className={mbWayAvailable3 ? styles.accountAvailableTrue : styles.accountAvailableFalse} onClick={toggleAvailable}>{mbWayAvailable3 ? ' disponível' : ' indisponível'}</span> : ''}
+                                <input required id="payment-data-mbw" tabIndex="1" className={styles.dataPaymentInput} placeholder='MBway'
+                                    ref={inputRef}
+                                    value={mbWay}
+                                    onChange={onChangeMbWay}
+                                />
+                            </div>                                   
+                        }
                         <button type='submit' className={styles.subBtn}>Confirme</button> 
                         <button type='button' onClick={cancelEdit} className={styles.cancelBtn}>Cancelar</button> 
                     </form>

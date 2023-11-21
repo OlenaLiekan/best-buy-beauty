@@ -81,7 +81,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const showCart = () => {
         if (isLashes ? lashesCount : addedCount) {
             window.scrollTo(0, 0);
-            navigate('/cart');
+            navigate('/cart');                
         } else {
             setIsWarning(true);
         }
@@ -281,7 +281,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                             ?
                             <div className="product-card__actions">
 
-                                {!isLashes || (activeCurl !== null && activeLength !== null && activeThickness !== null)
+                                {(!isLashes && company) || (activeCurl !== null && activeLength !== null && activeThickness !== null && company) 
                                     ?
                                     <>
                                         <div className="product-card__quantity quantity">

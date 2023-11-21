@@ -173,6 +173,9 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         const date = new Date();
         const today = date.toDateString();
         localStorage.setItem('orderDate', today);
+        localStorage.setItem('clientName', username);
+        localStorage.setItem('clientSurname', surname);
+        localStorage.setItem('clientPhone', phone);
         localStorage.setItem('orderTotal', (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2));
         dispatch(
             clearItems()

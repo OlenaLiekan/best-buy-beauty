@@ -330,7 +330,8 @@
     }
 }
 
-.deliveriesList {
+.deliveriesList,
+.paymentsList {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -342,7 +343,9 @@
 }
 
 .deliveryType,
-.deliveryTypeActive {
+.deliveryTypeActive,
+.paymentType,
+.paymentTypeActive {
     font-size: 14px;
     font-weight: 500;
     color: #252525;   
@@ -357,7 +360,8 @@
     }
 }
 
-.deliveryTypeActive {
+.deliveryTypeActive,
+.paymentTypeActive {
     border: 2px solid #AD912B;
 }
 
@@ -412,6 +416,32 @@
     &:hover {
         background-color: #45454551;
     }
+}
+
+.accountAvailableTrue {
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    color: #1560BD;
+    padding: 10px;
+    border-radius: 20px;
+    border: 2px solid #1560BD;
+    width: 98px;
+}
+
+.accountAvailableFalse {
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    color: #484848;
+    padding: 10px;
+    border-radius: 20px;
+    border: 2px solid #484848;
+    width: 110px;
+}
+
+.hidden {
+    display: none;
 }
 
 
