@@ -3074,6 +3074,23 @@ $goldColor: #AD912B;
         font-weight: 500;
         gap: 40px;
         font-size: 16px;
+        svg {
+            width: 16px;
+            @media(max-width: 479.98px) {
+                width: 14px;
+            }
+        }
+        .rotate {
+            transform: rotate(-180deg);
+            fill: #AD902B;
+        }
+        &_cursor {
+            color:#AD902B;
+            svg {
+                fill: #AD902B;
+            }
+            cursor: pointer;
+        }
         @media (max-width: 479.98px) {
             font-size: 14px;
         }
@@ -3098,6 +3115,15 @@ $goldColor: #AD912B;
             height: 100px;
         }
     }
+    &__address {
+        max-width: 500px;
+        font-size: 14px;
+        line-height: 1.2;
+        @media (max-width: 479.98px) {
+            font-size: 12px;
+            max-width: 300px;
+        }
+    }
     &__text {
         max-width: 500px;
         text-align: center;
@@ -3114,6 +3140,27 @@ $goldColor: #AD912B;
             @media (max-width: 479.98px) {
                 font-size: 14px;
             }
+        }
+    }
+    &__items {
+        display: flex;
+        flex-direction: column;
+        font-size: 14px;
+        gap: 5px;
+        @media(max-width: 479.98px) {
+            font-size: 12px;
+        }
+        .bold {
+            font-weight: 500;
+            line-height: 1.2;
+            white-space: wrap;
+            @media(max-width: 479px) {
+                max-width: 250px;                
+            }
+        } 
+
+        &_hidden {
+            display: none;
         }
     }
     &__button {

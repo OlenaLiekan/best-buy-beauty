@@ -12,6 +12,7 @@ const SuccessPage = () => {
     const [paymentDetails, setPaymentDetails] = React.useState([]);
     const [mbWayPayments, setMbWayPayments] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(false);
+    const [detailsVisibility, setDetailsVisibility] = React.useState(false);
 
     const data = localStorage.getItem('user') ? localStorage.getItem('user') : '';
     const user = data ? JSON.parse(data) : '';
@@ -21,7 +22,12 @@ const SuccessPage = () => {
     const orderTotal = localStorage.getItem('orderTotal');
     const clientName = localStorage.getItem('clientName');
     const clientLastName = localStorage.getItem('clientSurname');
+    const clientAddress = localStorage.getItem('clientAddress');
     const clientPhone = localStorage.getItem('clientPhone');
+    const totalCount = localStorage.getItem('totalCount');
+    const deliveryPrice = localStorage.getItem('deliveryPrice');
+    const clientOrder = localStorage.getItem('clientOrder');
+    const items = JSON.parse(clientOrder);
 
     React.useEffect(() => {
         setIsLoading(true);
@@ -32,6 +38,18 @@ const SuccessPage = () => {
                 setIsLoading(false);
             });
     }, [serverDomain]);      
+
+    const scrollToContacts = () => {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    const toggleDetails = () => {
+        if (detailsVisibility) {
+            setDetailsVisibility(false);
+        } else {
+            setDetailsVisibility(true);
+        }
+    }
 
     return (
         <div className="main__success success-main">
@@ -73,6 +91,9 @@ const SuccessPage = () => {
                                     Tenha presente que terá de realizar o pagamento no máximo <span className='bold'>de 3 dias</span> corridos. Caso contrário, o seu pedido será cancelado.
                                 </p>
                                 <p className="body-success__text">
+                                    Após o pagamento, é necessário enviar prinscript, comprovativo de pagamento para o email <span className='bold' onClick={scrollToContacts}>bestbuybeauty.pt@gmail.com</span> com o número da encomenda.
+                                </p>
+                                <p className="body-success__text">
                                     Data de entrega estimada 1-5 dias úteis. Após recebermos o pagamento da compra.   
                                 </p>
                                 <h4 className="success-main__subtitle bottom-line">
@@ -100,12 +121,73 @@ const SuccessPage = () => {
                                             Envio para o domicílio
                                         </div>
                                     </div>
-                                    <p className='body-success__text'>
+                                    <p className='body-success__address'>
                                         {clientName + ' ' + clientLastName}
                                     </p>
-                                    <p className='body-success__text'>
+                                    <p className='body-success__address'>
+                                        {clientAddress}
+                                    </p>
+                                    <p className='body-success__address bottom-line'>
                                         Tel.{' ' + clientPhone}
                                     </p>
+                                    <div className='body-success__line'>
+                                        <div>
+                                            Quantidade total
+                                        </div>
+                                        <div>
+                                            {totalCount}
+                                        </div>                                           
+                                    </div>   
+                                    <div onClick={toggleDetails} className='body-success__line body-success__line_cursor'>
+                                        <div>
+                                            {detailsVisibility ? 'Menos detalhes' : 'Mais detalhes'}
+                                        </div>
+                                        <svg className={detailsVisibility ? 'rotate' : ''} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                            <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
+                                        </svg>                                            
+                                    </div>   
+                                    {items.map((item, i) =>
+                                        <div className={detailsVisibility ? 'body-success__items' : 'body-success__items_hidden'} key={i}>
+                                            <p className='bold'>{i + 1}. {item.name}</p>
+                                            <p>Marca: {item.company}</p>
+                                            <p>Código: {item.code}</p>
+                                            {item.curlArr
+                                                ?
+                                                <p>Curvatura: {item.curlArr}</p>
+                                                :
+                                                ''
+                                            }
+                                            {item.thicknessArr
+                                                ?
+                                                <p>Grossura:  {item.thicknessArr} mm</p>
+                                                :
+                                                ''
+                                                }
+                                            {item.lengthArr
+                                                ?
+                                                <p>Tamanho: {item.lengthArr} mm</p>
+                                                :
+                                                ''
+                                            }
+                                            {item.info && !item.isLashes
+                                                ?
+                                                item.info.map((p, i) => 
+                                                    <p key={i}>{p.title}: {p.description}</p>
+                                                )
+                                                :''
+                                            }
+                                            <p>Preço: {item.price} €</p>
+                                            <p>Quantidade: {item.count}</p>
+                                        </div>
+                                    )}
+                                    <div className='body-success__line'>
+                                        <div>
+                                            Custo de entrega
+                                        </div>
+                                        <div>
+                                            {deliveryPrice} €
+                                        </div>
+                                    </div>  
                                     <div className='body-success__line'>
                                         <div>
                                             Valor total

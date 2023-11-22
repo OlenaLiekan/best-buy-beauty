@@ -121,10 +121,12 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     };
 
     const onChangePostalCode = (event) => { 
-        if (event.target.value.length > 4) {
+        if (event.target.value.length === 4) {
             setPostalCode(event.target.value.slice(0, 4) + '-' + event.target.value.slice(5, 8));
+        } else if (event.target.value.length === 5) {
+            setPostalCode(event.target.value.slice(0, 4));
         } else {
-            setPostalCode(event.target.value);              
+            setPostalCode(event.target.value.slice(0, 8));              
         }
     };
 
@@ -171,12 +173,17 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         updateUser(formData, id);   
         localStorage.setItem('orderId', orderNumber);
         const date = new Date();
-        const today = date.toDateString();
+        const today = date.toISOString().slice(0, 10);
+        localStorage.setItem('clientOrder', JSON.stringify(items));
         localStorage.setItem('orderDate', today);
         localStorage.setItem('clientName', username);
         localStorage.setItem('clientSurname', surname);
         localStorage.setItem('clientPhone', phone);
+        localStorage.setItem('clientOrder', JSON.stringify(items));
+        localStorage.setItem('clientAddress', `Urbanização ${company} ${firstAddress} ${secondAddress}, ${postalCode}, ${city}, ${region}, ${country}`);
         localStorage.setItem('orderTotal', (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2));
+        localStorage.setItem('totalCount', totalCount);
+        localStorage.setItem('deliveryPrice', (+deliveryPrice).toFixed(2));
         dispatch(
             clearItems()
         );         

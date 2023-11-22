@@ -60,10 +60,12 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
     };
 
     const onChangePostalCode = (event) => { 
-        if (event.target.value.length > 4) {
+        if (event.target.value.length === 4) {
             setPostalCode(event.target.value.slice(0, 4) + '-' + event.target.value.slice(5, 8));
+        } else if (event.target.value.length === 5) {
+            setPostalCode(event.target.value.slice(0, 4));
         } else {
-            setPostalCode(event.target.value);              
+            setPostalCode(event.target.value.slice(0, 8));              
         }
     };
 

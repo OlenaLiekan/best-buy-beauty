@@ -64,11 +64,16 @@ const Cart = () => {
         return <CartEmpty />
     }
 
+    const symbols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
     const showPopup = () => {
-        const result = new Date();
-        const date = result.toISOString().slice(2, 10).split('-').join('');
-        const time = result.toLocaleTimeString().split(':').join('');
-        setOrderNumber(date + time);
+        let random = symbols[Math.floor(Math.random() * symbols.length)];
+        let newSymbols = "";
+        while (newSymbols.length < 7) {
+            newSymbols += random;
+            random = symbols[Math.floor(Math.random() * symbols.length)];
+        }
+        setOrderNumber(newSymbols);
         popupInit();
     }
 
