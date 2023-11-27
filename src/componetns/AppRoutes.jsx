@@ -53,7 +53,7 @@ const AppRoutes = () => {
                 )}  
                 
                 <Route path="cart" element={<Cart arr={types} />} />
-                <Route path="success" element={<SuccessPage />} />
+                <Route path="send-email" element={<SuccessPage />} />
                 <Route path="*" element={<NotFound />} />
                 <Route path="about" element={<About />} />
                 <Route path="payment&delivery" element={<Payment />} />

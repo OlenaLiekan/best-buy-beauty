@@ -89,3 +89,8 @@ export const updateLogo = async (logo, id) => {
   const { data } = await $authHost.patch('api/logo/' + id, logo);
   return data;
 };
+
+export const sendEmail = async mail => {
+  const { data } = await $host.post('api/send-email', mail);
+  return data;
+};

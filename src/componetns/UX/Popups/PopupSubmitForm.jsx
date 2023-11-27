@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../../../http/userAPI';
 import axios from 'axios';
 import { AuthContext } from '../../../context';
+import { sendEmail } from '../../../http/productAPI';
 
 const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
 
@@ -159,9 +160,9 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         +
         '\n\nPedido № ' + orderNumber
         ;
-    
 
-    const submitForm = () => {
+    const submitForm = async () => {
+        
         const formData = new FormData();
         const id = user ? user.id : 0;
         formData.append('userId', id);
@@ -170,7 +171,15 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         formData.append('deliveryPrice', deliveryPrice);
         formData.append('sum', (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2));
         formData.append('orderNumber', orderNumber);
+        formData.append('userName', username);
+        formData.append('userSurname', surname);
+        formData.append('userEmail', email);
         updateUser(formData, id);   
+        fetch(`${serverDomain}api/send-email`, {
+            method: 'POST',
+            header: { 'Content-type': 'application/x-www-form-urlencoded' },
+            body: formData
+        }).then(response => console.log(response)).catch(error => console.log(error));
         localStorage.setItem('orderId', orderNumber);
         const date = new Date();
         const today = date.toISOString().slice(0, 10);
@@ -187,15 +196,28 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         dispatch(
             clearItems()
         );         
-        navigate('/success');
+        navigate('/send-email');
         window.scrollTo(0, 0); 
     } 
 
-    const [state, handleSubmit] = useForm("xqkoljrq");
+   /* const [state, handleSubmit] = useForm("xqkoljrq");
     if (state.succeeded) {
         return submitForm();
-    }
-    
+                                <ValidationError 
+                                prefix="Email" 
+                                field="email"
+                                errors={state.errors}
+                            />
+
+                            <ValidationError 
+                                prefix="Comment" 
+                                field="comment"
+                                errors={state.errors}
+                            />
+ disabled={state.submitting}                            
+
+    }*/
+
     return (
         <div className="cart__popup popup-cart">
             <div className="popup-cart__content">
@@ -203,13 +225,13 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                     Fechar
                 </button>
                 <div className="popup-cart__body">
-                    <form onSubmit={handleSubmit} className="popup-cart__form popup-form">
+                    <form onSubmit={submitForm} id="email-form" className="popup-cart__form popup-form email-form">
                         <div className="popup-form__text">
                             Por favor, deixe seus dados para fazer um pedido.
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-name-input" className="popup-form__label">Primeiro Nome</label>
-                            <input required id="user-name-input" tabIndex="1" autoComplete="off" type="text" name="Nome" data-error="Error" placeholder='Nome' className="popup-form__input _req"
+                            <input required id="user-name-input" tabIndex="1" autoComplete="off" type="text" name="nome" data-error="Error" placeholder='Nome' className="popup-form__input _req"
                                 ref={inputRef}
                                 value={username}
                                 onChange={onChangeUsername}/>
@@ -237,15 +259,11 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-email-input" className="popup-form__label">E-mail</label>
-                            <input required id="user-email-input" tabIndex="5" autoComplete="off" type="email" name="E-mail" data-error="Error" placeholder="example@email.com" className="popup-form__input _req _email" 
+                            <input required id="user-email-input" tabIndex="5" autoComplete="off" type="email" name="email" data-error="Error" placeholder="example@email.com" className="popup-form__input _req _email" 
                                 ref={inputRef}
                                 value={email}
                                 onChange={onChangeEmail}/>
-                            <ValidationError 
-                                prefix="Email" 
-                                field="email"
-                                errors={state.errors}
-                            />
+
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-f-address-input" className="popup-form__label">Morada №1</label>
@@ -304,13 +322,9 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                         <div className="popup-form__line popup-line__textarea">
                             <label htmlFor="user-comment" className="popup-form__label">Comente</label>
                             <textarea id="user-comment" tabIndex="12" className="popup-form__textarea" name="Comente" placeholder='Ola! Aqui você pode deixar suas dúvidas ou desejos.' cols="10" rows="5" maxLength="150"/> 
-                            <ValidationError 
-                                prefix="Comment" 
-                                field="comment"
-                                errors={state.errors}
-                            />
+
                         </div>
-                        <button type="submit" disabled={state.submitting} tabIndex="13" className="popup-form__button checkout scroll-top">
+                        <button type="submit" tabIndex="13" className="popup-form__button checkout scroll-top">
                             Enviar
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg>
                         </button>
