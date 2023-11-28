@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useForm, ValidationError } from '@formspree/react';
 import { clearItems } from '../../../redux/slices/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../../../http/userAPI';
@@ -30,6 +29,9 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     const [addresses, setAddresses] = React.useState([]);
     const [mainData, setMainData] = React.useState({});
     const [visibleList, setVisibleList] = React.useState(false);
+    const [paymentDetails, setPaymentDetails] = React.useState([]);
+    const [mbWayPayments, setMbWayPayments] = React.useState([]);
+    const [payment, setPayment] = React.useState('');
     const countries = ['Portugal', 'Outro'];
 
     const data = localStorage.getItem('user') ? localStorage.getItem('user') : '';
@@ -71,6 +73,14 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
             setMainData(addresses.find((address) => address.mainAddress));
         }
     }, [addresses]);
+
+    React.useEffect(() => {
+        axios.get(`${serverDomain}api/payment`)
+            .then((res) => {
+                setPaymentDetails(res.data);
+                setMbWayPayments(res.data.filter((payment) => payment.type === 'MBway').filter((mbw) => mbw.available));
+            });
+    }, [serverDomain]);   
 
     const onChangeCompany = (event) => { 
         setCompany(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
@@ -133,53 +143,50 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
 
     const { items, totalPrice } = useSelector((state) => state.cart);
 
+    React.useEffect(() => {
+        const result = paymentDetails.length && mbWayPayments
+            ?
+            '<b style="font-size: 120%;"><span style="padding: 0 57px 20px 20px;">IBAN </span></b>'
+            + paymentDetails[0].account
+            + '<br><b style="font-size: 120%;"><span style="padding: 0 51px 20px 20px;">Nome </span></b>'
+            + paymentDetails[0].recipient
+            + mbWayPayments.map((mbp) =>
+                '<br><b style="font-size: 120%;"><span style="padding: 0 40px 20px 20px;">MBway </span></b>' + mbp.account
+            ) : ''
+            ;
+        setPayment(result);
+    }, [paymentDetails, mbWayPayments]);
+
     const order = items.map((item, index) => (
-        (index > 0 ? '\n\n' : '') + (index + 1) + '. ' + item.name
+        (index > 0 ? '<br><br>' : '') + '<b>' + (index + 1) + '. ' + item.name
         +
-        '\nMarca: ' + item.company
+        '</b><br>Marca: ' + item.company
         +
-        '\nCódigo: ' + item.code + '\n'
+        '<br>Código: ' + item.code + '<br>'
         +
-        (item.curlArr ? 'Curvatura: ' + item.curlArr + '\n' : '')
+        (item.curlArr ? 'Curvatura: ' + item.curlArr + '<br>' : '')
         +
-        (item.thicknessArr ? 'Grossura: ' + item.thicknessArr + ' mm\n' : '')
+        (item.thicknessArr ? 'Grossura: ' + item.thicknessArr + ' mm<br>' : '')
         +
-        (item.lengthArr ? 'Tamanho: ' + item.lengthArr + ' mm\n' : '')
+        (item.lengthArr ? 'Tamanho: ' + item.lengthArr + ' mm<br>' : '')
         +
-        (item.isLashes ? '' : item.info.map((obj) => obj.title + ': ' + obj.description + '\n') )
+        (item.isLashes ? '' : item.info.map((obj) => obj.title + ': ' + obj.description + '<br>') )
         +
-        'Preço: ' + item.price + ' €\n'
+        'Preço: ' + item.price + ' €<br>'
         +
         'Quantidade: ' + item.count))
         +
-        '\n\nQuantidade total: ' + totalCount
+        '<br><br><b style="font-size: 125%; padding-bottom: 20px;"><span style="padding-right: 10px;">Quantidade total: </span>' + totalCount
         +
-        '\nCusto de entrega: ' + deliveryPrice + ' €'
+        '</b><br><b style="font-size: 125%; padding-bottom: 20px;"><span style="padding-right: 10px;">Custo de entrega: </span>' + deliveryPrice + ' €</b>'
         +
-        '\nMontante total: ' + (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2) + ' €'
-        +
-        '\n\nPedido № ' + orderNumber
+        '<br><b style="font-size: 125%; padding-bottom: 20px;"><span style="padding-right: 10px;">Valor total: </span>' + (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2) + ' €</b>'
         ;
-
-    const submitForm = async () => {
-        
-        const formData = new FormData();
-        const id = user ? user.id : 0;
-        formData.append('userId', id);
-        formData.append('items', JSON.stringify(items));
-        formData.append('quantity', totalCount);
-        formData.append('deliveryPrice', deliveryPrice);
-        formData.append('sum', (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2));
-        formData.append('orderNumber', orderNumber);
-        formData.append('userName', username);
-        formData.append('userSurname', surname);
-        formData.append('userEmail', email);
-        updateUser(formData, id);   
-        fetch(`${serverDomain}api/send-email`, {
-            method: 'POST',
-            header: { 'Content-type': 'application/x-www-form-urlencoded' },
-            body: formData
-        }).then(response => console.log(response)).catch(error => console.log(error));
+    
+    const success = () => {
+        dispatch(
+            clearItems()
+        );
         localStorage.setItem('orderId', orderNumber);
         const date = new Date();
         const today = date.toISOString().slice(0, 10);
@@ -189,34 +196,34 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         localStorage.setItem('clientSurname', surname);
         localStorage.setItem('clientPhone', phone);
         localStorage.setItem('clientOrder', JSON.stringify(items));
-        localStorage.setItem('clientAddress', `Urbanização ${company} ${firstAddress} ${secondAddress}, ${postalCode}, ${city}, ${region}, ${country}`);
+        localStorage.setItem('clientAddress', `${company} ${firstAddress} ${secondAddress}, ${postalCode}, ${city}, ${region}, ${country}`);
         localStorage.setItem('orderTotal', (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2));
         localStorage.setItem('totalCount', totalCount);
         localStorage.setItem('deliveryPrice', (+deliveryPrice).toFixed(2));
-        dispatch(
-            clearItems()
-        );         
         navigate('/send-email');
         window.scrollTo(0, 0); 
+    }
+
+    const submitForm = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        const id = user ? user.id : 0;
+        formData.append('userId', id);
+        formData.append('items', JSON.stringify(items));
+        formData.append('quantity', totalCount);
+        formData.append('deliveryPrice', deliveryPrice);
+        formData.append('sum', (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2));
+        formData.append('orderNumber', orderNumber);
+        formData.append('userOrder', order);
+        formData.append('userName', username);
+        formData.append('userSurname', surname);
+        formData.append('userEmail', email);
+        formData.append('userPhone', phone);
+        formData.append('paymentList', payment);
+        formData.append('userAddress', `${company} ${firstAddress} ${secondAddress}, ${postalCode}, ${city}, ${region}, ${country}`);
+        updateUser(formData, id).then((data) => success());  
+        sendEmail(formData).then(response => console.log(response)).catch(error => console.log(error));
     } 
-
-   /* const [state, handleSubmit] = useForm("xqkoljrq");
-    if (state.succeeded) {
-        return submitForm();
-                                <ValidationError 
-                                prefix="Email" 
-                                field="email"
-                                errors={state.errors}
-                            />
-
-                            <ValidationError 
-                                prefix="Comment" 
-                                field="comment"
-                                errors={state.errors}
-                            />
- disabled={state.submitting}                            
-
-    }*/
 
     return (
         <div className="cart__popup popup-cart">
@@ -263,7 +270,6 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                                 ref={inputRef}
                                 value={email}
                                 onChange={onChangeEmail}/>
-
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-f-address-input" className="popup-form__label">Morada №1</label>
@@ -322,7 +328,6 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                         <div className="popup-form__line popup-line__textarea">
                             <label htmlFor="user-comment" className="popup-form__label">Comente</label>
                             <textarea id="user-comment" tabIndex="12" className="popup-form__textarea" name="Comente" placeholder='Ola! Aqui você pode deixar suas dúvidas ou desejos.' cols="10" rows="5" maxLength="150"/> 
-
                         </div>
                         <button type="submit" tabIndex="13" className="popup-form__button checkout scroll-top">
                             Enviar
