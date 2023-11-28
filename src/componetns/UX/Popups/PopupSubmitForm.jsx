@@ -221,7 +221,11 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         formData.append('userPhone', phone);
         formData.append('paymentList', payment);
         formData.append('userAddress', `${company} ${firstAddress} ${secondAddress}, ${postalCode}, ${city}, ${region}, ${country}`);
-        updateUser(formData, id).then((data) => success());  
+        if (id > 0) {
+            updateUser(formData, id).then((data) => success());              
+        } else {
+            success();
+        }
         sendEmail(formData).then(response => console.log(response)).catch(error => console.log(error));
     } 
 
