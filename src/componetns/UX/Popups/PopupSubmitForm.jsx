@@ -146,12 +146,12 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     React.useEffect(() => {
         const result = paymentDetails.length && mbWayPayments
             ?
-            '<b style="font-size: 120%;"><span style="padding: 0 57px 20px 20px;">IBAN </span></b>'
+            '<b style="font-size: 120%;"><span style="padding: 0 57px 20px 0;">IBAN </span></b>'
             + paymentDetails[0].account
-            + '<br><b style="font-size: 120%;"><span style="padding: 0 51px 20px 20px;">Nome </span></b>'
+            + '<br><b style="font-size: 120%;"><span style="padding: 0 51px 20px 0;">Nome </span></b>'
             + paymentDetails[0].recipient
             + mbWayPayments.map((mbp) =>
-                '<br><b style="font-size: 120%;"><span style="padding: 0 40px 20px 20px;">MBway </span></b>' + mbp.account
+                '<br><b style="font-size: 120%;"><span style="padding: 0 40px 20px 0;">MBway </span></b>' + mbp.account
             ) : ''
             ;
         setPayment(result);
