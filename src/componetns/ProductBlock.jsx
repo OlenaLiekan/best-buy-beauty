@@ -8,7 +8,7 @@ const ProductBlock = ({path, id, info, name, rating, isLashes, price, brandId, i
 
     const navigate = useNavigate();
 
-    const [brands, setBrands] = React.useState([]);
+    const [company, setCompany] = React.useState({});
     const { isAuth, adminMode, setUpdateProductMode, serverDomain, imagesCloud } = React.useContext(AuthContext);
 
     const message = () => {
@@ -18,7 +18,7 @@ const ProductBlock = ({path, id, info, name, rating, isLashes, price, brandId, i
     React.useEffect(() => {
         axios.get(`${serverDomain}api/brand`)
             .then((res) => {
-                setBrands(res.data);
+                setCompany(res.data.find((brand) => brand.id === brandId));
             });
     }, [serverDomain]);
 
@@ -39,9 +39,6 @@ const ProductBlock = ({path, id, info, name, rating, isLashes, price, brandId, i
         setUpdateProductMode(true);
         navigate(`${path}`);
     }
-
-    const companyNames = brands.map((brand) => brand.name);
-    const company = companyNames.find((companyName, i) => i + 1 === brandId);
 
     return (
         <div className="product-main__item item-product">
@@ -65,7 +62,7 @@ const ProductBlock = ({path, id, info, name, rating, isLashes, price, brandId, i
                             </h2>
                         </div>
                         <div className="item-product__brand">
-                            {company}
+                            {company.name}
                         </div>
                         <div className="item-product__rating item-rating">
                             <svg className={rating === '0' ? 'empty-star' : 'rating-star'} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">

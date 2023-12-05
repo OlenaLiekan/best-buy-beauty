@@ -26,7 +26,6 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const [activeLength, setActiveLength] = React.useState(null);
     const [lengthArr, setLengthArr] = React.useState([]);
     const [lengthP, setLengthP] = React.useState({});
-    const [brands, setBrands] = React.useState([]);
     const [types, setTypes] = React.useState([]);
     const [userRate, setUserRate] = React.useState({});
     const [productRatings, setProductRatings] = React.useState([]);
@@ -34,6 +33,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const [activeTitle, setActiveTitle] = React.useState(0);
     const [isWarning, setIsWarning] = React.useState(false);
     const [popupSlides, setPopupSlides] = React.useState([]);
+    const [company, setCompany] = React.useState({});
 
     const tabs = ['Descrição', 'Método de uso', 'Ingredientes'];
 
@@ -60,13 +60,10 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     React.useEffect(() => {
         axios.get(`${serverDomain}api/brand`)
             .then((res) => {
-                setBrands(res.data);
+                setCompany(res.data.find((brand) => brand.id === brandId));
             });
     }, [serverDomain]);
 
-
-    const companyNames = brands.map((brand) => brand.name);
-    const company = companyNames.find((companyName, i) => i + 1 === brandId);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/type`)
@@ -102,7 +99,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
             info,               
             code,
             price,
-            company,
+            company: company.name,
             img,
             path,
             isLashes,
@@ -192,7 +189,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                             </div>
 
                             <div className="info-product__number"><span className="label-bold">Código do produto:</span> {code}</div>
-                            <div className="info-product__brand"><span className="label-bold">Marca:</span> {company}</div>
+                            <div className="info-product__brand"><span className="label-bold">Marca:</span> {company.name}</div>
                             {info.length && !isLashes ? info.map((obj) => 
                                 <div key={obj.id} className='info-product__volume'>  
                                     <span className="label-bold">

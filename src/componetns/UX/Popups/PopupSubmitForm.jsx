@@ -7,6 +7,7 @@ import { updateUser } from '../../../http/userAPI';
 import axios from 'axios';
 import { AuthContext } from '../../../context';
 import { sendEmail } from '../../../http/productAPI';
+import { closePopup } from '../../../js/script';
 
 const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
 
@@ -32,6 +33,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     const [paymentDetails, setPaymentDetails] = React.useState([]);
     const [mbWayPayments, setMbWayPayments] = React.useState([]);
     const [payment, setPayment] = React.useState('');
+    const [resetForm, setResetForm] = React.useState(false);
     const countries = ['Portugal', 'Outro'];
 
     const data = localStorage.getItem('user') ? localStorage.getItem('user') : '';
@@ -57,7 +59,20 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
             setRegion(mainData.region);
             setPostalCode(mainData.postalCode);
         }
-    }, [mainData, company, country, user.id, secondAddress, visibleList]);
+        if (resetForm) {
+            setUsername('');
+            setSurname('');
+            setPhone('');
+            setEmail('');
+            setCompany('');
+            setFirstAddress('');
+            setSecondAddress('');
+            setCountry('Portugal');
+            setCity('');
+            setRegion('');
+            setPostalCode('');
+        }
+    }, [mainData, company, country, user.id, secondAddress, visibleList, resetForm]);
 
     React.useEffect(() => {
         if (user.id) {
@@ -146,12 +161,13 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     React.useEffect(() => {
         const result = paymentDetails.length && mbWayPayments
             ?
-            '<b style="font-size: 120%;"><span style="padding: 0 57px 20px 0;">IBAN </span></b>'
+            '<b style="font-size: 110%;"><span style="padding: 0 10px 20px 0;">IBAN </span></b><br>'
             + paymentDetails[0].account
-            + '<br><b style="font-size: 120%;"><span style="padding: 0 51px 20px 0;">Nome </span></b>'
+            + '<br><br><b style="font-size: 110%;"><span style="padding: 0 90px 20px 0;">Nome </span></b><br>'
             + paymentDetails[0].recipient
+            + '<br><br><b style="font-size: 110%;"><span style="padding: 0 75px 20px 0;">MBway </span></b><br>'
             + mbWayPayments.map((mbp) =>
-                '<br><b style="font-size: 120%;"><span style="padding: 0 40px 20px 0;">MBway </span></b>' + mbp.account
+                `<span>${mbp.account} </span>`
             ) : ''
             ;
         setPayment(result);
@@ -176,21 +192,17 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         +
         'Quantidade: ' + item.count))
         +
-        '<br><br><b style="font-size: 125%; padding-bottom: 20px;"><span style="padding-right: 10px;">Quantidade total: </span>' + totalCount
+        '<br><br><b style="font-size: 110%; padding-bottom: 20px;"><span style="padding-right: 10px;">Quantidade total: </span>' + totalCount
         +
-        '</b><br><b style="font-size: 125%; padding-bottom: 20px;"><span style="padding-right: 10px;">Custo de entrega: </span>' + deliveryPrice + ' €</b>'
+        '</b><br><b style="font-size: 110%; padding-bottom: 20px;"><span style="padding-right: 10px;">Custo de entrega: </span>' + deliveryPrice + ' €</b>'
         +
-        '<br><b style="font-size: 125%; padding-bottom: 20px;"><span style="padding-right: 10px;">Valor total: </span>' + (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2) + ' €</b>'
+        '<br><br><b style="font-size: 125%; color: #AD902B; padding-bottom: 20px;"><span style="padding-right: 10px;">Valor total: </span>' + (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2) + ' €</b>'
         ;
     
     const success = () => {
-        dispatch(
-            clearItems()
-        );
-        localStorage.setItem('orderId', orderNumber);
         const date = new Date();
-        const today = date.toISOString().slice(0, 10);
-        localStorage.setItem('clientOrder', JSON.stringify(items));
+        const today = date.toISOString().slice(0, 10);        
+        localStorage.setItem('orderId', orderNumber);
         localStorage.setItem('orderDate', today);
         localStorage.setItem('clientName', username);
         localStorage.setItem('clientSurname', surname);
@@ -200,6 +212,9 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         localStorage.setItem('orderTotal', (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2));
         localStorage.setItem('totalCount', totalCount);
         localStorage.setItem('deliveryPrice', (+deliveryPrice).toFixed(2));
+        dispatch(
+            clearItems()
+        );
         navigate('/send-email');
         window.scrollTo(0, 0); 
     }
@@ -208,25 +223,33 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         e.preventDefault();
         const formData = new FormData();
         const id = user ? user.id : 0;
-        formData.append('userId', id);
-        formData.append('items', JSON.stringify(items));
-        formData.append('quantity', totalCount);
-        formData.append('deliveryPrice', deliveryPrice);
-        formData.append('sum', (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2));
-        formData.append('orderNumber', orderNumber);
-        formData.append('userOrder', order);
-        formData.append('userName', username);
-        formData.append('userSurname', surname);
-        formData.append('userEmail', email);
-        formData.append('userPhone', phone);
-        formData.append('paymentList', payment);
-        formData.append('userAddress', `${company} ${firstAddress} ${secondAddress}, ${postalCode}, ${city}, ${region}, ${country}`);
-        if (id > 0) {
-            updateUser(formData, id).then((data) => success());              
+        if (orderNumber && username && surname && phone && email && items && firstAddress && postalCode && city && region && country && totalPrice && totalCount && deliveryPrice) {
+            setResetForm(false);
+            formData.append('userId', id);
+            formData.append('items', JSON.stringify(items));
+            formData.append('quantity', totalCount);
+            formData.append('deliveryPrice', deliveryPrice);
+            formData.append('sum', (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2));
+            formData.append('orderNumber', orderNumber);
+            formData.append('userOrder', order);
+            formData.append('userName', username);
+            formData.append('userSurname', surname);
+            formData.append('userEmail', email);
+            formData.append('userPhone', phone);
+            formData.append('paymentList', payment);
+            formData.append('userAddress', `${company} ${firstAddress} ${secondAddress}, ${postalCode}, ${city}, ${region}, ${country}`);
+            if (id > 0) {
+                updateUser(formData, id).then((data) => success());
+            } else if (id === 0) {
+                success();
+            }
+            sendEmail(formData).then(response => console.log(response)).catch(error => console.log(error));
         } else {
-            success();
-        }
-        sendEmail(formData).then(response => console.log(response)).catch(error => console.log(error));
+            window.alert('Algo deu errado, tente novamente.');
+            setResetForm(true);
+            closePopup();
+            window.scrollTo(0, 0);
+        }    
     } 
 
     return (

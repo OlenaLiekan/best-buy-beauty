@@ -128,6 +128,11 @@ export function popupInit() {
   }
 }
 
+export function closePopup() {
+  const popupBody = document.querySelector('.popup-cart');
+  popupBody.classList.remove('_active');
+}
+
 export function scrollTop() {
   document.addEventListener('click', function (e) {
     if (e.target.closest('.scroll-top')) {
