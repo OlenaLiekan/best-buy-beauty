@@ -60,7 +60,7 @@ const ProductPage = ({type}) => {
         const search = searchValue ? `&name=${searchValue}` : '';
         const typeId = type.id ? `&typeId=${type.id}` : ''; 
         const category = categoryId ? `&categoryId=${categoryId}` : '';
-        axios.get(`${serverDomain}api/product?info&page=${currentPage}&limit=12${category}${typeId}${brandCategory}&sort=${sortBy}&order=${order}${search}`)
+        axios.get(`${serverDomain}api/product?info&page=${currentPage}&limit=24${category}${typeId}${brandCategory}&sort=${sortBy}&order=${order}${search}`)
         .then((res) => {
             setItems(res.data.rows);
         });

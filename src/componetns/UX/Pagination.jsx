@@ -11,7 +11,7 @@ const Pagination = ({type, onChangePage}) => {
   const { categoryId, brandId, currentPage } = useSelector((state) => state.filter);
   const [itemsCount, setItemsCount] = React.useState(0);
 
-  const contentPerPage = 12;
+  const contentPerPage = 24;
   const totalPages = itemsCount ? Math.ceil(itemsCount / contentPerPage) : 1;
   const forcePage = currentPage - 1;
 
@@ -46,7 +46,7 @@ const Pagination = ({type, onChangePage}) => {
             </svg>
         }
         onPageChange={(event) => onChangePage(event.selected + 1)}
-        pageRangeDisplayed={12}
+        pageRangeDisplayed={24}
         pageCount={totalPages}
         forcePage={forcePage}
         pageClassName="product-pagination__page"
