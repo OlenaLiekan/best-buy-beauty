@@ -171,7 +171,6 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
             ) : ''
             ;
         setPayment(result);
-        console.log(result);
     }, [paymentDetails, mbWayPayments]);
 
     const order = items.map((item, index) => (
