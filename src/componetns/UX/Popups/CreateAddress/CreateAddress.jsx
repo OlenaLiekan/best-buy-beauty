@@ -204,7 +204,7 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
                 </div>
                 <div className={styles.formLine}>
                     <label htmlFor="user-postal-code-input" className={styles.formLabel}>Código postal/ZIP</label>
-                    <input required id="user-postal-code-input" tabIndex="11" autoComplete="off" type="text" name="postal-code" placeholder='0000-000' data-error="Error" className={styles.formInput}
+                    <input required id="user-postal-code-input" tabIndex="11" autoComplete="off" type="text" pattern="[0-9]{4}-[0-9]{3}" name="postal-code" placeholder='0000-000' data-error="Error" className={styles.formInput}
                         ref={inputRef}
                         value={postalCode}
                         onChange={onChangePostalCode}/>

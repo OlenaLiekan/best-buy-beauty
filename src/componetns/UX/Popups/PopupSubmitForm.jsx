@@ -342,7 +342,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-postal-code-input" className="popup-form__label">Código postal/ZIP</label>
-                            <input required id="user-postal-code-input" tabIndex="11" autoComplete="off" type="text" name="Código_postal/ZIP" data-error="Error" className="popup-form__input"
+                            <input required id="user-postal-code-input" tabIndex="11" autoComplete="off" type="text" pattern="[0-9]{4}-[0-9]{3}" name="Código_postal/ZIP" data-error="Error" className="popup-form__input"
                                 ref={inputRef}
                                 value={postalCode}
                                 onChange={onChangePostalCode}/>
