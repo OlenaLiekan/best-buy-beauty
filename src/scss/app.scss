@@ -1811,12 +1811,13 @@ $goldColor: #AD912B;
         padding: 10px 0;
     }
     &__thickness,
-    &__length {
+    &__details {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         gap: 10px;
     }
-    &__value {        
+    &__value {    
         color: #AD902B;
     }
     &__titles {

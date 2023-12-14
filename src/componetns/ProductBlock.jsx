@@ -73,7 +73,7 @@ const ProductBlock = ({path, id, info, name, rating, isLashes, price, brandId, i
 
                         <div className={info.length && !isLashes ? "item-product__sizes" : "sizes_hidden"}>
                             {info.length && !isLashes ? info.map((obj) => 
-                                <div key={obj.id} className='item-product__length'>
+                                <div key={obj.id} className='item-product__details'>
                                     <span className="label-bold">
                                         {obj.title}:
                                     </span>
