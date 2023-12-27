@@ -15,7 +15,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = React.useState(false);
   const [freeDelivery, setFreeDelivery] = React.useState({});
-  const [hideAd, setHideAd] = React.useState(false);
+  const [hideAd, setHideAd] = React.useState(true);
   const [logo, setLogo] = React.useState('');
   const logout = () => {
     if (adminMode) {
@@ -57,7 +57,7 @@ const Header = () => {
 
   return (
     <div className="header">
-      <div className={hideAd ? "top-header__hidden" : "header__top top-header"}>
+      <div hidden className={hideAd ? "top-header__hidden" : "header__top top-header"}>
         <div className="top-header__container">
           <div className="top-header__ad ad-header">
             <div className="ad-header__text">
