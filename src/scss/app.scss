@@ -349,6 +349,141 @@ $goldColor: #AD912B;
     }
 }
 
+.top-header {
+    background-color: #252525;
+    &__container {
+        height: 30px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        @media (max-width: 767.98px) {
+            height: 24px;
+        }
+    }
+    &__ad {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        gap: 20px;
+    }
+    &__hidden {
+        display: none;
+    }
+}
+
+@keyframes ad_pc {
+    0% {
+        left: 50%;
+        opacity: 0;
+    }
+    10% {
+        opacity: 80%;
+    }
+    50% {
+        opacity: 100%;
+    }
+    96% {
+        opacity: 90%;
+    }
+    100% {
+        left: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes ad_mobile {
+    0% {
+        left: 50%;
+        opacity: 0;
+    }
+    10% {
+        opacity: 80%;
+    }
+    100% {
+        left: -35%;
+        opacity: 100%;
+    }
+}
+
+.ad-header {
+    &__text {
+        display: block;
+        position: relative;
+        color: #fff;
+        font-family: "Raleway";
+        font-size: 15px;
+        font-weight: 500;
+        letter-spacing: 1.5px;
+        width: 100%;
+        height: 30px;
+        overflow: hidden;
+        span {
+            position: absolute;
+            bottom: 30%;
+            left: 0;
+            width: 350px;
+            animation: ad_pc 20s linear infinite 0.5s;
+            &:hover {
+                animation-play-state: paused;
+            }
+        }
+        @media (max-width: 991.98px) {
+            span {
+                animation: ad_mobile 20s linear infinite 0.5s;
+            }
+        }
+        @media (max-width: 767.98px) {
+            font-size: 12px;
+            span {
+                animation: ad_mobile 17s linear infinite 0.5s;
+            }
+        }
+        @media (max-width: 479.98px) {
+            span {
+                animation: ad_mobile 12s linear infinite 0.5s;
+            }
+        }
+    }
+    &__btn {
+        position: relative;
+        cursor: pointer;        
+        span {     
+            display: block;
+            width: 18px;
+            height: 18px;
+            &::before,
+            &::after {
+                content: "";  
+                position: absolute;
+                top: 8px;
+                right: 0;
+                width: 18px;
+                height: 2px;
+                background-color: #ffffff7f;             
+                transition: all 0.3s ease 0s;
+                @media(max-width: 767.98px) {
+                    width: 14px;
+                    right: 2px;
+                }
+            }
+            &::before {
+               transform: rotate(45deg);  
+            }
+            &::after {
+                transform: rotate(-45deg);                
+            }
+            &:hover {
+                &::before,
+                &::after {
+                    background-color: #fff;
+                }
+            }
+        }
+    }
+}
+
 .bottom-header {
     background-color: #f1ede7;
     font-family: "Raleway";
@@ -366,9 +501,9 @@ $goldColor: #AD912B;
 
 
 .menu {
-    &__body {
+    &__body,
+    &__shift {
         position: fixed;
-        top: 80px;
         left: -104%;
         width: 40%;
         height: 100%;
@@ -382,17 +517,12 @@ $goldColor: #AD912B;
             width: 60%;
         }
 
-        @media (max-width: 767.98px) {
-            top: 60px;
-        }
-
         @media (max-width: 579.98px) {
             width: 100%;
         }
         &::before {
             content: "";
             position: fixed;
-            top: 80px;
             left: -104%;
             width: 40%;
             height: 50px;
@@ -401,11 +531,6 @@ $goldColor: #AD912B;
             z-index: 10;
             @media (max-width: 991.98px) {
                 width: 60%;
-            }
-
-            @media (max-width: 767.98px) {
-                height: 40px;
-                top: 60px;
             }
 
             @media (max-width: 579.98px) {
@@ -419,6 +544,33 @@ $goldColor: #AD912B;
             &::before {
                 left: 0;
             }
+        }
+    }
+
+    &__body { 
+        top: 80px;
+        &::before {
+            top: 80px;
+            @media (max-width: 767.98px) {
+                height: 40px;
+                top: 60px;
+            }
+        }
+        @media (max-width: 767.98px) {
+            top: 60px;
+        }
+    }
+    &__shift {
+        top: 110px;
+        &::before {
+            top: 110px;
+            @media (max-width: 767.98px) {
+                height: 40px;
+                top: 84px;
+            }
+        }
+        @media (max-width: 767.98px) {
+            top: 84px;
         }
     }
         
@@ -584,9 +736,9 @@ $goldColor: #AD912B;
             font-size: 20px;
         }
     }
-    &__body {
+    &__body,
+    &__shift {
         position: fixed;
-        top: 100px;
         left: -104%;
         width: 40%;
         height: 100%;
@@ -599,10 +751,6 @@ $goldColor: #AD912B;
         @media (max-width: 991.98px) {
             width: 60%;
         }
-        
-        @media (max-width: 767.98px) {
-            top: 80px;
-        }
 
         @media (max-width: 579.98px) {
             width: 100%;
@@ -611,7 +759,6 @@ $goldColor: #AD912B;
         &::before {
             content: "";
             position: fixed;
-            top: 80px;
             left: -104%;
             width: 40%;
             height: 50px;
@@ -621,11 +768,6 @@ $goldColor: #AD912B;
 
             @media (max-width: 991.98px) {
                 width: 60%;                
-            }
-
-            @media (max-width: 767.98px) {
-                top: 60px; 
-                height: 40px;               
             }
 
             @media (max-width: 579.98px) {
@@ -642,6 +784,32 @@ $goldColor: #AD912B;
         }
     }
 
+    &__body{
+        top: 100px;
+        &::before {
+            top: 80px;
+            @media (max-width: 767.98px) {
+                top: 60px;
+                height: 40px;
+            }
+        }
+        @media (max-width: 767.98px) {
+            top: 80px;
+        }
+    }
+    &__shift {
+        top: 130px;
+        &::before {
+            top: 110px;
+            @media (max-width: 767.98px) {
+                top: 84px;
+                height: 40px;
+            }
+        }
+        @media (max-width: 767.98px) {
+            top: 104px;
+        }
+    }
 
     &__link {
         display: flex;

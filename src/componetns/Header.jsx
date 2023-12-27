@@ -14,6 +14,8 @@ const Header = () => {
   const { isAuth, setIsAuth, adminMode, setAdminMode, imagesCloud, serverDomain} = React.useContext(AuthContext);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = React.useState(false);
+  const [freeDelivery, setFreeDelivery] = React.useState({});
+  const [hideAd, setHideAd] = React.useState(false);
   const [logo, setLogo] = React.useState('');
   const logout = () => {
     if (adminMode) {
@@ -46,8 +48,34 @@ const Header = () => {
     })
   }, [serverDomain]);
 
+  React.useEffect(() => {
+    axios.get(`${serverDomain}api/delivery`)
+      .then((res) => {
+        setFreeDelivery(res.data.find(delivery => delivery.price === "0.00"));
+    });
+  }, [serverDomain]);
+
   return (
     <div className="header">
+      <div className={hideAd ? "top-header__hidden" : "header__top top-header"}>
+        <div className="top-header__container">
+          <div className="top-header__ad ad-header">
+            <div className="ad-header__text">
+              <span>
+                {freeDelivery.requiredSum
+                  ?
+                  `Envio gratuito a partir de ${freeDelivery.requiredSum} €`
+                  : 
+                  'Bem-vindo ao site Best Buy Beauty!'
+                }                
+              </span>
+            </div>
+            <div onClick={() => setHideAd(true)} className="ad-header__btn">
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="header__boby body-header">
         <div className="body-header__container">
           <Link to="/" className="body-header__logo header-logo">
@@ -102,7 +130,7 @@ const Header = () => {
       </div>
       <div className="header__bottom bottom-header">
         <div className="bottom-header__container">
-          <MenuHeader />
+          <MenuHeader hideAd={hideAd} />
         </div>
       </div>
     </div>
