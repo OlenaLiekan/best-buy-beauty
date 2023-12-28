@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux";
 import { AuthContext } from "../../../context";
 import MenuSkeleton from "../../UI/Skeletons/MenuSkeleton";
 
-const MenuHeader = ({hideAd}) => {
+const MenuHeader = ({hideTicker}) => {
 
     const [menuList, setMenuList] = React.useState([]); 
     const [menuItems, setMenuItems] = React.useState([]);
@@ -51,7 +51,7 @@ const MenuHeader = ({hideAd}) => {
                 <Link to="/catalog" className="icon-menu__text icon-menu__text_hidden">Catálogo</Link>              
             </div>
             <div className="bottom-header__menu menu-bottom-header menu">
-                <nav className={hideAd ? "menu__body" : "menu__shift"}>
+                <nav className={hideTicker ? "menu__body" : "menu__shift"}>
                 <Link to="/catalog" className="icon-menu__text icon-menu__text_show">Catálogo</Link>                     
                     <ul className="menu__list">
                         {menuList.length ? menuList.map((item) => 
@@ -86,7 +86,7 @@ const MenuHeader = ({hideAd}) => {
                     </ul>
                 </nav>
             </div>
-            <SubMenuHeader menuItems={menuItems} categoryId={activeItem} hideAd={hideAd} />
+            <SubMenuHeader menuItems={menuItems} categoryId={activeItem} hideTicker={hideTicker} />
         </>
     );
 };

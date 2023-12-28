@@ -6,7 +6,7 @@ import { setBrandId, setCategoryId } from "../../redux/slices/filterSlice";
 import { useDispatch } from "react-redux";
 import MenuSkeleton from "../UI/Skeletons/MenuSkeleton";
 
-const SubMenuHeader = ({ menuItems, categoryId, hideAd }) => {
+const SubMenuHeader = ({ menuItems, categoryId, hideTicker }) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -29,7 +29,7 @@ const SubMenuHeader = ({ menuItems, categoryId, hideAd }) => {
 
     return ( 
         <div className="bottom-header__sub-menu sub-menu-bottom-header sub-menu">
-            <nav className={hideAd ? "sub-menu__body" : "sub-menu__shift"}>
+            <nav className={hideTicker ? "sub-menu__body" : "sub-menu__shift"}>
                 <div className="sub-menu__all" onClick={showCategoryTypes}>Ver Tudo</div>
                 <ul className="sub-menu__list list-sub-menu">
                     {menuItems.length

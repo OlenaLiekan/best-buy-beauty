@@ -361,7 +361,7 @@ $goldColor: #AD912B;
             height: 24px;
         }
     }
-    &__ad {
+    &__ticker {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -407,7 +407,7 @@ $goldColor: #AD912B;
     }
 }
 
-.ad-header {
+.ticker-header {
     &__text {
         display: block;
         position: relative;
@@ -424,41 +424,25 @@ $goldColor: #AD912B;
             bottom: 30%;
             left: 0;
             width: 350px;
-            animation-name: ad_pc;
-            animation-duration: 20s;
-            animation-timing-function: linear;
-            animation-iteration-count: infinite;
-            animation-delay: 0.5s;
+            animation: ad_pc 20s linear infinite 0.5s;
             &:hover {
                 animation-play-state: paused;
             }
         }
         @media (max-width: 991.98px) {
             span {
-                animation-name: ad_mobile;
-                animation-duration: 20s;
-                animation-timing-function: linear;
-                animation-iteration-count: infinite;
-                animation-delay: 0.5s;
+                animation: ad_mobile 20s linear infinite 0.5s;
             }
         }
         @media (max-width: 767.98px) {
             font-size: 12px;
             span {
-                animation-name: ad_mobile;
-                animation-duration: 17s;
-                animation-timing-function: linear;
-                animation-iteration-count: infinite;
-                animation-delay: 0.5s;
+                animation: ad_mobile 17s linear infinite 0.5s;
             }
         }
         @media (max-width: 479.98px) {
             span {
-                animation-name: ad_mobile;
-                animation-duration: 12s;
-                animation-timing-function: linear;
-                animation-iteration-count: infinite;
-                animation-delay: 0.5s;
+                animation: ad_mobile 12s linear infinite 0.5s;
             }
         }
     }

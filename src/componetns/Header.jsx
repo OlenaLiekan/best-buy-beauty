@@ -15,7 +15,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = React.useState(false);
   const [freeDelivery, setFreeDelivery] = React.useState({});
-  const [hideAd, setHideAd] = React.useState(true);
+  const [hideTicker, setHideTicker] = React.useState(false);
   const [logo, setLogo] = React.useState('');
   const logout = () => {
     if (adminMode) {
@@ -57,10 +57,10 @@ const Header = () => {
 
   return (
     <div className="header">
-      <div hidden className={hideAd ? "top-header__hidden" : "header__top top-header"}>
+      <div className={hideTicker ? "top-header__hidden" : "header__top top-header"}>
         <div className="top-header__container">
-          <div className="top-header__ad ad-header">
-            <div className="ad-header__text">
+          <div className="top-header__ticker ticker-header">
+            <div className="ticker-header__text">
               <span>
                 {freeDelivery.requiredSum
                   ?
@@ -70,7 +70,7 @@ const Header = () => {
                 }                
               </span>
             </div>
-            <div onClick={() => setHideAd(true)} className="ad-header__btn">
+            <div onClick={() => setHideTicker(true)} className="ticker-header__btn">
               <span></span>
             </div>
           </div>
@@ -130,7 +130,7 @@ const Header = () => {
       </div>
       <div className="header__bottom bottom-header">
         <div className="bottom-header__container">
-          <MenuHeader hideAd={hideAd} />
+          <MenuHeader hideTicker={hideTicker} />
         </div>
       </div>
     </div>
