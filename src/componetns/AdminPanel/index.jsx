@@ -41,7 +41,7 @@ const AdminPanel = () => {
     const [paymentId, setPaymentId] = React.useState(1);
     const [mbWayPayments, setMbWayPayments] = React.useState([]);
     const [mbWay, setMbWay] = React.useState('');
-    const [mbWayAvailable3, setMbwAvailable3] = React.useState(false);
+    const [mbWayAvailable, setMbwAvailable] = React.useState(false);
     const [recipient, setRecipient] = React.useState('');
     const [logoName, setLogoName] = React.useState('');
     const [logoImg, setLogoImg] = React.useState(null);
@@ -79,7 +79,7 @@ const AdminPanel = () => {
         }
         if (paymentId > 1) {
             setMbWay(mbWayPayments.find((mbwp) => mbwp.id === paymentId).account);
-            setMbwAvailable3(mbWayPayments.find((mbwp) => mbwp.id === 4).available);                
+            setMbwAvailable(mbWayPayments.find((mbwp) => mbwp.id === paymentId).available);                
         }
     }, [paymentDetails, paymentId, mbWayPayments]);
 
@@ -223,7 +223,7 @@ const AdminPanel = () => {
         const formData = new FormData();
         formData.set('account', paymentId === 1 ? account : mbWay);
         formData.set('recipient', recipient); 
-        formData.set('available', paymentId === 4 ? mbWayAvailable3 : true);
+        formData.set('available', mbWayAvailable);
         updatePayment(formData, id).then(data => success()).catch(err => message());
     }
 
@@ -252,11 +252,11 @@ const AdminPanel = () => {
     }
 
     const toggleAvailable = () => {
-        if (mbWayAvailable3) {
-            setMbwAvailable3(false);
+        if (mbWayAvailable) {
+            setMbwAvailable(false);
         }
         else {
-            setMbwAvailable3(true);   
+            setMbwAvailable(true);   
         }
     }
 
@@ -459,7 +459,7 @@ const AdminPanel = () => {
                             :
                             <div className={styles.formLinePayment}>
                                 <label htmlFor="payment-data-mbw" className={styles.dataPaymentLabel}>MBway: </label>
-                                {paymentId === 4 ? <span className={mbWayAvailable3 ? styles.accountAvailableTrue : styles.accountAvailableFalse} onClick={toggleAvailable}>{mbWayAvailable3 ? ' disponível' : ' indisponível'}</span> : ''}
+                                <span className={mbWayAvailable ? styles.accountAvailableTrue : styles.accountAvailableFalse} onClick={toggleAvailable}>{mbWayAvailable ? ' disponível' : ' indisponível'}</span>
                                 <input required id="payment-data-mbw" tabIndex="1" className={styles.dataPaymentInput} placeholder='MBway'
                                     ref={inputRef}
                                     value={mbWay}
