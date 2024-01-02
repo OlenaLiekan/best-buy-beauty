@@ -207,6 +207,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         localStorage.setItem('clientName', username);
         localStorage.setItem('clientSurname', surname);
         localStorage.setItem('clientPhone', phone);
+        localStorage.setItem('clientEmail', email);
         localStorage.setItem('clientOrder', JSON.stringify(items));
         localStorage.setItem('clientAddress', `${company} ${firstAddress} ${secondAddress}, ${postalCode}, ${city}, ${region}, ${country}`);
         localStorage.setItem('orderTotal', (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2));
@@ -238,12 +239,17 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
             formData.append('userPhone', phone);
             formData.append('paymentList', payment);
             formData.append('userAddress', `${company} ${firstAddress} ${secondAddress}, ${postalCode}, ${city}, ${region}, ${country}`);
-            if (id > 0) {
-                updateUser(formData, id).then((data) => success());
-            } else if (id === 0) {
-                success();
-            }
-            sendEmail(formData).then(response => console.log(response)).catch(error => console.log(error));
+            sendEmail(formData).then((response) => {
+                console.log(response);
+                if (id > 0) {
+                    updateUser(formData, id).then((data) => success());
+                } else if (id === 0) {
+                    success();
+                }                
+            }).catch((error) => {
+                console.log(error);
+                window.alert('Algo deu errado, tente novamente.');                
+            });
         } else {
             window.alert('Algo deu errado, tente novamente.');
             setResetForm(true);
