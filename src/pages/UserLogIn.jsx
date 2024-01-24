@@ -106,7 +106,7 @@ const UserLogIn = () => {
                         </h2>
                         <div className="form-login__line">
                             <label htmlFor="userEmail" className="form-login__label">E-mail</label>
-                            <input required id="userEmail" type="email" name='email' autoComplete='off' tabIndex="1" className="form-login__input form-login__input_access"
+                            <input required id="userEmail" type="email" name='email' autoComplete='new-password' tabIndex="1" className="form-login__input form-login__input_access"
                                 ref={inputRef}
                                 value={email}
                                 onChange={onChangeInputEmail} />                            
