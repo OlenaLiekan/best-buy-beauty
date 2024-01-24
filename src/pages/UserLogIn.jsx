@@ -16,39 +16,46 @@ const UserLogIn = () => {
     const [emailValue, setEmailValue] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [passValue, setPassValue] = React.useState('');
-    const {setIsAuth, serverDomain} = React.useContext(AuthContext);
+    const { setIsAuth, serverDomain } = React.useContext(AuthContext);
 
     React.useEffect(() => {
+        if (emailValue.length) {
             async function fetchUser() {
                 try {
                     const { data } = await axios
                         .get(
                             `${serverDomain}api/user?email=${emailValue}`,
-                        );
-                    setUser(data);
-
+                    );
+                    if (data) {
+                        setUser(data);                        
+                    }
                 } catch (error) {
                     window.alert('User não encontrado!');
                     navigate('/login');
                 }
             }
             window.scrollTo(0, 0);
-            fetchUser();       
+            fetchUser();
+        } 
     }, [emailValue, navigate, serverDomain]);     
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        try {
-            await login(email, password);
-            localStorage.setItem("auth", "true");
-            const loginDate = Date.now();
-            localStorage.setItem("date", loginDate);
-            setIsAuth(true);
-            const userData = JSON.stringify(currentUser);   
-            localStorage.setItem("user", userData); 
-            navigate('/auth');                 
-        } catch (error) {
-            setError(true);
+        if (currentUser.id) {
+            try {
+                await login(email, password);
+                localStorage.setItem("auth", "true");
+                const loginDate = Date.now();
+                localStorage.setItem("date", loginDate);
+                setIsAuth(true);
+                const userData = JSON.stringify(currentUser);   
+                localStorage.setItem("user", userData); 
+                navigate('/auth');                 
+            } catch (error) {
+                setError(true);
+            }
+        } else {
+            console.log('Autocomplete');
         }
     }
 
@@ -81,6 +88,14 @@ const UserLogIn = () => {
     const scroll = () => {
         window.scrollTo(0, 0);
     };
+
+    /*React.useEffect(() => {
+
+        setIsAuth(false);
+            localStorage.removeItem("auth", "true");
+        localStorage.removeItem("user");
+    }, []);*/
+
     return (
         <div className="main__login login-main">
             <div className="login-main__container">
@@ -101,7 +116,7 @@ const UserLogIn = () => {
                         </div>
                         <div className="form-login__line">
                             <label htmlFor="userPassword" className="form-login__label">Senha</label>
-                            <input required id="userPassword" type="password" name='password' autoComplete='off' tabIndex="2" className="form-login__input form-login__input_access"
+                            <input required id="userPassword" type="password" name='password' autoComplete='new-password' tabIndex="2" className="form-login__input form-login__input_access"
                                 ref={inputRef}
                                 value={password}
                                 onChange={onChangeInputPass}/>                            

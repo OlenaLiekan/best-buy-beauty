@@ -1107,10 +1107,17 @@ $goldColor: #AD912B;
         width: 100%;
         padding: 10px 20px;
         border-radius: 20px;
-        border: 2px solid $decorDarkColor;
+        border: 2px solid #484848;
         box-shadow: 3px 3px 3px #d9d9d962;
         margin-top: 20px;
         transition: all 0.6s ease 0s;
+        color: #848484;
+        cursor: default;
+        &._active {
+            border: 2px solid $decorDarkColor;
+            color: #252525;
+            cursor: pointer;
+        }
         &._active:hover {
             background-color: $decorDarkColor;
             color: #fff;            
