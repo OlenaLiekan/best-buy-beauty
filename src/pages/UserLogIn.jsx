@@ -116,7 +116,7 @@ const UserLogIn = () => {
                         </div>
                         <div className="form-login__line">
                             <label htmlFor="userPassword" className="form-login__label">Senha</label>
-                            <input required id="userPassword" type="password" name='password' autoComplete='new-password' tabIndex="2" className="form-login__input form-login__input_access"
+                            <input required id="userPassword" type="password" name='password' autoComplete='off' tabIndex="2" className="form-login__input form-login__input_access"
                                 ref={inputRef}
                                 value={password}
                                 onChange={onChangeInputPass}/>                            
