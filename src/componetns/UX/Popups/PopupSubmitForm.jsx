@@ -147,13 +147,11 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     };
 
     const onChangePostalCode = (event) => { 
-        if (event.target.value.length === 4) {
-            setPostalCode(event.target.value.slice(0, 4) + '-' + event.target.value.slice(5, 8));
-        } else if (event.target.value.length === 5) {
-            setPostalCode(event.target.value.slice(0, 4));
+        if (event.target.value.length > 4 && event.target.value[4] !== '-') {
+            setPostalCode(event.target.value.slice(0, 4) + '-' + event.target.value.slice(4, 8) );
         } else {
             setPostalCode(event.target.value.slice(0, 8));              
-        }
+        } 
     };
 
     const { items, totalPrice } = useSelector((state) => state.cart);
