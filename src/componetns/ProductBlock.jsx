@@ -4,7 +4,7 @@ import { AuthContext } from '../context';
 import { useNavigate } from 'react-router-dom';
 
 
-const ProductBlock = ({path, id, info, name, rating, isLashes, price, brandId, img}) => {
+const ProductBlock = ({path, id, info, name, rating, available, isLashes, price, brandId, img}) => {
 
     const navigate = useNavigate();
 
@@ -87,6 +87,9 @@ const ProductBlock = ({path, id, info, name, rating, isLashes, price, brandId, i
                         </div>                                        
                     </div>
                     <div className='item-product__bottom'>
+                        <div className={available ? "item-product__available" : "item-product__available item-product__available_no"}>
+                            {available ? 'Disponível' : 'Não disponível'}
+                        </div> 
                         <div className="item-product__price">{price} €</div>                   
                     </div>                    
                 </div>

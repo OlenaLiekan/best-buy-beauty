@@ -1975,7 +1975,32 @@ $goldColor: #AD912B;
     }
     &__bottom {
         display: flex;
+        flex-direction: column;
+        align-items: flex-end;
         justify-content: flex-end;
+        gap: 10px;
+        @media(max-width: 479.98px) {
+            gap: 7px;
+        }
+        @media(max-width: 379.98px) {
+            gap: 5px;
+        }
+    }
+    &__available {
+        text-transform: uppercase;
+        font-size: 16px;
+        font-weight: 600;
+        color: $decorDarkColor;
+        @media(max-width: 479.98px) {
+            font-size: 14px;
+        }
+        @media(max-width: 379.98px) {
+            font-size: 12px;
+        }
+        &_no {
+            white-space: nowrap;
+            color: #7f766acb;
+        }
     }
     &__sizes {
         display: flex;
@@ -2232,7 +2257,7 @@ $goldColor: #AD912B;
     line-height: 1.2;
     font-size: 18px;
     &_true {
-        color: #AD912B;
+        color: $decorDarkColor;
     }
     &_false {
         color: #b16451;

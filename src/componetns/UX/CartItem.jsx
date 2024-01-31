@@ -91,7 +91,6 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
                             :
                             ''
                         }
-
                     </div>                                         
                 </div>
                 <div className="item-cart__actions">
