@@ -161,16 +161,17 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     const { items, totalPrice } = useSelector((state) => state.cart);
 
     React.useEffect(() => {
-        const result = paymentDetails.length && mbWayPayments
+        const result = paymentDetails.length
             ?
             '<b style="font-size: 120%;"><span style="padding: 0 0 20px 0;">IBAN </span></b><br>'
             + paymentDetails[0].account
             + '<br><br><b style="font-size: 120%;"><span style="padding: 0 0 20px 0;">Nome </span></b><br>'
             + paymentDetails[0].recipient
             + '<br><br><b style="font-size: 120%;"><span style="padding: 0 0 20px 0;">MBway </span></b>'
-            + mbWayPayments.map((mbp) =>
+            + (mbWayPayments.length ? mbWayPayments.map((mbp) =>
                 `<br><span>${mbp.account}</span>`
-            ) : ''
+            ) : '<br><span>Temporariamente indisponível</span>')
+            : ''
             ;
         setPayment(result);
     }, [paymentDetails, mbWayPayments]);
@@ -240,7 +241,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
             formData.append('userSurname', surname);
             formData.append('userEmail', email);
             formData.append('userPhone', phone);
-            formData.append('paymentList', payment);
+            formData.append('paymentList', payment.length ? payment : 'Temporariamente indisponível');
             formData.append('userCompany', company ? company : ' ');
             formData.append('userAddress', `${firstAddress} ${secondAddress}, ${city}, ${region}, ${country}`);
             formData.append('userPostalCode', postalCode);
