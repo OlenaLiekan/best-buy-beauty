@@ -127,10 +127,10 @@ const SuccessPage = () => {
                                         </div>
                                     </div>
                                     <p className='body-success__address'>
-                                        {clientName + ' ' + clientLastName}
+                                        {clientCompany}
                                     </p>
                                     <p className='body-success__address'>
-                                        {clientCompany}
+                                        {clientName + ' ' + clientLastName}
                                     </p>
                                     <p className='body-success__address'>
                                         {clientAddress}
