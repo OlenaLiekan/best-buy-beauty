@@ -241,7 +241,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
             formData.append('userSurname', surname);
             formData.append('userEmail', email);
             formData.append('userPhone', phone);
-            formData.append('paymentList', payment.length ? payment : 'Temporariamente indisponível');
+            formData.append('paymentList', payment);
             formData.append('userCompany', company ? company : ' ');
             formData.append('userAddress', `${firstAddress} ${secondAddress}, ${city}, ${region}, ${country}`);
             formData.append('userPostalCode', postalCode);
