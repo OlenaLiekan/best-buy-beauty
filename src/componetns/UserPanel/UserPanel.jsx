@@ -60,8 +60,11 @@ const UserPanel = ({ user }) => {
         if (addresses.length) {
             setMainAddress(addresses.filter((addr) => addr.mainAddress)[0]);
             setRestAddresses(addresses.filter((addr) => !addr.mainAddress));            
+        } else {
+            setMainAddress('');
+            setRestAddresses([]);
         }
-    }, [addresses]);
+    }, [addresses, deletedAddressId]);
 
     const removeUser = () => {
         const access = window.prompt('Tem certeza de que deseja excluir sua conta? Depois de excluído, você não poderá restaurá-lo. Para excluir, escreva SIM na caixa abaixo.', '');
@@ -264,7 +267,7 @@ const UserPanel = ({ user }) => {
                                 !createAddressMode && restAddresses
                                     ?
                                     <>
-                                        {mainAddress
+                                        {mainAddress && addresses.length
                                             ?
                                             <div className={styles.addressItem}>
                                             <ul className={styles.userInfoTop}>

@@ -46,7 +46,11 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
     }, [addressId, addresses]);
 
     const onChangeCompany = (event) => { 
-        setCompany(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
+        if (event.target.value && event.target.value[0] === ' ') {
+            setCompany(event.target.value[1].toUpperCase() + event.target.value.slice(2));              
+        } else {
+            setCompany(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');
+        }         
     };
 
     const onChangeUsername = (event) => { 
@@ -130,7 +134,7 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
         formData.set('upLastName', surname);
         formData.set('upEmail', email);
         formData.set('upPhone', phone);
-        formData.set('company', company);            
+        formData.set('company', company ? company : ' ');            
         formData.set('firstAddress', firstAddress);
         formData.set('secondAddress', secondAddress);
         formData.set('city', city);

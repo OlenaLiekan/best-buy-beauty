@@ -54,7 +54,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
             setCompany(mainData.company ? mainData.company : company);
             setFirstAddress(mainData.firstAddress);
             setSecondAddress(mainData.secondAddress ? mainData.secondAddress : secondAddress);
-            setCountry((mainData.country && mainData.country === country) ? mainData.country : country);
+            setCountry(mainData.country ? mainData.country : country);
             setCity(mainData.city);
             setRegion(mainData.region);
             setPostalCode(mainData.postalCode);
@@ -98,7 +98,11 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     }, [serverDomain]);   
 
     const onChangeCompany = (event) => { 
-        setCompany(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
+        if (event.target.value && event.target.value[0] === ' ') {
+            setCompany(event.target.value[1].toUpperCase() + event.target.value.slice(2));              
+        } else {
+            setCompany(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');
+        }               
     };
 
     const onChangeUsername = (event) => { 
@@ -132,7 +136,6 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     const showCountries = () => {
         if (!visibleList) {
             setVisibleList(true);
-                    console.log(email);
         } else {
             setVisibleList(false);
         }
