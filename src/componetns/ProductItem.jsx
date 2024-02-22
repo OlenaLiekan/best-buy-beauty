@@ -11,6 +11,7 @@ import { AuthContext } from '../context';
 import ReviewItem from './ReviewItem';
 import NewReview from './UX/Popups/NewReview';
 import { setCurrentPage } from '../redux/slices/filterSlice';
+import Loader from './UI/Loader';
 
 const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, available, brandId, name, code, price, img}) => {
 
@@ -187,7 +188,6 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                     <span>{rating}</span>
                                 </div>
                             </div>
-
                             <div className="info-product__number"><span className="label-bold">Código do produto:</span> {code}</div>
                             <div className="info-product__brand"><span className="label-bold">Marca:</span> {company.name}</div>
                             {info.length && !isLashes ? info.map((obj) => 
@@ -278,7 +278,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                             ?
                             <div className="product-card__actions">
 
-                                {(!isLashes && company) || (activeCurl !== null && activeLength !== null && activeThickness !== null && company) 
+                                {(!isLashes && company.name) || (activeCurl !== null && activeLength !== null && activeThickness !== null && company.name) 
                                     ?
                                     <>
                                         <div className="product-card__quantity quantity">
@@ -293,11 +293,11 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                             </svg>
                                         </button>
                                     </>   
-                                : <div className='product-card__warning'>{company ? 'Selecione opções para adicionar item ao carrinho.' : ''}</div>   
+                                : <div className='product-card__warning'>{company.name ? 'Selecione opções para adicionar item ao carrinho.' : ''}</div>   
                                 }
                             </div>       
                             :
-                            ''
+                            ""
                         }                         
                     </div>
                 </div>
