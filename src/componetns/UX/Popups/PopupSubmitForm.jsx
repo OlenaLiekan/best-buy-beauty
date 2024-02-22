@@ -239,7 +239,8 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
             formData.append('userPhone', phone);
             formData.append('paymentList', payment);
             formData.append('userCompany', company ? company : ' ');
-            formData.append('userAddress', `${firstAddress} ${secondAddress}, ${postalCode}, ${city}, ${region}, ${country}`);
+            formData.append('userAddress', `${firstAddress} ${secondAddress}, ${city}, ${region}, ${country}`);
+            formData.append('userPostalCode', postalCode);
             sendEmail(formData).then((response) => {
                 console.log(response);
                 if (id > 0) {
