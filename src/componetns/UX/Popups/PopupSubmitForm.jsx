@@ -72,7 +72,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
             setRegion('');
             setPostalCode('');
         }
-    }, [mainData, company, country, user.id, secondAddress, visibleList, resetForm]);
+    }, [mainData, company, country, user.id, visibleList, resetForm]);
 
     React.useEffect(() => {
         if (user.id) {

@@ -43,7 +43,7 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
             setPostalCode(currentAddress.postalCode);
             setChecked(currentAddress.mainAddress);            
         }
-    }, [addressId, addresses, company, country, secondAddress]);
+    }, [addressId, addresses, company, country]);
 
     const onChangeCompany = (event) => { 
         setCompany(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
