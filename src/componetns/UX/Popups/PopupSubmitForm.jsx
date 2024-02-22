@@ -72,7 +72,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
             setRegion('');
             setPostalCode('');
         }
-    }, [mainData, company, country, user.id, visibleList, resetForm]);
+    }, [mainData, user.id, resetForm]);
 
     React.useEffect(() => {
         if (user.id) {
@@ -110,7 +110,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     };
 
     const onChangePhone = (event) => { 
-        setPhone(event.target.value);
+        setPhone(event.target.value.slice(0, 13));
     };
 
     const onChangeEmail = (event) => { 
