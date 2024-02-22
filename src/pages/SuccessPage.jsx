@@ -22,6 +22,7 @@ const SuccessPage = () => {
     const orderTotal = localStorage.getItem('orderTotal');
     const clientName = localStorage.getItem('clientName');
     const clientLastName = localStorage.getItem('clientSurname');
+    const clientCompany = localStorage.getItem('clientCompany');
     const clientAddress = localStorage.getItem('clientAddress');
     const clientPhone = localStorage.getItem('clientPhone');
     const clientEmail = localStorage.getItem('clientEmail');
@@ -127,6 +128,9 @@ const SuccessPage = () => {
                                     </div>
                                     <p className='body-success__address'>
                                         {clientName + ' ' + clientLastName}
+                                    </p>
+                                    <p className='body-success__address'>
+                                        {clientCompany}
                                     </p>
                                     <p className='body-success__address'>
                                         {clientAddress}

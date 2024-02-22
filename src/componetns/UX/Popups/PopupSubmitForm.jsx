@@ -208,7 +208,8 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         localStorage.setItem('clientPhone', phone);
         localStorage.setItem('clientEmail', email);
         localStorage.setItem('clientOrder', JSON.stringify(items));
-        localStorage.setItem('clientAddress', `${company} ${firstAddress} ${secondAddress}, ${postalCode}, ${city}, ${region}, ${country}`);
+        localStorage.setItem('clientCompany', company ? company : ' ');
+        localStorage.setItem('clientAddress', `${firstAddress} ${secondAddress}, ${postalCode}, ${city}, ${region}, ${country}`);
         localStorage.setItem('orderTotal', (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2));
         localStorage.setItem('totalCount', totalCount);
         localStorage.setItem('deliveryPrice', (+deliveryPrice).toFixed(2));
@@ -223,7 +224,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         e.preventDefault();
         const formData = new FormData();
         const id = user ? user.id : 0;
-        if (orderNumber && username && surname && phone && email && items && firstAddress && postalCode && city && region && country && totalPrice && totalCount && deliveryPrice) {
+        if (orderNumber && username && surname && phone && email && items && firstAddress && secondAddress && postalCode && city && region && country && totalPrice && totalCount && deliveryPrice) {
             setResetForm(false);
             formData.append('userId', id);
             formData.append('items', JSON.stringify(items));
@@ -237,7 +238,8 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
             formData.append('userEmail', email);
             formData.append('userPhone', phone);
             formData.append('paymentList', payment);
-            formData.append('userAddress', `${company} ${firstAddress} ${secondAddress}, ${postalCode}, ${city}, ${region}, ${country}`);
+            formData.append('userCompany', company ? company : ' ');
+            formData.append('userAddress', `${firstAddress} ${secondAddress}, ${postalCode}, ${city}, ${region}, ${country}`);
             sendEmail(formData).then((response) => {
                 console.log(response);
                 if (id > 0) {
@@ -304,15 +306,15 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                                 onChange={onChangeEmail}/>
                         </div>
                         <div className="popup-form__line">
-                            <label htmlFor="user-f-address-input" className="popup-form__label">Morada №1</label>
+                            <label htmlFor="user-f-address-input" className="popup-form__label">Rua</label>
                             <input required id="user-f-address-input" tabIndex="6" autoComplete="new-password" type="text" name="Morada_1" data-error="Error" className="popup-form__input"
                                 ref={inputRef}
                                 value={firstAddress}
                                 onChange={onChangeFAddress}/>
                         </div>
                         <div className="popup-form__line">
-                            <label htmlFor="user-s-address-input" className="popup-form__label">Morada №2</label>
-                            <input id="user-s-address-input" tabIndex="7" autoComplete="new-password" type="text" name="Morada_2" data-error="Error" className="popup-form__input"
+                            <label htmlFor="user-s-address-input" className="popup-form__label">Número da porta</label>
+                            <input required id="user-s-address-input" tabIndex="7" autoComplete="new-password" type="text" name="Morada_2" data-error="Error" className="popup-form__input"
                                 ref={inputRef}
                                 value={secondAddress}
                                 onChange={onChangeSAddress}/>

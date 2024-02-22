@@ -158,15 +158,15 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
                         onChange={onChangeEmail}/>
                 </div>
                 <div className={styles.formLine}>
-                    <label htmlFor="user-f-address-input" className={styles.formLabel}>Morada №1</label>
+                    <label htmlFor="user-f-address-input" className={styles.formLabel}>Rua</label>
                     <input required id="user-f-address-input" tabIndex="6" autoComplete="off" type="text" name="firstAddress" data-error="Error" className={styles.formInput}
                         ref={inputRef}
                         value={firstAddress}
                         onChange={onChangeFAddress}/>
                 </div>
                 <div className={styles.formLine}>
-                    <label htmlFor="user-s-address-input" className={styles.formLabel}>Morada №2</label>
-                    <input id="user-s-address-input" tabIndex="7" autoComplete="off" type="text" name="secondAddress" data-error="Error" className={styles.formInput}
+                    <label htmlFor="user-s-address-input" className={styles.formLabel}>Número da porta</label>
+                    <input required id="user-s-address-input" tabIndex="7" autoComplete="off" type="text" name="secondAddress" data-error="Error" className={styles.formInput}
                         ref={inputRef}
                         value={secondAddress}
                         onChange={onChangeSAddress}/>

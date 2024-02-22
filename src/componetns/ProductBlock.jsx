@@ -70,7 +70,6 @@ const ProductBlock = ({path, id, info, name, rating, available, isLashes, price,
                             </svg>
                             <span>{rating}</span>
                         </div>
-
                         <div className={info.length && !isLashes ? "item-product__sizes" : "sizes_hidden"}>
                             {info.length && !isLashes ? info.map((obj) => 
                                 <div key={obj.id} className='item-product__details'>
