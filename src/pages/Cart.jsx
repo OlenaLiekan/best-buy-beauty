@@ -54,10 +54,10 @@ const Cart = () => {
 
     React.useEffect(() => {
         //if (isMounted.current) {
-            const cartData = JSON.stringify(items);
-            localStorage.setItem('cart', cartData);
-        //}
-        //isMounted.current = true;
+        const cartData = JSON.stringify(items);
+        localStorage.setItem('cart', cartData);         
+        /*}
+        isMounted.current = true;*/
     }, [items]);
 
     if (!totalPrice) {

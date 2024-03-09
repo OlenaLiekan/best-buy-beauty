@@ -31,6 +31,9 @@ function App() {
 
   const [isLoading, setLoading] = React.useState(true);
 
+  const [productUpdated, setProductUpdated] = React.useState('');
+  const [productRemoved, setProductRemoved] = React.useState('');
+
   const serverDomain = 'https://bbb-server-a6ji.onrender.com/';
   const imagesCloud = 'https://res.cloudinary.com/bbbptcloud/image/upload/v1699129130/static/';
 
@@ -85,6 +88,10 @@ function App() {
           setImgViewerMode,
           serverDomain,
           imagesCloud,
+          productUpdated,
+          setProductUpdated,
+          productRemoved,
+          setProductRemoved,
         }}
       >
         <SearchContext.Provider value={{ searchValue, setSearchValue }}>

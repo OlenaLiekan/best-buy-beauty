@@ -22,7 +22,7 @@ const UpdateProduct = ({id, obj}) => {
     const [name, setName] = React.useState('');
     const [code, setCode] = React.useState('');
     const [price, setPrice] = React.useState(0);
-    const { setUpdateProductMode, serverDomain, imagesCloud } = React.useContext(AuthContext);
+    const { setUpdateProductMode, serverDomain, imagesCloud, setProductUpdated } = React.useContext(AuthContext);
     const [info, setInfo] = React.useState([]);
     const [slide, setSlide] = React.useState([]);
     const [objSlides, setObjSlides] = React.useState([]);
@@ -63,6 +63,7 @@ const UpdateProduct = ({id, obj}) => {
     const success = () => {
         window.alert('Dados do produto atualizados com sucesso!');
         setUpdateProductMode(false);  
+        setProductUpdated(obj.code);
         navigate('/auth');
         window.scrollTo(0, 0);  
     }

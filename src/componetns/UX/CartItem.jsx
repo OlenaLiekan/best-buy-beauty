@@ -7,7 +7,7 @@ import { AuthContext } from '../../context';
 
 const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, company, lengthArr, thicknessArr, curlArr, count }) => { 
 
-    const { imagesCloud } = React.useContext(AuthContext);
+    const { imagesCloud, productUpdated, setProductUpdated, productRemoved, setProductRemoved } = React.useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -41,6 +41,23 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
             );            
         }
     };
+
+    React.useEffect(() => {
+        if (productUpdated === code) {
+            dispatch(
+                removeItem(isLashes ? index : id)
+            );
+            setProductUpdated('');
+        }
+        if (productRemoved === code) {
+            dispatch(
+                removeItem(isLashes ? index : id)
+            );
+            setProductRemoved('');  
+        }
+    },[productUpdated, productRemoved]);
+
+
 
     if (count === 0) {
         dispatch(

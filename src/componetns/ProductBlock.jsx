@@ -4,12 +4,12 @@ import { AuthContext } from '../context';
 import { useNavigate } from 'react-router-dom';
 
 
-const ProductBlock = ({path, id, info, name, rating, available, isLashes, price, brandId, img}) => {
+const ProductBlock = ({path, id, code, info, name, rating, available, isLashes, price, brandId, img}) => {
 
     const navigate = useNavigate();
 
     const [company, setCompany] = React.useState({});
-    const { isAuth, adminMode, setUpdateProductMode, serverDomain, imagesCloud } = React.useContext(AuthContext);
+    const { isAuth, adminMode, setUpdateProductMode, serverDomain, imagesCloud, setProductRemoved } = React.useContext(AuthContext);
 
     const message = () => {
         window.alert('Ocorreu um erro!');        
@@ -27,6 +27,7 @@ const ProductBlock = ({path, id, info, name, rating, available, isLashes, price,
             axios.delete(`${serverDomain}api/product?id=${id}`)
                 .then(() => {
                     window.alert('O produto foi excluído com sucesso!');
+                    setProductRemoved(code);
                     navigate('/auth');
                     window.scrollTo(0, 0);
                 }).catch(err => message());      
