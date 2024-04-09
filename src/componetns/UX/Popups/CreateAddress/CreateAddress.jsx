@@ -24,7 +24,7 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
     const countries = ['Portugal', 'Outro'];
 
     const onChangeCompany = (event) => { 
-        setCompany(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
+        setCompany(event.target.value.slice(0,9));            
     };
 
     const onChangeUsername = (event) => { 
@@ -137,14 +137,14 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
                         onChange={onChangeSurname}/>
                 </div>
                 <div className={styles.formLine}>
-                    <label htmlFor="user-company-input" className={styles.formLabel}>Empresa</label>
-                    <input id="user-company-input" tabIndex="3" autoComplete="off" type="text" name="company" data-error="Error" className={styles.formInput}
+                    <label htmlFor="user-company-input" className={styles.formLabel}>NIF</label>
+                    <input id="user-company-input" tabIndex="3" autoComplete="off" type="text" name="company" pattern="[0-9]{9}" placeholder='000000000' data-error="Error" className={styles.formInput}
                         ref={inputRef}
                         value={company}
                         onChange={onChangeCompany} />
                 </div>
                 <div className={styles.formLine}>
-                    <label htmlFor="user-contact-input" className={styles.formLabel}>Telefone</label>
+                    <label htmlFor="user-contact-input" className={styles.formLabel}>Telemóvel</label>
                     <input required id="user-contact-input" tabIndex="4" autoComplete="off" type="tel" pattern="[+]{1}[0-9]{12}" name="contact" data-error="Error" placeholder="+351XXXXXXXXXX" className={styles.formInput}
                         ref={inputRef}
                         value={phone}

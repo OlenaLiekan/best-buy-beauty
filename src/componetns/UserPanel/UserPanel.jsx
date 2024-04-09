@@ -293,10 +293,10 @@ const UserPanel = ({ user }) => {
                                                     <p className={styles.addressLine}>{mainAddress.email}</p>
                                                     <p className={styles.addressLine}>{mainAddress.phone}</p>
                                                     <p className={styles.addressLine}>{mainAddress.company}</p>
-                                                    <p
-                                                        className={styles.addressLine}>
-                                                        {mainAddress.firstAddress}, {mainAddress.secondAddress ? mainAddress.secondAddress + ',' : ''} {mainAddress.city}, {mainAddress.region}, {mainAddress.country}, {mainAddress.postalCode}
+                                                    <p className={styles.addressLine}>
+                                                        {mainAddress.firstAddress}, {mainAddress.secondAddress ? mainAddress.secondAddress + ',' : ''} {mainAddress.city}, {mainAddress.region}, {mainAddress.country}
                                                     </p>
+                                                    <p className={styles.addressLine}>{mainAddress.postalCode}</p>
                                                 </div>
                                             </div>
                                             <button onClick={() => editAddress(mainAddress.id)} className={styles.updateAddressBtn}>Editar</button>

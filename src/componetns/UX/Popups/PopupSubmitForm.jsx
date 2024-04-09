@@ -98,11 +98,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     }, [serverDomain]);   
 
     const onChangeCompany = (event) => { 
-        if (event.target.value && event.target.value[0] === ' ') {
-            setCompany(event.target.value[1].toUpperCase() + event.target.value.slice(2));              
-        } else {
-            setCompany(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');
-        }               
+        setCompany(event.target.value.slice(0, 9));              
     };
 
     const onChangeUsername = (event) => { 
@@ -296,13 +292,13 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                                 onChange={onChangeSurname}/>
                         </div>
                         <div className="popup-form__line">
-                            <label htmlFor="user-company-input" className="popup-form__label">Empresa</label>
-                            <input id="user-company-input" tabIndex="3" autoComplete="new-password" type="text" name="Empresa" data-error="Error" className="popup-form__input"
+                            <label htmlFor="user-company-input" className="popup-form__label">NIF</label>
+                            <input id="user-company-input" tabIndex="3" autoComplete="new-password" type="text" name="Empresa" pattern="[0-9]{9}" data-error="Error" placeholder='000000000' className="popup-form__input"
                                 value={company}
                                 onChange={onChangeCompany}/>
                         </div>
                         <div className="popup-form__line">
-                            <label htmlFor="user-contact-input" className="popup-form__label">Telefone</label>
+                            <label htmlFor="user-contact-input" className="popup-form__label">Telemóvel</label>
                             <input required id="user-contact-input" tabIndex="4" autoComplete="new-password" type="tel" pattern="[+]{1}[0-9]{12}" name="Telefone" data-error="Error" placeholder="+351XXXXXXXXXX" className="popup-form__input _req"
                                 value={phone}
                                 onChange={onChangePhone}/>
@@ -362,7 +358,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                         </div>
 
                         <div className="popup-form__line popup-line__textarea">
-                            <label htmlFor="user-comment" className="popup-form__label">Comente</label>
+                            <label htmlFor="user-comment" className="popup-form__label">Comentário</label>
                             <textarea id="user-comment" tabIndex="12" className="popup-form__textarea" name="Comente" placeholder='Ola! Aqui você pode deixar suas dúvidas ou desejos.' cols="10" rows="5" maxLength="150"
                                 value={comment}
                                 onChange={onChangeComment}
