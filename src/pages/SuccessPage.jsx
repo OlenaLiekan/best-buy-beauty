@@ -26,6 +26,7 @@ const SuccessPage = () => {
     const clientAddress = localStorage.getItem('clientAddress');
     const clientPhone = localStorage.getItem('clientPhone');
     const clientEmail = localStorage.getItem('clientEmail');
+    const clientComment = localStorage.getItem('clientComment') ? localStorage.getItem('clientComment') : 'Sem comentários';
     const totalCount = localStorage.getItem('totalCount');
     const deliveryPrice = localStorage.getItem('deliveryPrice');
     const clientOrder = localStorage.getItem('clientOrder');
@@ -141,6 +142,11 @@ const SuccessPage = () => {
                                     <p className='body-success__address bottom-line'>
                                         {clientEmail}
                                     </p>
+                                    <div className='body-success__line'>
+                                        <div>
+                                            Um comentário: {clientComment}
+                                        </div>
+                                    </div>
                                     <div className='body-success__line'>
                                         <div>
                                             Quantidade total

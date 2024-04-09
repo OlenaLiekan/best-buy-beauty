@@ -11,7 +11,6 @@ import { closePopup } from '../../../js/script';
 
 const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
 
-    const inputRef = React.useRef();
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -27,6 +26,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     const [country, setCountry] = React.useState('Portugal');
     const [postalCode, setPostalCode] = React.useState('');
     const [company, setCompany] = React.useState('');
+    const [comment, setComment] = React.useState('');
     const [addresses, setAddresses] = React.useState([]);
     const [mainData, setMainData] = React.useState({});
     const [visibleList, setVisibleList] = React.useState(false);
@@ -133,6 +133,10 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         setCity(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
     };
 
+    const onChangeComment = (event) => { 
+        setComment(event.target.value);
+    };
+
     const showCountries = () => {
         if (!visibleList) {
             setVisibleList(true);
@@ -214,6 +218,9 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         localStorage.setItem('clientOrder', JSON.stringify(items));
         localStorage.setItem('clientCompany', company ? company : ' ');
         localStorage.setItem('clientAddress', `${firstAddress} ${secondAddress}, ${postalCode}, ${city}, ${region}, ${country}`);
+        if (comment) {
+            localStorage.setItem('clientComment', comment);            
+        }
         localStorage.setItem('orderTotal', (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2));
         localStorage.setItem('totalCount', totalCount);
         localStorage.setItem('deliveryPrice', (+deliveryPrice).toFixed(2));
@@ -245,6 +252,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
             formData.append('userCompany', company ? company : ' ');
             formData.append('userAddress', `${firstAddress} ${secondAddress}, ${city}, ${region}, ${country}`);
             formData.append('userPostalCode', postalCode);
+            formData.append('userComment', comment)
             sendEmail(formData).then((response) => {
                 console.log(response);
                 if (id > 0) {
@@ -278,63 +286,54 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                         <div className="popup-form__line">
                             <label htmlFor="user-name-input" className="popup-form__label">Primeiro Nome</label>
                             <input required id="user-name-input" tabIndex="1" autoComplete="new-password" type="text" name="nome" data-error="Error" placeholder='Nome' className="popup-form__input _req"
-                                ref={inputRef}
                                 value={username}
                                 onChange={onChangeUsername}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-surname-input" className="popup-form__label">Último Nome</label>
                             <input required id="user-surname-input" tabIndex="2" autoComplete="new-password" type="text" name="Sobrenome" data-error="Error" placeholder="Sobrenome" className="popup-form__input"
-                                ref={inputRef}
                                 value={surname}
                                 onChange={onChangeSurname}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-company-input" className="popup-form__label">Empresa</label>
                             <input id="user-company-input" tabIndex="3" autoComplete="new-password" type="text" name="Empresa" data-error="Error" className="popup-form__input"
-                                ref={inputRef}
                                 value={company}
                                 onChange={onChangeCompany}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-contact-input" className="popup-form__label">Telefone</label>
                             <input required id="user-contact-input" tabIndex="4" autoComplete="new-password" type="tel" pattern="[+]{1}[0-9]{12}" name="Telefone" data-error="Error" placeholder="+351XXXXXXXXXX" className="popup-form__input _req"
-                                ref={inputRef}
                                 value={phone}
                                 onChange={onChangePhone}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-email-input" className="popup-form__label">E-mail</label>
                             <input required id="user-email-input" tabIndex="5" autoComplete="new-password" type="email" name="email" data-error="Error" placeholder="example@email.com" className="popup-form__input _req _email" 
-                                ref={inputRef}
                                 value={email}
                                 onChange={onChangeEmail}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-f-address-input" className="popup-form__label">Rua</label>
                             <input required id="user-f-address-input" tabIndex="6" autoComplete="new-password" type="text" name="Morada_1" data-error="Error" className="popup-form__input"
-                                ref={inputRef}
                                 value={firstAddress}
                                 onChange={onChangeFAddress}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-s-address-input" className="popup-form__label">Número da porta</label>
                             <input required id="user-s-address-input" tabIndex="7" autoComplete="new-password" type="text" name="Morada_2" data-error="Error" className="popup-form__input"
-                                ref={inputRef}
                                 value={secondAddress}
                                 onChange={onChangeSAddress}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-city-input" className="popup-form__label">Cidade</label>
                             <input required id="user-city-input" tabIndex="8" autoComplete="new-password" type="text" name="Cidade" data-error="Error" className="popup-form__input"
-                                ref={inputRef}
                                 value={city}
                                 onChange={onChangeCity}/>
                         </div>
                         <div className="popup-form__line popup-form__line_select">
                             <label htmlFor="user-country-input" className="popup-form__label">País</label>
                             <input readOnly required onClick={showCountries} id="user-country-input" tabIndex="9" autoComplete="new-password" type="text" name="País" data-error="Error" className="popup-form__input popup-form__input_select"
-                                ref={inputRef}
                                 value={country} />
                             <svg onClick={showCountries} className={visibleList ? 'popup-form_rotate' : ''} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                                 <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
@@ -348,14 +347,12 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                         <div className="popup-form__line">
                             <label htmlFor="user-region-input" className="popup-form__label">Concelho</label>
                             <input required id="user-region-input" tabIndex="10" autoComplete="new-password" type="text" name="Concelho" data-error="Error" className="popup-form__input"
-                                ref={inputRef}
                                 value={region}
                                 onChange={onChangeRegion}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-postal-code-input" className="popup-form__label">Código postal/ZIP</label>
                             <input required id="user-postal-code-input" tabIndex="11" autoComplete="new-password" type="text" pattern="[0-9]{4}-[0-9]{3}" name="Código_postal/ZIP" data-error="Error" className="popup-form__input"
-                                ref={inputRef}
                                 value={postalCode}
                                 onChange={onChangePostalCode}/>
                         </div>
@@ -366,7 +363,10 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
 
                         <div className="popup-form__line popup-line__textarea">
                             <label htmlFor="user-comment" className="popup-form__label">Comente</label>
-                            <textarea id="user-comment" tabIndex="12" className="popup-form__textarea" name="Comente" placeholder='Ola! Aqui você pode deixar suas dúvidas ou desejos.' cols="10" rows="5" maxLength="150"/> 
+                            <textarea id="user-comment" tabIndex="12" className="popup-form__textarea" name="Comente" placeholder='Ola! Aqui você pode deixar suas dúvidas ou desejos.' cols="10" rows="5" maxLength="150"
+                                value={comment}
+                                onChange={onChangeComment}
+                            /> 
                         </div>
                         <button type="submit" tabIndex="13" className="popup-form__button checkout scroll-top">
                             Enviar

@@ -1,16 +1,4 @@
-$blackColor: #000000;
-$mainColor: #252525;
-$darkGreyColor: #484848;
-$lightGreyColor: #fefbfb;
-
-$decorColor: #196fd7;
-$decorDarkColor: #1560BD;
-$footerDecor: #7f766a;
-
-$footerColor: #f1ede7;
-$headerLineColor: #f1ede7;
-$whiteColor: #ffffff;
-$goldColor: #AD912B;
+@import 'variables.scss';
 
 #root {
     @media(max-width: 991.98px) {
@@ -1572,7 +1560,7 @@ $goldColor: #AD912B;
     overflow: hidden;
     position: relative;
     border: 1px solid #d9d9d94a;
-    box-shadow: 5px 5px 5px #d9d9d954;
+    box-shadow: 5px 5px 10px #d9d9d954;
     &__actions {
         display: flex;
         flex-direction: column;
@@ -3526,6 +3514,7 @@ $goldColor: #AD912B;
         line-height: 1.25;
         font-weight: 600;
         margin-bottom: 60px;
+        text-align: center;
         @media (max-width: 991.98px) {
             margin-bottom: 40px;
             font-size: 26px;
@@ -3599,7 +3588,7 @@ $goldColor: #AD912B;
         font-size: 18px;
         border: 2px dashed #AD902B;
         border-radius: 20px;
-        box-shadow: 5px 5px 5px #d9d9d952;
+        box-shadow: 5px 5px 10px #d9d9d952;
         padding: 15px 20px;
         align-self: flex-end;
         text-align: center;

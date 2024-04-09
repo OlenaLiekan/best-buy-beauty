@@ -55,7 +55,7 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
             );
             setProductRemoved('');  
         }
-    },[productUpdated, productRemoved]);
+    }, [productUpdated, productRemoved]);
 
 
 
