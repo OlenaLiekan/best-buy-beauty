@@ -124,6 +124,11 @@ const SuccessPage = () => {
                                     </div>
                                     <div className='body-success__line'>
                                         <div>
+                                            Um comentário: {clientComment}
+                                        </div>
+                                    </div>
+                                    <div className='body-success__line'>
+                                        <div>
                                             Envio para o domicílio
                                         </div>
                                     </div>
@@ -142,11 +147,6 @@ const SuccessPage = () => {
                                     <p className='body-success__address bottom-line'>
                                         {clientEmail}
                                     </p>
-                                    <div className='body-success__line'>
-                                        <div>
-                                            Um comentário: {clientComment}
-                                        </div>
-                                    </div>
                                     <div className='body-success__line'>
                                         <div>
                                             Quantidade total
