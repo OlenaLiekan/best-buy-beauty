@@ -137,7 +137,7 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
                         onChange={onChangeSurname}/>
                 </div>
                 <div className={styles.formLine}>
-                    <label htmlFor="user-company-input" className={styles.formLabel}>NIF</label>
+                    <label htmlFor="user-company-input" className={styles.formLabel}>NIF (opcional)</label>
                     <input id="user-company-input" tabIndex="3" autoComplete="off" type="text" name="company" pattern="[0-9]{9}" placeholder='000000000' data-error="Error" className={styles.formInput}
                         ref={inputRef}
                         value={company}

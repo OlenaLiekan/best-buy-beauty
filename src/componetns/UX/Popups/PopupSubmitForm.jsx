@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { clearItems } from '../../../redux/slices/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import IntlTelInput from 'intl-tel-input/react';
+import 'intl-tel-input/build/css/intlTelInput.css'
 import { updateUser } from '../../../http/userAPI';
 import axios from 'axios';
 import { AuthContext } from '../../../context';
@@ -18,6 +20,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     const [username, setUsername] = React.useState('');
     const [surname, setSurname] = React.useState('');    
     const [phone, setPhone] = React.useState('');
+    const [codeNumber, setCodeNumber] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [firstAddress, setFirstAddress] = React.useState('');
     const [secondAddress, setSecondAddress] = React.useState('');
@@ -292,7 +295,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                                 onChange={onChangeSurname}/>
                         </div>
                         <div className="popup-form__line">
-                            <label htmlFor="user-company-input" className="popup-form__label">NIF</label>
+                            <label htmlFor="user-company-input" className="popup-form__label">NIF (opcional)</label>
                             <input id="user-company-input" tabIndex="3" autoComplete="new-password" type="text" name="Empresa" pattern="[0-9]{9}" data-error="Error" placeholder='000000000' className="popup-form__input"
                                 value={company}
                                 onChange={onChangeCompany}/>
