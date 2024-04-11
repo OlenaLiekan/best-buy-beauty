@@ -306,6 +306,9 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                                 value={phone}
                                 onChange={onChangePhone}/>
                         </div>
+
+
+
                         <div className="popup-form__line">
                             <label htmlFor="user-email-input" className="popup-form__label">E-mail</label>
                             <input required id="user-email-input" tabIndex="5" autoComplete="new-password" type="email" name="email" data-error="Error" placeholder="example@email.com" className="popup-form__input _req _email" 

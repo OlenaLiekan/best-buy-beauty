@@ -151,7 +151,7 @@ const CreateProduct = () => {
     }
 
     React.useEffect(() => {
-        if (typeName === 'Pestanas') {
+        if (typeName.toLowerCase() === 'pestanas') {
             setIsLashes(true);
         } else {
             setIsLashes(false);
