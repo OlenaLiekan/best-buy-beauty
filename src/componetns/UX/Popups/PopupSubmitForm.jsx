@@ -3,13 +3,12 @@ import { useNavigate } from 'react-router-dom';
 
 import { clearItems } from '../../../redux/slices/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import IntlTelInput from 'intl-tel-input/react';
-import 'intl-tel-input/build/css/intlTelInput.css'
 import { updateUser } from '../../../http/userAPI';
 import axios from 'axios';
 import { AuthContext } from '../../../context';
 import { sendEmail } from '../../../http/productAPI';
 import { closePopup } from '../../../js/script';
+import { countries } from '../../../js/countriesTelInput';
 
 const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
 
@@ -19,14 +18,14 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     const { serverDomain, isAuth } = React.useContext(AuthContext);
     const [username, setUsername] = React.useState('');
     const [surname, setSurname] = React.useState('');    
-    const [phone, setPhone] = React.useState('');
-    const [codeNumber, setCodeNumber] = React.useState('');
+    const [phone, setPhone] = React.useState('+351');
     const [email, setEmail] = React.useState('');
     const [firstAddress, setFirstAddress] = React.useState('');
     const [secondAddress, setSecondAddress] = React.useState('');
     const [city, setCity] = React.useState('');
     const [region, setRegion] = React.useState('');
     const [country, setCountry] = React.useState('Portugal');
+    const [telCode, setTelCode] = React.useState('');
     const [postalCode, setPostalCode] = React.useState('');
     const [company, setCompany] = React.useState('');
     const [comment, setComment] = React.useState('');
@@ -37,7 +36,6 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     const [mbWayPayments, setMbWayPayments] = React.useState([]);
     const [payment, setPayment] = React.useState('');
     const [resetForm, setResetForm] = React.useState(false);
-    const countries = ['Portugal', 'Outro'];
 
     const data = localStorage.getItem('user') ? localStorage.getItem('user') : '';
     const user = data ? JSON.parse(data) : '';
@@ -113,7 +111,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     };
 
     const onChangePhone = (event) => { 
-        setPhone(event.target.value.slice(0, 13));
+        setPhone(event.target.value.slice(0,13));
     };
 
     const onChangeEmail = (event) => { 
@@ -144,21 +142,32 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         }
     }
 
-    const closeList = (countryName) => {
+    const onChangeCountry = (countryName, countryTelCode) => {
         setCountry(countryName);
+        setTelCode(countryTelCode);
         setVisibleList(false);
     }
+
+    React.useEffect(() => {
+        if (telCode) {
+            setPhone(telCode);
+        }
+    }, [telCode]);
 
     const onChangeRegion = (event) => { 
         setRegion(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
     };
 
     const onChangePostalCode = (event) => { 
-        if (event.target.value.length > 4 && event.target.value[4] !== '-') {
-            setPostalCode(event.target.value.slice(0, 4) + '-' + event.target.value.slice(4, 8) );
+        if (country === 'Portugal') {
+            if (event.target.value.length > 4 && event.target.value[4] !== '-') {
+                setPostalCode(event.target.value.slice(0, 4) + '-' + event.target.value.slice(4, 8) );
+            } else {
+                setPostalCode(event.target.value.slice(0, 8));              
+            }            
         } else {
-            setPostalCode(event.target.value.slice(0, 8));              
-        } 
+            setPostalCode(event.target.value.slice(0,10));
+        }
     };
 
     const { items, totalPrice } = useSelector((state) => state.cart);
@@ -301,62 +310,60 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                                 onChange={onChangeCompany}/>
                         </div>
                         <div className="popup-form__line">
-                            <label htmlFor="user-contact-input" className="popup-form__label">Telemóvel</label>
-                            <input required id="user-contact-input" tabIndex="4" autoComplete="new-password" type="tel" pattern="[+]{1}[0-9]{12}" name="Telefone" data-error="Error" placeholder="+351XXXXXXXXXX" className="popup-form__input _req"
-                                value={phone}
-                                onChange={onChangePhone}/>
-                        </div>
-
-
-
-                        <div className="popup-form__line">
-                            <label htmlFor="user-email-input" className="popup-form__label">E-mail</label>
-                            <input required id="user-email-input" tabIndex="5" autoComplete="new-password" type="email" name="email" data-error="Error" placeholder="example@email.com" className="popup-form__input _req _email" 
-                                value={email}
-                                onChange={onChangeEmail}/>
-                        </div>
-                        <div className="popup-form__line">
                             <label htmlFor="user-f-address-input" className="popup-form__label">Rua</label>
-                            <input required id="user-f-address-input" tabIndex="6" autoComplete="new-password" type="text" name="Morada_1" data-error="Error" className="popup-form__input"
+                            <input required id="user-f-address-input" tabIndex="4" autoComplete="new-password" type="text" name="Morada_1" data-error="Error" className="popup-form__input"
                                 value={firstAddress}
                                 onChange={onChangeFAddress}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-s-address-input" className="popup-form__label">Número da porta</label>
-                            <input required id="user-s-address-input" tabIndex="7" autoComplete="new-password" type="text" name="Morada_2" data-error="Error" className="popup-form__input"
+                            <input required id="user-s-address-input" tabIndex="5" autoComplete="new-password" type="text" name="Morada_2" data-error="Error" className="popup-form__input"
                                 value={secondAddress}
                                 onChange={onChangeSAddress}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-city-input" className="popup-form__label">Cidade</label>
-                            <input required id="user-city-input" tabIndex="8" autoComplete="new-password" type="text" name="Cidade" data-error="Error" className="popup-form__input"
+                            <input required id="user-city-input" tabIndex="6" autoComplete="new-password" type="text" name="Cidade" data-error="Error" className="popup-form__input"
                                 value={city}
                                 onChange={onChangeCity}/>
                         </div>
                         <div className="popup-form__line popup-form__line_select">
                             <label htmlFor="user-country-input" className="popup-form__label">País</label>
-                            <input readOnly required onClick={showCountries} id="user-country-input" tabIndex="9" autoComplete="new-password" type="text" name="País" data-error="Error" className="popup-form__input popup-form__input_select"
+                            <input readOnly required onClick={showCountries} id="user-country-input" tabIndex="7" autoComplete="new-password" type="text" name="País" data-error="Error" className="popup-form__input popup-form__input_select"
                                 value={country} />
                             <svg onClick={showCountries} className={visibleList ? 'popup-form_rotate' : ''} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                                 <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
                             </svg>
+                            <div className={visibleList ? 'popup-form__wrapper' : 'popup-form__wrapper_hidden'}>
                             <ul className={visibleList ? 'popup-form__list' : 'popup-form__list_hidden'}>
-                                {countries.map((countryName, i) => 
-                                    <li onClick={() => closeList(countryName) } key={i} className={'popup-form__item'}>{countryName}</li>
+                                {countries.map((country) => 
+                                    <li onClick={() => onChangeCountry(country.name, country.telCode)} key={country.id} className={'popup-form__item'}>{country.name} {country.telCode}</li>
                                 )}
-                            </ul>
+                            </ul></div>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-region-input" className="popup-form__label">Concelho</label>
-                            <input required id="user-region-input" tabIndex="10" autoComplete="new-password" type="text" name="Concelho" data-error="Error" className="popup-form__input"
+                            <input required id="user-region-input" tabIndex="8" autoComplete="new-password" type="text" name="Concelho" data-error="Error" className="popup-form__input"
                                 value={region}
                                 onChange={onChangeRegion}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-postal-code-input" className="popup-form__label">Código postal/ZIP</label>
-                            <input required id="user-postal-code-input" tabIndex="11" autoComplete="new-password" type="text" pattern="[0-9]{4}-[0-9]{3}" name="Código_postal/ZIP" data-error="Error" className="popup-form__input"
+                            <input required id="user-postal-code-input" tabIndex="9" autoComplete="new-password" type="text" pattern={country === "Portugal" ? "[0-9]{4}-[0-9]{3}" : "[0-9-A-Za-z]"} name="Código_postal/ZIP" data-error="Error" className="popup-form__input"
                                 value={postalCode}
                                 onChange={onChangePostalCode}/>
+                        </div>
+                        <div className="popup-form__line">
+                            <label htmlFor="user-contact-input" className="popup-form__label">Telemóvel</label>
+                            <input required id="user-contact-input" tabIndex="10" autoComplete="new-password" type="tel" pattern="\+?[0-9\s\-\(\)]+" name="Telefone" data-error="Error" placeholder="+351XXXXXXXXXX" className="popup-form__input _req"
+                                value={phone}
+                                onChange={onChangePhone}/>
+                        </div>
+                        <div className="popup-form__line">
+                            <label htmlFor="user-email-input" className="popup-form__label">E-mail</label>
+                            <input required id="user-email-input" tabIndex="11" autoComplete="new-password" type="email" name="email" data-error="Error" placeholder="example@email.com" className="popup-form__input _req _email" 
+                                value={email}
+                                onChange={onChangeEmail}/>
                         </div>
                         <div className="popup-form__line">
                             <label hidden htmlFor="order" className="popup-form__label">Ordem: </label>

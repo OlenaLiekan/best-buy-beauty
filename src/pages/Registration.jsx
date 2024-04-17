@@ -20,7 +20,7 @@ const Registration = () => {
     const [checkPassValue, setCheckPassValue] = React.useState('');
     const [currentUser, setUser] = React.useState({});
     const { serverDomain } = React.useContext(AuthContext);
-    
+
     React.useEffect(() => {
         async function fetchUser() {
             try {
@@ -103,15 +103,15 @@ const Registration = () => {
                             Crie sua conta pessoal.
                         </h2>
                         <div className="form-login__line">
-                            <label htmlFor="userName" className="form-login__label">Nome <span>*</span></label>
-                            <input required id="userName" type="text" tabIndex="1" name='name' placeholder="Nome" className="form-login__input"
+                            <label htmlFor="userName" className="form-login__label">Primeiro Nome <span>*</span></label>
+                            <input required id="userName" type="text" tabIndex="1" name='name' placeholder="Primeiro Nome" className="form-login__input"
                                 ref={inputRef}
                                 value={firstName}
                                 onChange={onChangeUsername}/>                            
                         </div>
                         <div className="form-login__line">
-                            <label htmlFor="userSurname" className="form-login__label">Sobrenome</label>
-                            <input required id="userSurname" type="text" tabIndex="2" name='surname' placeholder="Sobrenome" className="form-login__input"
+                            <label htmlFor="userSurname" className="form-login__label">Último Nome</label>
+                            <input required id="userSurname" type="text" tabIndex="2" name='surname' placeholder="Último Nome" className="form-login__input"
                                 ref={inputRef}
                                 value={lastName}
                                 onChange={onChangeSurname}/>                            
@@ -127,12 +127,14 @@ const Registration = () => {
                             Este e-mail já existe.
                         </div>
                         <div className="form-login__line">
-                            <label htmlFor="userPhone" className="form-login__label">Número de telefone</label>
+                            <label htmlFor="userPhone" className="form-login__label">Telemóvel</label>
                             <input required id="userPhone" type="tel" tabIndex="4" name='phone' pattern="[+]{1}[0-9]{12}" placeholder="+351XXXXXXXXX" className="form-login__input" 
                                 ref={inputRef}
                                 value={phone}
-                                onChange={onChangePhone}/> 
+                                onChange={onChangePhone}
+                            />
                         </div>
+
                         <div className="form-login__line">
                             <label htmlFor="userPassword" className="form-login__label">Senha <span>*</span></label>
                             <input required id="userPassword" type="password" name='password' tabIndex="5" placeholder="Criar uma senha" className="form-login__input" 

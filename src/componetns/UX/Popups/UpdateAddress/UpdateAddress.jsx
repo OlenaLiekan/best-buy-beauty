@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './UpdateAddress.module.scss';
 import { updateUser } from '../../../../http/userAPI';
 import { AuthContext } from '../../../../context';
+import { countries } from '../../../../js/countriesTelInput';
 
 const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
 
@@ -17,11 +18,11 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
     const [city, setCity] = React.useState('');
     const [region, setRegion] = React.useState('');
     const [country, setCountry] = React.useState('');
+    const [telCode, setTelCode] = React.useState('');
     const [postalCode, setPostalCode] = React.useState('');
     const [company, setCompany] = React.useState('');
     const [checked, setChecked] = React.useState(false);
     const [visibleList, setVisibleList] = React.useState(false);
-    const countries = ['Portugal', 'Outro'];
 
     if (!existingMainAddress) {
         existingMainAddress = { id: addressId };
@@ -59,6 +60,7 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
 
     const onChangePhone = (event) => { 
         setPhone(event.target.value.slice(0, 13));
+        console.log(phone);
     };
 
     const onChangeEmail = (event) => { 
@@ -82,11 +84,15 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
     };
 
     const onChangePostalCode = (event) => { 
-        if (event.target.value.length > 4 && event.target.value[4] !== '-') {
-            setPostalCode(event.target.value.slice(0, 4) + '-' + event.target.value.slice(4, 8));
+        if (country === "Portugal") {
+            if (event.target.value.length > 4 && event.target.value[4] !== '-') {
+                setPostalCode(event.target.value.slice(0, 4) + '-' + event.target.value.slice(4, 8));
+            } else {
+                setPostalCode(event.target.value.slice(0, 8));              
+            }             
         } else {
-            setPostalCode(event.target.value.slice(0, 8));              
-        }   
+            setPostalCode(event.target.value.slice(0, 10));
+        }
     };
 
     const checkedCheckbox = () => {
@@ -107,10 +113,18 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
         }
     }
 
-    const closeList = (countryName) => {
+    const onChangeCountry = (countryName, countryTelCode) => {
         setCountry(countryName);
+        setTelCode(countryTelCode);
         setVisibleList(false);
     }
+
+    
+    React.useEffect(() => {
+        if (telCode) {
+            setPhone(telCode);
+        }
+    }, [telCode]);
 
     const success = () => {
         setUpdateAddressMode(false);
@@ -166,67 +180,69 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
                         onChange={onChangeCompany}/>
                 </div>
                 <div className={styles.formLine}>
-                    <label htmlFor="user-contact-input" className={styles.formLabel}>Telemóvel</label>
-                    <input required id="user-contact-input" tabIndex="4" autoComplete="off" type="tel" pattern="[+]{1}[0-9]{12}" name="contact" data-error="Error" placeholder="+351XXXXXXXXXX" className={styles.formInput}
-                        ref={inputRef}
-                        value={phone}
-                        onChange={onChangePhone}/>
-                </div>
-                <div className={styles.formLine}>
-                    <label htmlFor="user-email-input" className={styles.formLabel}>E-mail</label>
-                    <input required id="user-email-input" tabIndex="5" autoComplete="off" type="email" name="email" data-error="Error" placeholder="example@email.com" className={styles.formInput} 
-                        ref={inputRef}
-                        value={email}
-                        onChange={onChangeEmail}/>
-                </div>
-                <div className={styles.formLine}>
                     <label htmlFor="user-f-address-input" className={styles.formLabel}>Rua</label>
-                    <input required id="user-f-address-input" tabIndex="6" autoComplete="off" type="text" name="firstAddress" data-error="Error" className={styles.formInput}
+                    <input required id="user-f-address-input" tabIndex="4" autoComplete="off" type="text" name="firstAddress" data-error="Error" className={styles.formInput}
                         ref={inputRef}
                         value={firstAddress}
                         onChange={onChangeFAddress}/>
                 </div>
                 <div className={styles.formLine}>
                     <label htmlFor="user-s-address-input" className={styles.formLabel}>Número da porta</label>
-                    <input required id="user-s-address-input" tabIndex="7" autoComplete="off" type="text" name="secondAddress" data-error="Error" className={styles.formInput}
+                    <input required id="user-s-address-input" tabIndex="5" autoComplete="off" type="text" name="secondAddress" data-error="Error" className={styles.formInput}
                         ref={inputRef}
                         value={secondAddress}
                         onChange={onChangeSAddress}/>
                 </div>
                 <div className={styles.formLine}>
                     <label htmlFor="user-city-input" className={styles.formLabel}>Cidade</label>
-                    <input required id="user-city-input" tabIndex="8" autoComplete="off" type="text" name="city" data-error="Error" className={styles.formInput}
+                    <input required id="user-city-input" tabIndex="6" autoComplete="off" type="text" name="city" data-error="Error" className={styles.formInput}
                         ref={inputRef}
                         value={city}
                         onChange={onChangeCity}/>
                 </div>
                 <div className={styles.formLineSelect}>
                     <label htmlFor="user-country-input" className={styles.formLabel}>País</label>
-                    <input readOnly required onClick={showCountries} id="user-country-input" tabIndex="9" autoComplete="off" type="text" name="country" data-error="Error" className={styles.formInputSelect}
+                    <input readOnly required onClick={showCountries} id="user-country-input" tabIndex="7" autoComplete="off" type="text" name="country" data-error="Error" className={styles.formInputSelect}
                         ref={inputRef}
                         value={country} />
                     <svg onClick={showCountries} className={visibleList ? styles.rotate : ''} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                         <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
                     </svg>
-                    <ul className={visibleList ? styles.countriesList : styles.hidden}>
-                        {countries.map((countryName, i) => 
-                            <li onClick={() => closeList(countryName) } key={i} className={styles.countryItem}>{countryName}</li>
-                        )}
-                    </ul>
+                    <div className={visibleList ? styles.countriesWrapper : styles.hidden}>
+                        <ul className={visibleList ? styles.countriesList : styles.hidden}>
+                            {countries.map((country) => 
+                                <li onClick={() => onChangeCountry(country.name, country.telCode)} key={country.id} className={styles.countryItem}>{country.name} {country.telCode}</li>
+                            )}
+                        </ul>                        
+                    </div>
                 </div>
                 <div className={styles.formLine}>
                     <label htmlFor="user-region-input" className={styles.formLabel}>Concelho</label>
-                    <input required id="user-region-input" tabIndex="10" autoComplete="off" type="text" name="region" data-error="Error" className={styles.formInput}
+                    <input required id="user-region-input" tabIndex="8" autoComplete="off" type="text" name="region" data-error="Error" className={styles.formInput}
                         ref={inputRef}
                         value={region}
                         onChange={onChangeRegion}/>
                 </div>
                 <div className={styles.formLine}>
                     <label htmlFor="user-postal-code-input" className={styles.formLabel}>Código postal/ZIP</label>
-                    <input required id="user-postal-code-input" tabIndex="11" autoComplete="off" type="text" pattern="[0-9]{4}-[0-9]{3}" name="postal-code" placeholder='0000-000' data-error="Error" className={styles.formInput}
+                    <input required id="user-postal-code-input" tabIndex="9" autoComplete="off" type="text" pattern={country === "Portugal" ? "[0-9]{4}-[0-9]{3}" : "[0-9-A-Za-z]"} name="postal-code" placeholder='0000-000' data-error="Error" className={styles.formInput}
                         ref={inputRef}
                         value={postalCode}
                         onChange={onChangePostalCode}/>
+                </div>
+                <div className={styles.formLine}>
+                    <label htmlFor="user-contact-input" className={styles.formLabel}>Telemóvel</label>
+                    <input required id="user-contact-input" tabIndex="10" autoComplete="off" type="tel" pattern="\+?[0-9\s\-\(\)]+" name="contact" data-error="Error" placeholder="+351XXXXXXXXXX" className={styles.formInput}
+                        ref={inputRef}
+                        value={phone}
+                        onChange={onChangePhone}/>
+                </div>
+                <div className={styles.formLine}>
+                    <label htmlFor="user-email-input" className={styles.formLabel}>E-mail</label>
+                    <input required id="user-email-input" tabIndex="11" autoComplete="off" type="email" name="email" data-error="Error" placeholder="example@email.com" className={styles.formInput} 
+                        ref={inputRef}
+                        value={email}
+                        onChange={onChangeEmail}/>
                 </div>
                 <div className={styles.formLineCheckbox}>
                     <label onClick={checkedCheckbox} htmlFor="userCheckBox" className={checked ? styles.formLabelChecked : styles.formLabelCheckbox}>

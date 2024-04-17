@@ -49,7 +49,7 @@ const UpdateUser = ({userId}) => {
     };
 
     const onChangePhone = (event) => { 
-        setPhone(event.target.value);
+        setPhone(event.target.value.slice(0,13));
     };
 
     const updateEmailValue = React.useCallback(
@@ -110,8 +110,8 @@ const UpdateUser = ({userId}) => {
                         onChange={onChangeSurname}/>
                 </div>
                 <div className={styles.formLine}>
-                    <label htmlFor="user-contact-input" className={styles.formLabel}>Telefone</label>
-                    <input required id="user-contact-input" tabIndex="3" autoComplete="off" type="tel" pattern="[+]{1}[0-9]{12}" name="contact" data-error="Error" placeholder="+351XXXXXXXXXX" className={styles.formInput}
+                    <label htmlFor="user-contact-input" className={styles.formLabel}>Telemóvel</label>
+                    <input required id="user-contact-input" tabIndex="3" autoComplete="off" type="tel" pattern="\+?[0-9\s\-\(\)]+" name="contact" data-error="Error" placeholder="+351XXXXXXXXXX" className={styles.formInput}
                         ref={inputRef}
                         value={phone}
                         onChange={onChangePhone}/>

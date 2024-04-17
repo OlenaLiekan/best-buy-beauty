@@ -156,27 +156,38 @@
     }
 }
 
-.countriesList {
+.countriesWrapper {
+    display: flex;
+    flex-direction: column;
     position: absolute;
     top: 18px;
     right: 0;
     width: 193px;
-    height: 90px;
-    display: flex;
-    flex-direction: column;
-    padding-top: 20px;
-    background-color: #fafafa;
+    height: 220px;
+    border-radius: 0 0 20px 20px;    
     border: 1.5px solid #9c9c9c;
-    border-radius: 0 0 20px 20px;
-    color: #484848;
-    z-index: 1;
+    overflow: hidden;
     @media(max-width: 479.98px) {
         left: 0;
         top: 34px;
     }
+
     @media(max-width: 379.98px) {
         width: 174px;
     }
+}
+
+.countriesList {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    flex-direction: column;
+    background-color: #fafafa;
+    border-radius: 0 0 20px 20px;
+    color: #484848;
+    z-index: 1;
+    padding-top: 20px;
 }
 
 .countryItem {
