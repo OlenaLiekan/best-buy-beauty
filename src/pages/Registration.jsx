@@ -74,7 +74,7 @@ const Registration = () => {
     };
 
     const onChangePhone = (event) => { 
-        setPhone(event.target.value);
+        setPhone(event.target.value.slice(0, 13));
     };
 
     const onChangeEmail = (event) => { 
@@ -128,7 +128,7 @@ const Registration = () => {
                         </div>
                         <div className="form-login__line">
                             <label htmlFor="userPhone" className="form-login__label">Telemóvel</label>
-                            <input required id="userPhone" type="tel" tabIndex="4" name='phone' pattern="[+]{1}[0-9]{12}" placeholder="+351XXXXXXXXX" className="form-login__input" 
+                            <input required id="userPhone" type="tel" tabIndex="4" name='phone' pattern="\+?[0-9\s\-\(\)]+" placeholder="+351XXXXXXXXX" className="form-login__input" 
                                 ref={inputRef}
                                 value={phone}
                                 onChange={onChangePhone}
