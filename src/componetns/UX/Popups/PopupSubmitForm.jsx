@@ -292,6 +292,12 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                             Por favor, deixe seus dados para fazer um pedido.
                         </div>
                         <div className="popup-form__line">
+                            <label hidden htmlFor="user-company-input" className="popup-form__label">NIF (opcional)</label>
+                            <input hidden id="user-company-input" tabIndex="3" autoComplete="new-password" type="text" name="Empresa" pattern="[0-9]{9}" data-error="Error" placeholder='000000000' className="popup-form__input"
+                                value={company}
+                                onChange={onChangeCompany}/>
+                        </div>
+                        <div className="popup-form__line">
                             <label htmlFor="user-name-input" className="popup-form__label">Primeiro Nome</label>
                             <input required id="user-name-input" tabIndex="1" autoComplete="new-password" type="text" name="nome" data-error="Error" placeholder='Nome' className="popup-form__input _req"
                                 value={username}
@@ -302,12 +308,6 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                             <input required id="user-surname-input" tabIndex="2" autoComplete="new-password" type="text" name="Sobrenome" data-error="Error" placeholder="Sobrenome" className="popup-form__input"
                                 value={surname}
                                 onChange={onChangeSurname}/>
-                        </div>
-                        <div className="popup-form__line">
-                            <label htmlFor="user-company-input" className="popup-form__label">NIF (opcional)</label>
-                            <input id="user-company-input" tabIndex="3" autoComplete="new-password" type="text" name="Empresa" pattern="[0-9]{9}" data-error="Error" placeholder='000000000' className="popup-form__input"
-                                value={company}
-                                onChange={onChangeCompany}/>
                         </div>
                         <div className="popup-form__line">
                             <label htmlFor="user-f-address-input" className="popup-form__label">Rua</label>
@@ -369,7 +369,6 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                             <label hidden htmlFor="order" className="popup-form__label">Ordem: </label>
                             <textarea hidden id="order" readOnly name="Ordem" value={order} className="popup-form__textarea _order"/>                            
                         </div>
-
                         <div className="popup-form__line popup-line__textarea">
                             <label htmlFor="user-comment" className="popup-form__label">Comentário</label>
                             <textarea id="user-comment" tabIndex="12" className="popup-form__textarea" name="Comente" placeholder='Ola! Aqui você pode deixar suas dúvidas ou desejos.' cols="10" rows="5" maxLength="150"

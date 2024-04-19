@@ -149,13 +149,6 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
                         onChange={onChangeSurname}/>
                 </div>
                 <div className={styles.formLine}>
-                    <label htmlFor="user-company-input" className={styles.formLabel}>NIF (opcional)</label>
-                    <input id="user-company-input" tabIndex="3" autoComplete="off" type="text" name="company" pattern="[0-9]{9}" placeholder='000000000' data-error="Error" className={styles.formInput}
-                        ref={inputRef}
-                        value={company}
-                        onChange={onChangeCompany} />
-                </div>
-                <div className={styles.formLine}>
                     <label htmlFor="user-f-address-input" className={styles.formLabel}>Rua</label>
                     <input required id="user-f-address-input" tabIndex="4" autoComplete="off" type="text" name="firstAddress" data-error="Error" className={styles.formInput}
                         ref={inputRef}
@@ -226,6 +219,13 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
                         Selecione principal
                     </label>
                     <input id="userCheckBox" type="checkbox" name="agree" tabIndex="12" className={styles.formInputCheckbox} /> 
+                </div>
+                <div className={styles.formLine}>
+                    <label hidden htmlFor="user-company-input" className={styles.formLabel}>NIF (opcional)</label>
+                    <input hidden id="user-company-input" tabIndex="3" autoComplete="off" type="text" name="company" pattern="[0-9]{9}" placeholder='000000000' data-error="Error" className={styles.formInput}
+                        ref={inputRef}
+                        value={company}
+                        onChange={onChangeCompany} />
                 </div>
                 <button type='submit' tabIndex="13" className={styles.formBtnSubmit}>
                     Adicionar
