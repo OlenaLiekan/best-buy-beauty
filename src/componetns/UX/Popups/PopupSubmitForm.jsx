@@ -293,7 +293,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                         </div>
                         <div className="popup-form__line">
                             <label hidden htmlFor="user-company-input" className="popup-form__label">NIF (opcional)</label>
-                            <input hidden id="user-company-input" tabIndex="3" autoComplete="new-password" type="text" name="Empresa" pattern="[0-9]{9}" data-error="Error" placeholder='000000000' className="popup-form__input"
+                            <input hidden id="user-company-input" tabIndex="3" autoComplete="new-password" type="text" name="Empresa" data-error="Error" placeholder='000000000' className="popup-form__input"
                                 value={company}
                                 onChange={onChangeCompany}/>
                         </div>

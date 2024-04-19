@@ -222,7 +222,7 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
                 </div>
                 <div className={styles.formLine}>
                     <label hidden htmlFor="user-company-input" className={styles.formLabel}>NIF (opcional)</label>
-                    <input hidden id="user-company-input" tabIndex="3" autoComplete="off" type="text" name="company" pattern="[0-9]{9}" placeholder='000000000' data-error="Error" className={styles.formInput}
+                    <input hidden id="user-company-input" tabIndex="3" autoComplete="off" type="text" name="company" placeholder='000000000' data-error="Error" className={styles.formInput}
                         ref={inputRef}
                         value={company}
                         onChange={onChangeCompany} />
