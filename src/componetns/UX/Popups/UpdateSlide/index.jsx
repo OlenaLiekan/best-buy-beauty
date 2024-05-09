@@ -29,7 +29,7 @@ const UpdateSlide = ({slideItem}) => {
     }
 
     const onChangeUrl = (event) => {
-        setUrl(event.target.value);
+        setUrl(event.target.value.trim());
     }
 
     const closeUpdatePopup = () => {
@@ -38,12 +38,13 @@ const UpdateSlide = ({slideItem}) => {
 
     const pushSlide = (e) => {
         e.preventDefault();
+        const newUrl = url.includes('#', 0) ? url.split('#').pop() : url;
         const id = slideItem.id;
         const formData = new FormData();
         if (img) {
             formData.append('img', img);            
         }
-        formData.append('url', url)
+        formData.append('url', newUrl)
         updateSlide(formData, id).then(data => success());
     }
 

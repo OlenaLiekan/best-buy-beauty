@@ -73,7 +73,8 @@ const MainSliderBlock = () => {
     }
   }, [updateSlideMode]);
 
-  const goToUrl = () => {
+  const goToUrl = (url) => {
+    console.log(url);
     localStorage.removeItem('categoryId');
     localStorage.removeItem('subItems');        
     dispatch(setCategoryId(0));
@@ -122,7 +123,7 @@ const MainSliderBlock = () => {
                               </svg>  
                             </div>
                             <Link to={`${slide.url}`}>
-                              <img onClick={goToUrl} src={`${imagesCloud}` + slide.img} alt="slide" />
+                              <img onClick={() => goToUrl(slide.url)} src={`${imagesCloud}` + slide.img} alt="slide" />
                             </Link>
                           </div>
                         }

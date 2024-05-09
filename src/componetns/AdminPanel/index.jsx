@@ -2,7 +2,7 @@ import React from 'react';
 
 import axios from 'axios';
 import styles from './AdminPanel.module.scss';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context';
 import { setCategoryId } from '../../redux/slices/filterSlice';
 import { useDispatch } from 'react-redux';
@@ -260,6 +260,10 @@ const AdminPanel = () => {
         }
     }
 
+    const toTop = () => {
+        window.scrollTo(0, 0);
+    }
+
     return (
         <div className={styles.actions}>
             {!editLogoMode
@@ -307,9 +311,11 @@ const AdminPanel = () => {
                 
                 <div className={styles.formBody}>
                     {arr.map((item, i) => 
-                        <button key={item.name} value={item.path} onClick={() => setPath(item.path)} className={styles.button}>
-                            {item.name}
-                        </button>
+                        <Link to={'/' + item.path} key={item.name}>
+                            <button onClick={toTop} className={styles.button}>
+                                {item.name}
+                            </button>
+                        </Link>
                     )}
                 </div>
             </form>
