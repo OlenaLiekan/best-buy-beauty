@@ -14,7 +14,7 @@ import CreateSlide from "./Popups/CreateSlide";
 import SliderSkeleton from "../UI/Skeletons/SliderSkeleton";
 import UpdateSlide from "./Popups/UpdateSlide";
 
-import { setCategoryId } from "../../redux/slices/filterSlice";
+import { setCategoryId, setBrandId } from "../../redux/slices/filterSlice";
 import { useDispatch } from "react-redux";
 
 const MainSliderBlock = () => {
@@ -36,7 +36,7 @@ const MainSliderBlock = () => {
     setIsLoading(true);
     axios.get(`${serverDomain}api/slide`)
       .then((res) => {
-        setSlides(res.data);
+        setSlides(res.data.length ? res.data.reverse() : res.data);
         setIsLoading(false);
       });
   }, [serverDomain]);
@@ -74,10 +74,17 @@ const MainSliderBlock = () => {
   }, [updateSlideMode]);
 
   const goToUrl = (url) => {
-    console.log(url);
     localStorage.removeItem('categoryId');
-    localStorage.removeItem('subItems');        
-    dispatch(setCategoryId(0));
+    localStorage.removeItem('subItems');  
+    dispatch(setCategoryId(0));     
+    if (url && url.includes('brandId', 0)) {
+      const urlArr = url.split('&');
+      const urlBrandArr = urlArr[2].split('=');
+      if (urlBrandArr[0] === 'brandId' && urlBrandArr[1]) {
+        const urlBrandId = +urlBrandArr[1];
+        dispatch(setBrandId(urlBrandId));        
+      }
+    }
   }
 
   return (
