@@ -201,7 +201,8 @@
         border-radius: 20px;
         background-color: #ffffff;
         border: 2px solid #d9d9d97e;
-        font-size: 0.875rem;
+        font-size: 1rem;
+        letter-spacing: 0.5px;
         padding: 0 30px 0 40px;
         transition: all 0.6s ease 0s;
         @media (max-width: 767.98px) {
@@ -239,7 +240,7 @@
         background-color: #ffffff;
         border-top: none;
         z-index: 5;            
-        box-shadow: 5px 5px 5px #7f756a0f;
+        box-shadow: 0px 5px 5px #7f756a0f;
         padding: 10px 0;
         &::-webkit-scrollbar {
             display: none;
