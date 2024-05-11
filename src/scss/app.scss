@@ -233,7 +233,7 @@
         position: absolute;
         top: 130px;
         left: 0;
-        width: 100vw;        
+        width: 100%;        
         max-height: 100vh;
         overflow: auto;   
         background-color: #ffffff;
@@ -241,6 +241,9 @@
         z-index: 5;            
         box-shadow: 5px 5px 5px #7f756a0f;
         padding: 10px 0;
+        &::-webkit-scrollbar {
+            display: none;
+        }
         @media(max-width: 767.98px) {
             top: 100px;
         }
