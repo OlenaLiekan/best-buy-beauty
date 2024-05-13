@@ -1462,7 +1462,8 @@
     }
 }
 
-.block-best {
+.block-best,
+.block-new {
     background-color: #fff;
     &__content {
         padding: 60px 0;
@@ -1493,7 +1494,8 @@
     }
 }
 
-.more-best-block {
+.more-best-block,
+.more-new-block {
         display: flex;    
         justify-content: flex-end;
         align-items: center;

@@ -10,6 +10,7 @@ import { updateDelivery, updateLogo, updatePayment } from '../../http/productAPI
 import Loader from '../UI/Loader';
 import LogoLoader from '../UI/Skeletons/LogoSkeleton';
 import LogoTextLoader from '../UI/Skeletons/LogoTextSkeleton';
+import { updateProduct } from '../../http/productAPI';
 
 const AdminPanel = () => {
 
@@ -29,7 +30,8 @@ const AdminPanel = () => {
     const [deliveries, setDeliveries] = React.useState([]);
     const [editPricesMode, setEditPricesMode] = React.useState(false);
     const [editPaymentDataMode, setEditPaymentDataMode] = React.useState(false);
-    const [editLogoMode, setEditLogoMode] = React.useState(false);    
+    const [editLogoMode, setEditLogoMode] = React.useState(false);
+    const [showList, setShowList] = React.useState(false);
     const [activeDelivery, setActiveDelivery] = React.useState(0);
     const [deliveryId, setDeliveryId] = React.useState(1);
     const [deliveryPrice, setDeliveryPrice] = React.useState('');
@@ -48,10 +50,14 @@ const AdminPanel = () => {
     const [logo, setLogo] = React.useState('');
     const [logoLoading, setLogoLoading] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(false);
+    const [listLoading, setListLoading] = React.useState(false);
+    const [items, setItems] = React.useState(false);
+    const [unavailableProducts, setUnavailableProducts] = React.useState([]);
+    const [deletedItemId, setDeletedItemId] = React.useState(null);
 
     const message = () => {
-        window.alert('Ocorreu um erro!');        
-    }
+        window.alert('Ocorreu um erro!');
+    };
 
     React.useEffect(() => {
         setLogoLoading(true);
@@ -61,6 +67,38 @@ const AdminPanel = () => {
                 setLogoLoading(false);
             });
     }, [serverDomain, editLogoMode]);
+
+    React.useEffect(() => {
+        setListLoading(true);
+        const sortBy = 'id';        
+        const order = 'ASC';
+        axios.get(`${serverDomain}api/product?limit=200&sort=${sortBy}&order=${order}`)
+        .then((res) => {
+            setItems(res.data.rows);
+            setListLoading(false);
+        });
+    }, [serverDomain, deletedItemId]);
+
+    React.useEffect(() => {
+        if (items.length) {
+            setUnavailableProducts(items.filter((item) => !item.available));
+        }
+    }, [items]);
+
+    const showSuccess = (id) => {
+        setDeletedItemId(id);
+        window.alert('O produto já está disponível!');
+    };
+
+    const showMessage = () => {
+        window.alert('Erro!');
+    };
+
+    const setAvailability = (id) => {
+        const formData = new FormData();
+        formData.append('available', true);
+        updateProduct(formData, id).then(data => showSuccess(id)).catch(err => showMessage());  
+    };
 
     React.useEffect(() => {
         setIsLoading(true);
@@ -120,24 +158,24 @@ const AdminPanel = () => {
     const setDelivery = (index, id) => {
         setActiveDelivery(index);
         setDeliveryId(id);
-    }
+    };
 
     const setPayment = (index, id) => {
         setActivePayment(index);
         setPaymentId(id);
-    }
+    };
 
     const editDeliveryPrices = () => {
         setEditLogoMode(false);
         setEditPaymentDataMode(false);
         setEditPricesMode(true);
-    }
+    };
 
     const editPaymentData = () => {
         setEditLogoMode(false);
         setEditPricesMode(false);
         setEditPaymentDataMode(true);
-    }
+    };
 
     const onChangePrice = (event) => { 
         setDeliveryPrice(event.target.value);            
@@ -161,11 +199,11 @@ const AdminPanel = () => {
 
     const onChangeLogoName = (event) => {
         setLogoName(event.target.value);
-    }
+    };
 
     const selectFile = (event) => {
         setLogoImg(event.target.files[0]);
-    }
+    };
 
     const cancelEdit = () => {
         if (editPricesMode) {
@@ -173,10 +211,10 @@ const AdminPanel = () => {
             setActiveDelivery(0);
             setDeliveryId('');
             setDeliveryPrice('');
-            setDeliverySum('');            
+            setDeliverySum('');
         }
         if (editPaymentDataMode) {
-            setEditPaymentDataMode(false);    
+            setEditPaymentDataMode(false);
             setAccount('');
             setActivePayment(0);
             setPaymentId('');
@@ -187,45 +225,45 @@ const AdminPanel = () => {
             setLogoName('');
             setLogoImg(null);
         }
-    }
+    };
 
     const success = () => {
         if (editPricesMode) {
             window.alert('Condições alteradas com sucesso!');
-            setEditPricesMode(false); 
+            setEditPricesMode(false);
             setDeliveryId(1);
             setActiveDelivery(0);
         }
         if (editPaymentDataMode) {
             window.alert('Detalhes de pagamento alterados com sucesso!');
-            setEditPaymentDataMode(false); 
+            setEditPaymentDataMode(false);
             setPaymentId(1);
             setActivePayment(0);
-        }   
+        }
         if (editLogoMode) {
             window.alert('Logotipo atualizado com sucesso!');
-            setEditLogoMode(false);            
-        }  
-    }
+            setEditLogoMode(false);
+        }
+    };
 
     const updateConditions = (e) => {
         e.preventDefault();
         const formData = new FormData();
         const id = deliveryId;
         formData.set('price', deliveryPrice);
-        formData.set('requiredSum', deliverySum);                     
+        formData.set('requiredSum', deliverySum);
         updateDelivery(formData, id).then(data => success()).catch(err => message());
-    }
+    };
 
     const updatePaymentData = (e) => {
         e.preventDefault();
         const id = paymentId;
         const formData = new FormData();
         formData.set('account', paymentId === 1 ? account : mbWay);
-        formData.set('recipient', recipient); 
+        formData.set('recipient', recipient);
         formData.set('available', mbWayAvailable);
         updatePayment(formData, id).then(data => success()).catch(err => message());
-    }
+    };
 
     const pushLogo = (e) => {
         e.preventDefault();
@@ -234,35 +272,43 @@ const AdminPanel = () => {
         formData.set('logoImg', logoImg);
         formData.set('logoName', logoName);
         updateLogo(formData, logoId).then(data => success()).catch(err => message());
-    }
+    };
 
     const showIban = () => {
         if (!visiblePaymentData) {
-            setVisiblePaymentData(true);            
+            setVisiblePaymentData(true);
         } else {
             setVisiblePaymentData(false);
         }
-    }
+    };
 
     const showLogoMenu = () => {
         setEditLogoMode(true);
         window.scrollTo(0, 0);
         setEditPricesMode(false);
         setEditPaymentDataMode(false);
-    }
+    };
 
     const toggleAvailable = () => {
         if (mbWayAvailable) {
             setMbwAvailable(false);
         }
         else {
-            setMbwAvailable(true);   
+            setMbwAvailable(true);
         }
-    }
+    };
 
     const toTop = () => {
         window.scrollTo(0, 0);
-    }
+    };
+
+    const onClickShowList = () => {
+        if (showList) {
+            setShowList(false);
+        } else {
+            setShowList(true);
+        }
+    };
 
     return (
         <div className={styles.actions}>
@@ -319,6 +365,43 @@ const AdminPanel = () => {
                     )}
                 </div>
             </form>
+
+            <div className={styles.productsListBlock}>
+                <h4>Gerenciamento de disponibilidade de produto</h4>
+                {showList
+                    ?
+                    <ul className={styles.productList}>
+                        {listLoading
+                            ?
+                            <div className={styles.loadingText}>Os dados estão sendo carregados...</div>
+                            :
+                            unavailableProducts.length
+                            ?
+                            unavailableProducts.map((item) => 
+                                <li key={item.id} className={styles.productItem}>
+                                    <svg onClick={() => setAvailability(item.id)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                        <path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 48c110.5 0 200 89.5 200 200 0 110.5-89.5 200-200 200-110.5 0-200-89.5-200-200 0-110.5 89.5-200 200-200m140.2 130.3l-22.5-22.7c-4.7-4.7-12.3-4.7-17-.1L215.3 303.7l-59.8-60.3c-4.7-4.7-12.3-4.7-17-.1l-22.7 22.5c-4.7 4.7-4.7 12.3-.1 17l90.8 91.5c4.7 4.7 12.3 4.7 17 .1l172.6-171.2c4.7-4.7 4.7-12.3 .1-17z" />
+                                    </svg>
+                                    <div className={styles.productImg}>
+                                        <img src={`${imagesCloud}` + item.img} alt="product"/>                                        
+                                    </div>
+                                    <div className={styles.productInfo}>
+                                        <div>{item.name}</div>
+                                        <div>{item.code}</div> 
+                                    </div>
+                                </li>                        
+                            )
+                            :
+                            <div className={styles.alertText}>Nenhum produto</div>
+                        }
+                    </ul>
+                    :
+                    ''
+                }
+                <button onClick={onClickShowList} className={styles.upBtn}>
+                    {showList ? 'Ocultar lista' : 'Mostrar lista'}
+                </button>
+            </div>
             
             {deliveries.length
                 ?
