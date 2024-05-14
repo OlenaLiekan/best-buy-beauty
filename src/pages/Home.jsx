@@ -10,8 +10,8 @@ const Home = ({types}) => {
       <div className="main__content">
         <MainSliderBlock />
         <NewProductsBlock types={types} />
+        <BrandsBlock />        
         <BestSellersBlock types={types} />
-        <BrandsBlock />
       </div>
     );
 };

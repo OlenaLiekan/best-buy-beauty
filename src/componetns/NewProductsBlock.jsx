@@ -18,7 +18,7 @@ const NewProductsBlock = () => {
     setIsLoading(true);
     const sortBy = 'id';        
     const order = 'DESC';
-    axios.get(`${serverDomain}api/product?limit=8&sort=${sortBy}&order=${order}`)
+    axios.get(`${serverDomain}api/product?limit=4&sort=${sortBy}&order=${order}`)
       .then((res) => {
         setItems(res.data.rows);
         setIsLoading(false);
