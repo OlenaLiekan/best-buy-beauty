@@ -13,7 +13,7 @@ import NewReview from './UX/Popups/NewReview';
 import { setCurrentPage } from '../redux/slices/filterSlice';
 import Loader from './UI/Loader';
 
-const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, available, brandId, name, code, price, img}) => {
+const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, available, topProduct, brandId, name, code, price, img}) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();

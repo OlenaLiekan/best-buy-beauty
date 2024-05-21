@@ -10,6 +10,7 @@ function Sort() {
 
   const [open, setOpen] = React.useState(false);
   const list = [
+    { name: 'novidades', sortProperty: 'id' },
     { name: 'popularidade', sortProperty: 'rating' },
     { name: 'preço mais alto', sortProperty: 'price' },
     { name: 'preço mais baixo', sortProperty: '-price' },

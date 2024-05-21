@@ -7,8 +7,8 @@ const initialState = {
   categoryId: category ? category : 0,
   currentPage: 1,
   sort: {
-    name: 'popularidade',
-    sortProperty: 'rating',
+    name: 'novidades',
+    sortProperty: 'id',
   },
 };
 

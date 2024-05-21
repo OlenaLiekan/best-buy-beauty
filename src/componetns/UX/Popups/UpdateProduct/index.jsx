@@ -33,7 +33,8 @@ const UpdateProduct = ({id, obj}) => {
     const [applying, setApplying] = React.useState('');
     const [compound, setCompound] = React.useState('');
     const [deletedSlideId, setDeletedSlideId] = React.useState([]);
-    const [checked, setChecked] = React.useState(true);
+    const [checkedAvailable, setCheckedAvailable] = React.useState(true);
+    const [checkedTop, setCheckedTop] = React.useState(false);
 
     React.useEffect(() => {
         setName(obj.name);
@@ -49,7 +50,8 @@ const UpdateProduct = ({id, obj}) => {
         setInfo(obj.info ? obj.info : []);
         setImg(obj.img);
         setObjSlides(obj.slide);
-        setChecked(obj.available);
+        setCheckedAvailable(obj.available);
+        setCheckedTop(obj.topProduct);
         const brand = brands.find(brand => brand.id === obj.brandId);
         if (brand) {
             setBrandName(brand.name);            
@@ -206,7 +208,8 @@ const UpdateProduct = ({id, obj}) => {
         formData.append('applying', applying);            
         formData.append('compound', compound);  
         formData.append('isLashes', isLashes);
-        formData.append('available', checked);
+        formData.append('available', checkedAvailable);
+        formData.append('topProduct', checkedTop);
         if (deletedSlideId) {
             formData.append('deletedSlideId', JSON.stringify(deletedSlideId));            
         }
@@ -225,11 +228,19 @@ const UpdateProduct = ({id, obj}) => {
         setDeletedSlideId([...deletedSlideId, id]);
     }
 
-    const checkedCheckbox = () => {
-        if (!checked) {
-            setChecked(true);
+    const checkedCheckboxAvailable = () => {
+        if (!checkedAvailable) {
+            setCheckedAvailable(true);
         } else {
-            setChecked(false);            
+            setCheckedAvailable(false);            
+        }
+    }
+
+    const checkedCheckboxTop = () => {
+        if (!checkedTop) {
+            setCheckedTop(true);
+        } else {
+            setCheckedTop(false);            
         }
     }
 
@@ -239,12 +250,20 @@ const UpdateProduct = ({id, obj}) => {
                 <path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" />
             </svg>
             <form onSubmit={updateProductItem} className={styles.formProduct}>
-                <div className={styles.formLineCheckbox}>
-                    <label onClick={checkedCheckbox} htmlFor="userCheckBox" className={checked ? styles.formLabelChecked : styles.formLabelCheckbox}>
-                        Disponível:
-                    </label>
-                    <input id="userCheckBox" type="checkbox" name="agree" className={styles.formInputCheckbox} /> 
-                </div>     
+                <div className={styles.checkboxes}>
+                    <div className={styles.formLineCheckbox}>
+                        <label onClick={checkedCheckboxAvailable} htmlFor="availableCheckbox" className={checkedAvailable ? styles.formLabelChecked : styles.formLabelCheckbox}>
+                            Disponível:
+                        </label>
+                        <input id="availableCheckbox" type="checkbox" name="agree" className={styles.formInputCheckbox} /> 
+                    </div>     
+                    <div className={styles.formLineCheckbox}>
+                        <label onClick={checkedCheckboxTop} htmlFor="topCheckbox" className={checkedTop ? styles.formLabelChecked : styles.formLabelCheckbox}>
+                            Best-seller:
+                        </label>
+                        <input id="topCheckbox" type="checkbox" name="top" className={styles.formInputCheckbox} /> 
+                    </div>     
+                </div>
                 <div className={styles.line}>
                     <label htmlFor="product-name" className={styles.label}>Nome:</label>
                     <input id="product-name" required tabIndex="1" type='text' className={styles.formInput}
