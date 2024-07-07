@@ -3527,7 +3527,7 @@
     gap: 40px;
     @media (max-width: 767.98px) {
         flex-direction: column-reverse;
-        gap: 30px;
+        gap: 80px;
     }
 }
 
@@ -3538,13 +3538,12 @@
         line-height: 130%;
         font-weight: 700;
         text-transform: uppercase;
-        margin-left: 2px;
+        text-align: center;
         &:not(:last-child) {
             margin-bottom: 30px;
         }    
         @media(max-width: 767.98px) {
-            font-size: 20px;
-            margin-left: 16px;
+            font-size: 20px;        
         }
         @media(max-width: 371.98px) {
             font-size: 18px;
@@ -3613,6 +3612,10 @@
     &__items {
         display: flex;
         flex-direction: column;
+        @media(max-width: 767.98px) {
+            font-size: 20px;
+            text-align: center;
+        }
     }
     &__item {
         &:not(:last-child) {
