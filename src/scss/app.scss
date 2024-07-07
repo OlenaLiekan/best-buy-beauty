@@ -405,7 +405,7 @@
         position: relative;
         color: #fff;
         font-family: "Raleway";
-        font-size: 15px;
+        font-size: 14px;
         font-weight: 500;
         letter-spacing: 1.5px;
         width: 100%;
@@ -1751,6 +1751,20 @@
         }
         @media(max-width: 379.98px) {
             font-size: 16px;
+        }
+    }
+    &__banner {
+        position: relative;
+        width: 100%;
+        height: 60vh;
+        margin: 0 0 40px 0;
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
     }
     &__items {
@@ -3552,6 +3566,7 @@
     border: 2px solid #ad912b;
     box-shadow: 5px 5px 5px #48484818;
     font-size: 14px;
+    line-height: 1.2;
     color: #000;
     border-radius: 20px;
     padding: 5px 10px;
@@ -3570,12 +3585,27 @@
             fill: #484848;
         }
     } 
+    &_mail {
+        svg {
+            width: 38px;
+            height: 40px;
+        }
+    }
+    &_location {
+        padding: 10px 15px 10px 7px;
+    }
 }
 
-.item-contacts__link_mail {       
-    svg {
-        width: 38px;
-        height: 40px;
+.link-contacts {
+    &__items {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    &__item {
+        span {
+            white-space: nowrap;
+        }
     }
 }
 

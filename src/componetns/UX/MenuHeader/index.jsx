@@ -24,8 +24,8 @@ const MenuHeader = ({hideTicker}) => {
     const onChangeBrand = (id) => {
         dispatch(setBrandId(id));
         localStorage.removeItem('categoryId');
-        localStorage.removeItem('subItems');        
-        dispatch(setCategoryId(id));
+        localStorage.removeItem('subItems');
+        dispatch(setCategoryId(id));        
     };
 
     React.useEffect(() => {

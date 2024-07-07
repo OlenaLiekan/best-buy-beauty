@@ -94,13 +94,13 @@ const SuccessPage = () => {
                                     ) : ''}
                                 </div>
                                 <p className="body-success__text">
-                                    Tenha presente que terá de realizar o pagamento no máximo <span className='bold'>de 3 dias</span> corridos. Caso contrário, o seu pedido será cancelado.
+                                    Tenha presente que terá de realizar o pagamento no máximo <span className='bold'>de 3 dias</span> corridos.
                                 </p>
                                 <p className="body-success__text">
-                                    Após o pagamento deverá enviar um comprovativo de pagamento em resposta a esta carta ou para o email <span className='bold' onClick={scrollToContacts}>bestbuybeauty.pt@gmail.com</span> indicando o número de pedido.
+                                    Após o pagamento deverá enviar um <span className='bold'>comprovativo de pagamento</span> em resposta a esta carta ou para o email <span className='bold' onClick={scrollToContacts}>bestbuybeauty.pt@gmail.com</span> indicando o número de pedido.
                                 </p>
                                 <p className="body-success__text">
-                                    Data de entrega estimada 1-5 dias úteis. Após recebermos o pagamento da compra.   
+                                    Data de entrega estimada 1 dia útil. Após recebermos o pagamento da compra.   
                                 </p>
                                 <h4 className="success-main__subtitle bottom-line">
                                     Dados do pedido

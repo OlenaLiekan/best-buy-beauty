@@ -64,7 +64,7 @@ const Header = () => {
               <span>
                 {freeDelivery.requiredSum
                   ?
-                  `Envio gratuito a partir de ${freeDelivery.requiredSum} €`
+                  `Envio express gratuito a partir de ${freeDelivery.requiredSum} €`
                   : 
                   'Bem-vindo ao site Best Buy Beauty!'
                 }                

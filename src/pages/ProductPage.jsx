@@ -26,7 +26,7 @@ const ProductPage = ({type}) => {
     const { categoryId, brandId, sort, currentPage } = useSelector((state) => state.filter);
 
     const { searchValue } = React.useContext(SearchContext);
-    const { isAuth, adminMode, createProductMode, setCreateProductMode, serverDomain } = React.useContext(AuthContext);
+    const { isAuth, adminMode, createProductMode, setCreateProductMode, serverDomain, imagesCloud } = React.useContext(AuthContext);
 
     const [items, setItems] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(true);
@@ -65,13 +65,15 @@ const ProductPage = ({type}) => {
             setItems(res.data.rows);
         });
         setIsLoading(false);
-        window.scrollTo(0, 0);             
+        window.scrollTo(0, 0);   
     }, [categoryId, brandId, sort, currentPage, searchValue, type.id, serverDomain]);
 
     React.useEffect(() => {
+        const typeId = type.id;
         const queryString = qs.stringify({
             sortProperty: sort.sortProperty,
             categoryId,
+            typeId,
             brandId,
             currentPage,
         });
@@ -85,6 +87,14 @@ const ProductPage = ({type}) => {
         <div className="main__product product-main">
             <div className="product-main__container">
                 <div className="product-main__content">
+                    {type.id == 21
+                        ?
+                        <div className='product-main__banner'>
+                            <img src={`${imagesCloud}` + 'q8xsnwgjc4y16qk16lah.png'} alt='pmu' />
+                        </div>
+                        :
+                        ''
+                    }
                     <Brands type={type} brandId={brandId} products={items} onChangeBrand={onChangeBrand}/>
                     <Sort arrItem={type} />
                     {isAuth && adminMode && createProductMode ? <CreateProduct /> : ''}

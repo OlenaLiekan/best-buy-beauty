@@ -105,7 +105,7 @@ const Catalog = () => {
     const showProducts = () => {
         localStorage.removeItem('categoryId');
         localStorage.removeItem('subItems');        
-        dispatch(setCategoryId(''));
+        dispatch(setCategoryId(0));
     }
 
 

@@ -96,7 +96,7 @@ const ProductBlock = ({path, id, code, info, name, rating, available, topProduct
                         <div className={available ? "item-product__available" : "item-product__available item-product__available_no"}>
                             {available ? 'Disponível' : 'Não disponível'}
                         </div> 
-                        <div className="item-product__price">{price} €</div>                   
+                        <div className="item-product__price">{price} €</div>                     
                     </div>                    
                 </div>
             </div>
