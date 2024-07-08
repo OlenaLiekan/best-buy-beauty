@@ -13,6 +13,7 @@ import MenuSkeleton from "../../UI/Skeletons/MenuSkeleton";
 const MenuHeader = ({hideTicker}) => {
 
     const [menuList, setMenuList] = React.useState([]); 
+    const [submenuList, setSubmenuList] = React.useState([]); 
     const [menuItems, setMenuItems] = React.useState([]);
     const [activeItem, setActiveItem] = React.useState(0);
     const { serverDomain } = React.useContext(AuthContext);
@@ -31,7 +32,8 @@ const MenuHeader = ({hideTicker}) => {
     React.useEffect(() => {
         axios.get(`${serverDomain}api/category`)
             .then((res) => {
-                setMenuList(res.data);
+                setMenuList(res.data.filter((item) => item.subMenu));
+                setSubmenuList(res.data.filter((item) => !item.subMenu).reverse());
             });
     }, [serverDomain]);
 
@@ -55,25 +57,15 @@ const MenuHeader = ({hideTicker}) => {
                 <Link to="/catalog" className="icon-menu__text icon-menu__text_show">Catálogo</Link>                     
                     <ul className="menu__list">
                         {menuList.length ? menuList.map((item) => 
-                            <li key={item.id} value={item.name} onClick={() => setActiveItem(item.id)} className="menu__item item-menu">
-                                {
-                                    item.subMenu
-                                    ?                                
-                                    <div className="item-menu__link">
-                                        <button className="item-menu__button menu-button">
-                                            {item.name}   
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-                                                <path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
-                                            </svg>
-                                        </button>
-                                    </div> 
-                                        :
-                                    <div className="item-menu__link">
-                                        <Link to={`/${camelize(item.name)}`} onClick={() => onChangeBrand(0)} className="item-menu__button menu-link">
-                                            {item.name}
-                                        </Link>
-                                    </div>
-                                }
+                            <li key={item.id} value={item.name} onClick={() => setActiveItem(item.id)} className="menu__item item-menu">                               
+                                <div className="item-menu__link">
+                                    <button className="item-menu__button menu-button">
+                                        {item.name}   
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                                            <path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                                        </svg>
+                                    </button>
+                                </div> 
                             </li>
                         )
                         :                     
@@ -82,7 +74,23 @@ const MenuHeader = ({hideTicker}) => {
                                 <MenuSkeleton />
                             </li>
                         )        
-                    }
+                        }
+                        {submenuList.length ? submenuList.map((item) => 
+                            <li key={item.id} value={item.name} onClick={() => setActiveItem(item.id)} className="menu__item item-menu">                               
+                                <div className="item-menu__link">
+                                    <Link to={`/${camelize(item.name)}`} onClick={() => onChangeBrand(0)} className="item-menu__button menu-link">
+                                        {item.name}
+                                    </Link>
+                                </div>
+                            </li>
+                        )
+                        :                     
+                        skeletons.map((skeleton, i) => 
+                            <li key={i}>
+                                <MenuSkeleton />
+                            </li>
+                        )        
+                        }
                     </ul>
                 </nav>
             </div>

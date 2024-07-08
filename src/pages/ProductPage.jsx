@@ -19,6 +19,8 @@ import NotFoundProduct from '../componetns/NotFoundProduct';
 import CreateProduct from '../componetns/UX/Popups/CreateProduct';
 import { SearchContext } from '../App';
 
+import banner from '../assets/img/banner.JPG';
+
 const ProductPage = ({type}) => {
 
     const navigate = useNavigate();
@@ -90,7 +92,7 @@ const ProductPage = ({type}) => {
                     {type.id == 21
                         ?
                         <div className='product-main__banner'>
-                            <img src={`${imagesCloud}` + 'q8xsnwgjc4y16qk16lah.png'} alt='pmu' />
+                            <div className="img"></div>
                         </div>
                         :
                         ''

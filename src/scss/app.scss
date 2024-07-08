@@ -580,7 +580,7 @@
     &__list {        
         display: flex;
         flex-direction: column;
-        padding-bottom: 80px;
+        padding-bottom: 100px;
     }
     &__item {
           &:hover {
@@ -600,17 +600,20 @@
         justify-content: space-between;
         align-items: center;
         width: 100%;        
-        font-size: 24px;
+        font-size: 20px;
+        text-transform: uppercase;
         line-height: 130%;
+        letter-spacing: 0.5px;
         font-weight: 500;
         padding: 15px 40px 15px 60px;        
         gap: 20px;  
         @media (max-width: 767.98px) {
             padding: 10px 25px;
+            font-size: 18px;
         }  
         @media (max-width: 372.98px) {
             gap: 10px;
-            font-size: 20px;
+            font-size: 15px;
         }  
         svg {
             width: 10px;
@@ -815,12 +818,17 @@
     &__list {
         display: flex;
         flex-direction: column;
-        font-size: 24px;
+        font-size: 20px;
+        letter-spacing: 0.5px;
         line-height: 130%;
         font-weight: 500;
+        text-transform: uppercase;
         margin-bottom: 60px;
         @media (max-width: 372.98px) {
-            font-size: 20px;
+            font-size: 18px;
+        }
+        @media (max-width: 372.98px) {
+            font-size: 15px;
         }
     }
 
@@ -858,7 +866,7 @@
 .back__button {
     display: flex;    
     align-items: center;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 600;
     color: #AD902B;    
     gap: 15px;
@@ -1654,27 +1662,29 @@
         display: flex;
         position: absolute;
         width: 100%;
+        height: 100px;
         bottom: -40px;
         left: 0;
-        font-size: 18px;
+        font-size: 16px;
         letter-spacing: 0.6px;
         font-weight: 500;
         color: #fff;
         line-height: 125%;
         text-align: center;
+        text-transform: uppercase;
         justify-content: space-around;
         align-items: center;
         background-color: #000000a6;
-        padding: 20px 0 60px 0;
+        padding: 20px 15px 60px 15px;
         transition: bottom 0.8s ease 0s;
         &:hover {
             bottom: 0;
         }
         @media (max-width: 991.98px) {
-            font-size: 16px;
+            font-size: 14px;
         }
         @media (max-width: 579.98px) {
-            padding: 10px 0 50px 0;
+            padding: 10px 10px 50px 10px;
         }
     }
     &__add {        
@@ -1754,18 +1764,17 @@
         }
     }
     &__banner {
-        position: relative;
-        width: 100%;
-        height: 60vh;
-        margin: 0 0 40px 0;
-        img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        max-width: 1400px;
+        height: 400px;
+        background: url('../../src/assets/img/banner.JPG') center / cover no-repeat;  
+        margin: 0 0 60px 0; 
+        @media(max-width: 991.98px) {
+            height: 350px;
         }
+        @media(max-width: 767.98px) {
+            height: 300px;
+            background: url('../../src/assets/img/banner2.jpg') 85% 0 / cover no-repeat;
+        }         
     }
     &__items {
         display: grid;
@@ -1875,7 +1884,7 @@
         top: 0;
         right: 0;
         align-self: flex-end;
-        background-color: #ca0d0d;
+        background-color: #b45a40;
         color: #ffffff;
         padding: 10px;
         font-size: 16px;
