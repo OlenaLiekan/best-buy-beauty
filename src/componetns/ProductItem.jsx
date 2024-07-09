@@ -13,7 +13,7 @@ import NewReview from './UX/Popups/NewReview';
 import { setCurrentPage } from '../redux/slices/filterSlice';
 import Loader from './UI/Loader';
 
-const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, available, topProduct, brandId, name, code, price, img}) => {
+const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, available, topProduct, brandId, name, code, price, discountPrice, img}) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -35,6 +35,9 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const [isWarning, setIsWarning] = React.useState(false);
     const [popupSlides, setPopupSlides] = React.useState([]);
     const [company, setCompany] = React.useState({});
+
+    const percents = +discountPrice > 0 ? 100 - (discountPrice * 100 / price).toFixed(0) : '';
+    const priceValue = +discountPrice > 0 ? discountPrice : price;
 
     const tabs = ['Descrição', 'Método de uso', 'Ingredientes'];
 
@@ -99,7 +102,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
             name,
             info,               
             code,
-            price,
+            price: priceValue,
             company: company.name,
             img,
             path,
@@ -140,7 +143,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     }, [isLashes, info]);
 
     React.useEffect(() => {
-        setIndex(id + curlArr[activeCurl] + thicknessArr[activeThickness] + lengthArr[activeLength]);            
+        setIndex(id + curlArr[activeCurl] + thicknessArr[activeThickness] + lengthArr[activeLength]); 
     }, [id, activeCurl, activeLength, activeThickness, curlArr, thicknessArr, lengthArr]);
     
     const paragraphs = text.length ? text[0].text.split('\r\n') : '';
@@ -250,10 +253,35 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                             <div className="info-product__price">
                                 <span className="label-bold">Preço:</span>
                                 {price !== 0
-                                ?
-                                <div className="price__value">
-                                    {price} €                                    
-                                </div>
+                                    ?
+                                    <div className='price__value-block'>
+                                        <div className='price__value-row'>
+                                            {percents
+                                                ?
+                                                <div className='price__value_percents'>
+                                                    - {percents}%
+                                                </div>
+                                                :
+                                                ''
+                                            }
+                                            <div className={
+                                                +discountPrice > 0
+                                                    ?
+                                                    "price__value_strike"
+                                                    : "price__value"
+                                            }>
+                                                {price} €                                
+                                            </div>                                              
+                                        </div>
+                                        {+discountPrice > 0
+                                            ?
+                                            <div className="price__value price__value_discount">
+                                                {discountPrice} €
+                                            </div>
+                                            :
+                                            ''
+                                        }
+                                    </div> 
                                 : 
                                 'Verifique com o gerente.'    
                                 }
@@ -319,7 +347,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                         )}
                     </div>
                     {text.length
-                        ? 
+                        ?
                         paragraphs.map((p, i) => 
                             <p key={i} className={activeTitle === 0 ? 'description-product__text' : 'description-product__text_hidden'}>
                                 {p}
@@ -327,6 +355,54 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                         )
                         : ''                        
                     }
+                    <p className={
+                        activeTitle === 0 && typeId === 21
+                            ?
+                            'description-product__text'
+                            :
+                            'description-product__text_hidden'
+                    }>
+                        Download the Pigment Color Chart: <br/>
+                        <Link to='https://drive.google.com/file/d/1jcjdMGNQ32Umey6bjRMv1m7X-lUAR-XX/view?usp=sharing' className="description-product__pmu-link">
+                            https://drive.google.com/file/d/1jcjdMGNQ32Umey6bjRMv1m7X-lUAR-XX/view?usp=sharing
+                        </Link>
+                    </p>
+                    <p className={
+                        activeTitle === 0 && typeId === 21
+                            ?
+                            'description-product__text'
+                            :
+                            'description-product__text_hidden'
+                    }>
+                        Download the brochure for pigments: <br />
+                        <Link to="https://drive.google.com/file/d/1EvZCS-BGTRn07VJvy63oniTtbWVV1NXG/view?usp=sharing" className="description-product__pmu-link">
+                            https://drive.google.com/file/d/1EvZCS-BGTRn07VJvy63oniTtbWVV1NXG/view?usp=sharing
+                        </Link>
+                    </p>
+                    <p className={
+                        activeTitle === 0 && typeId === 21
+                            ?
+                            'description-product__text'
+                            :
+                            'description-product__text_hidden'
+                    }>
+                        Download the REACH Compliance Declaration: <br />
+                        <Link to="https://drive.google.com/file/d/1m9XfvNJa8MvPpt6WSIWHcyjJtP-ncL_L/view?usp=sharing" className="description-product__pmu-link">
+                            https://drive.google.com/file/d/1m9XfvNJa8MvPpt6WSIWHcyjJtP-ncL_L/view?usp=sharing
+                        </Link>
+                    </p>
+                    <p className={
+                        activeTitle === 0 && typeId === 21
+                            ?
+                            'description-product__text'
+                            :
+                            'description-product__text_hidden'
+                    }>
+                        Download the Safety Data Sheet: <br />
+                        <Link to="https://drive.google.com/file/d/15W1lCaZ7Gs8momCtqaWxtj1GahRXL2nu/view?usp=sharing" className="description-product__pmu-link">
+                            https://drive.google.com/file/d/15W1lCaZ7Gs8momCtqaWxtj1GahRXL2nu/view?usp=sharing
+                        </Link>
+                    </p>
                     {applying.length
                         ? 
                         paragraphsApplying.map((p, i) => 

@@ -19,8 +19,6 @@ import NotFoundProduct from '../componetns/NotFoundProduct';
 import CreateProduct from '../componetns/UX/Popups/CreateProduct';
 import { SearchContext } from '../App';
 
-import banner from '../assets/img/banner.JPG';
-
 const ProductPage = ({type}) => {
 
     const navigate = useNavigate();
@@ -28,7 +26,7 @@ const ProductPage = ({type}) => {
     const { categoryId, brandId, sort, currentPage } = useSelector((state) => state.filter);
 
     const { searchValue } = React.useContext(SearchContext);
-    const { isAuth, adminMode, createProductMode, setCreateProductMode, serverDomain, imagesCloud } = React.useContext(AuthContext);
+    const { isAuth, adminMode, createProductMode, setCreateProductMode, serverDomain } = React.useContext(AuthContext);
 
     const [items, setItems] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(true);

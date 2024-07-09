@@ -4,12 +4,14 @@ import { AuthContext } from '../context';
 import { useNavigate } from 'react-router-dom';
 
 
-const ProductBlock = ({path, id, code, info, name, rating, available, topProduct, isLashes, price, brandId, img}) => {
+const ProductBlock = ({path, id, code, info, name, rating, available, topProduct, isLashes, price, brandId, img, discountPrice}) => {
 
     const navigate = useNavigate();
 
     const [company, setCompany] = React.useState({});
     const { isAuth, adminMode, setUpdateProductMode, serverDomain, imagesCloud, setProductRemoved } = React.useContext(AuthContext);
+
+    const percents = +discountPrice > 0 ? 100 - (discountPrice * 100 / price).toFixed(0) : '';
 
     const message = () => {
         window.alert('Ocorreu um erro!');        
@@ -96,7 +98,20 @@ const ProductBlock = ({path, id, code, info, name, rating, available, topProduct
                         <div className={available ? "item-product__available" : "item-product__available item-product__available_no"}>
                             {available ? 'Disponível' : 'Não disponível'}
                         </div> 
-                        <div className="item-product__price">{price} €</div>                     
+                        <div className="item-product__price-block">
+                            <div className="item-product__price-row">
+                                {percents
+                                    ?
+                                    <div className='item-product__price_percents'>
+                                        -{percents}%
+                                    </div>
+                                    :
+                                    ''
+                                }
+                                <div className={+discountPrice > 0 ? "item-product__price item-product__price_strike" : "item-product__price"}>{price} €</div>
+                            </div>
+                            {+discountPrice > 0 ? <div className="item-product__price item-product__price_discount">{discountPrice} €</div> : ''}
+                        </div>
                     </div>                    
                 </div>
             </div>
