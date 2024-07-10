@@ -21,7 +21,7 @@ const AdminPanel = () => {
         { name: 'Slide', path: ' ' },
     ];
     const [path, setPath] = React.useState('');
-    const { serverDomain, imagesCloud } = React.useContext(AuthContext);
+    const { serverDomain, imagesCloud, isPromoPage, setIsPromoPage } = React.useContext(AuthContext);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -299,6 +299,9 @@ const AdminPanel = () => {
     };
 
     const toTop = () => {
+        if (isPromoPage) {
+            setIsPromoPage(false);
+        }
         window.scrollTo(0, 0);
     };
 
