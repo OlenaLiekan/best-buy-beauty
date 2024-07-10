@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSort } from '../../redux/slices/filterSlice';
+import { AuthContext } from '../../context';
 
 function Sort() {
 
@@ -8,15 +9,30 @@ function Sort() {
   const sort = useSelector(state => state.filter.sort);
   const sortRef = React.useRef();
 
+  const { isPromoPage, setIsPromoPage } = React.useContext(AuthContext);
+
   const [open, setOpen] = React.useState(false);
-  const list = [
-    { name: 'novidades', sortProperty: 'id' },
-    { name: 'popularidade', sortProperty: 'rating' },
-    { name: 'preço mais alto', sortProperty: 'price' },
-    { name: 'preço mais baixo', sortProperty: '-price' },
-    { name: 'nome A - Z', sortProperty: '-name' }, 
-    { name: 'nome Z - A', sortProperty: 'name' },   
-  ];
+  const list = isPromoPage
+    ?
+    [
+      { name: 'novidades', sortProperty: 'id' },
+      { name: 'popularidade', sortProperty: 'rating' },
+      { name: 'preço mais alto', sortProperty: 'price' },
+      { name: 'preço mais baixo', sortProperty: '-price' },  
+      { name: 'nome A - Z', sortProperty: '-name' }, 
+      { name: 'nome Z - A', sortProperty: 'name' },   
+    ]
+    :
+    [
+      { name: 'novidades', sortProperty: 'id' },
+      { name: 'popularidade', sortProperty: 'rating' },
+      { name: 'preço mais alto', sortProperty: 'price' },
+      { name: 'preço mais baixo', sortProperty: '-price' },
+      { name: 'ações primeiro', sortProperty: 'discountPrice' },    
+      { name: 'nome A - Z', sortProperty: '-name' }, 
+      { name: 'nome Z - A', sortProperty: 'name' },   
+    ]
+    ;
   const onClickListItem = (obj) => {
     dispatch(setSort(obj));
     setOpen(false);

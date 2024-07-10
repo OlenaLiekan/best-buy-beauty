@@ -20,7 +20,7 @@ const BrandsBlock = () => {
     createCompanyMode,
     updateCompanyMode,
     setCreateCompanyMode,
-    setUpdateCompanyMode, serverDomain, imagesCloud
+    setUpdateCompanyMode, serverDomain, imagesCloud, isPromoPage, setIsPromoPage
   } = React.useContext(AuthContext);
 
 
@@ -58,6 +58,9 @@ const BrandsBlock = () => {
   }, [id, serverDomain, setCreateCompanyMode, setUpdateCompanyMode]);
   
   const onChangeBrand = (brandId) => {
+    if (isPromoPage) {
+      setIsPromoPage(false);
+    }
     dispatch(setCategoryId(0));
     localStorage.removeItem('categoryId');
     localStorage.removeItem('subItems');

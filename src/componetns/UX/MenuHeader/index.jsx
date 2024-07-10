@@ -16,18 +16,31 @@ const MenuHeader = ({hideTicker}) => {
     const [submenuList, setSubmenuList] = React.useState([]); 
     const [menuItems, setMenuItems] = React.useState([]);
     const [activeItem, setActiveItem] = React.useState(0);
-    const { serverDomain } = React.useContext(AuthContext);
+    const { serverDomain, isPromoPage, setIsPromoPage } = React.useContext(AuthContext);
 
     const skeletons = [...new Array(6)].map((_, index) => <MenuSkeleton key={index} />);
 
     const dispatch = useDispatch();
 
     const onChangeBrand = (id) => {
+        if (isPromoPage) {
+            setIsPromoPage(false);            
+        }
         dispatch(setBrandId(id));
         localStorage.removeItem('categoryId');
         localStorage.removeItem('subItems');
         dispatch(setCategoryId(id));        
     };
+
+    const showPromo = () => {
+        if (!isPromoPage) {
+            setIsPromoPage(true);            
+        }
+        dispatch(setBrandId(0));
+        localStorage.removeItem('categoryId');
+        localStorage.removeItem('subItems');
+        dispatch(setCategoryId(0));  
+    };  
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/category`)
@@ -56,6 +69,13 @@ const MenuHeader = ({hideTicker}) => {
                 <nav className={hideTicker ? "menu__body" : "menu__shift"}>
                 <Link to="/catalog" className="icon-menu__text icon-menu__text_show">Catálogo</Link>                     
                     <ul className="menu__list">
+                        <li className="menu__item item-menu">
+                            <div className="item-menu__link">
+                                <Link to={`/produtos`} onClick={showPromo} className="item-menu__button menu-link">
+                                    Promoção
+                                </Link>
+                            </div>
+                        </li>
                         {menuList.length ? menuList.map((item) => 
                             <li key={item.id} value={item.name} onClick={() => setActiveItem(item.id)} className="menu__item item-menu">                               
                                 <div className="item-menu__link">
@@ -75,9 +95,11 @@ const MenuHeader = ({hideTicker}) => {
                             </li>
                         )        
                         }
-                        {submenuList.length ? submenuList.map((item) => 
+                        {submenuList.length
+                            ?
+                            submenuList.map((item) => 
                             <li key={item.id} value={item.name} onClick={() => setActiveItem(item.id)} className="menu__item item-menu">                               
-                                <div className="item-menu__link">
+                                <div className={item.id == 8 ? "item-menu__link item-menu__link-promo" : "item-menu__link"}>
                                     <Link to={`/${camelize(item.name)}`} onClick={() => onChangeBrand(0)} className="item-menu__button menu-link">
                                         {item.name}
                                     </Link>

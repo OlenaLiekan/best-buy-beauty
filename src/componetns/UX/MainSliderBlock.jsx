@@ -19,7 +19,7 @@ import { useDispatch } from "react-redux";
 
 const MainSliderBlock = () => {
 
-  const { isAuth, adminMode, createSlideMode, updateSlideMode, setCreateSlideMode, setUpdateSlideMode, serverDomain, imagesCloud } = React.useContext(AuthContext);
+  const { isAuth, adminMode, createSlideMode, updateSlideMode, setCreateSlideMode, setUpdateSlideMode, serverDomain, imagesCloud, isPromoPage, setIsPromoPage } = React.useContext(AuthContext);
   const [slides, setSlides] = React.useState([]);
   const [id, setId] = React.useState('');
   const [slideItem, setSlideItem] = React.useState({});
@@ -74,6 +74,9 @@ const MainSliderBlock = () => {
   }, [updateSlideMode]);
 
   const goToUrl = (url) => {
+    if (isPromoPage) {
+      setIsPromoPage(false);
+    }
     localStorage.removeItem('categoryId');
     localStorage.removeItem('subItems');  
     dispatch(setCategoryId(0));     

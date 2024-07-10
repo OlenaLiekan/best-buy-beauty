@@ -28,16 +28,31 @@ const Catalog = () => {
         updateTypeMode,
         setUpdateTypeMode,
         serverDomain,
-        imagesCloud
+        imagesCloud,
+        isPromoPage,
+        setIsPromoPage
     } = React.useContext(AuthContext);
 
     const onChangeBrand = (id) => {
         dispatch(setBrandId(id));
-    }
+        if (isPromoPage) {
+            setIsPromoPage(false);
+        }
+    };
+
+    const showPromo = () => {
+        if (!isPromoPage) {
+            setIsPromoPage(true);
+        }
+        dispatch(setBrandId(0));        
+        localStorage.removeItem('categoryId');
+        localStorage.removeItem('subItems');        
+        dispatch(setCategoryId(0));
+    };
 
     const message = () => {
-        window.alert('Ocorreu um erro!');        
-    }
+        window.alert('Ocorreu um erro!');
+    };
 
     React.useEffect(() => {
         setIsLoading(true);
@@ -160,7 +175,27 @@ const Catalog = () => {
                                         </Link>
                                     </div>
                             )      
-                            }    
+                            }  
+                            <div className="catalog__item item-catalog">
+                                <div className="item-catalog__content">      
+                                    <h3 className="item-catalog__category">  
+                                        <span className="item-catalog__name">
+                                            Promoção 
+                                        </span>
+                                    </h3> 
+
+                                    <Link to={`/produtos`} onClick={showPromo}>
+                                        <div className="item-catalog__image">
+                                            <img src={`${imagesCloud}` + 'q8xsnwgjc4y16qk16lah.png'} alt="category" />
+                                        </div>                                                 
+                                    </Link>
+                                </div>
+                                <Link to={`/produtos`} onClick={showPromo}>
+                                    <h2 className="item-catalog__title">
+                                        Promoção
+                                    </h2>                                            
+                                </Link>
+                            </div>
                         </div>                                 
                     }
                     {catalogItems.length < 1 && !isLoading ? <NotFoundProduct/> : ''}                    

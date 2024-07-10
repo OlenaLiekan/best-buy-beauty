@@ -187,6 +187,7 @@ const CreateProduct = () => {
         formData.append('applying', applying);            
         formData.append('compound', compound);            
         formData.append('isLashes', isLashes);
+        formData.append('isPromo', promoPrice && +promoPrice > 0 ? true : false);
         images.forEach((file) => {
             formData.append('slide', file);
         });

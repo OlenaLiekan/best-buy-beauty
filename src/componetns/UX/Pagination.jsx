@@ -7,7 +7,7 @@ import { AuthContext } from '../../context';
 
 const Pagination = ({type, onChangePage}) => {
   const { searchValue } = React.useContext(SearchContext);
-  const { serverDomain } = React.useContext(AuthContext);
+  const { serverDomain, isPromoPage } = React.useContext(AuthContext);
   const { categoryId, brandId, currentPage } = useSelector((state) => state.filter);
   const [itemsCount, setItemsCount] = React.useState(0);
 
@@ -20,15 +20,17 @@ const Pagination = ({type, onChangePage}) => {
     const search = searchValue ? `&name=${searchValue}` : '';
     const typeId = type.id ? `&typeId=${type.id}` : ''; 
     const category = categoryId ? `&categoryId=${categoryId}` : '';
+    const promo = isPromoPage ? '&isPromo=true' : '';
     axios
       .get(
-          `${serverDomain}api/product?${company}${category}${typeId}${search}`,
+          `${serverDomain}api/product?${company}${category}${typeId}${search}${promo}`,
       )
       .then((res) => {
-        setItemsCount(res.data.count);          
+        setItemsCount(res.data.count);   
     });
     window.scrollTo(0, 0);
-  }, [type, categoryId, brandId, searchValue, serverDomain]);
+
+  }, [type, categoryId, brandId, searchValue, serverDomain, isPromoPage]);
   
   return (
 

@@ -593,6 +593,9 @@
 .item-menu {
     &__link {
         display: flex;
+        &-promo {
+            color: #AD902B;
+        }
     }
     &__button {
         display: flex;        

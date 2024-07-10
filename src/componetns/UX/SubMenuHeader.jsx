@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { menuInit, camelize } from "../../js/script";
 import { setBrandId, setCategoryId } from "../../redux/slices/filterSlice";
 import { useDispatch } from "react-redux";
+import { AuthContext } from "../../context";
 import MenuSkeleton from "../UI/Skeletons/MenuSkeleton";
 
 const SubMenuHeader = ({ menuItems, categoryId, hideTicker }) => {
@@ -11,9 +12,14 @@ const SubMenuHeader = ({ menuItems, categoryId, hideTicker }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const { isPromoPage, setIsPromoPage } = React.useContext(AuthContext);
+
     const skeletons = [...new Array(4)].map((_, index) => <MenuSkeleton key={index} />);
 
     const onChangeBrandCategory = (id) => {
+        if (isPromoPage) {
+            setIsPromoPage(false);
+        }
         dispatch(setBrandId(id));
         localStorage.removeItem('categoryId');
         localStorage.removeItem('subItems');        
@@ -21,6 +27,9 @@ const SubMenuHeader = ({ menuItems, categoryId, hideTicker }) => {
     }
 
     const showCategoryTypes = () => {
+        if (isPromoPage) {
+            setIsPromoPage(false);
+        }
         dispatch(setCategoryId(categoryId));
         localStorage.setItem('categoryId', categoryId);
         localStorage.setItem('subItems', JSON.stringify(menuItems));

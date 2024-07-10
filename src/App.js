@@ -34,6 +34,8 @@ function App() {
   const [productUpdated, setProductUpdated] = React.useState('');
   const [productRemoved, setProductRemoved] = React.useState('');
 
+  const [isPromoPage, setIsPromoPage] = React.useState(false);
+
   const serverDomain = 'https://bbb-server-a6ji.onrender.com/';
   const imagesCloud = 'https://res.cloudinary.com/bbbptcloud/image/upload/v1699129130/static/';
 
@@ -92,6 +94,8 @@ function App() {
           setProductUpdated,
           productRemoved,
           setProductRemoved,
+          isPromoPage,
+          setIsPromoPage,
         }}
       >
         <SearchContext.Provider value={{ searchValue, setSearchValue }}>

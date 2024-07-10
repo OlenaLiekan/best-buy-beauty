@@ -26,7 +26,7 @@ const ProductPage = ({type}) => {
     const { categoryId, brandId, sort, currentPage } = useSelector((state) => state.filter);
 
     const { searchValue } = React.useContext(SearchContext);
-    const { isAuth, adminMode, createProductMode, setCreateProductMode, serverDomain } = React.useContext(AuthContext);
+    const { isAuth, adminMode, createProductMode, setCreateProductMode, serverDomain, isPromoPage } = React.useContext(AuthContext);
 
     const [items, setItems] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(true);
@@ -60,13 +60,14 @@ const ProductPage = ({type}) => {
         const search = searchValue ? `&name=${searchValue}` : '';
         const typeId = type.id ? `&typeId=${type.id}` : ''; 
         const category = categoryId ? `&categoryId=${categoryId}` : '';
-        axios.get(`${serverDomain}api/product?info&page=${currentPage}&limit=24${category}${typeId}${brandCategory}&sort=${sortBy}&order=${order}${search}`)
+        const promo = isPromoPage ? '&isPromo=true' : '';
+        axios.get(`${serverDomain}api/product?info&page=${currentPage}&limit=24${category}${typeId}${brandCategory}&sort=${sortBy}&order=${order}${search}${promo}`)
         .then((res) => {
             setItems(res.data.rows);
         });
         setIsLoading(false);
-        window.scrollTo(0, 0);   
-    }, [categoryId, brandId, sort, currentPage, searchValue, type.id, serverDomain]);
+        window.scrollTo(0, 0);
+    }, [categoryId, brandId, sort, currentPage, searchValue, type.id, serverDomain, isPromoPage]);
 
     React.useEffect(() => {
         const typeId = type.id;
@@ -95,7 +96,12 @@ const ProductPage = ({type}) => {
                         :
                         ''
                     }
-                    <Brands type={type} brandId={brandId} products={items} onChangeBrand={onChangeBrand}/>
+                    {type.id == 21
+                        ?
+                        ''
+                        : 
+                        <Brands type={type} brandId={brandId} products={items} onChangeBrand={onChangeBrand} />
+                    }
                     <Sort arrItem={type} />
                     {isAuth && adminMode && createProductMode ? <CreateProduct /> : ''}
                     {categoryId
@@ -107,7 +113,7 @@ const ProductPage = ({type}) => {
                         </h2> 
                         :
                         <h1 className='product-main__type'>
-                            {type.id > 0 ? type.name : 'Todos os produtos'}
+                            {type.id > 0 ? type.name : (isPromoPage ? 'Produtos promocionais' : 'Todos os produtos')}
                         </h1>                        
                     }
                     <div className="product-main__items">

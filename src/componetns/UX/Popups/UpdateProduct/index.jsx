@@ -36,6 +36,7 @@ const UpdateProduct = ({id, obj}) => {
     const [deletedSlideId, setDeletedSlideId] = React.useState([]);
     const [checkedAvailable, setCheckedAvailable] = React.useState(true);
     const [checkedTop, setCheckedTop] = React.useState(false);
+    const [isPromo, setIsPromo] = React.useState(false);
 
     React.useEffect(() => {
         setName(obj.name);
@@ -54,6 +55,7 @@ const UpdateProduct = ({id, obj}) => {
         setObjSlides(obj.slide);
         setCheckedAvailable(obj.available);
         setCheckedTop(obj.topProduct);
+        setIsPromo(obj.isPromo);
         const brand = brands.find(brand => brand.id === obj.brandId);
         if (brand) {
             setBrandName(brand.name);            
@@ -217,6 +219,7 @@ const UpdateProduct = ({id, obj}) => {
         formData.append('isLashes', isLashes);
         formData.append('available', checkedAvailable);
         formData.append('topProduct', checkedTop);
+        formData.append('isPromo', promoPrice && +promoPrice > 0 ? true : false);
         if (deletedSlideId) {
             formData.append('deletedSlideId', JSON.stringify(deletedSlideId));            
         }
