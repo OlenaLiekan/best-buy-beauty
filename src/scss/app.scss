@@ -294,6 +294,7 @@
 }
 
 .item-search {
+    position: relative;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -338,6 +339,29 @@
         @media (max-width: 319.98px) {
             max-width: 130px;
         }
+    }
+}
+
+.info-search {
+    &__price-block {
+        display: flex;
+        align-items: center;        
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    &__strike {
+        text-decoration: line-through;
+        color: #848484;
+    }
+    &__percents {
+        position: absolute;
+        top: 5px;
+        left: 15px;
+        display: flex;
+        font-size: 10px;        
+        padding: 3px 5px;
+        background-color: #b45a40;
+        color: #fff;
     }
 }
 

@@ -148,12 +148,31 @@ const Search = () => {
                                         <div className="item-search__image">
                                             <img src={`${imagesCloud}` + item.img} alt="product preview" />
                                         </div>
-                                        <div className="item-search__info">
+                                        <div className="item-search__info info-search">
                                             <h2>{item.name}</h2>
                                             {companyNames.find((companyName, i) =>
                                                 i + 1 === item.brandId
                                             )}
-                                            <span>{item.price} €</span>
+                                            <div className="info-search__price-block">
+
+                                                {item.discountPrice > 0
+                                                    ?
+                                                    <span className="info-search__promo"> {item.discountPrice}  €</span>
+                                                    :
+                                                    ''
+                                                }                                                   
+                                                <span className={item.discountPrice > 0 ? "info-search__strike" : ''}>
+                                                    {item.price} €
+                                                </span>
+                                                {item.discountPrice > 0
+                                                    ?
+                                                    <div className="info-search__percents">
+                                                        - {100 - (item.discountPrice * 100 / item.price).toFixed(0)}%
+                                                    </div>  
+                                                    :
+                                                    ''
+                                                }
+                                            </div>
                                         </div>
                                     </li>
                                 </div>
