@@ -638,8 +638,10 @@
     &__text {
         font-weight: 600;  
         z-index: 11;             
-        &_hidden {        
-            font-size: 20px;        
+        &_hidden {     
+            font-size: 18px;  
+            letter-spacing: 0.8px;
+            text-transform: uppercase;    
             &:hover {
                 color: #000;
             }
@@ -651,16 +653,19 @@
             position: absolute;
             top: 60px;
             left: 25px;
-            font-size: 24px;
-            color: #ad912bdb;
+            font-size: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #252525;
+            z-index: 1;
             &:hover {
-                color: #AD902B;
+                color: #000;
             }
             @media (min-width: 479.98px) {
                 display: none;
             }
             @media (max-width: 371.98px) {
-                font-size: 20px;
+                font-size: 16px;
             }
         }
 
