@@ -70,7 +70,7 @@ const MenuHeader = ({hideTicker}) => {
                 <Link to="/catalog" className="icon-menu__text icon-menu__text_show">Catálogo</Link>                     
                     <ul className="menu__list">
                         <li className="menu__item item-menu">
-                            <div className="item-menu__link">
+                            <div className="item-menu__link item-menu__link-promo">
                                 <Link to={`/produtos`} onClick={showPromo} className="item-menu__button menu-link">
                                     Promoção
                                 </Link>

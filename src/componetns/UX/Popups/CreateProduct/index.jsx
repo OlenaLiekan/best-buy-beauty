@@ -173,25 +173,29 @@ const CreateProduct = () => {
 
     const pushProduct = (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('code', code);
-        formData.append('price', price);
-        formData.append('discountPrice', promoPrice ? promoPrice : 0);
-        formData.append('categoryId', categoryId);
-        formData.append('brandId', brandId);
-        formData.append('typeId', typeId);
-        formData.append('img', img);
-        formData.append('info', JSON.stringify(info));
-        formData.append('text', text);
-        formData.append('applying', applying);            
-        formData.append('compound', compound);            
-        formData.append('isLashes', isLashes);
-        formData.append('isPromo', promoPrice && +promoPrice > 0 ? true : false);
-        images.forEach((file) => {
-            formData.append('slide', file);
-        });
-        createProduct(formData).then(data => success()).catch(err => message());      
+        if (price > +promoPrice) {
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('code', code);
+            formData.append('price', price);
+            formData.append('discountPrice', promoPrice ? promoPrice : 0);
+            formData.append('categoryId', categoryId);
+            formData.append('brandId', brandId);
+            formData.append('typeId', typeId);
+            formData.append('img', img);
+            formData.append('info', JSON.stringify(info));
+            formData.append('text', text);
+            formData.append('applying', applying);            
+            formData.append('compound', compound);            
+            formData.append('isLashes', isLashes);
+            formData.append('isPromo', promoPrice && +promoPrice > 0 ? true : false);
+            images.forEach((file) => {
+                formData.append('slide', file);
+            });
+            createProduct(formData).then(data => success()).catch(err => message());
+        } else {
+            window.alert('O preço promocional deve ser inferior ao preço padrão.');
+        }
     }
 
     return (

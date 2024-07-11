@@ -205,32 +205,36 @@ const UpdateProduct = ({id, obj}) => {
 
     const updateProductItem = (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        formData.set('name', name);
-        formData.set('code', code);
-        formData.set('price', price);
-        formData.set('discountPrice', promoPrice === '' ? 0 : promoPrice);
-        formData.append('categoryId', categoryId);
-        formData.set('brandId', brandId);
-        formData.set('typeId', typeId);
-        formData.set('text', text);
-        formData.append('applying', applying);            
-        formData.append('compound', compound);  
-        formData.append('isLashes', isLashes);
-        formData.append('available', checkedAvailable);
-        formData.append('topProduct', checkedTop);
-        formData.append('isPromo', promoPrice && +promoPrice > 0 ? true : false);
-        if (deletedSlideId) {
-            formData.append('deletedSlideId', JSON.stringify(deletedSlideId));            
+        if (price > +promoPrice) {
+            const formData = new FormData();
+            formData.set('name', name);
+            formData.set('code', code);
+            formData.set('price', price);
+            formData.set('discountPrice', promoPrice === '' ? 0 : promoPrice);
+            formData.append('categoryId', categoryId);
+            formData.set('brandId', brandId);
+            formData.set('typeId', typeId);
+            formData.set('text', text);
+            formData.append('applying', applying);            
+            formData.append('compound', compound);  
+            formData.append('isLashes', isLashes);
+            formData.append('available', checkedAvailable);
+            formData.append('topProduct', checkedTop);
+            formData.append('isPromo', promoPrice && +promoPrice > 0 ? true : false);
+            if (deletedSlideId) {
+                formData.append('deletedSlideId', JSON.stringify(deletedSlideId));            
+            }
+            if (img) {
+                formData.set('img', img);               
+            }
+            formData.set('info', JSON.stringify(info));
+            images.forEach((file) => {
+                formData.append('slide', file);
+            });           
+            updateProduct(formData, id).then(data => success()).catch(err => message());
+        } else {
+            window.alert('O preço promocional deve ser inferior ao preço padrão.');
         }
-        if (img) {
-            formData.set('img', img);               
-        }
-        formData.set('info', JSON.stringify(info));
-        images.forEach((file) => {
-            formData.append('slide', file);
-        });           
-        updateProduct(formData, id).then(data => success()).catch(err => message());      
     }
 
     const removeImage = (id) => {
