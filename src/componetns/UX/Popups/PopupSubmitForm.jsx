@@ -225,7 +225,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         localStorage.setItem('clientEmail', email);
         localStorage.setItem('clientOrder', JSON.stringify(items));
         localStorage.setItem('clientCompany', company ? company : ' ');
-        localStorage.setItem('clientAddress', `${firstAddress} ${secondAddress}, ${postalCode}, ${city}, ${region}, ${country}`);
+        localStorage.setItem('clientAddress', `Rua: ${firstAddress}, Número da porta: ${secondAddress}, Código postal/ZIP: ${postalCode}, ${city}, ${region}, ${country}`);
         if (comment) {
             localStorage.setItem('clientComment', comment);            
         }
@@ -258,7 +258,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
             formData.append('userPhone', phone);
             formData.append('paymentList', payment);
             formData.append('userCompany', company ? company : ' ');
-            formData.append('userAddress', `${firstAddress} ${secondAddress}, ${city}, ${region}, ${country}`);
+            formData.append('userAddress', `Rua: ${firstAddress}, Número da porta: ${secondAddress}, ${city}, ${region}, ${country}`);
             formData.append('userPostalCode', postalCode);
             formData.append('userComment', comment)
             sendEmail(formData).then((response) => {
