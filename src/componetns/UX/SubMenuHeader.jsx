@@ -3,27 +3,30 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { menuInit, camelize } from "../../js/script";
 import { setBrandId, setCategoryId } from "../../redux/slices/filterSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AuthContext } from "../../context";
 import MenuSkeleton from "../UI/Skeletons/MenuSkeleton";
 
-const SubMenuHeader = ({ menuItems, categoryId, hideTicker }) => {
+const SubMenuHeader = ({ menuItems, categoryId, hideTicker, brands, areBrands}) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+        const { brandId} = useSelector((state) => state.filter);
 
     const { isPromoPage, setIsPromoPage } = React.useContext(AuthContext);
 
     const skeletons = [...new Array(4)].map((_, index) => <MenuSkeleton key={index} />);
 
-    const onChangeBrandCategory = (id) => {
+    const onChangeBrandCategory = (category, brand) => {
         if (isPromoPage) {
             setIsPromoPage(false);
         }
-        dispatch(setBrandId(id));
+        dispatch(setBrandId(brand));
         localStorage.removeItem('categoryId');
         localStorage.removeItem('subItems');        
-        dispatch(setCategoryId(id));
+        dispatch(setCategoryId(category));
+        console.log(brandId);
     }
 
     const showCategoryTypes = () => {
@@ -41,21 +44,31 @@ const SubMenuHeader = ({ menuItems, categoryId, hideTicker }) => {
             <nav className={hideTicker ? "sub-menu__body" : "sub-menu__shift"}>
                 <div className="sub-menu__all" onClick={showCategoryTypes}>Ver Tudo</div>
                 <ul className="sub-menu__list list-sub-menu">
-                    {menuItems.length
+                    {areBrands & brands.length
                         ?
-                        menuItems.map((type) => 
-                            <li key={type.id} value={type.name} onClick={menuInit} className="sub-menu__item item-sub-menu">
-                                <Link to={`/${camelize(type.name)}`} onClick={() => onChangeBrandCategory(0)} className="item-sub-menu__link" >
-                                    {type.name}
+                        brands.map((brand) => 
+                            <li key={brand.id} value={brand.name} onClick={menuInit} className="sub-menu__item item-sub-menu">
+                                <Link to={`/produtos?sortProperty=id&categoryId=0&typeId=0&brandId=${brand.id}&currentPage=1`} onClick={() => onChangeBrandCategory(0, brand.id)} className="item-sub-menu__link" >
+                                    {brand.name}
                                 </Link>
-                            </li>  
+                            </li>      
                         )
                         :
-                        skeletons.map((skeleton, i) => 
-                            <li key={i} className="sub-menu__skeleton">
-                                <MenuSkeleton/>
-                            </li>
-                        )  
+                        menuItems.length
+                            ? 
+                            menuItems.map((type) => 
+                                <li key={type.id} value={type.name} onClick={menuInit} className="sub-menu__item item-sub-menu">
+                                    <Link to={`/${camelize(type.name)}`} onClick={() => onChangeBrandCategory(0, 0)} className="item-sub-menu__link" >
+                                        {type.name}
+                                    </Link>
+                                </li>  
+                                )
+                            :
+                            skeletons.map((skeleton, i) => 
+                                <li key={i} className="sub-menu__skeleton">
+                                    <MenuSkeleton/>
+                                </li>
+                            )  
                         
                     }
                 </ul>

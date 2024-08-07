@@ -12,9 +12,11 @@ import MenuSkeleton from "../../UI/Skeletons/MenuSkeleton";
 
 const MenuHeader = ({hideTicker}) => {
 
-    const [menuList, setMenuList] = React.useState([]); 
-    const [submenuList, setSubmenuList] = React.useState([]); 
+    const [topMenuList, setTopMenuList] = React.useState([]); 
+    const [bottomMenuList, setBottomMenuList] = React.useState([]); 
     const [menuItems, setMenuItems] = React.useState([]);
+    const [areBrands, setAreBrands] = React.useState(false);
+    const [brands, setBrands] = React.useState([]);
     const [activeItem, setActiveItem] = React.useState(0);
     const { serverDomain, isPromoPage, setIsPromoPage } = React.useContext(AuthContext);
 
@@ -42,12 +44,24 @@ const MenuHeader = ({hideTicker}) => {
         dispatch(setCategoryId(0));  
     };  
 
+    const setOptions = () => {
+        setAreBrands(true);
+        setActiveItem(0);
+    }
+
     React.useEffect(() => {
         axios.get(`${serverDomain}api/category`)
             .then((res) => {
-                setMenuList(res.data.filter((item) => item.subMenu));
-                setSubmenuList(res.data.filter((item) => !item.subMenu).reverse());
+                setTopMenuList(res.data.filter((item) => item.subMenu));
+                setBottomMenuList(res.data.filter((item) => !item.subMenu).reverse());
             });
+    }, [serverDomain]);
+
+    React.useEffect(() => {
+        axios.get(`${serverDomain}api/brand`)
+        .then((res) => {
+            setBrands(res.data);
+        });
     }, [serverDomain]);
 
     React.useEffect(() => {
@@ -56,7 +70,7 @@ const MenuHeader = ({hideTicker}) => {
                 .then((res) => {
                     setMenuItems(res.data);
                 }); 
-        }   
+        }
     }, [activeItem, serverDomain]);
 
     return ( 
@@ -76,9 +90,9 @@ const MenuHeader = ({hideTicker}) => {
                                 </Link>
                             </div>
                         </li>
-                        {menuList.length ? menuList.map((item) => 
+                        {topMenuList.length ? topMenuList.map((item) => 
                             <li key={item.id} value={item.name} onClick={() => setActiveItem(item.id)} className="menu__item item-menu">                               
-                                <div className="item-menu__link">
+                                <div className="item-menu__link" onClick={() => setAreBrands(false)}>
                                     <button className="item-menu__button menu-button">
                                         {item.name}   
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
@@ -95,9 +109,9 @@ const MenuHeader = ({hideTicker}) => {
                             </li>
                         )        
                         }
-                        {submenuList.length
+                        {bottomMenuList.length
                             ?
-                            submenuList.map((item) => 
+                            bottomMenuList.map((item) => 
                             <li key={item.id} value={item.name} onClick={() => setActiveItem(item.id)} className="menu__item item-menu">                               
                                 <div className={item.id == 8 ? "item-menu__link item-menu__link-promo" : "item-menu__link"}>
                                     <Link to={`/${camelize(item.name)}`} onClick={() => onChangeBrand(0)} className="item-menu__button menu-link">
@@ -113,10 +127,20 @@ const MenuHeader = ({hideTicker}) => {
                             </li>
                         )        
                         }
+                        <li hidden onClick={setOptions} className="menu__item item-menu">                               
+                            <div className="item-menu__link">
+                                <button className="item-menu__button menu-button">
+                                    Marcas   
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                                        <path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                                    </svg>
+                                </button>
+                            </div> 
+                        </li>
                     </ul>
                 </nav>
             </div>
-            <SubMenuHeader menuItems={menuItems} categoryId={activeItem} hideTicker={hideTicker} />
+            <SubMenuHeader areBrands={areBrands} brands={brands} menuItems={menuItems} categoryId={activeItem} hideTicker={hideTicker} />
         </>
     );
 };

@@ -81,12 +81,12 @@ const Footer = () => {
             <div className="body-footer__actions actions-footer">
               <ul className="actions-footer__items">
                 <li className="actions-footer__item">
-                  <Link to="/about" onClick={footerLink} className="actions-footer__link">
+                  <Link to="about" onClick={footerLink} className="actions-footer__link">
                     Sobre nós                    
                   </Link>
                 </li>
                 <li className="actions-footer__item">
-                  <Link to="/payment&delivery" onClick={footerLink} className="actions-footer__link">
+                  <Link to="payment&delivery" onClick={footerLink} className="actions-footer__link">
                     Pagamento & entrega                   
                   </Link>
                 </li>
@@ -94,7 +94,27 @@ const Footer = () => {
                   <Link to="faq" onClick={footerLink} className="actions-footer__link">
                     Perguntas frequentes                   
                   </Link>
-                </li>                
+                </li>  
+                <li className="actions-footer__item">
+                  <Link to="terms" onClick={footerLink} className="actions-footer__link">
+                    Termos e Condições                  
+                  </Link>
+                </li>
+                <li className="actions-footer__item">
+                  <Link to="returnsPolicy" onClick={footerLink} className="actions-footer__link">
+                    Política de Devolução              
+                  </Link>
+                </li>
+                <li className="actions-footer__item">
+                  <Link to="privacyPolicy" onClick={footerLink} className="actions-footer__link">
+                    Política de Privacidade                
+                  </Link>
+                </li>
+                <li className="actions-footer__item">
+                  <Link to="https://www.livroreclamacoes.pt/Inicio/" className="actions-footer__link">
+                    Livro de Reclamações               
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>

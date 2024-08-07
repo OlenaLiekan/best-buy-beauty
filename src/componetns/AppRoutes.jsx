@@ -19,6 +19,9 @@ import { AuthContext } from '../context';
 import AuthPage from '../pages/AuthPage';
 import axios from 'axios';
 import { camelize } from '../js/script';
+import Terms from '../pages/Terms';
+import PrivacyPolicy from '../pages/PrivacyPolicy';
+import ReturnsPolicy from '../pages/ReturnsPolicy';
 
 const AppRoutes = () => {
     const { isAuth, serverDomain } = React.useContext(AuthContext);
@@ -57,7 +60,11 @@ const AppRoutes = () => {
                 <Route path="*" element={<NotFound />} />
                 <Route path="about" element={<About />} />
                 <Route path="payment&delivery" element={<Payment />} />
-                <Route path="faq" element={<Faq/>} />            
+                <Route path="faq" element={<Faq />} />    
+                
+                <Route path="terms" element={<Terms />} /> 
+                <Route path="privacyPolicy" element={<PrivacyPolicy />} /> 
+                <Route path="returnsPolicy" element={<ReturnsPolicy />} /> 
             </Route>
 
         </Routes>          
