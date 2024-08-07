@@ -3,7 +3,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { menuInit, camelize } from "../../js/script";
 import { setBrandId, setCategoryId } from "../../redux/slices/filterSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { AuthContext } from "../../context";
 import MenuSkeleton from "../UI/Skeletons/MenuSkeleton";
 
@@ -11,8 +11,6 @@ const SubMenuHeader = ({ menuItems, categoryId, hideTicker, brands, areBrands}) 
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-        const { brandId} = useSelector((state) => state.filter);
 
     const { isPromoPage, setIsPromoPage } = React.useContext(AuthContext);
 
@@ -26,7 +24,16 @@ const SubMenuHeader = ({ menuItems, categoryId, hideTicker, brands, areBrands}) 
         localStorage.removeItem('categoryId');
         localStorage.removeItem('subItems');        
         dispatch(setCategoryId(category));
-        console.log(brandId);
+    }
+
+    const onChangeBrand = (brandId) => {
+        if (isPromoPage) {
+            setIsPromoPage(false);
+        }
+        dispatch(setCategoryId(0));
+        localStorage.removeItem('categoryId');
+        localStorage.removeItem('subItems');
+        dispatch(setBrandId(brandId));
     }
 
     const showCategoryTypes = () => {
@@ -48,7 +55,7 @@ const SubMenuHeader = ({ menuItems, categoryId, hideTicker, brands, areBrands}) 
                         ?
                         brands.map((brand) => 
                             <li key={brand.id} value={brand.name} onClick={menuInit} className="sub-menu__item item-sub-menu">
-                                <Link to={`/produtos?sortProperty=id&categoryId=0&typeId=0&brandId=${brand.id}&currentPage=1`} onClick={() => onChangeBrandCategory(0, brand.id)} className="item-sub-menu__link" >
+                                <Link to={`/produtos?sortProperty=id&categoryId=0&typeId=0&brandId=${brand.id}&currentPage=1`} onClick={() => onChangeBrand(brand.id)} className="item-sub-menu__link" >
                                     {brand.name}
                                 </Link>
                             </li>      

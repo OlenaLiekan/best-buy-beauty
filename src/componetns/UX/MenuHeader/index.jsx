@@ -47,6 +47,7 @@ const MenuHeader = ({hideTicker}) => {
     const setOptions = () => {
         setAreBrands(true);
         setActiveItem(0);
+        dispatch(setBrandId(0));
     }
 
     React.useEffect(() => {
@@ -127,7 +128,7 @@ const MenuHeader = ({hideTicker}) => {
                             </li>
                         )        
                         }
-                        <li hidden onClick={setOptions} className="menu__item item-menu">                               
+                        <li onClick={setOptions} className="menu__item item-menu">                               
                             <div className="item-menu__link">
                                 <button className="item-menu__button menu-button">
                                     Marcas   

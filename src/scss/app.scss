@@ -887,10 +887,10 @@
 
 .list-sub-menu__back {
     display: flex;
-    justify-content: center;
-    margin-bottom: 80px;  
+    justify-content: flex-end;
+    margin-bottom: 140px;        
+    margin-right: 40px;     
     @media (max-width: 579.98px) {
-        justify-content: flex-end;
         margin-right: 20px;
     }
 }
