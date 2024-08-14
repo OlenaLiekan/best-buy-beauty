@@ -3740,12 +3740,12 @@
         }
     }
     &__item {
-        max-width: 500px;
+        max-width: 340px;
         &:not(:last-child) {
             margin-bottom: 20px;
         }
         @media(max-width: 991.98px) {
-            max-width: 340px;
+            max-width: 280px;
         }
     }
     &__link {
@@ -3787,7 +3787,8 @@
 .payment-main,
 .terms-main,
 .privacy-main,
-.returns-main {
+.returns-main,
+.dispute-main {
     &__content {
         display: flex;
         flex-direction: column;
@@ -3829,7 +3830,8 @@
 
 .terms-main,
 .privacy-main,
-.returns-main {
+.returns-main,
+.dispute-main {
     &__content {
         max-width: 90%;
         margin: 0 auto;
@@ -3864,6 +3866,17 @@
         @media(max-width: 379.98px) {
             gap: 40px;
         }
+    }
+}
+
+.dispute-main {
+    min-height: 80vh;
+    &__title {
+        max-width: 720px;
+    }
+    &__item {
+        text-align: center;
+        line-height: 1.3;
     }
 }
 

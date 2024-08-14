@@ -22,6 +22,7 @@ import { camelize } from '../js/script';
 import Terms from '../pages/Terms';
 import PrivacyPolicy from '../pages/PrivacyPolicy';
 import ReturnsPolicy from '../pages/ReturnsPolicy';
+import DisputeResolution from '../pages/DisputeResolution';
 
 const AppRoutes = () => {
     const { isAuth, serverDomain } = React.useContext(AuthContext);
@@ -65,6 +66,7 @@ const AppRoutes = () => {
                 <Route path="terms" element={<Terms />} /> 
                 <Route path="privacyPolicy" element={<PrivacyPolicy />} /> 
                 <Route path="returnsPolicy" element={<ReturnsPolicy />} /> 
+                <Route path="disputeResolution" element={<DisputeResolution />} /> 
             </Route>
 
         </Routes>          

@@ -14,7 +14,7 @@ const Terms = () => {
                         <p>
                             Estes termos e condições regem o website <b>www.best-buy-beauty.com</b>,
                             propriedade e gestão de <b>Svitlana Yefanova</b>, identificada com o
-                            número fiscal <b>293155267</b>, com sede em <b>Rua Quinta dos Arcos lote 22 loja A, Portugal</b>
+                            número fiscal <b>293155267</b>, com sede em <b>R DOS CRASTOS 626 N, Porches, Portugal</b>
                             , e contacto de email <Link to="mailto:bestbuybeauty.pt@gmail.com" className="terms-main__link">
                                 bestbuybeauty.pt@gmail.com
                             </Link>

@@ -114,6 +114,11 @@ const Footer = () => {
                   <Link to="https://www.livroreclamacoes.pt/Inicio/" className="actions-footer__link">
                     Livro de Reclamações               
                   </Link>
+                </li>  
+                <li className="actions-footer__item">
+                  <Link to="disputeResolution" onClick={footerLink} className="actions-footer__link">
+                    ENCONTRAR UMA SOLUÇÃO PARA O SEU PROBLEMA DE CONSUMO                
+                  </Link>
                 </li>
               </ul>
             </div>
