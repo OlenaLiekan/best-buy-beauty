@@ -37,7 +37,8 @@ const Header = () => {
   }, [user]);
 
   const { items } = useSelector((state) => state.cart);
-  const totalCount = items.reduce((sum, item) => sum + item.count, 0);
+  const totalCount = items.reduce((sum, item) => !item.available && item.available !== 'undefined' ? sum : sum + item.count, 0);
+
 
   React.useEffect(() => {
     setIsLoading(true);

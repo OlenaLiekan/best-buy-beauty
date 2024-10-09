@@ -48,7 +48,7 @@ const ProductBlock = ({path, id, code, info, name, rating, available, topProduct
             <div className="item-product__body">
                 {topProduct
                     ?
-                    <div className='item-product__top-product'>Best-seller</div>
+                    <div className={available ? 'item-product__top-product' : 'item-product__top-product item-product__top-product-faded'}>Best-seller</div>
                     :
                     ''
                 }
@@ -61,10 +61,10 @@ const ProductBlock = ({path, id, code, info, name, rating, available, topProduct
                     </svg>                                                
                 </div>
                 <div onClick={() => navigate(`${path}`)} className="item-product__image">
-                    <img src={`${imagesCloud}` + img} alt="product"/>
+                    <img className={available ? '' : 'faded'} src={`${imagesCloud}` + img} alt="product"/>
                 </div>  
-                <div className="item-product__info">
-                    <div className="item-product__top">
+                <div className={available ? "item-product__info" : "item-product__info item-product__info-faded"}>
+                    <div className='item-product__top'>
                         <div className="item-product__titles">
                             <h2 onClick={() => navigate(`${path}`)} className="item-product__title">
                                 {name} 

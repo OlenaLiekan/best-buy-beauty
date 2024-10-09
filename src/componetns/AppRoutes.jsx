@@ -23,6 +23,7 @@ import Terms from '../pages/Terms';
 import PrivacyPolicy from '../pages/PrivacyPolicy';
 import ReturnsPolicy from '../pages/ReturnsPolicy';
 import DisputeResolution from '../pages/DisputeResolution';
+import SubmitPage from '../pages/SubmitPage';
 
 const AppRoutes = () => {
     const { isAuth, serverDomain } = React.useContext(AuthContext);
@@ -57,6 +58,7 @@ const AppRoutes = () => {
                 )}  
                 
                 <Route path="cart" element={<Cart arr={types} />} />
+                <Route path="order" element={<SubmitPage />} />
                 <Route path="send-email" element={<SuccessPage />} />
                 <Route path="*" element={<NotFound />} />
                 <Route path="about" element={<About />} />

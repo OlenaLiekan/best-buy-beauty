@@ -1,19 +1,26 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { clearItems } from '../../../redux/slices/cartSlice';
+import { clearItems } from '../redux/slices/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUser } from '../../../http/userAPI';
+import { updateUser } from '../http/userAPI';
 import axios from 'axios';
-import { AuthContext } from '../../../context';
-import { sendEmail } from '../../../http/productAPI';
-import { closePopup } from '../../../js/script';
-import { countries } from '../../../js/countriesTelInput';
+import { AuthContext } from '../context';
+import { sendEmail } from '../http/productAPI';
+import { closePopup } from '../js/script';
+import { countries } from '../js/countriesTelInput';
 
-const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
+const SubmitPage = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const { totalPrice, items } = useSelector((state) => state.cart);
+    const totalCount = items.reduce((sum, item) => !item.available && item.available !== 'undefined' ? sum : sum + item.count, 0);
+    const [deliveryPrices, setDeliveryPrices] = React.useState([]);
+    const [deliveryPrice, setDeliveryPrice] = React.useState('0.00');
+    const [orderNumber, setOrderNumber] = React.useState('');
+    const [isPortugal, setIsPortugal] = React.useState(0);
 
     const { serverDomain, isAuth } = React.useContext(AuthContext);
     const [username, setUsername] = React.useState('');
@@ -39,6 +46,53 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
 
     const data = localStorage.getItem('user') ? localStorage.getItem('user') : '';
     const user = data ? JSON.parse(data) : '';
+
+    const symbols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+    React.useEffect(() => {
+        let random = symbols[Math.floor(Math.random() * symbols.length)];
+        let newSymbols = "";
+        while (newSymbols.length < 7) {
+            newSymbols += random;
+            random = symbols[Math.floor(Math.random() * symbols.length)];
+        }
+        setOrderNumber(newSymbols);
+    }, [items]);
+
+    React.useEffect(() => {
+        if (country === "Portugal") {
+            setIsPortugal(true);
+        } else {
+            setIsPortugal(false);
+        }
+    }, [country]);
+
+    React.useEffect(() => {
+        axios.get(`${serverDomain}api/delivery`)
+            .then((res) => {
+                setDeliveryPrices(res.data);
+            });
+    }, [serverDomain]);
+
+    React.useEffect(() => {
+        if (deliveryPrices.length) {
+            const oneProduct = deliveryPrices.find((delivery) => delivery.type === 'Um produto');
+            const moreProducts = deliveryPrices.find((delivery) => delivery.type === 'Mais produtos');
+            const freeDelivery = deliveryPrices.find((delivery) => delivery.type === 'Entrega grátis');
+            const otherCountry = deliveryPrices.find((delivery) => delivery.type === 'Outro país');
+            if (isPortugal) {
+                if ((totalCount === 1) && (totalPrice < freeDelivery.requiredSum)) {
+                    setDeliveryPrice(oneProduct.price);
+                } else if ((totalCount > 1) && (totalPrice < freeDelivery.requiredSum)) {
+                    setDeliveryPrice(moreProducts.price);
+                } else {
+                    setDeliveryPrice(freeDelivery.price);
+                }                  
+            } else if (!isPortugal) {
+                setDeliveryPrice(otherCountry.price);
+            }
+        }
+    }, [totalCount, totalPrice, deliveryPrices, isPortugal]);
 
     React.useEffect(() => {
         if (user.id && !mainData) {
@@ -170,8 +224,6 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         }
     };
 
-    const { items, totalPrice } = useSelector((state) => state.cart);
-
     React.useEffect(() => {
         const result = paymentDetails.length
             ?
@@ -188,7 +240,9 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         setPayment(result);
     }, [paymentDetails, mbWayPayments]);
 
-    const order = items.map((item, index) => (
+    const orderItems = items.filter((item) => item.available);
+
+    const order = orderItems.map((item, index) => (
         (index > 0 ? '<br><br>' : '') + '<b>' + (index + 1) + '. ' + item.name
         +
         '</b><br>Marca: ' + item.company
@@ -223,7 +277,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         localStorage.setItem('clientSurname', surname);
         localStorage.setItem('clientPhone', phone);
         localStorage.setItem('clientEmail', email);
-        localStorage.setItem('clientOrder', JSON.stringify(items));
+        localStorage.setItem('clientOrder', JSON.stringify(orderItems));
         localStorage.setItem('clientCompany', company ? company : ' ');
         localStorage.setItem('clientAddress', `Rua: ${firstAddress}, Número da porta: ${secondAddress}, Código postal/ZIP: ${postalCode}, ${city}, ${region}, ${country}`);
         if (comment) {
@@ -246,7 +300,7 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
         if (orderNumber && username && surname && phone && email && items && firstAddress && secondAddress && postalCode && city && region && country && totalPrice && totalCount && deliveryPrice) {
             setResetForm(false);
             formData.append('userId', id);
-            formData.append('items', JSON.stringify(items));
+            formData.append('items', JSON.stringify(orderItems));
             formData.append('quantity', totalCount);
             formData.append('deliveryPrice', deliveryPrice);
             formData.append('sum', (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2));
@@ -283,9 +337,6 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
     return (
         <div className="cart__popup popup-cart">
             <div className="popup-cart__content">
-                <button className="popup-cart__close">
-                    Fechar
-                </button>
                 <div className="popup-cart__body">
                     <form onSubmit={submitForm} id="email-form" className="popup-cart__form popup-form email-form">
                         <div className="popup-form__text">
@@ -382,9 +433,35 @@ const PopupSubmitForm = ({totalCount, deliveryPrice, orderNumber}) => {
                         </button>
                     </form>                   
                 </div>
+                <div className='popup-cart__aside aside-popup-cart'>
+                    <div className="aside-popup-cart__wrapper">
+                        <div className="aside-popup-cart__line">
+                            <div className="aside-popup-cart__text">
+                                Subtotal {totalCount} itens
+                            </div>
+                            <div className="aside-popup-cart__text">
+                                {totalPrice.toFixed(2)} €
+                            </div>                            
+                        </div>
+                        <div className="aside-popup-cart__line">
+                            <div className="aside-popup-cart__text">
+                                Custo de entrega 
+                            </div>       
+                            <div className="aside-popup-cart__text">{deliveryPrice} €</div>
+                        </div>
+                        <div className="aside-popup-cart__line">
+                            <div className="aside-popup-cart__text aside-popup-cart__text-total">
+                                Total 
+                            </div>
+                            <div className="aside-popup-cart__text-total">
+                                {(+totalPrice + +deliveryPrice).toFixed(2)} €
+                            </div>  
+                        </div>    
+                    </div>
+                </div>
             </div>
         </div>
     );
 };
 
-export default PopupSubmitForm;
+export default SubmitPage;

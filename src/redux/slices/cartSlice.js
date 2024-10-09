@@ -51,7 +51,7 @@ const cartSlice = createSlice({
         lashesItem.count--;
       }
       state.totalPrice = state.items.reduce((sum, obj) => {
-        return obj.price * obj.count + sum;
+        return obj.available ? obj.price * obj.count + sum : 0 + sum;
       }, 0);
     },
     removeItem(state, action) {
@@ -63,7 +63,7 @@ const cartSlice = createSlice({
         state.items = state.items.filter(obj => obj.index !== action.payload);
       }
       state.totalPrice = state.items.reduce((sum, obj) => {
-        return obj.price * obj.count + sum;
+        return obj.available ? obj.price * obj.count + sum : 0 + sum;
       }, 0);
     },
     clearItems(state) {

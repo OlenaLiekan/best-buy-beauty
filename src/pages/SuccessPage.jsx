@@ -84,7 +84,7 @@ const SuccessPage = () => {
                                     </div>
                                     <div className='body-success__line'>
                                         <div>Nome</div>
-                                        <div>{paymentDetails.length && !isLoading ? paymentDetails[0].recipient : 'Carregando...'}</div>
+                                        <div className='body-success__details'>{paymentDetails.length && !isLoading ? paymentDetails[0].recipient : 'Carregando...'}</div>
                                     </div>      
                                     {mbWayPayments.length ? mbWayPayments.map((payment, i) => 
                                         <div key={i} className='body-success__line'>

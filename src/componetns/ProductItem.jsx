@@ -11,9 +11,8 @@ import { AuthContext } from '../context';
 import ReviewItem from './ReviewItem';
 import NewReview from './UX/Popups/NewReview';
 import { setCurrentPage } from '../redux/slices/filterSlice';
-import Loader from './UI/Loader';
 
-const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, available, topProduct, brandId, name, code, price, discountPrice, img}) => {
+const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, available, brandId, name, code, price, discountPrice, img}) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -41,7 +40,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
 
     const tabs = ['Descrição', 'Método de uso', 'Ingredientes'];
 
-    const { isAuth, adminMode, updateProductMode, serverDomain } = React.useContext(AuthContext);
+    const { isAuth, adminMode, updateProductMode, serverDomain} = React.useContext(AuthContext);
 
     const data = localStorage.getItem("user");
     const user = JSON.parse(data);
@@ -110,7 +109,8 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
             curlArr: curlArr[activeCurl],
             thicknessArr: thicknessArr[activeThickness],
             lengthArr: lengthArr[activeLength],
-            index
+            index,
+            available,
         };
         dispatch(addItem(item));           
     };
