@@ -1,0 +1,16 @@
+export const countries = [
+  { id: 3, name: 'Austria', telCode: '+43' },
+  { id: 4, name: 'Belgium', telCode: '+32' },
+  { id: 13, name: 'France', telCode: '+33' },
+  { id: 14, name: 'Germany', telCode: '+49' },
+  { id: 21, name: 'Latvia', telCode: '+371' },
+  { id: 22, name: 'Liechtenstein', telCode: '+423' },
+  { id: 23, name: 'Lithuania', telCode: '+370' },
+  { id: 24, name: 'Luxembourg', telCode: '+352' },
+  { id: 29, name: 'Netherlands', telCode: '+31' },
+  { id: 31, name: 'Norway', telCode: '+47' },
+  { id: 33, name: 'Portugal', telCode: '+351' },
+  { id: 39, name: 'Spain', telCode: '+34' },
+  { id: 41, name: 'Switzerland', telCode: '+41' },
+  { id: 45, name: 'Outro', telCode: '+' },
+];
