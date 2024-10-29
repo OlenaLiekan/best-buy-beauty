@@ -36,7 +36,7 @@ function App() {
 
   const [isPromoPage, setIsPromoPage] = React.useState(false);
 
-  const serverDomain = 'http://localhost:3001/'; //https://bbb-server-a6ji.onrender.com/
+  const serverDomain = 'https://bbb-server-a6ji.onrender.com/';
   const imagesCloud = 'https://res.cloudinary.com/bbbptcloud/image/upload/v1699129130/static/';
 
   React.useEffect(() => {
