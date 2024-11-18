@@ -94,3 +94,8 @@ export const sendEmail = async mail => {
   const { data } = await $host.post('api/send-email', mail);
   return data;
 };
+
+export const submitPurchase = async orderData => {
+  const { data } = await $host.post('api/sibs', orderData);
+  return data;
+};
