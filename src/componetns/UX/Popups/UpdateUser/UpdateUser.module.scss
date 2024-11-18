@@ -1,0 +1,82 @@
+.body {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    @media(max-width: 479.98px) {
+        margin-bottom: 10px;
+    }
+}
+
+.userDataForm {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.formLine {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    @media(max-width: 479.98px) {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}
+
+.formLabel {
+    font-size: 15px;
+    font-weight: 500;
+    color: #252525;
+    user-select: none;
+    @media(max-width: 379.98px) {
+        font-size: 13px;
+    }
+}
+
+.formInput {
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1.5px solid #9c9c9c;
+    outline: none;
+    @media(max-width: 379.98px) {
+        font-size: 12px;
+    }
+}
+
+.formBtnSubmit {
+    display: flex;
+    justify-content: center;
+    padding: 15px 20px;
+    border-radius: 20px;
+    background-color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1560BD;
+    border: 2px solid #1560BD;
+    box-shadow: 3px 3px 3px #9c9c9c56;
+    transition: all 0.6s ease 0s;
+
+    &:hover {
+        color: #fff;
+        border: 2px solid #1560BD;
+        background-color: #1560BD;
+    }
+    @media(max-width: 379.98px) {
+        font-size: 14px;
+    }
+}
+
+.error {
+    display: flex;
+    font-size: 14px;
+    color: #AD912B;
+    margin-bottom: 20px;
+}
+
+.hidden {
+    display: none;
+}
