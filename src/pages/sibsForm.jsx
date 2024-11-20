@@ -9,7 +9,7 @@ const { serverDomain } = React.useContext(AuthContext);
 
   useEffect(() => {
     const script = document.createElement("script");
-    script.src = `https://spg.qly.site1.sibs.pt/assets/js/widget.js?id=${transactionID}`;
+    script.src = `https://api.sibspayments.com/assets/js/widget.js?id=${transactionID}`;
     script.async = true;
     document.body.appendChild(script);
   }, [transactionID]);
