@@ -36,7 +36,7 @@ const SubmitPage = () => {
   const [secondAddress, setSecondAddress] = React.useState("");
   const [city, setCity] = React.useState("");
   const [region, setRegion] = React.useState("");
-  const [country, setCountry] = React.useState("Portugal");
+  const [country, setCountry] = React.useState("PT");
   const [telCode, setTelCode] = React.useState("");
   const [postalCode, setPostalCode] = React.useState("");
   const [company, setCompany] = React.useState("");
@@ -72,7 +72,7 @@ const SubmitPage = () => {
   }, [items]);
 
   React.useEffect(() => {
-    if (country === "Portugal") {
+    if (country === "PT") {
       setIsPortugal(true);
     } else {
       setIsPortugal(false);
@@ -143,7 +143,7 @@ const SubmitPage = () => {
       setCompany("");
       setFirstAddress("");
       setSecondAddress("");
-      setCountry("Portugal");
+      setCountry("PT");
       setCity("");
       setRegion("");
       setPostalCode("");

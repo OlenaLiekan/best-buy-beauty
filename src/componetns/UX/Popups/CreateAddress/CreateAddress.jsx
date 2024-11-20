@@ -2,7 +2,8 @@ import React from 'react';
 import styles from './CreateAddress.module.scss';
 import { updateUser } from '../../../../http/userAPI';
 import { AuthContext } from '../../../../context';
-import { countries } from '../../../../js/countriesTelInput';
+
+import { getCountryCallingCode, getCountries } from "libphonenumber-js";
 
 const CreateAddress = ({userId, addressId, existingMainAddress}) => {
 
@@ -17,7 +18,7 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
     const [secondAddress, setSecondAddress] = React.useState('');
     const [city, setCity] = React.useState('');
     const [region, setRegion] = React.useState('');
-    const [country, setCountry] = React.useState('Portugal');
+    const [country, setCountry] = React.useState('PT');
     const [telCode, setTelCode] = React.useState('');
     const [postalCode, setPostalCode] = React.useState('');
     const [company, setCompany] = React.useState('');
@@ -61,7 +62,7 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
     };
 
     const onChangePostalCode = (event) => { 
-        if (country === "Portugal") {
+        if (country === "PT") {
             if (event.target.value.length > 4 && event.target.value[4] !== '-') {
                 setPostalCode(event.target.value.slice(0, 4) + '-' + event.target.value.slice(4, 8));
             } else {
@@ -90,17 +91,20 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
         }
     }
 
-    const onChangeCountry = (countryName, countryTelCode) => {
-        setCountry(countryName);
-        setTelCode(countryTelCode);
-        setVisibleList(false);
-    }
+    const countries = getCountries().map((countryCode) => {
+        return {
+        code: countryCode,
+        name: new Intl.DisplayNames(["pt"], { type: "region" }).of(countryCode),
+        telCode: `+${getCountryCallingCode(countryCode)}`,
+        };
+    });
 
-    React.useEffect(() => {
-        if (telCode) {
-            setPhone(telCode);
-        }
-    }, [telCode]);
+    const onChangeCountry = (countryCode) => {
+        setCountry(countryCode);
+        const newTelCode = `+${getCountryCallingCode(countryCode)}`;
+        setPhone(newTelCode);
+        setVisibleList(false);
+    };
 
     const success = () => {
         setCreateAddressMode(false);
@@ -115,6 +119,7 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
         e.preventDefault();
         const formData = new FormData();
         const id = userId;
+        const countryData = countries.find((c) => c.code === country);
         formData.append('userId', id);
         formData.append('crFirstName', username);
         formData.append('crLastName', surname);
@@ -124,7 +129,7 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
         formData.append('firstAddress', firstAddress);
         formData.append('secondAddress', secondAddress);
         formData.append('city', city);
-        formData.append('country', country);
+        formData.append('country', countryData.code);
         formData.append('region', region);
         formData.append('postalCode', postalCode);
         formData.append('mainAddress', checked);
@@ -173,15 +178,21 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
                         <label htmlFor="user-country-input" className={styles.formLabel}>País</label>
                         <input readOnly required onClick={showCountries} id="user-country-input" tabIndex="7" autoComplete="off" type="text" name="country" data-error="Error" className={styles.formInputSelect}
                             ref={inputRef}
-                            value={country} />
+                            value={countries.find((c) => c.code === country)?.name || ""} />
                         <svg onClick={showCountries} className={visibleList ? styles.rotate : ''} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                             <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
                         </svg>
                         <div className={visibleList ? styles.countriesWrapper : styles.hidden}>
                             <ul className={visibleList ? styles.countriesList : styles.hidden}>
-                                {countries.map((country) => 
-                                    <li onClick={() => onChangeCountry(country.name, country.telCode)} key={country.id} className={styles.countryItem}>{country.name} {country.telCode}</li>
-                                )}
+                                {countries.map((country) => (
+                                    <li
+                                    onClick={() => onChangeCountry(country.code)}
+                                    key={country.code}
+                                    className={styles.countryItem}
+                                    >
+                                    {country.name} {country.telCode}
+                                    </li>
+                                ))}
                             </ul>                            
                         </div>
                 </div>
