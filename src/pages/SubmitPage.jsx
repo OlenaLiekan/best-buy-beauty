@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { clearItems } from "../redux/slices/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../http/userAPI";
@@ -386,7 +386,7 @@ const SubmitPage = () => {
 
   const submitForm = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
+    /*const formData = new FormData();
     const id = user ? user.id : 0;
     const countryData = countries.find((c) => c.code === country);
 
@@ -451,305 +451,338 @@ const SubmitPage = () => {
       setResetForm(true);
       closePopup();
       window.scrollTo(0, 0);
-    }
+    }*/
   };
 
   return (
     <div className="cart__popup popup-cart">
       <div className="popup-cart__content">
-        <div className="popup-cart__body">
-          <form
-            onSubmit={submitForm}
-            id="email-form"
-            className="popup-cart__form popup-form email-form"
-          >
-            <div className="popup-form__text">
-              Por favor, deixe seus dados para fazer um pedido.
-            </div>
-            <div className="popup-form__line">
-              <label
-                hidden
-                htmlFor="user-company-input"
-                className="popup-form__label"
-              >
-                NIF (opcional)
-              </label>
-              <input
-                hidden
-                id="user-company-input"
-                tabIndex="3"
-                autoComplete="new-password"
-                type="text"
-                name="Empresa"
-                data-error="Error"
-                placeholder="000000000"
-                className="popup-form__input"
-                value={company}
-                onChange={onChangeCompany}
-              />
-            </div>
-            <div className="popup-form__line">
-              <label htmlFor="user-name-input" className="popup-form__label">
-                Primeiro Nome
-              </label>
-              <input
-                required
-                id="user-name-input"
-                tabIndex="1"
-                autoComplete="new-password"
-                type="text"
-                name="nome"
-                data-error="Error"
-                placeholder="Nome"
-                className="popup-form__input _req"
-                value={username}
-                onChange={onChangeUsername}
-              />
-            </div>
-            <div className="popup-form__line">
-              <label htmlFor="user-surname-input" className="popup-form__label">
-                Último Nome
-              </label>
-              <input
-                required
-                id="user-surname-input"
-                tabIndex="2"
-                autoComplete="new-password"
-                type="text"
-                name="Sobrenome"
-                data-error="Error"
-                placeholder="Sobrenome"
-                className="popup-form__input"
-                value={surname}
-                onChange={onChangeSurname}
-              />
-            </div>
-            <div className="popup-form__line">
-              <label
-                htmlFor="user-f-address-input"
-                className="popup-form__label"
-              >
-                Rua
-              </label>
-              <input
-                required
-                id="user-f-address-input"
-                tabIndex="4"
-                autoComplete="new-password"
-                type="text"
-                name="Morada_1"
-                data-error="Error"
-                className="popup-form__input"
-                value={firstAddress}
-                onChange={onChangeFAddress}
-              />
-            </div>
-            <div className="popup-form__line">
-              <label
-                htmlFor="user-s-address-input"
-                className="popup-form__label"
-              >
-                Número da porta
-              </label>
-              <input
-                required
-                id="user-s-address-input"
-                tabIndex="5"
-                autoComplete="new-password"
-                type="text"
-                name="Morada_2"
-                data-error="Error"
-                className="popup-form__input"
-                value={secondAddress}
-                onChange={onChangeSAddress}
-              />
-            </div>
-            <div className="popup-form__line">
-              <label htmlFor="user-city-input" className="popup-form__label">
-                Cidade
-              </label>
-              <input
-                required
-                id="user-city-input"
-                tabIndex="6"
-                autoComplete="new-password"
-                type="text"
-                name="Cidade"
-                data-error="Error"
-                className="popup-form__input"
-                value={city}
-                onChange={onChangeCity}
-              />
-            </div>
-            <div className="popup-form__line popup-form__line_select">
-              <label htmlFor="user-country-input" className="popup-form__label">
-                País
-              </label>
-              <input
-                readOnly
-                required
-                onClick={showCountries}
-                id="user-country-input"
-                tabIndex="7"
-                autoComplete="new-password"
-                type="text"
-                name="País"
-                data-error="Error"
-                className="popup-form__input popup-form__input_select"
-                value={countries.find((c) => c.code === country)?.name || ""}
-              />
-              <svg
-                onClick={showCountries}
-                className={visibleList ? "popup-form_rotate" : ""}
-                xmlns="http://www.w3.org/2000/svg"
-                height="1em"
-                viewBox="0 0 448 512"
-              >
-                <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
-              </svg>
-              <div
-                className={
-                  visibleList
-                    ? "popup-form__wrapper"
-                    : "popup-form__wrapper_hidden"
-                }
-              >
-                <ul
+          <div className="popup-cart__text">
+            <p className="popup-cart__paragraph">
+              Pedimos desculpas, o site está passando por trabalhos técnicos.
+            </p>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+              <path d="M308.5 135.3c7.1-6.3 9.9-16.2 6.2-25c-2.3-5.3-4.8-10.5-7.6-15.5L304 89.4c-3-5-6.3-9.9-9.8-14.6c-5.7-7.6-15.7-10.1-24.7-7.1l-28.2 9.3c-10.7-8.8-23-16-36.2-20.9L199 27.1c-1.9-9.3-9.1-16.7-18.5-17.8C173.9 8.4 167.2 8 160.4 8l-.7 0c-6.8 0-13.5 .4-20.1 1.2c-9.4 1.1-16.6 8.6-18.5 17.8L115 56.1c-13.3 5-25.5 12.1-36.2 20.9L50.5 67.8c-9-3-19-.5-24.7 7.1c-3.5 4.7-6.8 9.6-9.9 14.6l-3 5.3c-2.8 5-5.3 10.2-7.6 15.6c-3.7 8.7-.9 18.6 6.2 25l22.2 19.8C32.6 161.9 32 168.9 32 176s.6 14.1 1.7 20.9L11.5 216.7c-7.1 6.3-9.9 16.2-6.2 25c2.3 5.3 4.8 10.5 7.6 15.6l3 5.2c3 5.1 6.3 9.9 9.9 14.6c5.7 7.6 15.7 10.1 24.7 7.1l28.2-9.3c10.7 8.8 23 16 36.2 20.9l6.1 29.1c1.9 9.3 9.1 16.7 18.5 17.8c6.7 .8 13.5 1.2 20.4 1.2s13.7-.4 20.4-1.2c9.4-1.1 16.6-8.6 18.5-17.8l6.1-29.1c13.3-5 25.5-12.1 36.2-20.9l28.2 9.3c9 3 19 .5 24.7-7.1c3.5-4.7 6.8-9.5 9.8-14.6l3.1-5.4c2.8-5 5.3-10.2 7.6-15.5c3.7-8.7 .9-18.6-6.2-25l-22.2-19.8c1.1-6.8 1.7-13.8 1.7-20.9s-.6-14.1-1.7-20.9l22.2-19.8zM112 176a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zM504.7 500.5c6.3 7.1 16.2 9.9 25 6.2c5.3-2.3 10.5-4.8 15.5-7.6l5.4-3.1c5-3 9.9-6.3 14.6-9.8c7.6-5.7 10.1-15.7 7.1-24.7l-9.3-28.2c8.8-10.7 16-23 20.9-36.2l29.1-6.1c9.3-1.9 16.7-9.1 17.8-18.5c.8-6.7 1.2-13.5 1.2-20.4s-.4-13.7-1.2-20.4c-1.1-9.4-8.6-16.6-17.8-18.5L583.9 307c-5-13.3-12.1-25.5-20.9-36.2l9.3-28.2c3-9 .5-19-7.1-24.7c-4.7-3.5-9.6-6.8-14.6-9.9l-5.3-3c-5-2.8-10.2-5.3-15.6-7.6c-8.7-3.7-18.6-.9-25 6.2l-19.8 22.2c-6.8-1.1-13.8-1.7-20.9-1.7s-14.1 .6-20.9 1.7l-19.8-22.2c-6.3-7.1-16.2-9.9-25-6.2c-5.3 2.3-10.5 4.8-15.6 7.6l-5.2 3c-5.1 3-9.9 6.3-14.6 9.9c-7.6 5.7-10.1 15.7-7.1 24.7l9.3 28.2c-8.8 10.7-16 23-20.9 36.2L315.1 313c-9.3 1.9-16.7 9.1-17.8 18.5c-.8 6.7-1.2 13.5-1.2 20.4s.4 13.7 1.2 20.4c1.1 9.4 8.6 16.6 17.8 18.5l29.1 6.1c5 13.3 12.1 25.5 20.9 36.2l-9.3 28.2c-3 9-.5 19 7.1 24.7c4.7 3.5 9.5 6.8 14.6 9.8l5.4 3.1c5 2.8 10.2 5.3 15.5 7.6c8.7 3.7 18.6 .9 25-6.2l19.8-22.2c6.8 1.1 13.8 1.7 20.9 1.7s14.1-.6 20.9-1.7l19.8 22.2zM464 304a48 48 0 1 1 0 96 48 48 0 1 1 0-96z" />
+            </svg>
+            <p className="popup-cart__paragraph"> Fazer um pedido no site está temporariamente indisponível. </p>
+            <p className="popup-cart__paragraph"> Utilize estes contactos para fazer uma encomenda: </p>
+            <ul className="popup-cart__items contacts__items">
+                <li className="contacts__item item-contacts popup-cart__item">
+                  <Link to='https://www.instagram.com/bestbuybeauty.pt/'>
+                    bestbuybeauty.pt
+                  </Link>
+                </li>
+                <li className="contacts__item item-contacts popup-cart__item">
+                  <Link to='https://www.instagram.com/sculptorlash_pt/'>
+                    sculptorlash_pt
+                  </Link>
+                </li>
+                <li className="contacts__item item-contacts popup-cart__item">
+                  <div>
+                    +351 960 201 624
+                  </div>
+                </li>
+                <li className="contacts__item item-contacts popup-cart__item">
+                  <Link to='mailto:bestbuybeauty.pt@gmail.com'>
+                    bestbuybeauty.pt@gmail.com
+                  </Link>
+                </li>
+              </ul>
+            <p className="popup-cart__paragraph"> Obrigado pela sua compreensão!</p>
+          </div>        
+          <div hidden className="popup-cart__body">
+            <form
+              onSubmit={submitForm}
+              id="email-form"
+              className="popup-cart__form popup-form email-form"
+            >
+              <div className="popup-form__text">
+                Por favor, deixe seus dados para fazer um pedido.
+              </div>
+              <div className="popup-form__line">
+                <label
+                  hidden
+                  htmlFor="user-company-input"
+                  className="popup-form__label"
+                >
+                  NIF (opcional)
+                </label>
+                <input
+                  hidden
+                  id="user-company-input"
+                  tabIndex="3"
+                  autoComplete="new-password"
+                  type="text"
+                  name="Empresa"
+                  data-error="Error"
+                  placeholder="000000000"
+                  className="popup-form__input"
+                  value={company}
+                  onChange={onChangeCompany}
+                />
+              </div>
+              <div className="popup-form__line">
+                <label htmlFor="user-name-input" className="popup-form__label">
+                  Primeiro Nome
+                </label>
+                <input
+                  required
+                  id="user-name-input"
+                  tabIndex="1"
+                  autoComplete="new-password"
+                  type="text"
+                  name="nome"
+                  data-error="Error"
+                  placeholder="Nome"
+                  className="popup-form__input _req"
+                  value={username}
+                  onChange={onChangeUsername}
+                />
+              </div>
+              <div className="popup-form__line">
+                <label htmlFor="user-surname-input" className="popup-form__label">
+                  Último Nome
+                </label>
+                <input
+                  required
+                  id="user-surname-input"
+                  tabIndex="2"
+                  autoComplete="new-password"
+                  type="text"
+                  name="Sobrenome"
+                  data-error="Error"
+                  placeholder="Sobrenome"
+                  className="popup-form__input"
+                  value={surname}
+                  onChange={onChangeSurname}
+                />
+              </div>
+              <div className="popup-form__line">
+                <label
+                  htmlFor="user-f-address-input"
+                  className="popup-form__label"
+                >
+                  Rua
+                </label>
+                <input
+                  required
+                  id="user-f-address-input"
+                  tabIndex="4"
+                  autoComplete="new-password"
+                  type="text"
+                  name="Morada_1"
+                  data-error="Error"
+                  className="popup-form__input"
+                  value={firstAddress}
+                  onChange={onChangeFAddress}
+                />
+              </div>
+              <div className="popup-form__line">
+                <label
+                  htmlFor="user-s-address-input"
+                  className="popup-form__label"
+                >
+                  Número da porta
+                </label>
+                <input
+                  required
+                  id="user-s-address-input"
+                  tabIndex="5"
+                  autoComplete="new-password"
+                  type="text"
+                  name="Morada_2"
+                  data-error="Error"
+                  className="popup-form__input"
+                  value={secondAddress}
+                  onChange={onChangeSAddress}
+                />
+              </div>
+              <div className="popup-form__line">
+                <label htmlFor="user-city-input" className="popup-form__label">
+                  Cidade
+                </label>
+                <input
+                  required
+                  id="user-city-input"
+                  tabIndex="6"
+                  autoComplete="new-password"
+                  type="text"
+                  name="Cidade"
+                  data-error="Error"
+                  className="popup-form__input"
+                  value={city}
+                  onChange={onChangeCity}
+                />
+              </div>
+              <div className="popup-form__line popup-form__line_select">
+                <label htmlFor="user-country-input" className="popup-form__label">
+                  País
+                </label>
+                <input
+                  readOnly
+                  required
+                  onClick={showCountries}
+                  id="user-country-input"
+                  tabIndex="7"
+                  autoComplete="new-password"
+                  type="text"
+                  name="País"
+                  data-error="Error"
+                  className="popup-form__input popup-form__input_select"
+                  value={countries.find((c) => c.code === country)?.name || ""}
+                />
+                <svg
+                  onClick={showCountries}
+                  className={visibleList ? "popup-form_rotate" : ""}
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="1em"
+                  viewBox="0 0 448 512"
+                >
+                  <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
+                </svg>
+                <div
                   className={
-                    visibleList ? "popup-form__list" : "popup-form__list_hidden"
+                    visibleList
+                      ? "popup-form__wrapper"
+                      : "popup-form__wrapper_hidden"
                   }
                 >
-                  {countries.map((country) => (
-                    <li
-                      onClick={() => onChangeCountry(country.code)}
-                      key={country.code}
-                      className={"popup-form__item"}
-                    >
-                      {country.name} {country.telCode}
-                    </li>
-                  ))}
-                </ul>
+                  <ul
+                    className={
+                      visibleList ? "popup-form__list" : "popup-form__list_hidden"
+                    }
+                  >
+                    {countries.map((country) => (
+                      <li
+                        onClick={() => onChangeCountry(country.code)}
+                        key={country.code}
+                        className={"popup-form__item"}
+                      >
+                        {country.name} {country.telCode}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-            </div>
-            <div className="popup-form__line">
-              <label htmlFor="user-region-input" className="popup-form__label">
-                Concelho
-              </label>
-              <input
-                required
-                id="user-region-input"
-                tabIndex="8"
-                autoComplete="new-password"
-                type="text"
-                name="Concelho"
-                data-error="Error"
-                className="popup-form__input"
-                value={region}
-                onChange={onChangeRegion}
-              />
-            </div>
-            <div className="popup-form__line">
-              <label
-                htmlFor="user-postal-code-input"
-                className="popup-form__label"
+              <div className="popup-form__line">
+                <label htmlFor="user-region-input" className="popup-form__label">
+                  Concelho
+                </label>
+                <input
+                  required
+                  id="user-region-input"
+                  tabIndex="8"
+                  autoComplete="new-password"
+                  type="text"
+                  name="Concelho"
+                  data-error="Error"
+                  className="popup-form__input"
+                  value={region}
+                  onChange={onChangeRegion}
+                />
+              </div>
+              <div className="popup-form__line">
+                <label
+                  htmlFor="user-postal-code-input"
+                  className="popup-form__label"
+                >
+                  Código postal/ZIP
+                </label>
+                <input
+                  required
+                  id="user-postal-code-input"
+                  tabIndex="9"
+                  autoComplete="new-password"
+                  type="text"
+                  pattern={
+                    country === "Portugal" ? "[0-9]{4}-[0-9]{3}" : "[0-9-A-Za-z]"
+                  }
+                  name="Código_postal/ZIP"
+                  data-error="Error"
+                  className="popup-form__input"
+                  value={postalCode}
+                  onChange={onChangePostalCode}
+                />
+              </div>
+              <div className="popup-form__line">
+                <label htmlFor="user-contact-input" className="popup-form__label">
+                  Telemóvel
+                </label>
+                <input
+                  required
+                  id="user-contact-input"
+                  tabIndex="10"
+                  autoComplete="new-password"
+                  type="tel"
+                  pattern="\+?[0-9\s\-\(\)]+"
+                  name="Telefone"
+                  data-error="Error"
+                  placeholder="+351XXXXXXXXXX"
+                  className="popup-form__input _req"
+                  value={phone}
+                  onChange={onChangePhone}
+                />
+              </div>
+              <div className="popup-form__line">
+                <label htmlFor="user-email-input" className="popup-form__label">
+                  E-mail
+                </label>
+                <input
+                  required
+                  id="user-email-input"
+                  tabIndex="11"
+                  autoComplete="new-password"
+                  type="email"
+                  name="email"
+                  data-error="Error"
+                  placeholder="example@email.com"
+                  className="popup-form__input _req _email"
+                  value={email}
+                  onChange={onChangeEmail}
+                />
+              </div>
+              <div className="popup-form__line">
+                <label hidden htmlFor="order" className="popup-form__label">
+                  Ordem:{" "}
+                </label>
+                <textarea
+                  hidden
+                  id="order"
+                  readOnly
+                  name="Ordem"
+                  value={order}
+                  className="popup-form__textarea _order"
+                />
+              </div>
+              <div className="popup-form__line popup-line__textarea">
+                <label htmlFor="user-comment" className="popup-form__label">
+                  Comentário
+                </label>
+                <textarea
+                  id="user-comment"
+                  tabIndex="12"
+                  className="popup-form__textarea"
+                  name="Comente"
+                  placeholder="Ola! Aqui você pode deixar suas dúvidas ou desejos."
+                  cols="10"
+                  rows="5"
+                  maxLength="150"
+                  value={comment}
+                  onChange={onChangeComment}
+                />
+              </div>
+              <button
+                type="submit"
+                tabIndex="13"
+                className="popup-form__button checkout scroll-top"
               >
-                Código postal/ZIP
-              </label>
-              <input
-                required
-                id="user-postal-code-input"
-                tabIndex="9"
-                autoComplete="new-password"
-                type="text"
-                pattern={
-                  country === "Portugal" ? "[0-9]{4}-[0-9]{3}" : "[0-9-A-Za-z]"
-                }
-                name="Código_postal/ZIP"
-                data-error="Error"
-                className="popup-form__input"
-                value={postalCode}
-                onChange={onChangePostalCode}
-              />
-            </div>
-            <div className="popup-form__line">
-              <label htmlFor="user-contact-input" className="popup-form__label">
-                Telemóvel
-              </label>
-              <input
-                required
-                id="user-contact-input"
-                tabIndex="10"
-                autoComplete="new-password"
-                type="tel"
-                pattern="\+?[0-9\s\-\(\)]+"
-                name="Telefone"
-                data-error="Error"
-                placeholder="+351XXXXXXXXXX"
-                className="popup-form__input _req"
-                value={phone}
-                onChange={onChangePhone}
-              />
-            </div>
-            <div className="popup-form__line">
-              <label htmlFor="user-email-input" className="popup-form__label">
-                E-mail
-              </label>
-              <input
-                required
-                id="user-email-input"
-                tabIndex="11"
-                autoComplete="new-password"
-                type="email"
-                name="email"
-                data-error="Error"
-                placeholder="example@email.com"
-                className="popup-form__input _req _email"
-                value={email}
-                onChange={onChangeEmail}
-              />
-            </div>
-            <div className="popup-form__line">
-              <label hidden htmlFor="order" className="popup-form__label">
-                Ordem:{" "}
-              </label>
-              <textarea
-                hidden
-                id="order"
-                readOnly
-                name="Ordem"
-                value={order}
-                className="popup-form__textarea _order"
-              />
-            </div>
-            <div className="popup-form__line popup-line__textarea">
-              <label htmlFor="user-comment" className="popup-form__label">
-                Comentário
-              </label>
-              <textarea
-                id="user-comment"
-                tabIndex="12"
-                className="popup-form__textarea"
-                name="Comente"
-                placeholder="Ola! Aqui você pode deixar suas dúvidas ou desejos."
-                cols="10"
-                rows="5"
-                maxLength="150"
-                value={comment}
-                onChange={onChangeComment}
-              />
-            </div>
-            <button
-              type="submit"
-              tabIndex="13"
-              className="popup-form__button checkout scroll-top"
-            >
-              Efetuar pagamento
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z" />
-              </svg>
-            </button>
-          </form>
-        </div>
+                Efetuar pagamento
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z" />
+                </svg>
+              </button>
+            </form>
+          </div>
         <div className="popup-cart__aside aside-popup-cart">
           <div className="aside-popup-cart__wrapper">
             <div className="aside-popup-cart__line">
@@ -766,9 +799,7 @@ const SubmitPage = () => {
             </div>
             <div className="aside-popup-cart__line">
               <div
-                className="aside-popup-cart__text aside-popup
-                            
-                            -cart__text-total"
+                className="aside-popup-cart__text aside-popup-cart__text-total"
               >
                 Total
               </div>

@@ -3112,6 +3112,34 @@
         flex: 0 0 55%;      
         background-color: #fff;
     }
+    &__text {
+        display: flex;
+        flex-direction: column;
+        margin: 40px auto;
+        text-align: center;
+        min-height: 100vh;        
+        gap: 20px;
+        padding: 0 15px;
+        svg {
+            width: 200px;
+            height: 200px;
+            fill:#b45a40;
+            margin: 15px auto;
+        }
+    }
+    &__paragraph {
+        color: #252525;
+        font-weight: 500;
+        line-height: 1.2;
+        font-size: 16px;
+
+    }
+    &__items {
+        margin: 30px 0;
+    }
+    &__item:hover {
+        color: #AD902B;
+    }
     &__aside {     
         flex: 0 0 45%;
         background-color: #f0f0f067;
