@@ -490,7 +490,7 @@ const SubmitPage = () => {
               </ul>
             <p className="popup-cart__paragraph"> Obrigado pela sua compreensão!</p>
           </div>        
-          <div className="popup-cart__body">
+          <div hidden className="popup-cart__body">
             <form
               onSubmit={submitForm}
               id="email-form"

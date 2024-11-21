@@ -3113,7 +3113,7 @@
         background-color: #fff;
     }
     &__text {
-        display: none;
+        display: flex;
         flex-direction: column;
         margin: 40px auto;
         text-align: center;
