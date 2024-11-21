@@ -386,7 +386,7 @@ const SubmitPage = () => {
 
   const submitForm = async (e) => {
     e.preventDefault();
-    /*const formData = new FormData();
+    const formData = new FormData();
     const id = user ? user.id : 0;
     const countryData = countries.find((c) => c.code === country);
 
@@ -451,7 +451,7 @@ const SubmitPage = () => {
       setResetForm(true);
       closePopup();
       window.scrollTo(0, 0);
-    }*/
+    }
   };
 
   return (
@@ -490,7 +490,7 @@ const SubmitPage = () => {
               </ul>
             <p className="popup-cart__paragraph"> Obrigado pela sua compreensão!</p>
           </div>        
-          <div hidden className="popup-cart__body">
+          <div className="popup-cart__body">
             <form
               onSubmit={submitForm}
               id="email-form"
