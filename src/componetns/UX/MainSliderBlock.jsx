@@ -91,8 +91,8 @@ const MainSliderBlock = () => {
   }
 
   return (
-      <section className="main__block block-main">
-        <div className="block-main__container">
+    <section className="main__block block-main">
+      <div className="block-main__container">
         <div className="block-main__body">
           {isAuth && adminMode && createSlideMode ? <CreateSlide /> : ""}
           {isAuth && adminMode && !createSlideMode ? 

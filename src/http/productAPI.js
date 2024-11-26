@@ -95,6 +95,11 @@ export const sendEmail = async mail => {
   return data;
 };
 
+export const sendNewPass = async passMail => {
+  const { data } = await $host.post('api/reset-password', passMail);
+  return data;
+};
+
 export const submitPurchase = async orderData => {
   const { data } = await $host.post('api/sibs', orderData);
   return data;

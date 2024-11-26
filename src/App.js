@@ -1,8 +1,10 @@
 import React from 'react';
 import './scss/app.scss';
 import './scss/style.scss';
-import AppRoutes from './componetns/AppRoutes';
+
 import { AuthContext } from './context';
+import AppRoutes from './componetns/AppRoutes';
+
 export const SearchContext = React.createContext();
 
 function App() {
@@ -51,7 +53,7 @@ function App() {
       setAdminMode(false);
     }
     setLoading(false);
-  }, []);
+  }, [isAuth, adminMode]);
 
   return (
     <>

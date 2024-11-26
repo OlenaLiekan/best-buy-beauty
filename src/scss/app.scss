@@ -1021,12 +1021,13 @@
         }
     }
     &__text {
-        display: flex;     
+        display: flex;    
         font-size: 14px;           
         font-weight: 500;
         letter-spacing: 0.5px;
         color: #484848;
         gap: 10px;
+        margin-bottom: 20px;
         @media (max-width: 479.98px) {
             flex-direction: column;
             align-items: flex-start;
@@ -1046,13 +1047,14 @@
     padding: 20px;
     margin-bottom: 30px;
     &__title {
+        max-width: 400px;
         font-size: 16px;
         font-weight: 500;
         letter-spacing: 0.5px;
-        line-height: 1.2;
+        line-height: 1.4;
         color: #48484880;
         margin-bottom: 50px;
-        text-align: left;
+        text-align: center;
         @media (max-width: 479.98px) {
             letter-spacing: normal;
             font-size: 14px;
@@ -3111,9 +3113,17 @@
     &__body {        
         flex: 0 0 55%;      
         background-color: #fff;
+        min-height: 100vh;
+    }
+    &__redirect {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        gap: 40px;
+        max-width: 500px;
     }
     &__text {
-        display: flex;
+        display: none;
         flex-direction: column;
         margin: 40px auto;
         text-align: center;
@@ -3143,7 +3153,37 @@
     &__aside {     
         flex: 0 0 45%;
         background-color: #f0f0f067;
+    }
+}
+
+.redirect-cart {
+    &__text {
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 1.4;
+        letter-spacing: 0.5px;
+        &_gold {
+            color: #AD902B;            
         }
+        &_blue {
+            font-size: 56px;
+            color: #1560BD;
+            background-color: #fff;
+            border-radius: 50%;
+            border: 6px dotted #1561bd71;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            padding: 32px 0;
+        }
+        &_link {
+            cursor: pointer;
+            color: #1560BD;
+            &:hover {
+                color: #252525;
+            }
+        }
+    }
 }
 
 .aside-popup-cart {        

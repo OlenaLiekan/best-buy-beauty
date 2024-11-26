@@ -15,10 +15,10 @@ const MenuHeader = ({hideTicker}) => {
     const [topMenuList, setTopMenuList] = React.useState([]); 
     const [bottomMenuList, setBottomMenuList] = React.useState([]); 
     const [menuItems, setMenuItems] = React.useState([]);
-    const [areBrands, setAreBrands] = React.useState(false);
     const [brands, setBrands] = React.useState([]);
+    const [areBrands, setAreBrands] = React.useState(false);
     const [activeItem, setActiveItem] = React.useState(0);
-    const { serverDomain, isPromoPage, setIsPromoPage } = React.useContext(AuthContext);
+    const { serverDomain, isPromoPage, setIsPromoPage} = React.useContext(AuthContext);
 
     const skeletons = [...new Array(6)].map((_, index) => <MenuSkeleton key={index} />);
 
@@ -64,6 +64,7 @@ const MenuHeader = ({hideTicker}) => {
             setBrands(res.data);
         });
     }, [serverDomain]);
+
 
     React.useEffect(() => {
         if (activeItem > 0) {
@@ -128,8 +129,8 @@ const MenuHeader = ({hideTicker}) => {
                             </li>
                         )        
                         }
-                        <li onClick={setOptions} className="menu__item item-menu">                               
-                            <div className="item-menu__link">
+                        <li className="menu__item item-menu">                               
+                            <div onClick={setOptions} className="item-menu__link">
                                 <button className="item-menu__button menu-button">
                                     Marcas   
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
