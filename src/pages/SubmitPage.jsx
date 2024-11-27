@@ -719,7 +719,7 @@ const SubmitPage = () => {
                     autoComplete="new-password"
                     type="text"
                     pattern={
-                      country === "Portugal" ? "[0-9]{4}-[0-9]{3}" : "[0-9-A-Za-z]"
+                      country === "PT" ? "[0-9]{4}-[0-9]{3}" : "[0-9-A-Za-z]"
                     }
                     name="Código_postal/ZIP"
                     data-error="Error"
