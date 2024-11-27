@@ -161,7 +161,7 @@ const Registration = () => {
                             </label>
                             <input required id="userCheckBox" type="checkbox" name="agree" tabIndex="7" className="form-login__checkbox" /> 
                         </div>
-                        <button type="submit" tabIndex="8" className="form-login__button">Crie a sua conta aqui</button>
+                        <button type="submit" tabIndex="8" className="form-login__button form-login__button _active">Crie a sua conta aqui</button>
                     </form>
                     <p className="login-main__text">
                         Já tem uma conta pessoal?

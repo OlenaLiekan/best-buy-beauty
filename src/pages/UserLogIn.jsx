@@ -18,6 +18,9 @@ const UserLogIn = () => {
     const [passValue, setPassValue] = React.useState('');
     const { setIsAuth, serverDomain } = React.useContext(AuthContext);
 
+    const data = localStorage.getItem("redirected") ? localStorage.getItem("redirected") : '';
+    const backToOrderPage = data ? JSON.parse(data) : "";
+
     React.useEffect(() => {
         if (emailValue.length) {
             async function fetchUser() {
@@ -50,7 +53,12 @@ const UserLogIn = () => {
                 setIsAuth(true);
                 const userData = JSON.stringify(currentUser);   
                 localStorage.setItem("user", userData); 
-                navigate('/auth');                 
+                if (backToOrderPage) {
+                    localStorage.removeItem('redirected');
+                    navigate('/order');
+                } else {
+                    navigate('/auth');                     
+                }
             } catch (error) {
                 setError(true);
             }
@@ -61,6 +69,7 @@ const UserLogIn = () => {
 
     const updateEmailValue = React.useCallback(
         debounce((str) => {
+            setUser({});
             setEmailValue(str);
         }, 600),
         [],
@@ -111,7 +120,7 @@ const UserLogIn = () => {
                                 value={email}
                                 onChange={onChangeInputEmail} />                            
                         </div>
-                        <div className={(currentUser && !emailValue.length) || (currentUser && emailValue.length) ? "form-login__line form-login__line_err" : "form-login__line form-login__line_err _error"}>
+                        <div className={(!currentUser.id && emailValue.length) ? "form-login__line form-login__line_err _error" : "form-login__line form-login__line_err"}>
                             E-mail inválido!
                         </div>
                         <div className="form-login__line">
@@ -132,6 +141,12 @@ const UserLogIn = () => {
                             Crie aqui.
                         </Link>                            
                     </p>
+                    <p className="login-main__text">
+                        Esqueceu sua senha?
+                        <Link to="/reset-password" onClick={scroll} className="login-main__link">                            
+                            Redefinir aqui.
+                        </Link>                            
+                    </p>                    
                 </div>
             </div>
         </div>

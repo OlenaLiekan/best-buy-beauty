@@ -13,7 +13,7 @@ const SliderSkeleton = (props) => (
     foregroundColor="#ecebeb"
     {...props}
     >
-      <rect x="0" y="0" rx="0" ry="0" width="1200" height="400" /> 
+      <rect x="0" y="0" rx="0" ry="0" width="1920" height="400" /> 
   </ContentLoader>
 )
 

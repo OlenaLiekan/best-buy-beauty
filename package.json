@@ -12,7 +12,7 @@
     "cookie-parser": "^1.4.7",
     "intl-tel-input": "^21.1.1",
     "jwt-decode": "^3.1.2",
-    "libphonenumber-js": "^1.11.12",
+    "libphonenumber-js": "^1.11.14",
     "lodash.debounce": "^4.0.8",
     "mobx": "^6.9.0",
     "mobx-react-lite": "^3.4.3",

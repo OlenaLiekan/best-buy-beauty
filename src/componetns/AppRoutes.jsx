@@ -24,6 +24,7 @@ import DisputeResolution from "../pages/DisputeResolution";
 import SubmitPage from "../pages/SubmitPage";
 import SIBSForm from "../pages/sibsForm";
 import MBWay from "../pages/MBWay";
+import ResetPassword from "../pages/ResetPassword";
 
 const AppRoutes = () => {
   const { isAuth, serverDomain } = React.useContext(AuthContext);
@@ -45,6 +46,7 @@ const AppRoutes = () => {
           <Route path="login" element={<UserLogIn />} />
         )}
         <Route path="registration" element={<Registration />} />
+        <Route path="reset-password" element={<ResetPassword/> } />
         <Route path="catalog" element={<Catalog />} />
         {types.map((type) => (
           <Route

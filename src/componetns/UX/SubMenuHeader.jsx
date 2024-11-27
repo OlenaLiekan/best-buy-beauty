@@ -12,7 +12,7 @@ const SubMenuHeader = ({ menuItems, categoryId, hideTicker, brands, areBrands}) 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { isPromoPage, setIsPromoPage } = React.useContext(AuthContext);
+    const { isPromoPage, setIsPromoPage} = React.useContext(AuthContext);
 
     const skeletons = [...new Array(4)].map((_, index) => <MenuSkeleton key={index} />);
 
@@ -51,7 +51,7 @@ const SubMenuHeader = ({ menuItems, categoryId, hideTicker, brands, areBrands}) 
             <nav className={hideTicker ? "sub-menu__body" : "sub-menu__shift"}>
                 <div className="sub-menu__all" onClick={showCategoryTypes}>Ver Tudo</div>
                 <ul className="sub-menu__list list-sub-menu">
-                    {areBrands & brands.length
+                    {areBrands && brands.length
                         ?
                         brands.map((brand) => 
                             <li key={brand.id} value={brand.name} onClick={menuInit} className="sub-menu__item item-sub-menu">

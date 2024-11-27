@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './UpdatePassword.module.scss';
-import { updateUser, login } from '../../../../http/userAPI';
+import { updateUser } from '../../../../http/userAPI';
 import { AuthContext } from '../../../../context';
 import { useNavigate } from 'react-router-dom';
 
@@ -48,8 +48,6 @@ const UpdatePassword = ({userId}) => {
     const updateUserData = async (e) => {
         e.preventDefault();
         try {
-            const email = user.email;
-            await login(email, password);
             if (newPassword === checkPassword) {
                 const formData = new FormData();
                 const id = userId;
