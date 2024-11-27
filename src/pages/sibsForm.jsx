@@ -19,8 +19,7 @@ const { serverDomain } = React.useContext(AuthContext);
       <form
         className="paymentSPG"
         spg-config={JSON.stringify({
-          //paymentMethodList: ["CARD", "MBWAY", "REFERENCE"],
-          paymentMethodList: ["CARD"],
+          paymentMethodList: ["CARD", "MBWAY", "REFERENCE"],
           redirectUrl: `${serverDomain}api/sibs/formHandler?orderId=${localStorage.getItem('orderId')}`,
           amount: amount.toString().replace(",", "."),
           language: "pt",
