@@ -4,14 +4,16 @@ import { AuthContext } from '../context';
 import { useNavigate } from 'react-router-dom';
 
 
-const ProductBlock = ({path, id, code, info, name, rating, available, topProduct, isLashes, price, brandId, img, discountPrice, isPromo}) => {
+const ProductBlock = ({ path, id, code, info, name, rating, available, topProduct, isLashes, price, brandId, img, discountPrice, isPromo }) => {
 
     const navigate = useNavigate();
 
     const [company, setCompany] = React.useState({});
-    const { isAuth, adminMode, setUpdateProductMode, serverDomain, imagesCloud, setProductRemoved } = React.useContext(AuthContext);
+    const [brandDiscount, setBrandDiscount] = React.useState(0);
+    const { isAuth, adminMode, setUpdateProductMode, serverDomain, imagesCloud, setProductRemoved, isBlackFriday } = React.useContext(AuthContext);
 
     const percents = +discountPrice > 0 ? 100 - (discountPrice * 100 / price).toFixed(0) : '';
+    const finalPrice = brandDiscount > 0 && isBlackFriday ? (price * (100 - brandDiscount) / 100).toFixed(2) : price;
 
     const message = () => {
         window.alert('Ocorreu um erro!');        
@@ -21,6 +23,7 @@ const ProductBlock = ({path, id, code, info, name, rating, available, topProduct
         axios.get(`${serverDomain}api/brand`)
             .then((res) => {
                 setCompany(res.data.find((brand) => brand.id === brandId));
+                setBrandDiscount(res.data.find((brand) => brand.id === brandId).discount);
             });
     }, [serverDomain]);
 
@@ -108,9 +111,23 @@ const ProductBlock = ({path, id, code, info, name, rating, available, topProduct
                                     :
                                     ''
                                 }
-                                <div className={+discountPrice > 0 ? "item-product__price item-product__price_strike" : "item-product__price"}>{price} €</div>
+                                {
+                                    brandDiscount > 0 && isBlackFriday && !percents
+                                    ?
+                                    <div className='item-product__price_percents item-product__price_percents-black'>
+                                        -{brandDiscount}%
+                                    </div>
+                                    :
+                                    '' 
+                                }
+                                <div className={+discountPrice > 0 || (brandDiscount > 0 && isBlackFriday) ? "item-product__price item-product__price_strike" : "item-product__price"}>{price} €</div>
                             </div>
-                            {+discountPrice > 0 ? <div className="item-product__price item-product__price_discount">{discountPrice} €</div> : ''}
+                            {+discountPrice > 0 || (+brandDiscount > 0 && isBlackFriday)
+                                ?
+                                <div className="item-product__price item-product__price_discount">
+                                    {discountPrice > 0 ? discountPrice : finalPrice} €</div>
+                                : ''
+                            }
                         </div>
                     </div>                    
                 </div>

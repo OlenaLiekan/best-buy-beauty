@@ -2,16 +2,18 @@ import React from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector} from 'react-redux';
-import { addItem, minusItem, removeItem } from '../../redux/slices/cartSlice';
+import { addItem, minusItem, removeItem, clearItems  } from '../../redux/slices/cartSlice';
 import { AuthContext } from '../../context';
 import axios from 'axios';
-
+    
 const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, company, lengthArr, thicknessArr, curlArr, count, available }) => { 
 
     const [dbItem, setDBItem] = React.useState({});
     const [itemsUpdated, setItemsUpdated] = React.useState(false);
     const [itemLoading, setItemLoading] = React.useState(false);
-    const { imagesCloud, serverDomain, productUpdated, setProductUpdated, productRemoved, setProductRemoved} = React.useContext(AuthContext);
+    const [brandDiscount, setBrandDiscount] = React.useState('');
+    const { imagesCloud, serverDomain, productUpdated, setProductUpdated, productRemoved, setProductRemoved, isBlackFriday} = React.useContext(AuthContext);
+
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -56,8 +58,18 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
     }, [id, itemsUpdated, available]);
 
     React.useEffect(() => {
+        axios.get(`${serverDomain}api/brand`)
+            .then((res) => {
+                if (dbItem.brandId) {
+                    setBrandDiscount(res.data.find((brand) => brand.id === dbItem.brandId).discount);                    
+                }
+            });
+    }, [serverDomain, dbItem]);
+
+    React.useEffect(() => {
         if (itemsUpdated) {
             window.location.reload(); 
+            console.log(price);
         }
     }, [itemsUpdated]);
 
@@ -80,11 +92,12 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
     React.useEffect(() => {
         setItemsUpdated(false);
         if (dbItem.available !== undefined && dbItem.available !== null) {
-            const itemPrice = +dbItem.discountPrice > 0 ? dbItem.discountPrice : dbItem.price;
-            if (currentItem.available !== dbItem.available || currentItem.price !== itemPrice) {
+            const itemPrice = +dbItem.discountPrice > 0 ? dbItem.discountPrice : (brandDiscount == 0 && !isBlackFriday ? dbItem.price : (dbItem.price * (100 - brandDiscount) / 100).toFixed(2));
+            
+            if (currentItem.available !== dbItem.available || currentItem.price !== itemPrice && brandDiscount == 0 && !isBlackFriday) {
                 let itemCopy = Object.assign({}, currentItem);
                 itemCopy.available = dbItem.available;
-                itemCopy.price = +dbItem.discountPrice > 0 ? dbItem.discountPrice : dbItem.price;
+                itemCopy.price = +dbItem.discountPrice > 0 ? dbItem.discountPrice : (brandDiscount == 0 && !isBlackFriday ? dbItem.price : (dbItem.price * (100 - brandDiscount) / 100).toFixed(2));
                 const data = JSON.parse(localStorage.getItem('cart'));
                 const itemPosition = data.findIndex((item) => item.id === id);
                 data.splice(itemPosition, 1, itemCopy);

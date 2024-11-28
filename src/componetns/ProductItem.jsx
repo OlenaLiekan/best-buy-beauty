@@ -34,13 +34,14 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const [isWarning, setIsWarning] = React.useState(false);
     const [popupSlides, setPopupSlides] = React.useState([]);
     const [company, setCompany] = React.useState({});
-
+    const [brandDiscount, setBrandDiscount] = React.useState(0);
+    const { isAuth, adminMode, updateProductMode, serverDomain, isBlackFriday } = React.useContext(AuthContext);
+    
     const percents = +discountPrice > 0 ? 100 - (discountPrice * 100 / price).toFixed(0) : '';
-    const priceValue = +discountPrice > 0 ? discountPrice : price;
+    const finalPrice = brandDiscount > 0 && isBlackFriday ? (price * (100 - brandDiscount) / 100).toFixed(2) : price;
+    const priceValue = +discountPrice > 0 ? discountPrice : ( brandDiscount > 0 && isBlackFriday ? finalPrice : price );
 
     const tabs = ['Descrição', 'Método de uso', 'Ingredientes'];
-
-    const { isAuth, adminMode, updateProductMode, serverDomain} = React.useContext(AuthContext);
 
     const data = localStorage.getItem("user");
     const user = JSON.parse(data);
@@ -64,6 +65,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
         axios.get(`${serverDomain}api/brand`)
             .then((res) => {
                 setCompany(res.data.find((brand) => brand.id === brandId));
+                setBrandDiscount(res.data.find((brand) => brand.id === brandId).discount);
             });
     }, [serverDomain]);
 
@@ -264,8 +266,17 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                                 :
                                                 ''
                                             }
+                                            {
+                                                brandDiscount > 0 && isBlackFriday && !percents
+                                                ?
+                                                <div className='item-product__price_percents item-product__price_percents-black'>
+                                                    -{brandDiscount}%
+                                                </div>
+                                                :
+                                                '' 
+                                            }
                                             <div className={
-                                                +discountPrice > 0
+                                                +discountPrice > 0 || (+brandDiscount > 0 && isBlackFriday)
                                                     ?
                                                     "price__value_strike"
                                                     : "price__value"
@@ -273,10 +284,10 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                                 {price} €                                
                                             </div>                                              
                                         </div>
-                                        {+discountPrice > 0
+                                        {+discountPrice > 0 || (+brandDiscount > 0 && isBlackFriday)
                                             ?
                                             <div className="price__value price__value_discount">
-                                                {discountPrice} €
+                                                {discountPrice > 0 ? discountPrice : finalPrice} €
                                             </div>
                                             :
                                             ''

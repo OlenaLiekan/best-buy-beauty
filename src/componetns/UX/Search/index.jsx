@@ -18,7 +18,7 @@ const Search = () => {
     const [value, setValue] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(true); 
     const { searchValue, setSearchValue } = React.useContext(SearchContext);
-    const { serverDomain, imagesCloud } = React.useContext(AuthContext);
+    const { serverDomain, imagesCloud, isBlackFriday } = React.useContext(AuthContext);
 
     const inputRef = React.useRef();
     const dispatch = useDispatch();
@@ -77,8 +77,6 @@ const Search = () => {
                 setBrands(res.data);
             });
     }, [serverDomain]);
-
-    const companyNames = brands.map((brand) => brand.name);
 
     React.useEffect(() => {
         axios
@@ -150,27 +148,43 @@ const Search = () => {
                                         </div>
                                         <div className="item-search__info info-search">
                                             <h2>{item.name}</h2>
-                                            {companyNames.find((companyName, i) =>
-                                                i + 1 === item.brandId
-                                            )}
+                                            
+                                            {
+                                                brands.map((brand) => 
+                                                    brand.id == item.brandId ? brand.name : ''
+                                                )
+                                            }
+                                            
                                             <div className="info-search__price-block">
 
                                                 {item.discountPrice > 0
                                                     ?
                                                     <span className="info-search__promo"> {item.discountPrice}  €</span>
                                                     :
-                                                    ''
-                                                }                                                   
-                                                <span className={item.discountPrice > 0 ? "info-search__strike" : ''}>
-                                                    {item.price} €
-                                                </span>
+                                                    brands.map((brand) => 
+                                                        brand.id == item.brandId && brand.discount > 0 && isBlackFriday ? (item.price * (100 - brand.discount) / 100).toFixed(2) + ' €' : ''
+                                                    )
+                                                }          
+                                                {brands.map((brand) => 
+                                                    brand.id == item.brandId
+                                                    ?
+                                                    <span className={item.discountPrice > 0 || (brand.discount > 0 && isBlackFriday) ? "info-search__strike" : ''}>
+                                                        {item.price} €
+                                                    </span>
+                                                    :
+                                                    ''                                                  
+                                                )}
                                                 {item.discountPrice > 0
                                                     ?
                                                     <div className="info-search__percents">
                                                         - {100 - (item.discountPrice * 100 / item.price).toFixed(0)}%
                                                     </div>  
                                                     :
-                                                    ''
+                                                    <div className="info-search__percents info-search__percents_black">
+                                                        {brands.map((brand) => 
+                                                            brand.discount > 0 && isBlackFriday && brand.id === item.brandId ? <span>- {brand.discount}%</span> : '' 
+                                                        )}
+                                                    </div>  
                                                 }
                                             </div>
                                         </div>

@@ -4,6 +4,7 @@ import './scss/style.scss';
 
 import { AuthContext } from './context';
 import AppRoutes from './componetns/AppRoutes';
+import { useDispatch } from 'react-redux';
 
 export const SearchContext = React.createContext();
 
@@ -12,6 +13,7 @@ function App() {
 
   const [isAuth, setIsAuth] = React.useState(false);
   const [adminMode, setAdminMode] = React.useState(false);
+  const [isBlackFriday, setIsBlackFriday] = React.useState(false);
 
   const [createSlideMode, setCreateSlideMode] = React.useState(false);
   const [createProductMode, setCreateProductMode] = React.useState(false);
@@ -38,6 +40,8 @@ function App() {
 
   const [isPromoPage, setIsPromoPage] = React.useState(false);
 
+  const dispatch = useDispatch();
+
   const serverDomain = 'https://bbb-server-a6ji.onrender.com/';
   const imagesCloud = 'https://res.cloudinary.com/bbbptcloud/image/upload/v1699129130/static/';
 
@@ -54,6 +58,17 @@ function App() {
     }
     setLoading(false);
   }, [isAuth, adminMode]);
+
+  React.useEffect(() => {
+    const startDate = new Date(2024, 10, 29).getTime();
+    const finishDate = new Date(2024, 11, 1, 23, 59, 0).getTime();
+    const currentTime = new Date().getTime();
+    if (currentTime >= startDate && currentTime <= finishDate) {
+      setIsBlackFriday(true);
+    } else {
+      setIsBlackFriday(false);
+    }
+  }, [isBlackFriday]);
 
   return (
     <>
@@ -98,6 +113,8 @@ function App() {
           setProductRemoved,
           isPromoPage,
           setIsPromoPage,
+          isBlackFriday,
+          setIsBlackFriday,
         }}
       >
         <SearchContext.Provider value={{ searchValue, setSearchValue }}>
