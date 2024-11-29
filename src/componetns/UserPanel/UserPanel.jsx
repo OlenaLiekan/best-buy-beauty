@@ -50,7 +50,7 @@ const UserPanel = ({ user }) => {
         axios.get(`${serverDomain}api/user/${user.id}`)
             .then((res) => {
                 setCurrentUser(res.data);
-                setOrders(res.data.order);                    
+                setOrders(res.data.order.sort((a, b) => a.id < b.id ? 1 : -1));                    
                 setAddresses(res.data.address);
                 setIsLoading(false);
             });
@@ -142,9 +142,9 @@ const UserPanel = ({ user }) => {
 
     React.useEffect(() => {
         if (orders && allOrders) {
-            setOrdersReverse(orders.slice().reverse());
+            setOrdersReverse(orders.slice());
         } else if (orders && !allOrders) {
-            setOrdersReverse(orders.slice(-10).reverse());  
+            setOrdersReverse(orders.slice(0, 10));  
         }
     }, [orders, allOrders]);
 
