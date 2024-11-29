@@ -65,8 +65,7 @@ const PaymentPendingPage = () => {
         navigate("/order");
       }
     } catch (error) {
-      window.alert(`Erro ao verificar status do pagamento: ${error.message}`);
-      navigate("/order");
+      console.warn(`Erro ao verificar status do pagamento: ${error.message}. Continuando processo sem interrupção.`);
     }
   };
 
