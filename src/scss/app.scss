@@ -1071,6 +1071,7 @@
         }
     }
     &__line {
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -1105,6 +1106,15 @@
             &._error {
                 display: flex;            
             }
+        }
+        svg {
+            position: absolute;
+            top: 5px;
+            right: 0;
+            fill: #484848;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
         }
     }
     &__label {

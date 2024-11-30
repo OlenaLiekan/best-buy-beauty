@@ -131,7 +131,7 @@ const SubmitPage = () => {
   }, [totalCount, totalPrice, deliveryPrices, isPortugal]);
 
   React.useEffect(() => {
-    if (user.id && !mainData.length) {
+    if (user.id && !mainData) {
       setUsername(user.firstName);
       setSurname(user.lastName);
       setPhone(user.phone);
@@ -358,7 +358,7 @@ const SubmitPage = () => {
     localStorage.setItem("clientCompany", company ? company : " ");
     localStorage.setItem(
       "clientAddress",
-      `Rua: ${firstAddress}, Número da porta: ${secondAddress}, Código postal/ZIP: ${postalCode}, ${city}, ${region}, ${country}`
+      `Rua: ${firstAddress}, Número da porta: ${secondAddress}, Código postal/ZIP: ${postalCode}, ${city}, ${region}, ${countryData.code}`
     );
     localStorage.setItem("clientCountry", countryData);
     localStorage.setItem("clientComment", comment ? comment : " ");
@@ -395,7 +395,6 @@ const SubmitPage = () => {
         },
         body: JSON.stringify(orderData)
     });
-
     //dispatch(clearItems());
     navigate("/sibs-form", { state: response.paymentInfo });
     window.scrollTo(0, 0);
