@@ -1115,6 +1115,9 @@
             width: 22px;
             height: 22px;
             cursor: pointer;
+            @media (max-width: 479.98px) {
+                top: 30px;
+            }
         }
     }
     &__label {
