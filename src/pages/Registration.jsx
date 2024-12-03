@@ -80,7 +80,7 @@ const Registration = () => {
     };
 
     const onChangeEmail = (event) => { 
-        setEmail(event.target.value);
+        setEmail(event.target.value.toLowerCase());
         updateEmailValue(event.target.value);
     };
 

@@ -245,7 +245,7 @@ const SubmitPage = () => {
   };
 
   const onChangeEmail = (event) => {
-    setEmail(event.target.value);
+    setEmail(event.target.value.toLowerCase());
   };
 
   const onChangeFAddress = (event) => {

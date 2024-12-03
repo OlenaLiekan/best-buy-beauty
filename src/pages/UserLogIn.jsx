@@ -85,7 +85,7 @@ const UserLogIn = () => {
 
     const onChangeInputEmail = (event) => { 
         setError(false);
-        setEmail(event.target.value);
+        setEmail(event.target.value.toLowerCase());
         updateEmailValue(event.target.value);
     };
 

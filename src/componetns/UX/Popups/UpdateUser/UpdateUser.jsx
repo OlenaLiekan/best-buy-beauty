@@ -60,8 +60,8 @@ const UpdateUser = ({userId}) => {
     );
 
     const onChangeEmail = (event) => { 
-        setEmail(event.target.value);
-        updateEmailValue(event.target.value);
+        setEmail(event.target.value.toLowerCase());
+        updateEmailValue(event.target.value.toLowerCase());
     };
 
     const success = () => {
