@@ -197,7 +197,7 @@ const UserPanel = ({ user }) => {
                     <div className={styles.body}>
                         <div className={activeOption === 0 ? styles.orders : styles.hidden}>
                             <ul className={styles.ordersList}>
-                                {ordersReverse.length
+                                {ordersReverse.length && paidOrders.length
                                     ?
                                     paidOrders.map((transaction) => 
                                         ordersReverse.map((order, index) =>  
