@@ -142,9 +142,10 @@ const PaymentPendingPage = () => {
         <div
           style={{
             display: "flex",
-            flexWrap: "wrap",
+            flexDirection: "column",
             justifyContent: "space-between",
             padding: "15px",
+            gap: "15px",
             borderBottom: "1px solid #e1e1e1",
           }}
         >
