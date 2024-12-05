@@ -249,11 +249,11 @@ const SubmitPage = () => {
   };
 
   const onChangeFAddress = (event) => {
-    setFirstAddress(event.target.value);
+    setFirstAddress(event.target.value.split(',').join(' '));
   };
 
   const onChangeSAddress = (event) => {
-    setSecondAddress(event.target.value);
+    setSecondAddress(event.target.value.split(',').join(' '));
   };
 
   const onChangeCity = (event) => {
