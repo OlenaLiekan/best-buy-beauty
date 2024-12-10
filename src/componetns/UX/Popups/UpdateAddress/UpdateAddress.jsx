@@ -76,11 +76,11 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
     };
 
     const onChangeCity = (event) => { 
-        setCity(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
+        setCity(event.target.value ? (event.target.value[0].toUpperCase() + event.target.value.slice(1)).split(',').join(' ') : '');            
     };
 
     const onChangeRegion = (event) => { 
-        setRegion(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
+        setRegion(event.target.value ? (event.target.value[0].toUpperCase() + event.target.value.slice(1)).split(',').join(' ') : '');            
     };
 
     const onChangePostalCode = (event) => { 

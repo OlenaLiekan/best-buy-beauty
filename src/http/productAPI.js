@@ -80,11 +80,6 @@ export const updateDelivery = async (delivery, id) => {
   return data;
 };
 
-export const updatePayment = async (payment, id) => {
-  const { data } = await $authHost.patch('api/payment/' + id, payment);
-  return data;
-};
-
 export const updateLogo = async (logo, id) => {
   const { data } = await $authHost.patch('api/logo/' + id, logo);
   return data;

@@ -138,8 +138,8 @@ const Registration = () => {
                         </div>
 
                         <div className="form-login__line">
-                            <label htmlFor="userPassword" className="form-login__label">Senha <span>*</span></label>
-                            <input required id="userPassword" type={hiddenPass ? "password" : "text"} name='password' tabIndex="5" placeholder="Criar uma senha" className="form-login__input" 
+                            <label htmlFor="userPassword" className="form-login__label">Palavra-passe <span>*</span></label>
+                            <input required id="userPassword" type={hiddenPass ? "password" : "text"} name='password' tabIndex="5" placeholder="Criar uma palavra-passe" className="form-login__input" 
                                 ref={inputRef}
                                 value={password}
                                 onChange={onChangePass} /> 
@@ -155,8 +155,8 @@ const Registration = () => {
                                 }
                         </div>
                         <div className="form-login__line">
-                            <label htmlFor="userCheckPassword" className="form-login__label">Verifique a senha <span>*</span></label>
-                            <input required id="userCheckPassword" type={hiddenCheckPass ? "password" : 'text'} name='checkPass' tabIndex="6" placeholder="Repita a senha" className="form-login__input" 
+                            <label htmlFor="userCheckPassword" className="form-login__label">Сonfirmar a palavra-passe <span>*</span></label>
+                            <input required id="userCheckPassword" type={hiddenCheckPass ? "password" : 'text'} name='checkPass' tabIndex="6" placeholder="Repita a palavra-passe" className="form-login__input" 
                                 ref={inputRef}
                                 value={checkPass}
                                 onChange={onChangeCheckPass} /> 
@@ -172,7 +172,7 @@ const Registration = () => {
                                 }
                         </div>
                         <div className={checkPassValue && password !== checkPassValue ? 'form-login__line form-login__line_error _error' : "form-login__line form-login__line_error" }>
-                            As senhas não correspondem.
+                            As palavras-passe não coincidem.
                         </div>
                         <div className="form-login__text">
                             Seus dados não serão repassados a terceiros.                           

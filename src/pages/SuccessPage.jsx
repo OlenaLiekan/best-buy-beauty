@@ -8,10 +8,7 @@ import axios from "axios";
 
 const SuccessPage = () => {
   const dispatch = useDispatch();
-  const { serverDomain, adminMode } = React.useContext(AuthContext);
-  const [paymentDetails, setPaymentDetails] = React.useState([]);
-  const [mbWayPayments, setMbWayPayments] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
+  const { adminMode } = React.useContext(AuthContext);
   const [detailsVisibility, setDetailsVisibility] = React.useState(false);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -37,10 +34,6 @@ const SuccessPage = () => {
   const items = JSON.parse(clientOrder);
   dispatch(clearItems());
 
-  const scrollToContacts = () => {
-    window.scrollTo(0, document.body.scrollHeight);
-  };
-
   const toggleDetails = () => {
     if (detailsVisibility) {
       setDetailsVisibility(false);
@@ -48,19 +41,6 @@ const SuccessPage = () => {
       setDetailsVisibility(true);
     }
   };
-
-  React.useEffect(() => {
-    setIsLoading(true);
-    axios.get(`${serverDomain}api/payment`).then((res) => {
-      setPaymentDetails(res.data);
-      setMbWayPayments(
-        res.data
-          .filter((payment) => payment.type === "MBway")
-          .filter((mbw) => mbw.available)
-      );
-      setIsLoading(false);
-    });
-  }, [serverDomain]);
 
   return (
     <div className="main__success success-main">

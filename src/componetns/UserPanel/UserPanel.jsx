@@ -366,7 +366,7 @@ const UserPanel = ({ user }) => {
                                 <li className={styles.infoLine}>{user.phone}</li>
                             </ul>
                             <button onClick={editData} className={styles.changeData}>Alterar dados</button>
-                            <button onClick={updatePass} className={styles.changePassword}>Alterar a senha</button>
+                            <button onClick={updatePass} className={styles.changePassword}>Alterar a palavra-passe</button>
                             <button onClick={removeUser} className={styles.deleteAccount}>Deletar conta</button>
                         </div>
                         {updateUserMode && activeOption === 2 ? <UpdateUser userId={currentUser.id} /> : ''}

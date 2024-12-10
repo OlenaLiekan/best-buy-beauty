@@ -125,7 +125,7 @@ const UserLogIn = () => {
                             E-mail inválido!
                         </div>
                         <div className="form-login__line">
-                            <label htmlFor="userPassword" className="form-login__label">Senha</label>
+                            <label htmlFor="userPassword" className="form-login__label">Palavra-passe</label>
                             <input required id="userPassword" type={hiddenPass ? "password" : "text"} name='password' autoComplete='off' tabIndex="2" className="form-login__input form-login__input_access"
                                 ref={inputRef}
                                 value={password}
@@ -143,7 +143,7 @@ const UserLogIn = () => {
 
                         </div>
                         <div className={error && currentUser && passValue.length ? "form-login__line form-login__line_error _error" : "form-login__line form-login__line_error"}>
-                            Senha inválida!
+                            Palavra-passe inválida!
                         </div>
                         <button type="submit" tabIndex="3" className={ email && password ? "form-login__button _active" : "form-login__button"}>Entre</button>
                     </form>
@@ -154,7 +154,7 @@ const UserLogIn = () => {
                         </Link>                            
                     </p>
                     <p className="login-main__text">
-                        Esqueceu sua senha?
+                        Esqueceu sua palavra-passe?
                         <Link to="/reset-password" onClick={scroll} className="login-main__link">                            
                             Redefinir aqui.
                         </Link>                            

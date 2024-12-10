@@ -55,8 +55,7 @@ const ResetPassword = () => {
     }, [emailValue, serverDomain]); 
 
     const success = () => {
-        console.log('Envio de e-mail iniciado');
-        window.alert('Senha alterada com sucesso! Verifique seu e-mail.');
+        window.alert('Palavra-passe alterada com sucesso! Verifique seu e-mail.');
         window.scrollTo(0, 0);
         navigate('/login');        
     }
@@ -130,14 +129,14 @@ const ResetPassword = () => {
                             Não há nenhuma conta com este e-mail.
                         </div>
                         <div className="form-login__line">
-                            <label hidden htmlFor="userPassword" className="form-login__label">Senha</label>
+                            <label hidden htmlFor="userPassword" className="form-login__label">Palavra-passe</label>
                             <input hidden id="userPassword" type="text" name='password' autoComplete='off' tabIndex="2" className="form-login__input form-login__input_access"
                                 ref={inputRef}
                                 value={newPassword}
                                 onChange={onChangeInputPass}/>                            
                         </div>
-                        <h3 className="form-login__title">Enviaremos uma nova senha para seu e-mail.</h3>
-                        <button type="submit" tabIndex="3" className={ email && newPassword ? "form-login__button _active" : "form-login__button"}>Enviar senha</button>
+                        <h3 className="form-login__title">Enviaremos uma nova palavra-passe para seu e-mail.</h3>
+                        <button type="submit" tabIndex="3" className={ email && newPassword ? "form-login__button _active" : "form-login__button"}>Enviar palavra-passe</button>
                     </form>         
                 </div>
             </div>

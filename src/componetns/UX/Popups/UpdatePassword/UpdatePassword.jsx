@@ -32,7 +32,7 @@ const UpdatePassword = ({userId}) => {
     };  
 
     const success = () => {
-        window.alert('Senha alterada com sucesso!');
+        window.alert('Palavra-passe alterada com sucesso!');
         setUpdatePassMode(false);
         window.scrollTo(0, 0);
         setIsAuth(false);
@@ -64,15 +64,15 @@ const UpdatePassword = ({userId}) => {
         <div className={styles.body}>     
             <form onSubmit={updateUserData} id="passwordForm" className={styles.userPasswordForm}>
                 <div className={styles.formLine}>
-                    <label htmlFor="user-password-input" className={styles.formLabel}>Senha</label>
+                    <label htmlFor="user-password-input" className={styles.formLabel}>Palavra-passe atual</label>
                     <input required id="user-password-input" tabIndex="1" autoComplete="off" type="password" name="password" className={styles.formInput}
                         ref={inputRef}
                         value={password}
                         onChange={onChangePassword}/>
                 </div>
-                <div className={error ? styles.error : styles.hidden}>Senha incorreta!</div>
+                <div className={error ? styles.error : styles.hidden}>Palavra-passe incorreta!</div>
                 <div className={styles.formLine}>
-                    <label htmlFor="user-newPassword-input" className={styles.formLabel}>Nova Senha</label>
+                    <label htmlFor="user-newPassword-input" className={styles.formLabel}>Nova palavra-passe</label>
                     <input required id="user-newPassword-input" tabIndex="2" autoComplete="off" type="password" name="newPassword" className={styles.formInput}
                         ref={inputRef}
                         value={newPassword}
@@ -85,7 +85,7 @@ const UpdatePassword = ({userId}) => {
                         value={checkPassword}
                         onChange={onChangeCheckPassword}/>
                 </div>
-                <div className={checkPassword.length && checkPassword !== newPassword ? styles.error : styles.hidden}>Senhas nao sao as mesmas!</div>
+                <div className={checkPassword.length && checkPassword !== newPassword ? styles.error : styles.hidden}>As palavras-passe não coincidem !</div>
                 <button type='submit' tabIndex="4" className={styles.formBtnSubmit}>
                     Atualizar
                 </button>
