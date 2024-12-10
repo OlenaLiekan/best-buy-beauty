@@ -44,7 +44,9 @@ const SubmitPage = () => {
   const [addresses, setAddresses] = React.useState([]);
   const [mainData, setMainData] = React.useState({});
   const [visibleList, setVisibleList] = React.useState(false);
-
+  const [paymentDetails, setPaymentDetails] = React.useState([]);
+  const [mbWayPayments, setMbWayPayments] = React.useState([]);
+  const [payment, setPayment] = React.useState("");
   const [resetForm, setResetForm] = React.useState(false);
   const [timeMark, setTimeMark] = React.useState(6);
   const data = localStorage.getItem("user") ? localStorage.getItem("user") : "";
@@ -178,6 +180,31 @@ const SubmitPage = () => {
       setMainData(addresses.find((address) => address.mainAddress));
     }
   }, [addresses]);
+
+  React.useEffect(() => {
+    axios.get(`${serverDomain}api/payment`).then((res) => {
+      setPaymentDetails(res.data);
+      setMbWayPayments(
+        res.data
+          .filter((payment) => payment.type === "MBway")
+          .filter((mbw) => mbw.available)
+      );
+    });
+  }, [serverDomain]);
+
+  React.useEffect(() => {
+    const result = paymentDetails.length
+      ? '<b style="font-size: 120%;"><span style="padding: 0 0 20px 0;">IBAN </span></b><br>' +
+        paymentDetails[0].account +
+        '<br><br><b style="font-size: 120%;"><span style="padding: 0 0 20px 0;">Nome </span></b><br>' +
+        paymentDetails[0].recipient +
+        '<br><br><b style="font-size: 120%;"><span style="padding: 0 0 20px 0;">MBway </span></b>' +
+        (mbWayPayments.length
+          ? mbWayPayments.map((mbp) => `<br><span>${mbp.account}</span>`)
+          : "<br><span>Temporariamente indisponível</span>")
+      : "";
+    setPayment(result);
+  }, [paymentDetails, mbWayPayments]);
 
   React.useEffect(() => {
     if (telCode) {
@@ -411,6 +438,7 @@ const SubmitPage = () => {
       formData.append("userSurname", surname);
       formData.append("userEmail", email);
       formData.append("userPhone", phone);
+      formData.append("paymentList", payment);
       formData.append("userCompany", company ? company : " ");
       formData.append(
         "userAddress",
@@ -425,6 +453,8 @@ const SubmitPage = () => {
         if (response.success) {
           if (id > 0) {
             updateUser(formData, id).then((data) => success(response));
+          } else if (id === 0) {
+            success(response);
           }
         } else {
           window.alert("Erro ao enviar o pedido. Tente novamente.");
