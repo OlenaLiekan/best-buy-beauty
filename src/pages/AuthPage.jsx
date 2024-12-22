@@ -15,14 +15,15 @@ const AuthPage = () => {
     React.useEffect(() => {
         if (user.role === "ADMIN") {
             setAdminMode(true);
+            localStorage.setItem("adminMode", "true");
         } else {
             setAdminMode(false);
             localStorage.removeItem("adminMode", "true");
         }
 
-        if (adminMode) {
+        /*if (adminMode) {
             localStorage.setItem("adminMode", "true");            
-        }
+        }*/
 
         if (isAuth) {
             const loginDate = localStorage.getItem("date");        
@@ -30,7 +31,7 @@ const AuthPage = () => {
                 if ( result > 86399998) {
                     if (adminMode) {
                         setAdminMode(false);
-                        localStorage.removeItem("adminMode", "true");
+                        localStorage.removeItem("adminMode");
                     }
                     localStorage.removeItem('user');
                     setIsAuth(false);    

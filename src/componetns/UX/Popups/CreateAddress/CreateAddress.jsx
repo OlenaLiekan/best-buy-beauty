@@ -24,6 +24,7 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
     const [company, setCompany] = React.useState('');
     const [checked, setChecked] = React.useState(false);
     const [visibleList, setVisibleList] = React.useState(false);
+    const [countryValue, setCountryValue] = React.useState('');
 
     const onChangeCompany = (event) => { 
         setCompany(event.target.value.slice(0,9));            
@@ -88,6 +89,7 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
             setVisibleList(true);
         } else {
             setVisibleList(false);
+            setCountryValue('');
         }
     }
 
@@ -104,6 +106,11 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
         const newTelCode = `+${getCountryCallingCode(countryCode)}`;
         setPhone(newTelCode);
         setVisibleList(false);
+        setCountryValue('');
+    };
+
+    const onChangeCountryValue = (event) => {
+        setCountryValue(event.target.value);
     };
 
     const success = () => {
@@ -184,15 +191,38 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
                         </svg>
                         <div className={visibleList ? styles.countriesWrapper : styles.hidden}>
                             <ul className={visibleList ? styles.countriesList : styles.hidden}>
-                                {countries.map((country) => (
-                                    <li
-                                    onClick={() => onChangeCountry(country.code)}
-                                    key={country.code}
-                                    className={styles.countryItem}
-                                    >
-                                    {country.name} {country.telCode}
-                                    </li>
-                                ))}
+                                <li>
+                                    <input
+                                        id="country-search-input"
+                                        name="country_value"
+                                        type="text"
+                                        placeholder="Digite seu país"
+                                        value={countryValue}
+                                        onChange={onChangeCountryValue}
+                                        className={styles.countrySearch}
+                                    />  
+                                </li>
+                                {countryValue 
+                                    ?
+                                    countries.filter((country) => country.name.toLowerCase().includes(countryValue.toLowerCase())).map((country) => (
+                                        <li
+                                            onClick={() => onChangeCountry(country.code)}
+                                            key={country.code}
+                                            className={styles.countryItem}
+                                            >
+                                            {country.name} {country.telCode}
+                                        </li>
+                                    ))
+                                    :
+                                    countries.map((country) => (
+                                        <li
+                                        onClick={() => onChangeCountry(country.code)}
+                                        key={country.code}
+                                        className={styles.countryItem}
+                                        >
+                                            {country.name} {country.telCode}
+                                        </li>
+                                    ))}
                             </ul>                            
                         </div>
                 </div>

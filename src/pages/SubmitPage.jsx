@@ -49,6 +49,7 @@ const SubmitPage = () => {
   const [payment, setPayment] = React.useState("");
   const [resetForm, setResetForm] = React.useState(false);
   const [timeMark, setTimeMark] = React.useState(6);
+  const [countryValue, setCountryValue] = React.useState('');
   const data = localStorage.getItem("user") ? localStorage.getItem("user") : "";
   const user = data ? JSON.parse(data) : "";
   const symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -95,6 +96,7 @@ const SubmitPage = () => {
       setIsPortugal(false);
     }
   }, [country]);
+
 
   React.useEffect(() => {
     axios.get(`${serverDomain}api/delivery`).then((res) => {
@@ -273,6 +275,7 @@ const SubmitPage = () => {
       setVisibleList(true);
     } else {
       setVisibleList(false);
+      setCountryValue('');
     }
   };
 
@@ -281,6 +284,11 @@ const SubmitPage = () => {
     const newTelCode = `+${getCountryCallingCode(countryCode)}`;
     setPhone(newTelCode);
     setVisibleList(false);
+    setCountryValue('');
+  };
+
+  const onChangeCountryValue = (event) => {
+    setCountryValue(event.target.value);
   };
 
   const onChangeRegion = (event) => {
@@ -669,13 +677,40 @@ const SubmitPage = () => {
                         ? "popup-form__wrapper"
                         : "popup-form__wrapper_hidden"
                     }
-                  >
+                >
+
                     <ul
                       className={
                         visibleList ? "popup-form__list" : "popup-form__list_hidden"
                       }
-                    >
-                      {countries.map((country) => (
+                  >
+                      <li>
+                      <input
+                        id="country-search-input"
+                        name="country_value"
+                        type="text"
+                        placeholder="Digite seu país"
+                        tabIndex="8"
+                        value={countryValue}
+                        onChange={onChangeCountryValue}
+                        className={"popup-form__search"}
+                      />
+                                          
+                      </li>
+                    {countryValue
+                      ?
+                      countries.filter((country) => country.name.toLowerCase().includes(countryValue.toLowerCase())).map((country) => (
+                       <li
+                          onClick={() => onChangeCountry(country.code)}
+                          key={country.code}
+                          className={"popup-form__item"}
+                        >
+                          {country.name} {country.telCode}
+                        </li> 
+                        )
+                      )
+                      :
+                      countries.map((country) => (
                         <li
                           onClick={() => onChangeCountry(country.code)}
                           key={country.code}
@@ -694,7 +729,7 @@ const SubmitPage = () => {
                   <input
                     required
                     id="user-region-input"
-                    tabIndex="8"
+                    tabIndex="9"
                     autoComplete="new-password"
                     type="text"
                     name="Concelho"
@@ -714,7 +749,7 @@ const SubmitPage = () => {
                   <input
                     required
                     id="user-postal-code-input"
-                    tabIndex="9"
+                    tabIndex="10"
                     autoComplete="new-password"
                     type="text"
                     pattern={
@@ -734,7 +769,7 @@ const SubmitPage = () => {
                   <input
                     required
                     id="user-contact-input"
-                    tabIndex="10"
+                    tabIndex="11"
                     autoComplete="new-password"
                     type="tel"
                     pattern="\+?[0-9\s\-\(\)]+"
@@ -753,7 +788,7 @@ const SubmitPage = () => {
                   <input
                     required
                     id="user-email-input"
-                    tabIndex="11"
+                    tabIndex="12"
                     autoComplete="new-password"
                     type="email"
                     name="email"
@@ -783,7 +818,7 @@ const SubmitPage = () => {
                   </label>
                   <textarea
                     id="user-comment"
-                    tabIndex="12"
+                    tabIndex="13"
                     className="popup-form__textarea"
                     name="Comente"
                     placeholder="Ola! Aqui você pode deixar suas dúvidas ou desejos."
@@ -796,7 +831,7 @@ const SubmitPage = () => {
                 </div>
                 <button
                   type="submit"
-                  tabIndex="13"
+                  tabIndex="14"
                   className="popup-form__button checkout scroll-top"
                 >
                   Efetuar pagamento

@@ -17,7 +17,7 @@ const UserLogIn = () => {
     const [password, setPassword] = React.useState('');
     const [passValue, setPassValue] = React.useState('');
     const [hiddenPass, setHiddenPass] = React.useState(true);
-    const { setIsAuth, serverDomain } = React.useContext(AuthContext);
+    const { setIsAuth, isAuth, serverDomain } = React.useContext(AuthContext);
 
     const data = localStorage.getItem("redirected") ? localStorage.getItem("redirected") : '';
     const backToOrderPage = data ? JSON.parse(data) : "";
@@ -41,7 +41,7 @@ const UserLogIn = () => {
             window.scrollTo(0, 0);
             fetchUser();
         } 
-    }, [emailValue, navigate, serverDomain]);     
+    }, [emailValue, serverDomain]);     
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();

@@ -60,8 +60,8 @@ function App() {
   }, [isAuth, adminMode]);
 
   React.useEffect(() => {
-    const startDate = new Date(2024, 10, 29).getTime();
-    const finishDate = new Date(2024, 11, 1, 23, 59, 0).getTime();
+    const startDate = new Date(2024, 11, 23).getTime();
+    const finishDate = new Date(2024, 11, 25, 23, 59, 0).getTime();
     const currentTime = new Date().getTime();
     if (currentTime >= startDate && currentTime <= finishDate) {
       setIsBlackFriday(true);

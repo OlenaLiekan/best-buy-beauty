@@ -69,7 +69,6 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
     React.useEffect(() => {
         if (itemsUpdated) {
             window.location.reload(); 
-            console.log(price);
         }
     }, [itemsUpdated]);
 

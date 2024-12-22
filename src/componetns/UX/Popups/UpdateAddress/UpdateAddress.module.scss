@@ -161,7 +161,7 @@
     position: absolute;
     top: 18px;
     right: 0;
-    width: 193px;
+    width: 196px;
     height: 220px;
     display: flex;
     flex-direction: column;
@@ -174,7 +174,7 @@
     }
 
     @media(max-width: 379.98px) {
-        width: 174px;
+        width: 176px;
     }
 }
 
@@ -189,6 +189,22 @@
     border-radius: 0 0 20px 20px;
     color: #484848;
     z-index: 1;
+}
+
+.countrySearch {
+    width: 100%;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 10px;
+    letter-spacing: 0.5px;
+    outline: none;
+
+    &::placeholder {
+        color: #848484;
+    }
+    @media(max-width: 379.98px) {
+        font-size: 12px;
+    }
 }
 
 .countryItem {

@@ -235,7 +235,7 @@
         top: 130px;
         left: 0;
         width: 100%;        
-        max-height: 100vh;
+        max-height: 75vh;
         overflow: auto;   
         background-color: #ffffff;
         border-top: none;
@@ -3255,6 +3255,17 @@
         margin-bottom: 20px;
         @media(max-width: 767.98px) {
             text-align: center;
+        }
+    }
+    &__search {
+        width: 100%;
+        font-size: 15px;
+        font-weight: 500;
+        padding: 8px 10px;
+        letter-spacing: 0.5px;
+        outline: none;
+        &::placeholder {
+            color: #848484;
         }
     }
     &__line {

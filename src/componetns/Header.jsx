@@ -20,6 +20,7 @@ const Header = () => {
   const logout = () => {
     if (adminMode) {
       setAdminMode(false);
+      localStorage.removeItem("adminMode");
     }
     localStorage.removeItem('user');
     setIsAuth(false);    
@@ -33,6 +34,8 @@ const Header = () => {
   React.useEffect(() => {
     if (!user) {
       setIsAuth(false);
+      localStorage.removeItem('auth');
+      localStorage.removeItem('user');
     }
   }, [user]);
 
@@ -77,7 +80,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <div className="header__boby body-header">
+      <div className="header__body body-header">
         <div className="body-header__container">
           <Link to="/" className="body-header__logo header-logo">
             <div className="header-logo__image">

@@ -30,7 +30,7 @@ const Search = () => {
 
     const clearValue = () => {
         setValue('');        
-        setSearchValue('');   
+        setSearchValue(''); 
     }
 
     const onClickClear = () => {
@@ -62,7 +62,7 @@ const Search = () => {
                 )
                 .then((res) => {
                     if (res.data.count > 0) {
-                        setItems(res.data.rows);
+                        setItems(res.data.rows.filter((item) => item.available));
                     }
                 });
             setIsLoading(false);            
