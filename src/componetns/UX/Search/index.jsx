@@ -62,7 +62,7 @@ const Search = () => {
                 )
                 .then((res) => {
                     if (res.data.count > 0) {
-                        setItems(res.data.rows.filter((item) => item.available));
+                        setItems(res.data.rows);
                     }
                 });
             setIsLoading(false);            

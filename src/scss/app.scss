@@ -360,12 +360,12 @@
         display: flex;
         font-size: 10px;        
         padding: 3px 5px;
-        background-color: #b45a40;
+        background-color: #e53638;
         color: #fff;
         &_black {
             background-color: transparent;
             span {
-                background-color: #252525;      
+                background-color: #e53638;      
                 font-size: 10px;
                 padding: 3px 5px;
             }
@@ -2187,7 +2187,7 @@
             font-weight: 500;
             letter-spacing: 0.5px;
             color: #fff;
-            background-color: #b45a40;
+            background-color: #e53638;
             padding: 5px 8px;
             border-radius: 8px;
             &-black {

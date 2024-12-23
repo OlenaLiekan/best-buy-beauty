@@ -114,7 +114,7 @@ const ProductBlock = ({ path, id, code, info, name, rating, available, topProduc
                                 {
                                     brandDiscount > 0 && isBlackFriday && !percents
                                     ?
-                                    <div className='item-product__price_percents item-product__price_percents-black'>
+                                    <div className='item-product__price_percents'>
                                         -{brandDiscount}%
                                     </div>
                                     :

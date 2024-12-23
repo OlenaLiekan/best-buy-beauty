@@ -74,7 +74,7 @@ const SubmitPage = () => {
       })();
       setTimeout(() => {
         localStorage.setItem("redirected", true);
-        navigate("/registration");
+        navigate("/registration");        
       }, 10000);
     }
   },[user]);
