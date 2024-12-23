@@ -60,7 +60,7 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
     React.useEffect(() => {
         axios.get(`${serverDomain}api/brand`)
             .then((res) => {
-                if (dbItem.brandId) {
+                if (dbItem && dbItem.brandId) {
                     setBrandDiscount(res.data.find((brand) => brand.id === dbItem.brandId).discount);                    
                 }
             });
@@ -90,20 +90,23 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
     const currentItem = useSelector((state) => state.cart.items.find((obj) => obj.id === id));
     React.useEffect(() => {
         setItemsUpdated(false);
-        if (dbItem.available !== undefined && dbItem.available !== null) {
-            const itemPrice = +dbItem.discountPrice > 0 ? dbItem.discountPrice : (brandDiscount == 0 && !isBlackFriday ? dbItem.price : (dbItem.price * (100 - brandDiscount) / 100).toFixed(2));
-            
-            if (currentItem.available !== dbItem.available || currentItem.price !== itemPrice && brandDiscount == 0 && !isBlackFriday) {
-                let itemCopy = Object.assign({}, currentItem);
-                itemCopy.available = dbItem.available;
-                itemCopy.price = +dbItem.discountPrice > 0 ? dbItem.discountPrice : (brandDiscount == 0 && !isBlackFriday ? dbItem.price : (dbItem.price * (100 - brandDiscount) / 100).toFixed(2));
-                const data = JSON.parse(localStorage.getItem('cart'));
-                const itemPosition = data.findIndex((item) => item.id === id);
-                data.splice(itemPosition, 1, itemCopy);
-                localStorage.setItem('cart', JSON.stringify(data));
-                setItemsUpdated(true);
-            } 
+        if (dbItem) {
+            if (dbItem.available !== undefined && dbItem.available !== null) {
+                const itemPrice = +dbItem.discountPrice > 0 ? dbItem.discountPrice : (brandDiscount == 0 && !isBlackFriday ? dbItem.price : (dbItem.price * (100 - brandDiscount) / 100).toFixed(2));
+                
+                if (currentItem.available !== dbItem.available || currentItem.price !== itemPrice && brandDiscount == 0 && !isBlackFriday) {
+                    let itemCopy = Object.assign({}, currentItem);
+                    itemCopy.available = dbItem.available;
+                    itemCopy.price = +dbItem.discountPrice > 0 ? dbItem.discountPrice : (brandDiscount == 0 && !isBlackFriday ? dbItem.price : (dbItem.price * (100 - brandDiscount) / 100).toFixed(2));
+                    const data = JSON.parse(localStorage.getItem('cart'));
+                    const itemPosition = data.findIndex((item) => item.id === id);
+                    data.splice(itemPosition, 1, itemCopy);
+                    localStorage.setItem('cart', JSON.stringify(data));
+                    setItemsUpdated(true);
+                } 
+            }            
         }
+
     }, [dbItem, id]);
 
     if (count === 0) {
@@ -115,7 +118,7 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
     return (
         <div className="body-cart__item item__cart">
             <div className="item-cart__content">
-                <div className={dbItem.available ? "item-cart__product-block" : "item-cart__product-block item-cart__product-block_faded"}>
+                <div className={dbItem && dbItem.available ? "item-cart__product-block" : "item-cart__product-block item-cart__product-block_faded"}>
                     <div onClick={handleClick} className="item-cart__image">
                         <img src={`${imagesCloud}` + img} alt="product" />
                     </div>                        
@@ -158,7 +161,7 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
                     </div>                                         
                 </div>
                 <div className="item-cart__actions">
-                    { !itemLoading && dbItem && !dbItem.available
+                    {!itemLoading && dbItem && !dbItem.available || !itemLoading && !dbItem
                         ?
                         <div className='item-cart__unavailable'>{itemLoading ? '' : "Não disponível" }</div>  
                         :
