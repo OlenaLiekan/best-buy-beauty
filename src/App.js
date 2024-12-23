@@ -50,11 +50,14 @@ function App() {
       setIsAuth(true);
     } else {
       setIsAuth(false);
+      localStorage.removeItem('auth');
+      localStorage.removeItem('user');
     }
     if (localStorage.getItem('adminMode', 'true')) {
       setAdminMode(true);
     } else {
       setAdminMode(false);
+      localStorage.removeItem('adminMode');
     }
     setLoading(false);
   }, [isAuth, adminMode]);

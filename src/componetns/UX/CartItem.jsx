@@ -87,6 +87,15 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
         }
     }, [productUpdated, productRemoved]);
 
+    React.useEffect(() => {
+        if (!itemLoading && !dbItem) {
+            dispatch(
+                removeItem(isLashes ? index : id)
+            );
+            setProductRemoved('');     
+        }
+    }, []);
+
     const currentItem = useSelector((state) => state.cart.items.find((obj) => obj.id === id));
     React.useEffect(() => {
         setItemsUpdated(false);

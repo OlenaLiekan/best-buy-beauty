@@ -17,6 +17,7 @@ const Header = () => {
   const [freeDelivery, setFreeDelivery] = React.useState({});
   const [hideTicker, setHideTicker] = React.useState(false);
   const [logo, setLogo] = React.useState('');
+
   const logout = () => {
     if (adminMode) {
       setAdminMode(false);
@@ -41,7 +42,6 @@ const Header = () => {
 
   const { items } = useSelector((state) => state.cart);
   const totalCount = items.reduce((sum, item) => !item.available && item.available !== 'undefined' ? sum : sum + item.count, 0);
-
 
   React.useEffect(() => {
     setIsLoading(true);
