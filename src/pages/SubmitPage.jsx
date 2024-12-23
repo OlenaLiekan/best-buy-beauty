@@ -65,17 +65,17 @@ const SubmitPage = () => {
 
   React.useEffect(() => {
     if (!user) {
-      const numbers = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+      const numbers = [6, 5, 4, 3, 2, 1];
       (async function main() {
-        for (let i = 0; i < numbers.length; i++) {
+        for (let i = 0; i < numbers.length; i++) {     
           setTimeMark(numbers[i]);
           await new Promise((resolve) => setTimeout(resolve, 1000));
         }
       })();
       setTimeout(() => {
         localStorage.setItem("redirected", true);
-        navigate("/registration");        
-      }, 10000);
+          navigate("/registration");       
+      }, 6000);
     }
   },[user]);
 
@@ -478,10 +478,6 @@ const SubmitPage = () => {
     }
   };
 
-  const goToLogin = () => {
-    navigate('/login');
-  }
-
   return (
     <div className="cart__popup popup-cart">
       <div className="popup-cart__content">
@@ -850,9 +846,6 @@ const SubmitPage = () => {
                   para a página de registro após
                 </p>
                 <p className="redirect-cart__text redirect-cart__text_blue">{timeMark}</p>
-                <p className="redirect-cart__text redirect-cart__text_link" onClick={goToLogin}>
-                  Ou vá para a página de login
-                </p>
               </div>
             }          
           </div>

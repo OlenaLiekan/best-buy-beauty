@@ -35,6 +35,8 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const [popupSlides, setPopupSlides] = React.useState([]);
     const [company, setCompany] = React.useState({});
     const [brandDiscount, setBrandDiscount] = React.useState(0);
+    const [productAdded, setProductAdded] = React.useState(false);
+    const [productDownvoted, setProductDownvoted] = React.useState(false);
     const { isAuth, adminMode, updateProductMode, serverDomain, isBlackFriday } = React.useContext(AuthContext);
     
     const percents = +discountPrice > 0 ? 100 - (discountPrice * 100 / price).toFixed(0) : '';
@@ -101,7 +103,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
         const item = {
             id,
             name,
-            info,               
+            info,
             code,
             price: priceValue,
             company: company.name,
@@ -114,14 +116,25 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
             index,
             available,
         };
-        dispatch(addItem(item));           
+        dispatch(addItem(item));
+        setProductDownvoted(false);
+        setProductAdded(true);
+        setTimeout(() => {
+            setProductAdded(false);
+        }, 2000);
     };
 
     const onClickMinus = () => { 
         dispatch(
             minusItem(isLashes ? index : id)
         );
-
+        if (lashesCount || addedCount > 0) {
+            setProductAdded(false);
+            setProductDownvoted(true);
+            setTimeout(() => {
+                setProductDownvoted(false);
+            }, 2000);            
+        }
     };
 
     const changePage = () => {
@@ -321,6 +334,8 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                     ?
                                     <>
                                         <div className="product-card__quantity quantity">
+                                            <span className={productAdded ? "quantity__product-added" : "quantity__product-added quantity__product-added_hidden"}>Produto adicionado ao carrinho</span>
+                                            <span className={productDownvoted ? "quantity__product-added" : "quantity__product-added quantity__product-added_hidden"}>O produto foi rejeitado</span>
                                             <button onClick={onClickMinus} className="quantity__minus">-</button>
                                             <div className="quantity__text">{isLashes ? lashesCount : addedCount}</div>
                                             <button onClick={onClickAdd} className="quantity__plus">+</button>
