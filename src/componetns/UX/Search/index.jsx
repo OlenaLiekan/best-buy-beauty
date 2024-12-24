@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./Search.module.scss";
 import debounce from 'lodash.debounce';
 import axios from "axios";
-import { camelize } from "../../../js/script";
+import { bodyLock, bodyUnlock, camelize } from "../../../js/script";
 
 import { SearchContext } from '../../../App';
 import { setSearch } from "../../../redux/slices/filterSlice";
@@ -17,7 +17,7 @@ const Search = () => {
     const [brands, setBrands] = React.useState([]);
     const [value, setValue] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(true); 
-    const { searchValue, setSearchValue } = React.useContext(SearchContext);
+    const { searchValue, setSearchValue, lockedSearch, setLockedSearch } = React.useContext(SearchContext);
     const { serverDomain, imagesCloud, isBlackFriday } = React.useContext(AuthContext);
 
     const inputRef = React.useRef();
@@ -25,10 +25,10 @@ const Search = () => {
     const navigate = useNavigate();
 
     const clearValueWithDelay = () => {
-        setTimeout(clearValue, 500);         
+        setTimeout(clearValue, 500);     
     };
 
-    const clearValue = () => {
+    const clearValue = () => {    
         setValue('');        
         setSearchValue(''); 
     }
@@ -36,12 +36,12 @@ const Search = () => {
     const onClickClear = () => {
         setSearchValue('');
         setValue('');
-        inputRef.current.focus();        
+        inputRef.current.focus();   
     }
 
     const updateSearchValue = React.useCallback(
         debounce((str) => {
-            setSearchValue(str);
+            setSearchValue(str);        
         }, 500),
         [],
     );
@@ -66,10 +66,24 @@ const Search = () => {
                     }
                 });
             setIsLoading(false);            
-            window.scrollTo(0, 0);            
+            window.scrollTo(0, 0);  
+        } else {
+            bodyUnlock();
         }
         setItems([]);
     }, [searchValue, serverDomain]);
+
+    React.useEffect(() => {
+        if (value) {
+            setLockedSearch(true);
+            bodyLock(); 
+        } else {
+            bodyUnlock();
+            setTimeout(() => {
+                setLockedSearch(false);
+            }, 500);
+        }
+    }, [value]);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/brand`)

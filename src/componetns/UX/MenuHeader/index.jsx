@@ -8,6 +8,7 @@ import { camelize } from "../../../js/script";
 import { setBrandId, setCategoryId } from "../../../redux/slices/filterSlice";
 import { useDispatch } from "react-redux";
 import { AuthContext } from "../../../context";
+import { SearchContext } from '../../../App';
 import MenuSkeleton from "../../UI/Skeletons/MenuSkeleton";
 
 const MenuHeader = ({hideTicker}) => {
@@ -18,7 +19,8 @@ const MenuHeader = ({hideTicker}) => {
     const [brands, setBrands] = React.useState([]);
     const [areBrands, setAreBrands] = React.useState(false);
     const [activeItem, setActiveItem] = React.useState(0);
-    const { serverDomain, isPromoPage, setIsPromoPage} = React.useContext(AuthContext);
+    const { serverDomain, isPromoPage, setIsPromoPage } = React.useContext(AuthContext);
+    const { lockedSearch, setLockedSearch } = React.useContext(SearchContext);
 
     const skeletons = [...new Array(6)].map((_, index) => <MenuSkeleton key={index} />);
 
@@ -77,7 +79,7 @@ const MenuHeader = ({hideTicker}) => {
 
     return ( 
         <>
-            <div className="menu__link">
+            <div className={lockedSearch ? "menu__link menu__link_hidden" : "menu__link"}>
                 <button onClick={menuInit} type="button" className="menu__icon icon-menu"><span></span></button>
                 <Link to="/catalog" className="icon-menu__text icon-menu__text_hidden">Catálogo</Link>              
             </div>

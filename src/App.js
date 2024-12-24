@@ -11,6 +11,7 @@ export const SearchContext = React.createContext();
 function App() {
   const [searchValue, setSearchValue] = React.useState('');
   const [scroll, setScroll] = React.useState(0);
+  const [lockedSearch, setLockedSearch] = React.useState(false);
 
   const [isAuth, setIsAuth] = React.useState(false);
   const [adminMode, setAdminMode] = React.useState(false);
@@ -132,7 +133,14 @@ function App() {
           setScroll,
         }}
       >
-        <SearchContext.Provider value={{ searchValue, setSearchValue }}>
+        <SearchContext.Provider
+          value={{
+            searchValue,
+            setSearchValue,
+            lockedSearch,
+            setLockedSearch,
+          }}
+        >
           <AppRoutes />
         </SearchContext.Provider>
       </AuthContext.Provider>
