@@ -10,6 +10,7 @@ export const SearchContext = React.createContext();
 
 function App() {
   const [searchValue, setSearchValue] = React.useState('');
+  const [scroll, setScroll] = React.useState(0);
 
   const [isAuth, setIsAuth] = React.useState(false);
   const [adminMode, setAdminMode] = React.useState(false);
@@ -73,6 +74,15 @@ function App() {
     }
   }, [isBlackFriday]);
 
+  const handleScroll = () => {
+    setScroll(window.scrollY);
+  };
+
+  React.useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>
       <AuthContext.Provider
@@ -118,6 +128,8 @@ function App() {
           setIsPromoPage,
           isBlackFriday,
           setIsBlackFriday,
+          scroll,
+          setScroll,
         }}
       >
         <SearchContext.Provider value={{ searchValue, setSearchValue }}>

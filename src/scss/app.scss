@@ -35,6 +35,15 @@
 .body-header {
     background-color: #fff;
     position: relative;
+    width: 100%;
+    &_fixed {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 50;
+        border-bottom: 2px solid #2525250c;
+        box-shadow: 5px 5px 5px #4848480d;        
+    }
     &__container {
         position: relative;
         min-height: 80px;    
