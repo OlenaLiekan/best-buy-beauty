@@ -61,7 +61,7 @@ const Header = () => {
 
   return (
     <div className="header">
-      <div className={hideTicker || scroll > 5 ? "top-header__hidden" : "header__top top-header"}>
+      <div className={hideTicker ? "top-header__hidden" : "header__top top-header"}>
         <div className="top-header__container">
           <div className="top-header__ticker ticker-header">
             <div className="ticker-header__text">
@@ -80,7 +80,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <div className={scroll > 5 ? "header__body body-header body-header_fixed" : "header__body body-header"}>
+      <div className={"header__body body-header"}>
         <div className="body-header__container">
           <Link to="/" className="body-header__logo header-logo">
             <div onClick={() => window.scrollTo(0,0)} className="header-logo__image">
@@ -95,7 +95,7 @@ const Header = () => {
               {!isLoading && logo ? logo.logoName : <LogoTextLoader/>}
             </h3>
           </Link>
-          {scroll > 5 ? '' : <Search />}
+          <Search />
           <div className="body-header__actions">
             <Link to="/cart" className="actions-header__cart _icon-cart">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M352 160v-32C352 57.42 294.579 0 224 0 153.42 0 96 57.42 96 128v32H0v272c0 44.183 35.817 80 80 80h288c44.183 0 80-35.817 80-80V160h-96zm-192-32c0-35.29 28.71-64 64-64s64 28.71 64 64v32H160v-32zm160 120c-13.255 0-24-10.745-24-24s10.745-24 24-24 24 10.745 24 24-10.745 24-24 24zm-192 0c-13.255 0-24-10.745-24-24s10.745-24 24-24 24 10.745 24 24-10.745 24-24 24z"/></svg>
