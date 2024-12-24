@@ -32,25 +32,27 @@
 .formLineSelect {
     position: relative;
     user-select: none;
-    svg {
-        position: absolute;
-        right: 10px;
-        top: 10px;
-        z-index: 2;
-        cursor: pointer;
-        transition: fill 0.4s ease 0s;
-        &:hover {
-            fill: #AD912B;
-        }
-        @media(max-width: 479.98px) {
-            left: 170px;
-            top: 30px;
-        }
-        @media(max-width: 379.98px) {
-            left: 150px;
-            top: 26px;
-        }
+}
+
+.arrow,
+.rotate {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 2;
+    cursor: pointer;
+    transition: fill 0.4s ease 0s;
+    &:hover {
+        fill: #AD912B;
     }
+    @media(max-width: 479.98px) {
+        left: 170px;
+        top: 30px;
+    }
+    @media(max-width: 379.98px) {
+        left: 150px;
+        top: 26px;
+    }    
 }
 
 .rotate {
@@ -190,11 +192,24 @@
     padding-top: 20px;
 }
 
+.searchLine {
+    position: relative;
+}
+
+.searchSvg {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    width: 18px;
+    height: 18px;
+    fill: #25252594;
+}
+
 .countrySearch {
     width: 100%;
     font-size: 14px;
     font-weight: 500;
-    padding: 8px 10px;
+    padding: 8px 10px 8px 40px;
     letter-spacing: 0.5px;
     outline: none;
     &::placeholder {

@@ -3333,15 +3333,26 @@
             text-align: center;
         }
     }
+    &__search-line {
+        position: relative;
+    }
     &__search {
         width: 100%;
         font-size: 15px;
         font-weight: 500;
-        padding: 8px 10px;
+        padding: 8px 10px 8px 40px;
         letter-spacing: 0.5px;
         outline: none;
         &::placeholder {
-            color: #848484;
+            color: #848484;        
+        }
+        &_svg {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 18px;
+            height: 18px;
+            fill: #25252594;
         }
     }
     &__line {
@@ -3359,24 +3370,23 @@
         &_select {
             position: relative;
             user-select: none;
-        
-            svg {
-                position: absolute;
-                right: 10px;
-                top: 10px;
-                z-index: 2;
-                cursor: pointer;
-                transition: fill 0.4s ease 0s;
-        
-                &:hover {
-                    fill: #AD912B;
-                }
-        
-                @media(max-width: 579.98px) {
-                    right: 10px;
-                    top: 34px;
-                }
-            }
+        }
+    }
+    &__arrow{
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        z-index: 2;
+        cursor: pointer;
+        transition: fill 0.4s ease 0s;
+
+        &:hover {
+            fill: #AD912B;
+        }
+
+        @media(max-width: 579.98px) {
+            right: 10px;
+            top: 34px;
         }
     }
     &_rotate {
