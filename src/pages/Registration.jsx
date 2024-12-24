@@ -126,7 +126,7 @@ const Registration = () => {
                                 onChange={onChangeEmail}/> 
                         </div>
                         <div className={emailValue && currentUser.email === emailValue ? "form-login__line form-login__line_error _error" : "form-login__line form-login__line_error"}>
-                            Este e-mail já existe.
+                            Este e-mail já existe!
                         </div>
                         <div className="form-login__line">
                             <label htmlFor="userPhone" className="form-login__label">Telemóvel</label>

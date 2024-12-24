@@ -48,7 +48,7 @@ const SubmitPage = () => {
   const [mbWayPayments, setMbWayPayments] = React.useState([]);
   const [payment, setPayment] = React.useState("");
   const [resetForm, setResetForm] = React.useState(false);
-  const [timeMark, setTimeMark] = React.useState(6);
+  //const [timeMark, setTimeMark] = React.useState(6);
   const [countryValue, setCountryValue] = React.useState('');
   const data = localStorage.getItem("user") ? localStorage.getItem("user") : "";
   const user = data ? JSON.parse(data) : "";
@@ -63,7 +63,7 @@ const SubmitPage = () => {
     }
   }, [location]);
 
-  React.useEffect(() => {
+  /*React.useEffect(() => {
     if (!user) {
       const numbers = [6, 5, 4, 3, 2, 1];
       (async function main() {
@@ -77,7 +77,7 @@ const SubmitPage = () => {
           navigate("/registration");       
       }, 6000);
     }
-  },[user]);
+  },[user]);*/
 
   React.useEffect(() => {
     let random = symbols[Math.floor(Math.random() * symbols.length)];
@@ -478,6 +478,10 @@ const SubmitPage = () => {
     }
   };
 
+  const redirectToCart = () => {
+    localStorage.setItem("redirected", true);
+  };
+
   return (
     <div className="cart__popup popup-cart">
       <div className="popup-cart__content">
@@ -839,13 +843,19 @@ const SubmitPage = () => {
               :
               <div className="popup-cart__redirect redirect-cart">
                 <p className="redirect-cart__text redirect-cart__text_gold">
-                  Por favor, registre-se para continuar fazendo seu pedido.
+                  Se você é um novo cliente, <br />
+                  registre-se para continuar fazendo seu pedido.
                 </p>
+                <Link onClick={redirectToCart} className="redirect-cart__link redirect-cart__link_black" to='/registration'>
+                  Cadastre-se aqui
+                </Link>
                 <p className="redirect-cart__text">
-                  Você será redirecionado automaticamente <br/>
-                  para a página de registro após
+                  Você já tem uma conta pessoal em nosso site? <br />
+                  Faça login para concluir sua compra.
                 </p>
-                <p className="redirect-cart__text redirect-cart__text_blue">{timeMark}</p>
+                <Link onClick={redirectToCart} className="redirect-cart__link" to='/login'>
+                  Faça login aqui
+                </Link>
               </div>
             }          
           </div>

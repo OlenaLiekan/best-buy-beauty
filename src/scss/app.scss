@@ -1106,7 +1106,7 @@
             justify-content: flex-end;
             border-bottom: none;
             font-weight: 500;                
-            color: $goldColor;
+            color: #e53638;
             letter-spacing: 2px;
             font-size: 14px;
             line-height: 1.2;
@@ -3235,6 +3235,29 @@
 }
 
 .redirect-cart {
+    &__link {
+        padding: 15px;
+        background-color: #0a55b0;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 1.2;
+        letter-spacing: 1px;
+        border-radius: 20px;
+        width: 200px;
+        text-align: center;
+        align-self: center;
+        box-shadow: 2px 2px 5px #25252521;
+        &:hover {
+            background-color: #1560BD;
+        }
+        &_black {
+            background-color: #252525;
+            &:hover {
+                background-color: #313131;
+            }
+        }
+    }
     &__text {
         font-size: 16px;
         font-weight: 500;
