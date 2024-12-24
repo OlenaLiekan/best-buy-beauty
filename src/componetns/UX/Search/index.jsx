@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./Search.module.scss";
 import debounce from 'lodash.debounce';
 import axios from "axios";
-import { bodyLock, bodyUnlock, camelize } from "../../../js/script";
+import { scrollBodyLock, scrollBodyUnlock, camelize } from "../../../js/script";
 
 import { SearchContext } from '../../../App';
 import { setSearch } from "../../../redux/slices/filterSlice";
@@ -68,7 +68,7 @@ const Search = () => {
             setIsLoading(false);            
             window.scrollTo(0, 0);  
         } else {
-            bodyUnlock();
+            scrollBodyUnlock();
         }
         setItems([]);
     }, [searchValue, serverDomain]);
@@ -76,9 +76,9 @@ const Search = () => {
     React.useEffect(() => {
         if (value) {
             setLockedSearch(true);
-            bodyLock(); 
+            scrollBodyLock();
         } else {
-            bodyUnlock();
+            scrollBodyUnlock();
             setTimeout(() => {
                 setLockedSearch(false);
             }, 500);

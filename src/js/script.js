@@ -200,3 +200,21 @@ export function camelize(str) {
     .map((word, index) => (index === 0 ? word : word[0].toUpperCase() + word.slice(1)))
     .join('');
 }
+
+const bodyEl = document.body;
+let lastScrollPos = 0;
+export const scrollBodyLock = () => {
+  lastScrollPos = window.scrollY;
+  bodyEl.style.overflow = 'hidden';
+  bodyEl.style.position = 'fixed';
+  bodyEl.style.top = `-${lastScrollPos}px`;
+  bodyEl.style.width = '100%';
+};
+
+export const scrollBodyUnlock = () => {
+  bodyEl.style.removeProperty('overflow');
+  bodyEl.style.removeProperty('position');
+  bodyEl.style.removeProperty('top');
+  bodyEl.style.removeProperty('width');
+  window.scrollTo(0, lastScrollPos);
+};
