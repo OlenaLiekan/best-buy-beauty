@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./Search.module.scss";
 import debounce from 'lodash.debounce';
 import axios from "axios";
-import { scrollBodyLock, scrollBodyUnlock, camelize } from "../../../js/script";
+import { bodyLock, bodyUnlock, camelize } from "../../../js/script";
 
 import { SearchContext } from '../../../App';
 import { setSearch } from "../../../redux/slices/filterSlice";
@@ -17,7 +17,7 @@ const Search = () => {
     const [brands, setBrands] = React.useState([]);
     const [value, setValue] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(true); 
-    const { searchValue, setSearchValue, lockedSearch, setLockedSearch } = React.useContext(SearchContext);
+    const { searchValue, setSearchValue, scroll, setLockedSearch } = React.useContext(SearchContext);
     const { serverDomain, imagesCloud, isBlackFriday } = React.useContext(AuthContext);
 
     const inputRef = React.useRef();
@@ -68,22 +68,22 @@ const Search = () => {
             setIsLoading(false);            
             window.scrollTo(0, 0);  
         } else {
-            scrollBodyUnlock();
+            bodyUnlock();
+            setItems([]);            
         }
-        setItems([]);
     }, [searchValue, serverDomain]);
 
     React.useEffect(() => {
         if (value) {
             setLockedSearch(true);
-            scrollBodyLock();
+            bodyLock();
         } else {
-            scrollBodyUnlock();
+            bodyUnlock();
             setTimeout(() => {
                 setLockedSearch(false);
             }, 500);
         }
-    }, [value]);
+    }, [value, scroll]);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/brand`)
@@ -151,7 +151,7 @@ const Search = () => {
                 )}
             </form>
             {value || items.length ?
-                <div className='search-header__results'>
+                <div className={value ? "search-header__results" : "search-header__results_hidden"}>
                     <div className="search-header__body">
                         <ul className="search-header__list search-list">
                             {isLoading ? '' : items.map((item) =>

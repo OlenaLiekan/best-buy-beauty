@@ -240,6 +240,7 @@
         }
     }
     &__results {
+        display: flex;
         position: absolute;
         top: 130px;
         left: 0;
@@ -251,6 +252,9 @@
         z-index: 50;            
         box-shadow: 0px 5px 5px #7f756a0f;
         padding: 10px 0;
+        &_hidden {
+            display: none;
+        }
         &::-webkit-scrollbar {
             display: none;
         }
