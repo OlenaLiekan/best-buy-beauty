@@ -25,18 +25,21 @@ const Search = () => {
     const navigate = useNavigate();
 
     const clearValueWithDelay = () => {
-        setTimeout(clearValue, 500);     
+        setTimeout(clearValue, 500);    
+        bodyUnlock();
     };
 
     const clearValue = () => {    
         setValue('');        
         setSearchValue(''); 
+        bodyUnlock();
     }
 
     const onClickClear = () => {
         setSearchValue('');
         setValue('');
         inputRef.current.focus();   
+        bodyUnlock();
     }
 
     const updateSearchValue = React.useCallback(
