@@ -201,7 +201,7 @@ export function camelize(str) {
     .join('');
 }
 
-/*const bodyEl = document.body;
+const bodyEl = document.body;
 let lastScrollPos = 0;
 export const scrollBodyLock = () => {
   lastScrollPos = window.scrollY;
@@ -217,4 +217,4 @@ export const scrollBodyUnlock = () => {
   bodyEl.style.removeProperty('top');
   bodyEl.style.removeProperty('width');
   window.scrollTo(0, lastScrollPos);
-};*/
+};
