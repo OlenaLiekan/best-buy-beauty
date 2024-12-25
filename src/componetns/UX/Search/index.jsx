@@ -79,9 +79,7 @@ const Search = () => {
             bodyLock();
         } else {
             bodyUnlock();
-            setTimeout(() => {
-                setLockedSearch(false);
-            }, 500);
+            setLockedSearch(false);
         }
     }, [value, scroll]);
 
