@@ -345,6 +345,7 @@ const SubmitPage = () => {
 
   const onClickUsePromo = (e) => {
     e.preventDefault();
+    window.scrollTo(0, 0);
       if (availablePromocode) {
         setMessage('Código promocional aplicado.');
       } else {
@@ -973,7 +974,13 @@ const SubmitPage = () => {
 
             </div>
             <div className={message ? "aside-popup-cart__line aside-popup-cart__line_msg" : "aside-popup-cart__line"}>
-              <div className="aside-popup-cart__text aside-popup-cart__text_msg">
+              <div className={availablePromocode ? "aside-popup-cart__text aside-popup-cart__text_msg" : "aside-popup-cart__text aside-popup-cart__text_msg aside-popup-cart__text_msg-red"}>
+                {availablePromocode
+                  ?
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M173.9 439.4l-166.4-166.4c-10-10-10-26.2 0-36.2l36.2-36.2c10-10 26.2-10 36.2 0L192 312.7 432.1 72.6c10-10 26.2-10 36.2 0l36.2 36.2c10 10 10 26.2 0 36.2l-294.4 294.4c-10 10-26.2 10-36.2 0z" /></svg>
+                  :
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path d="M242.7 256l100.1-100.1c12.3-12.3 12.3-32.2 0-44.5l-22.2-22.2c-12.3-12.3-32.2-12.3-44.5 0L176 189.3 75.9 89.2c-12.3-12.3-32.2-12.3-44.5 0L9.2 111.5c-12.3 12.3-12.3 32.2 0 44.5L109.3 256 9.2 356.1c-12.3 12.3-12.3 32.2 0 44.5l22.2 22.2c12.3 12.3 32.2 12.3 44.5 0L176 322.7l100.1 100.1c12.3 12.3 32.2 12.3 44.5 0l22.2-22.2c12.3-12.3 12.3-32.2 0-44.5L242.7 256z" /></svg>
+                }
                 {message} 
               </div>
             </div>
