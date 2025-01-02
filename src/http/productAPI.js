@@ -95,8 +95,33 @@ export const sendEmail = async mail => {
   return data;
 };
 
+export const newMember = async promoMail => {
+  const { data } = await $host.post('api/newMember', promoMail);
+  return data;
+};
+
 export const sendNewPass = async passMail => {
   const { data } = await $host.post('api/reset-password', passMail);
+  return data;
+};
+
+export const createPromocode = async promocode => {
+  const { data } = await $authHost.post('api/promocode', promocode);
+  return data;
+};
+
+export const updatePromocode = async (promocode, id) => {
+  const { data } = await $authHost.patch('api/promocode/' + id, promocode);
+  return data;
+};
+
+export const fetchPromocode = async () => {
+  const { data } = await $host.get('api/promocode');
+  return data;
+};
+
+export const fetchOnePromocode = async id => {
+  const { data } = await $host.get('api/promocode/' + id);
   return data;
 };
 

@@ -203,6 +203,7 @@ export function camelize(str) {
 
 const bodyEl = document.body;
 let lastScrollPos = 0;
+
 export const scrollBodyLock = () => {
   lastScrollPos = window.scrollY;
   bodyEl.style.overflow = 'hidden';

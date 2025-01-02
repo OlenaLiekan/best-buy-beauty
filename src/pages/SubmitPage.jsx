@@ -23,6 +23,7 @@ const SubmitPage = () => {
         : sum + item.count,
     0
   );
+
   const [deliveryPrices, setDeliveryPrices] = React.useState([]);
   const [deliveryPrice, setDeliveryPrice] = React.useState("0.00");
   const [orderNumber, setOrderNumber] = React.useState("");
@@ -49,11 +50,36 @@ const SubmitPage = () => {
   const [payment, setPayment] = React.useState("");
   const [resetForm, setResetForm] = React.useState(false);
   //const [timeMark, setTimeMark] = React.useState(6);
+  const [promocode, setPromocode] = React.useState('');
+  const [availablePromocode, setAvailablePromocode] = React.useState(false);
+  const [message, setMessage] = React.useState('');
+  const [promocodes, setPromocodes] = React.useState([]);
+  const [promocodeValue, setPromocodeValue] = React.useState(0);
+  const [userPromocodes, setUserPromocodes] = React.useState([]);
+
   const [countryValue, setCountryValue] = React.useState('');
+
   const data = localStorage.getItem("user") ? localStorage.getItem("user") : "";
   const user = data ? JSON.parse(data) : "";
   const symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   const orderItems = items.filter((item) => item.available);
+
+  const finalSum = promocodeValue && availablePromocode && message ? (totalPrice - (totalPrice * promocodeValue / 100 ).toFixed(2)) : totalPrice;
+
+  React.useEffect(() => {
+      axios.get(`${serverDomain}api/promocode`).then((res) => {
+      setPromocodes(res.data);
+    });
+  }, [serverDomain, availablePromocode]);
+
+  React.useEffect(() => {
+    if (user) {
+      axios.get(`${serverDomain}api/user/${user.id}`)
+        .then((res) => {
+          setUserPromocodes(res.data.promocode);
+        });
+    }
+  }, [user.id]);
 
   React.useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -62,22 +88,6 @@ const SubmitPage = () => {
       window.alert(decodeURIComponent(error));
     }
   }, [location]);
-
-  /*React.useEffect(() => {
-    if (!user) {
-      const numbers = [6, 5, 4, 3, 2, 1];
-      (async function main() {
-        for (let i = 0; i < numbers.length; i++) {     
-          setTimeMark(numbers[i]);
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-        }
-      })();
-      setTimeout(() => {
-        localStorage.setItem("redirected", true);
-          navigate("/registration");       
-      }, 6000);
-    }
-  },[user]);*/
 
   React.useEffect(() => {
     let random = symbols[Math.floor(Math.random() * symbols.length)];
@@ -313,6 +323,37 @@ const SubmitPage = () => {
     }
   };
 
+  const onChangePromocode = (e) => {
+    setAvailablePromocode(false);
+    setMessage('');
+    setPromocode(e.target.value.trim());
+  }
+
+  React.useEffect(() => {
+    if (promocode && promocodes) {
+      const match = promocodes.find((code) => promocode.toLowerCase() === code.name.toLowerCase());
+      const usedPromocode = userPromocodes.length ? userPromocodes.find((item) => item.name.toLowerCase() === promocode.toLowerCase()) : '';
+      if (match && !usedPromocode) {
+        setAvailablePromocode(true);
+        setPromocodeValue(match.value);
+      } else {
+        setAvailablePromocode(false);
+        setPromocodeValue('');
+      }
+    }
+  }, [promocodes,promocode,userPromocodes]);
+
+  const onClickUsePromo = (e) => {
+    e.preventDefault();
+      if (availablePromocode) {
+        setMessage('Código promocional aplicado.');
+      } else {
+        setMessage('O código promocional está incorreto ou já foi aplicado anteriormente.');
+      }     
+  };
+
+
+
   const order =
     orderItems.map(
       (item, index) =>
@@ -346,10 +387,13 @@ const SubmitPage = () => {
     totalCount +
     '</b><br><b style="font-size: 110%; padding-bottom: 20px;"><span style="padding-right: 10px;">Custo de entrega: </span>' +
     deliveryPrice +
-    " €</b>" +
+    " €</b>"  +
     '<br><br><b style="font-size: 125%; color: #AD902B; padding-bottom: 20px;"><span style="padding-right: 10px;">Valor total: </span>' +
     (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2) +
-    " €</b>";
+    " €</b>"+
+    (availablePromocode ? '<br><br><b style="font-size: 110%; color: #AD902B; padding-bottom: 20px;"><span style="padding-right: 10px;">Desconto: </span>' +
+    '- ' + promocodeValue + '%  ' + promocode +
+    "</b>" : '');
 
   const success = async (response) => {
     const date = new Date();
@@ -370,9 +414,16 @@ const SubmitPage = () => {
     );
     localStorage.setItem("clientCountry", countryData);
     localStorage.setItem("clientComment", comment ? comment : " ");
+    if (promocodeValue && availablePromocode) {
+      localStorage.setItem("promocodeDiscount", (totalPrice * promocodeValue / 100).toFixed(2));
+      localStorage.setItem("promocode", promocode.toUpperCase());
+    } else {
+      localStorage.removeItem("promocodeDiscount");
+      localStorage.removeItem("promocode");
+    }
     localStorage.setItem(
       "orderTotal",
-      (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2)
+      (finalSum + Number(deliveryPrice)).toFixed(2)
     );
     localStorage.setItem("totalCount", totalCount);
     localStorage.setItem("deliveryPrice", (+deliveryPrice).toFixed(2));
@@ -427,7 +478,7 @@ const SubmitPage = () => {
       city &&
       region &&
       country &&
-      totalPrice &&
+      finalSum &&
       totalCount &&
       deliveryPrice
     ) {
@@ -438,7 +489,7 @@ const SubmitPage = () => {
       formData.append("deliveryPrice", deliveryPrice);
       formData.append(
         "sum",
-        (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2)
+        (finalSum + Number(deliveryPrice)).toFixed(2)
       );
       formData.append("orderNumber", orderNumber);
       formData.append("userOrder", order);
@@ -879,9 +930,52 @@ const SubmitPage = () => {
                 {totalPrice.toFixed(2)} €
               </div>
             </div>
+            {
+              promocode.length && availablePromocode && message
+                ?
+                <div className="aside-popup-cart__line aside-popup-cart__line_label">
+                  <div className="aside-popup-cart__discount-persent">
+                    {promocodeValue}% de desconto
+                  </div>
+                  <div className="aside-popup-cart__discount-sum">
+                    - {(totalPrice - finalSum).toFixed(2)} €
+                  </div>
+                </div>  
+                :
+                ''
+            }
+           
             <div className="aside-popup-cart__line">
               <div className="aside-popup-cart__text">Custo de entrega</div>
               <div className="aside-popup-cart__text">{deliveryPrice} €</div>
+            </div>
+            <div className="aside-popup-cart__line aside-popup-cart__line_title">
+              <div className="aside-popup-cart__text aside-popup-cart__text_promo">
+                Código promocional
+              </div>
+            </div>
+            <div className="aside-popup-cart__line aside-popup-cart__line_promo">
+              <input type="text"
+                value={promocode}
+                onChange={onChangePromocode}
+                className="aside-popup-cart__input" />
+              {
+                promocode.length && !message
+                  ?
+                  <button onClick={onClickUsePromo} className="aside-popup-cart__btn" type="button">
+                    Aplicar
+                  </button>
+                  :
+                  <button disabled className="aside-popup-cart__btn aside-popup-cart__btn_disabled" type="button">
+                    Aplicar
+                  </button>
+              }
+
+            </div>
+            <div className={message ? "aside-popup-cart__line aside-popup-cart__line_msg" : "aside-popup-cart__line"}>
+              <div className="aside-popup-cart__text aside-popup-cart__text_msg">
+                {message} 
+              </div>
             </div>
             <div className="aside-popup-cart__line">
               <div
@@ -890,7 +984,7 @@ const SubmitPage = () => {
                 Total
               </div>
               <div className="aside-popup-cart__text-total">
-                {(+totalPrice + +deliveryPrice).toFixed(2)} €
+                {(+finalSum + +deliveryPrice).toFixed(2)} €
               </div>
             </div>
           </div>

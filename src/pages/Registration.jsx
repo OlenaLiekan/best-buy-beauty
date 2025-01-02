@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { checkedCheckbox } from '../js/script';
 import axios from 'axios';
 import debounce from 'lodash.debounce';
+import { newMember } from '../http/productAPI.js';
 import { registration } from '../http/userAPI.js';
 import { AuthContext } from '../context';
 
@@ -21,7 +22,19 @@ const Registration = () => {
     const [currentUser, setUser] = React.useState({});
     const [hiddenPass, setHiddenPass] = React.useState(true);
     const [hiddenCheckPass, setHiddenCheckPass] = React.useState(true);
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [promocode, setPromocode] = React.useState({});
     const { serverDomain } = React.useContext(AuthContext);
+
+    React.useEffect(() => {
+        setIsLoading(true);
+        axios.get(`${serverDomain}api/promocode`)
+            .then((res) => {
+                setPromocode(res.data.find((item) => item.newMember));
+                setIsLoading(false);
+            });
+    }, [serverDomain]);
+
 
     React.useEffect(() => {
         async function fetchUser() {
@@ -40,6 +53,19 @@ const Registration = () => {
         fetchUser();
     }, [emailValue, serverDomain]); 
 
+    const sendToNewMember = () => {
+        if (promocode && !isLoading) {
+            const promocodeName = promocode.name;
+            const promocodeValue = promocode.value;
+            const formData = new FormData();
+            formData.set('userEmail', email);
+            formData.set('userName', firstName);
+            formData.set('promocode', promocodeName);
+            formData.set('promocodeValue', promocodeValue);
+            newMember(formData).then((data) => console.log('promocode sent')).catch((err) => console.log('error'));     
+        }        
+    }
+
     const createAccount = async (e) => {
         e.preventDefault();
         try {
@@ -47,6 +73,7 @@ const Registration = () => {
             navigate('/login');
             window.scrollTo(0, 0);
             window.alert('Parabéns! Sua conta foi criada com sucesso.');
+            sendToNewMember();
         } catch (error) {
             window.alert('error');
         }

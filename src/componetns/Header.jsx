@@ -38,7 +38,7 @@ const Header = () => {
       localStorage.removeItem('auth');
       localStorage.removeItem('user');
     }
-  }, [user]);
+  }, [user, isAuth]);
 
   const { items } = useSelector((state) => state.cart);
   const totalCount = items.reduce((sum, item) => !item.available && item.available !== 'undefined' ? sum : sum + item.count, 0);

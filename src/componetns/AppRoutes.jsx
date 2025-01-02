@@ -46,7 +46,7 @@ const AppRoutes = () => {
           <Route path="login" element={<UserLogIn />} />
         )}
         <Route path="registration" element={<Registration />} />
-        <Route path="reset-password" element={<ResetPassword/> } />
+        <Route path="reset-password" element={<ResetPassword />} />
         <Route path="catalog" element={<Catalog />} />
         {types.map((type) => (
           <Route

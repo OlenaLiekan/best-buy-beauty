@@ -80,11 +80,12 @@ const Search = () => {
         if (value) {
             setLockedSearch(true);
             scrollBodyLock();
+            console.log(value);
         } else {
             scrollBodyUnlock();
             setLockedSearch(false);
         }
-    }, [value, scroll]);
+    }, [value]);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/brand`)

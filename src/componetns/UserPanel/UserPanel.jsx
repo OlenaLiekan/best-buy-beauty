@@ -28,6 +28,7 @@ const UserPanel = ({ user }) => {
     const [visibleMain, setVisibleMain] = React.useState(true);
     const [allOrders, setAllOrders] = React.useState(false);
     const [paidOrders, setPaidOrders] = React.useState([]);
+    const [userPaidOrders, setUserPaidOrders] = React.useState([]);
 
     const menuItems = ['Histórico de pedidos', 'Endereços', 'Gerenciamento de contas'];
 
@@ -49,6 +50,7 @@ const UserPanel = ({ user }) => {
         axios.get(`${serverDomain}api/sibs?paymentStatus=Success`)
             .then((res) => {
                 setPaidOrders(res.data);
+                setUserPaidOrders(res.data.filter((order) => order.email === user.email));
             });
     }, [user.id]);
 
@@ -256,7 +258,7 @@ const UserPanel = ({ user }) => {
                                 </>  
                                 }  
                             </ul>
-                            <button onClick={showAll} className={orders.length > 10 ? styles.showOrders : styles.hidden}>
+                            <button onClick={showAll} className={userPaidOrders.length > 10 ? styles.showOrders : styles.hidden}>
                                 {allOrders ? 'Ocultar arquivo' : 'Mostre tudo'}
                             </button>
                         </div>

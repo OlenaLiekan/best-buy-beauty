@@ -4,12 +4,17 @@ import { clearItems } from "../redux/slices/cartSlice";
 import { useDispatch } from "react-redux";
 import { scrollTop } from "../js/script";
 import { AuthContext } from "../context";
+import { updateUser } from "../http/userAPI";
 import axios from "axios";
 
 const SuccessPage = () => {
   const dispatch = useDispatch();
   const { adminMode } = React.useContext(AuthContext);
   const [detailsVisibility, setDetailsVisibility] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [existingPromocode, setExistingPromocode] = React.useState('');
+  const { serverDomain} = React.useContext(AuthContext);
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const method = queryParams.get("method");
@@ -28,6 +33,8 @@ const SuccessPage = () => {
   const clientComment = localStorage.getItem("clientComment")
     ? localStorage.getItem("clientComment")
     : "Sem comentários";
+  const promocodeDiscount = localStorage.getItem('promocodeDiscount') ? localStorage.getItem('promocodeDiscount') : '';
+  const promocode = localStorage.getItem('promocode') ? localStorage.getItem('promocode') : '';
   const totalCount = localStorage.getItem("totalCount");
   const deliveryPrice = localStorage.getItem("deliveryPrice");
   const clientOrder = localStorage.getItem("clientOrder");
@@ -41,6 +48,32 @@ const SuccessPage = () => {
       setDetailsVisibility(true);
     }
   };
+
+  const savePromocode = () => {
+    const formData = new FormData();
+    const id = user.id;
+    formData.append('promocode', promocode);
+    formData.append('orderId', orderId);
+    formData.append('userId', id);
+    updateUser(formData, id);
+  };
+
+  React.useEffect(() => {
+    if (promocode && user) {
+      setIsLoading(true);
+      axios.get(`${serverDomain}api/user/${user.id}`)
+        .then((res) => {
+          setExistingPromocode(res.data.promocode.find((item) => item.name === promocode));
+          setIsLoading(false);
+        });
+    }
+  }, [promocode]);
+
+  React.useEffect(() => {
+    if (!existingPromocode && !isLoading) {
+      savePromocode();
+    }
+  }, [existingPromocode, isLoading]);
 
   return (
     <div className="main__success success-main">
@@ -199,6 +232,16 @@ const SuccessPage = () => {
                     <div>Custo de entrega</div>
                     <div>{deliveryPrice} €</div>
                   </div>
+                  {
+                    promocodeDiscount 
+                      ?
+                      <div className="body-success__line">
+                        <div>Desconto {promocode}</div>
+                        <div>- {promocodeDiscount} €</div>
+                      </div>                      
+                      :
+                      ''
+                  }
                   <div className="body-success__line">
                     <div>Valor total</div>
                     <div>{orderTotal} €</div>
