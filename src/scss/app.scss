@@ -3845,6 +3845,10 @@
         @media (max-width: 379.98px) {
             font-size: 12px;
         }
+        &_bold {
+            color: #000;
+            font-weight: 600;
+        }
     }
     &__details {
         text-align: right;

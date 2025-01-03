@@ -242,19 +242,19 @@ const SuccessPage = () => {
                       :
                       ''
                   }
-                  <div className="body-success__line">
+                  <div className="body-success__line body-success__line_bold">
                     <div>Valor total</div>
                     <div>{orderTotal} €</div>
                   </div>
                 </div>
                 {user && !adminMode ? (
-                  <Link to="/auth" className="body-success__button checkout">
+                  <Link to="/auth" onClick={() => window.scrollTo(0, 0)} className="body-success__button checkout">
                     Ver a minha compra
                   </Link>
                 ) : (
                   <Link
                     to="/"
-                    onClick={scrollTop}
+                    onClick={() => window.scrollTo(0, 0)}
                     className="body-success__button go-shopping scroll-top"
                   >
                     Voltar à página inicial
