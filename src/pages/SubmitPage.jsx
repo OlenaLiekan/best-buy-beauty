@@ -388,13 +388,13 @@ const SubmitPage = () => {
     totalCount +
     '</b><br><b style="font-size: 110%; padding-bottom: 20px;"><span style="padding-right: 10px;">Custo de entrega: </span>' +
     deliveryPrice +
-    " €</b>"  +
-    '<br><br><b style="font-size: 125%; color: #AD902B; padding-bottom: 20px;"><span style="padding-right: 10px;">Valor total: </span>' +
-    (+totalPrice.toFixed(2) + Number(deliveryPrice)).toFixed(2) +
-    " €</b>"+
+    " €</b>" +
     (availablePromocode ? '<br><br><b style="font-size: 110%; color: #AD902B; padding-bottom: 20px;"><span style="padding-right: 10px;">Desconto: </span>' +
     '- ' + promocodeValue + '%  ' + promocode +
-    "</b>" : '');
+    "</b>" : '') + 
+    '<br><br><b style="font-size: 125%; color: #AD902B; padding-bottom: 20px;"><span style="padding-right: 10px;">Valor total: </span>' +
+    (finalSum + Number(deliveryPrice)).toFixed(2) +
+    " €</b>";
 
   const success = async (response) => {
     const date = new Date();
@@ -507,6 +507,8 @@ const SubmitPage = () => {
       formData.append("userPostalCode", postalCode);
       formData.append("userComment", comment);
       formData.append("countryCode", countryData.code);
+      formData.append("promocodeName", availablePromocode && promocode ? promocode : '');
+      formData.append("promocodeValue", availablePromocode && promocodeValue ? promocodeValue : '');
 
       try {
         const response = await submitPurchase(formData);
