@@ -390,7 +390,7 @@ const SubmitPage = () => {
     deliveryPrice +
     " €</b>" +
     (availablePromocode ? '<br><br><b style="font-size: 110%; color: #AD902B; padding-bottom: 20px;"><span style="padding-right: 10px;">Desconto: </span>' +
-    '- ' + promocodeValue + '%  ' + promocode +
+    '- ' + promocodeValue + '%  ' + promocode.toUpperCase() +
     "</b>" : '') + 
     '<br><br><b style="font-size: 125%; color: #AD902B; padding-bottom: 20px;"><span style="padding-right: 10px;">Valor total: </span>' +
     (finalSum + Number(deliveryPrice)).toFixed(2) +
@@ -507,7 +507,7 @@ const SubmitPage = () => {
       formData.append("userPostalCode", postalCode);
       formData.append("userComment", comment);
       formData.append("countryCode", countryData.code);
-      formData.append("promocodeName", availablePromocode && promocode ? promocode : '');
+      formData.append("promocodeName", availablePromocode && promocode ? promocode.toUpperCase() : '');
       formData.append("promocodeValue", availablePromocode && promocodeValue ? promocodeValue : '');
 
       try {
