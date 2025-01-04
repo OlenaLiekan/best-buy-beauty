@@ -49,7 +49,6 @@ const Registration = () => {
             } catch (error) {
             }
         }
-        window.scrollTo(0, 0);
         fetchUser();
     }, [emailValue, serverDomain]); 
 
