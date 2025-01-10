@@ -994,7 +994,7 @@ const SubmitPage = () => {
             }
             {usedPromocode
               ?
-              <div className="aside-popup-cart__line">
+              <div className="aside-popup-cart__line aside-popup-cart__line_overflow">
                 <div className="aside-popup-cart__used-promocode">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M0 252.1V48C0 21.5 21.5 0 48 0h204.1a48 48 0 0 1 33.9 14.1l211.9 211.9c18.7 18.7 18.7 49.1 0 67.9L293.8 497.9c-18.7 18.7-49.1 18.7-67.9 0L14.1 286.1A48 48 0 0 1 0 252.1zM112 64c-26.5 0-48 21.5-48 48s21.5 48 48 48 48-21.5 48-48-21.5-48-48-48z"/></svg>
                   {usedPromocode}
