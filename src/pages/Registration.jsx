@@ -69,8 +69,8 @@ const Registration = () => {
         e.preventDefault();
         try {
             await registration(email, password, firstName, lastName, phone); 
+            window.scrollTo(0, 0);            
             navigate('/login');
-            window.scrollTo(0, 0);
             window.alert('Parabéns! Sua conta foi criada com sucesso.');
             sendToNewMember();
         } catch (error) {

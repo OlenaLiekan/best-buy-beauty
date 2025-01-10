@@ -3192,8 +3192,8 @@
             padding: 30px 20px;
         }
     }
-    &__body {        
-        flex: 0 0 55%;      
+    &__body {     
+        margin: 0 auto;
         background-color: #fff;
         min-height: 100vh;
     }
@@ -3232,8 +3232,8 @@
     &__item:hover {
         color: #AD902B;
     }
-    &__aside {     
-        flex: 0 0 45%;
+    &__aside {    
+        flex: 0 0 45%; 
         background-color: #f0f0f067;
     }
 }
@@ -3315,28 +3315,13 @@
         }
         &_label {
             background-color: #fff;
-            color: #1560BD;
+            color: #AD902B;
             padding: 10px;
             font-weight: 500;
-            width: 350px;
-            @media(max-width: 991.98px) {
-                width: 260px;
-            }
-        
-            @media(max-width: 767.98px) {
-                width: 350px;
-            }
-        
-            @media(max-width: 379.98px) {
-                width: 260px;
-            }
-            @media(max-width: 319.98px) {
-                width: 240px;
-            }
         }
         &_promo {
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             gap: 2px;
             @media(max-width: 991.98px) {
                 flex-direction: column;
@@ -3351,14 +3336,17 @@
                 gap: 15px;
             }
         }
-        &_title,
         &_msg {
             justify-content: center;
             text-align: center;
         }
         &_msg {
+            background-color: #ffffff58;
+            border-radius: 2px;
+            border: 2px solid #fff;
+        }
+        &_overflow {
             width: 350px;
-            background-color: #fff;
             @media(max-width: 991.98px) {
                 width: 260px;
             }
@@ -3376,6 +3364,44 @@
             }
         }
     }
+    &__used-promocode {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        background-color: #84848425;
+        color: #252525;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 1.2;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        border-radius: 2px;
+        padding: 10px;
+
+        svg {
+            fill: #252525c0;
+            transform: rotate(90deg);
+            width: 20px;
+            height: 20px;
+        }
+        @media(max-width: 379.98px) {
+            margin: 0 auto;
+        }
+    }
+    &__text-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        background-color: #ffffff58;
+        border-radius: 2px;
+        border: 2px solid #fff;
+        color: #484848;
+        font-size: 16px;
+        letter-spacing: 0.5px;
+        padding: 10px;
+        width: 100%;
+    }
     &__text {
         display: flex;
         gap: 10px;
@@ -3389,14 +3415,23 @@
             width: 30px;
             height: 30px;
         }
+        &-delivery {
+            display: flex;
+            gap: 5px;
+            svg {
+                fill: #252525;
+                width: 14px;
+                height: 14px;
+                cursor: pointer;
+                transition: all 0.6s ease 0s;
+                &:hover {
+                    fill: #AD902B;
+                    transform: rotate(-360deg);
+                }
+            }
+        }
         @media(max-width: 479.98px) {
             font-size: 14px;
-        }
-        &_promo {
-            color: #252525;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-top: 20px;
         }
         &_msg {
             font-size: 14px;
@@ -3404,8 +3439,8 @@
             padding: 10px;        
             svg {
                 fill: #20a120;
-                width: 40px;
-                height: 40px;
+                width: 30px;
+                height: 30px;
             }
         }
         &_msg-red {
@@ -3437,6 +3472,12 @@
         color: #252525;
         outline: none;
         box-shadow: 5px 5px 5px #2525250a;
+        &::placeholder {
+            text-transform: none;
+            font-weight: 500;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+        }
         @media(max-width: 991.98px) {
             width: 100%;
             border-radius: 20px 20px 20px 20px;
@@ -3486,9 +3527,25 @@
     }
 }
 
+.text-group {
+    &__label {
+        color: #252525;
+        font-weight: 500;
+    }
+}
+
+.delete-icon {
+    cursor: pointer;
+    transition: fill 0.6s ease 0s;
+    &:hover {
+        fill: #252525;
+    }
+}
+
 .popup-form {
     display: flex;
     flex-direction: column;
+    max-width: 460px;
     &__text {
         font-size: 14px;
         font-weight: 500;

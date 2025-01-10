@@ -28,6 +28,7 @@ const SubmitPage = () => {
   const [deliveryPrice, setDeliveryPrice] = React.useState("0.00");
   const [orderNumber, setOrderNumber] = React.useState("");
   const [isPortugal, setIsPortugal] = React.useState(0);
+  const [isSpain, setIsSpain] = React.useState(0);
   const { serverDomain, isAuth } = React.useContext(AuthContext);
   const [username, setUsername] = React.useState("");
   const [surname, setSurname] = React.useState("");
@@ -56,6 +57,7 @@ const SubmitPage = () => {
   const [promocodes, setPromocodes] = React.useState([]);
   const [promocodeValue, setPromocodeValue] = React.useState(0);
   const [userPromocodes, setUserPromocodes] = React.useState([]);
+  const [usedPromocode, setUsedPromocode] = React.useState('');
 
   const [countryValue, setCountryValue] = React.useState('');
 
@@ -102,10 +104,17 @@ const SubmitPage = () => {
   React.useEffect(() => {
     if (country === "PT") {
       setIsPortugal(true);
+      setIsSpain(false);
     } else {
       setIsPortugal(false);
+      if (country === "ES") {
+        setIsSpain(true);
+        setIsPortugal(false);
+      } else {
+        setIsSpain(false);
+      }
     }
-  }, [country]);
+  }, [country, isPortugal, isSpain]);
 
 
   React.useEffect(() => {
@@ -115,6 +124,9 @@ const SubmitPage = () => {
   }, [serverDomain]);
 
   React.useEffect(() => {
+    if (user) {
+
+
     if (deliveryPrices.length) {
       const oneProduct = deliveryPrices.find(
         (delivery) => delivery.type === "Um produto"
@@ -128,6 +140,9 @@ const SubmitPage = () => {
       const otherCountry = deliveryPrices.find(
         (delivery) => delivery.type === "Outro país"
       );
+      const spain = deliveryPrices.find(
+        (delivery) => delivery.type === "Espanha"
+      );
       if (isPortugal) {
         if (totalCount === 1 && totalPrice < freeDelivery.requiredSum) {
           setDeliveryPrice(oneProduct.price);
@@ -136,11 +151,14 @@ const SubmitPage = () => {
         } else {
           setDeliveryPrice(freeDelivery.price);
         }
-      } else if (!isPortugal) {
-        setDeliveryPrice(otherCountry.price);
+      } else if (isSpain) {
+          setDeliveryPrice(spain.price);  
+      } else {
+        setDeliveryPrice(otherCountry.price);          
+      }
       }
     }
-  }, [totalCount, totalPrice, deliveryPrices, isPortugal]);
+  }, [totalCount, totalPrice, deliveryPrices, isPortugal, isSpain]);
 
   React.useEffect(() => {
     if (user.id && !mainData) {
@@ -332,24 +350,25 @@ const SubmitPage = () => {
   React.useEffect(() => {
     if (promocode && promocodes) {
       const match = promocodes.find((code) => promocode.toLowerCase() === code.name.toLowerCase());
-      const usedPromocode = userPromocodes.length ? userPromocodes.find((item) => item.name.toLowerCase() === promocode.toLowerCase()) : '';
-      if (match && !usedPromocode) {
+      const usedPromo = userPromocodes.length ? userPromocodes.find((item) => item.name.toLowerCase() === promocode.toLowerCase()) : '';
+      if (match && !usedPromo) {
         setAvailablePromocode(true);
         setPromocodeValue(match.value);
       } else {
         setAvailablePromocode(false);
-        setPromocodeValue('');
       }
     }
-  }, [promocodes,promocode,userPromocodes]);
+  }, [promocodes, promocode, usedPromocode, userPromocodes]);
 
   const onClickUsePromo = (e) => {
     e.preventDefault();
     window.scrollTo(0, 0);
       if (availablePromocode) {
-        setMessage('Código promocional aplicado.');
+        setMessage('Código de desconto aplicado.');
+        setUsedPromocode(promocode);
+        setPromocode('');
       } else {
-        setMessage('O código promocional está incorreto ou já foi aplicado anteriormente.');
+        setMessage('O código de desconto está incorreto ou já foi aplicado anteriormente.');
       }     
   };
 
@@ -389,8 +408,8 @@ const SubmitPage = () => {
     '</b><br><b style="font-size: 110%; padding-bottom: 20px;"><span style="padding-right: 10px;">Custo de entrega: </span>' +
     deliveryPrice +
     " €</b>" +
-    (availablePromocode ? '<br><br><b style="font-size: 110%; color: #AD902B; padding-bottom: 20px;"><span style="padding-right: 10px;">Desconto: </span>' +
-    '- ' + promocodeValue + '%  ' + promocode.toUpperCase() +
+    (usedPromocode ? '<br><br><b style="font-size: 110%; color: #AD902B; padding-bottom: 20px;"><span style="padding-right: 10px;">Desconto: </span>' +
+    '- ' + promocodeValue + '%  ' + usedPromocode.toUpperCase() +
     "</b>" : '') + 
     '<br><br><b style="font-size: 125%; color: #AD902B; padding-bottom: 20px;"><span style="padding-right: 10px;">Valor total: </span>' +
     (finalSum + Number(deliveryPrice)).toFixed(2) +
@@ -415,9 +434,9 @@ const SubmitPage = () => {
     );
     localStorage.setItem("clientCountry", countryData);
     localStorage.setItem("clientComment", comment ? comment : " ");
-    if (promocodeValue && availablePromocode) {
+    if (promocodeValue && usedPromocode) {
       localStorage.setItem("promocodeDiscount", (totalPrice * promocodeValue / 100).toFixed(2));
-      localStorage.setItem("promocode", promocode.toUpperCase());
+      localStorage.setItem("promocode", usedPromocode.toUpperCase());
     } else {
       localStorage.removeItem("promocodeDiscount");
       localStorage.removeItem("promocode");
@@ -507,8 +526,8 @@ const SubmitPage = () => {
       formData.append("userPostalCode", postalCode);
       formData.append("userComment", comment);
       formData.append("countryCode", countryData.code);
-      formData.append("promocodeName", availablePromocode && promocode ? promocode.toUpperCase() : '');
-      formData.append("promocodeValue", availablePromocode && promocodeValue ? promocodeValue : '');
+      formData.append("promocodeName", usedPromocode ? usedPromocode.toUpperCase() : '');
+      formData.append("promocodeValue", usedPromocode && promocodeValue ? promocodeValue : '');
 
       try {
         const response = await submitPurchase(formData);
@@ -536,12 +555,19 @@ const SubmitPage = () => {
     localStorage.setItem("redirected", true);
   };
 
+  const deletePromocode = () => {
+    setMessage('');
+    setAvailablePromocode(false);
+    setUsedPromocode('');
+    setPromocodeValue(0);
+  }
+
   return (
     <div className="cart__popup popup-cart">
       <div className="popup-cart__content">
           <div className="popup-cart__text">
             <p className="popup-cart__paragraph">
-              Pedimos desculpas, o site está passando por trabalhos técnicos.
+              Pedimos desculpas, o site está passando por trabalhos técnicos. 
             </p>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
               <path d="M308.5 135.3c7.1-6.3 9.9-16.2 6.2-25c-2.3-5.3-4.8-10.5-7.6-15.5L304 89.4c-3-5-6.3-9.9-9.8-14.6c-5.7-7.6-15.7-10.1-24.7-7.1l-28.2 9.3c-10.7-8.8-23-16-36.2-20.9L199 27.1c-1.9-9.3-9.1-16.7-18.5-17.8C173.9 8.4 167.2 8 160.4 8l-.7 0c-6.8 0-13.5 .4-20.1 1.2c-9.4 1.1-16.6 8.6-18.5 17.8L115 56.1c-13.3 5-25.5 12.1-36.2 20.9L50.5 67.8c-9-3-19-.5-24.7 7.1c-3.5 4.7-6.8 9.6-9.9 14.6l-3 5.3c-2.8 5-5.3 10.2-7.6 15.6c-3.7 8.7-.9 18.6 6.2 25l22.2 19.8C32.6 161.9 32 168.9 32 176s.6 14.1 1.7 20.9L11.5 216.7c-7.1 6.3-9.9 16.2-6.2 25c2.3 5.3 4.8 10.5 7.6 15.6l3 5.2c3 5.1 6.3 9.9 9.9 14.6c5.7 7.6 15.7 10.1 24.7 7.1l28.2-9.3c10.7 8.8 23 16 36.2 20.9l6.1 29.1c1.9 9.3 9.1 16.7 18.5 17.8c6.7 .8 13.5 1.2 20.4 1.2s13.7-.4 20.4-1.2c9.4-1.1 16.6-8.6 18.5-17.8l6.1-29.1c13.3-5 25.5-12.1 36.2-20.9l28.2 9.3c9 3 19 .5 24.7-7.1c3.5-4.7 6.8-9.5 9.8-14.6l3.1-5.4c2.8-5 5.3-10.2 7.6-15.5c3.7-8.7 .9-18.6-6.2-25l-22.2-19.8c1.1-6.8 1.7-13.8 1.7-20.9s-.6-14.1-1.7-20.9l22.2-19.8zM112 176a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zM504.7 500.5c6.3 7.1 16.2 9.9 25 6.2c5.3-2.3 10.5-4.8 15.5-7.6l5.4-3.1c5-3 9.9-6.3 14.6-9.8c7.6-5.7 10.1-15.7 7.1-24.7l-9.3-28.2c8.8-10.7 16-23 20.9-36.2l29.1-6.1c9.3-1.9 16.7-9.1 17.8-18.5c.8-6.7 1.2-13.5 1.2-20.4s-.4-13.7-1.2-20.4c-1.1-9.4-8.6-16.6-17.8-18.5L583.9 307c-5-13.3-12.1-25.5-20.9-36.2l9.3-28.2c3-9 .5-19-7.1-24.7c-4.7-3.5-9.6-6.8-14.6-9.9l-5.3-3c-5-2.8-10.2-5.3-15.6-7.6c-8.7-3.7-18.6-.9-25 6.2l-19.8 22.2c-6.8-1.1-13.8-1.7-20.9-1.7s-14.1 .6-20.9 1.7l-19.8-22.2c-6.3-7.1-16.2-9.9-25-6.2c-5.3 2.3-10.5 4.8-15.6 7.6l-5.2 3c-5.1 3-9.9 6.3-14.6 9.9c-7.6 5.7-10.1 15.7-7.1 24.7l9.3 28.2c-8.8 10.7-16 23-20.9 36.2L315.1 313c-9.3 1.9-16.7 9.1-17.8 18.5c-.8 6.7-1.2 13.5-1.2 20.4s.4 13.7 1.2 20.4c1.1 9.4 8.6 16.6 17.8 18.5l29.1 6.1c5 13.3 12.1 25.5 20.9 36.2l-9.3 28.2c-3 9-.5 19 7.1 24.7c4.7 3.5 9.5 6.8 14.6 9.8l5.4 3.1c5 2.8 10.2 5.3 15.5 7.6c8.7 3.7 18.6 .9 25-6.2l19.8-22.2c6.8 1.1 13.8 1.7 20.9 1.7s14.1-.6 20.9-1.7l19.8 22.2zM464 304a48 48 0 1 1 0 96 48 48 0 1 1 0-96z" />
@@ -925,48 +951,18 @@ const SubmitPage = () => {
           </div>
         <div className="popup-cart__aside aside-popup-cart">
           <div className="aside-popup-cart__wrapper">
-            <div className="aside-popup-cart__line">
-              <div className="aside-popup-cart__text">
-                Subtotal {totalCount} itens
-              </div>
-              <div className="aside-popup-cart__text">
-                {totalPrice.toFixed(2)} €
-              </div>
-            </div>
-            {
-              promocode.length && availablePromocode && message
-                ?
-                <div className="aside-popup-cart__line aside-popup-cart__line_label">
-                  <div className="aside-popup-cart__discount-persent">
-                    {promocodeValue}% de desconto
-                  </div>
-                  <div className="aside-popup-cart__discount-sum">
-                    - {(totalPrice - finalSum).toFixed(2)} €
-                  </div>
-                </div>  
-                :
-                ''
-            }
-           
-            <div className="aside-popup-cart__line">
-              <div className="aside-popup-cart__text">Custo de entrega</div>
-              <div className="aside-popup-cart__text">{deliveryPrice} €</div>
-            </div>
             {user 
               ?
               <>
-                <div className="aside-popup-cart__line aside-popup-cart__line_title">
-                  <div className="aside-popup-cart__text aside-popup-cart__text_promo">
-                    Código promocional
-                  </div>
-                </div>
                 <div className="aside-popup-cart__line aside-popup-cart__line_promo">
                   <input type="text"
+                    disabled={usedPromocode ? true : false}
+                    placeholder="Código de desconto"
                     value={promocode}
                     onChange={onChangePromocode}
                     className="aside-popup-cart__input" />
                   {
-                    promocode.length && !message
+                    !usedPromocode.length && promocode.length && !message
                       ?
                       <button onClick={onClickUsePromo} className="aside-popup-cart__btn" type="button">
                         Aplicar
@@ -976,9 +972,8 @@ const SubmitPage = () => {
                         Aplicar
                       </button>
                   }
-
                 </div>
-                <div className={message ? "aside-popup-cart__line aside-popup-cart__line_msg" : "aside-popup-cart__line"}>
+                <div className={message ? "aside-popup-cart__line aside-popup-cart__line_msg aside-popup-cart__line_overflow" : "aside-popup-cart__line"}>
                   <div className={availablePromocode ? "aside-popup-cart__text aside-popup-cart__text_msg" : "aside-popup-cart__text aside-popup-cart__text_msg aside-popup-cart__text_msg-red"}>
                     {message
                       ?
@@ -997,6 +992,73 @@ const SubmitPage = () => {
               :
               ''
             }
+            {usedPromocode
+              ?
+              <div className="aside-popup-cart__line">
+                <div className="aside-popup-cart__used-promocode">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M0 252.1V48C0 21.5 21.5 0 48 0h204.1a48 48 0 0 1 33.9 14.1l211.9 211.9c18.7 18.7 18.7 49.1 0 67.9L293.8 497.9c-18.7 18.7-49.1 18.7-67.9 0L14.1 286.1A48 48 0 0 1 0 252.1zM112 64c-26.5 0-48 21.5-48 48s21.5 48 48 48 48-21.5 48-48-21.5-48-48-48z"/></svg>
+                  {usedPromocode}
+                  <svg onClick={deletePromocode} className="delete-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path d="M242.7 256l100.1-100.1c12.3-12.3 12.3-32.2 0-44.5l-22.2-22.2c-12.3-12.3-32.2-12.3-44.5 0L176 189.3 75.9 89.2c-12.3-12.3-32.2-12.3-44.5 0L9.2 111.5c-12.3 12.3-12.3 32.2 0 44.5L109.3 256 9.2 356.1c-12.3 12.3-12.3 32.2 0 44.5l22.2 22.2c12.3 12.3 32.2 12.3 44.5 0L176 322.7l100.1 100.1c12.3 12.3 32.2 12.3 44.5 0l22.2-22.2c12.3-12.3 12.3-32.2 0-44.5L242.7 256z"/></svg>
+                </div>
+              </div>
+              :
+              ""
+            }
+            <div className="aside-popup-cart__line">
+              <div className="aside-popup-cart__text">
+                Subtotal {totalCount} {totalCount > 1 ? 'itens' : 'iten'}
+              </div>
+              <div className="aside-popup-cart__text">
+                {totalPrice.toFixed(2)} €
+              </div>
+            </div>
+            {
+              usedPromocode.length
+                ?
+                <div className="aside-popup-cart__line aside-popup-cart__line_label aside-popup-cart__line_overflow">
+                  <div className="aside-popup-cart__discount-persent">
+                    {promocodeValue}% de desconto
+                  </div>
+                  <div className="aside-popup-cart__discount-sum">
+                    - {(totalPrice - finalSum).toFixed(2)} €
+                  </div>
+                </div>  
+                :
+                ''
+            }
+            <div className="aside-popup-cart__line">
+              <div className="aside-popup-cart__text aside-popup-cart__text-delivery">
+                Envio
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119.1 8 256c0 137 111 248 248 248s248-111 248-248C504 119.1 393 8 256 8zm0 448c-110.5 0-200-89.4-200-200 0-110.5 89.5-200 200-200 110.5 0 200 89.5 200 200 0 110.5-89.4 200-200 200zm107.2-255.2c0 67.1-72.4 68.1-72.4 92.9V300c0 6.6-5.4 12-12 12h-45.6c-6.6 0-12-5.4-12-12v-8.7c0-35.7 27.1-50 47.6-61.5 17.6-9.8 28.3-16.5 28.3-29.6 0-17.2-22-28.7-39.8-28.7-23.2 0-33.9 11-48.9 30-4.1 5.1-11.5 6.1-16.7 2.1l-27.8-21.1c-5.1-3.9-6.3-11.1-2.6-16.4C184.8 131.5 214.9 112 261.8 112c49.1 0 101.5 38.3 101.5 88.8zM298 368c0 23.2-18.8 42-42 42s-42-18.8-42-42 18.8-42 42-42 42 18.8 42 42z"/></svg>
+              </div>
+              <div className="aside-popup-cart__text">{user ? (deliveryPrice > 0 ? deliveryPrice + ' €' : 'GRÁTIS') : "Depende do país"}</div>
+            </div>
+            <div className="aside-popup-cart__line aside-popup-cart__line_overflow">
+              {
+                isPortugal && user
+                &&
+                <div className="aside-popup-cart__text-group text-group">
+                  <div className="text-group__label">{deliveryPrice > 0 ? "CTT Expresso" : "Portes grátis (CTT Expresso)" }</div>
+                  <div>Entrega em 1-2 dias úteis</div>
+                </div>
+              }
+              {
+                isSpain && user
+                &&
+                <div className="aside-popup-cart__text-group text-group">
+                  <div className="text-group__label">Envio CTT</div>
+                  <div>Entrega em 2-4 dias úteis</div>
+                </div>
+              }
+              {
+                !isPortugal && !isSpain && user
+                  &&
+                  <div className="aside-popup-cart__text-group text-group">
+                    <div className="text-group__label">Envio CTT</div>
+                    <div>Entrega em 3-7 dias úteis</div>
+                  </div>
+              }
+            </div>
             <div className="aside-popup-cart__line">
               <div
                 className="aside-popup-cart__text aside-popup-cart__text-total"
