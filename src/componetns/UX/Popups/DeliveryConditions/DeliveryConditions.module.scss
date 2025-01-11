@@ -1,0 +1,113 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    background-color: #00000070;
+    z-index: 50;
+}
+
+.body {
+    position: relative;
+    max-width: 500px;
+    height: 80vh;
+    background-color: #fff;
+    margin: 60px 10px;
+    border-radius: 20px;
+    overflow: hidden;
+    @media(max-width: 991.98px) {
+        margin: 40px 10px;
+        height: 90vh;
+    }
+}
+
+.content {
+    height: 100%;    
+    padding: 40px 40px 40px 30px;
+    overflow: auto;
+    @media(max-width: 767.98px) {
+        padding: 30px 30px 30px 20px;
+    }
+}
+
+.titleH3,
+.titleH4 {
+    font-weight: 500;
+    line-height: 1.2;
+    color: #000;
+}
+
+.titleH3 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 1px;    
+    margin-bottom: 20px;
+    @media(max-width: 767.98px) {
+        font-size: 16px;
+        margin-bottom: 15px;
+    }
+}
+
+.titleH4 {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    margin-bottom: 15px;
+    @media(max-width: 767.98px) {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+}
+
+.paragraph {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #AD902B;
+    letter-spacing: 0.5px;
+    margin-bottom: 15px;
+    @media(max-width: 767.98px) {
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 40px;
+    margin-bottom: 20px;
+    @media(max-width: 767.98px) {
+        margin-left: 30px;
+        margin-bottom: 15px;
+    }
+    li {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.2;
+        letter-spacing: 0.5px;
+        color: #484848;
+        list-style: disc;  
+        @media(max-width: 767.98px) {
+            font-size: 12px;
+        }
+    }
+}
+
+.closeIcon {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    width: 22px;
+    height: 22px;
+    fill: #484848;
+    cursor: pointer;
+    transition: fill 0.6s ease 0s;
+    &:hover {
+        fill: #000;
+    }
+}

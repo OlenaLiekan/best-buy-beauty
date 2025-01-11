@@ -8,8 +8,9 @@ import { AuthContext } from "../context";
 //import { sendEmail } from "../http/productAPI";
 
 import { submitPurchase } from "../http/productAPI";
-import { closePopup } from "../js/script";
+import { bodyLock, closePopup } from "../js/script";
 import { getCountryCallingCode, getCountries } from "libphonenumber-js";
+import DeliveryConditions from "../componetns/UX/Popups/DeliveryConditions";
 
 const SubmitPage = () => {
   //const dispatch = useDispatch();
@@ -24,12 +25,13 @@ const SubmitPage = () => {
     0
   );
 
+  const { serverDomain, imagesCloud, isAuth, setShowConditions, showConditions} = React.useContext(AuthContext);
+
   const [deliveryPrices, setDeliveryPrices] = React.useState([]);
   const [deliveryPrice, setDeliveryPrice] = React.useState("0.00");
   const [orderNumber, setOrderNumber] = React.useState("");
   const [isPortugal, setIsPortugal] = React.useState(0);
-  const [isSpain, setIsSpain] = React.useState(0);
-  const { serverDomain, isAuth } = React.useContext(AuthContext);
+  const [isSpain, setIsSpain] = React.useState(0);  
   const [username, setUsername] = React.useState("");
   const [surname, setSurname] = React.useState("");
   const [phone, setPhone] = React.useState("+351");
@@ -372,6 +374,11 @@ const SubmitPage = () => {
       }     
   };
 
+  const openConditions = () => {
+    setShowConditions(true);
+    window.scrollTo(0, 0);
+    bodyLock();
+  };
 
 
   const order =
@@ -564,7 +571,8 @@ const SubmitPage = () => {
 
   return (
     <div className="cart__popup popup-cart">
-      <div className="popup-cart__content">
+      {showConditions && <DeliveryConditions />}
+        <div className="popup-cart__content">
           <div className="popup-cart__text">
             <p className="popup-cart__paragraph">
               Pedimos desculpas, o site está passando por trabalhos técnicos. 
@@ -951,6 +959,52 @@ const SubmitPage = () => {
           </div>
         <div className="popup-cart__aside aside-popup-cart">
           <div className="aside-popup-cart__wrapper">
+            <div className="aside-popup-cart__items">
+              {
+                items.map((item, index) => 
+                  <div key={index} className="aside-popup-cart__item item-aside-popup">
+                    <div className="item-aside-popup__image">
+                      <img src={`${imagesCloud}` + item.img} alt="product" />
+                      <span>{item.count}</span>
+                    </div>
+                    <div className="item-aside-popup__info">
+                      <div className="item-aside-popup__info-top">
+                        <div className="item-aside-popup__name">
+                          {item.name}
+                          {
+                            item.isLashes
+                              &&
+                              <div>
+                                {'(' + item.curlArr + "/" + item.thicknessArr + '/' + item.lengthArr + ' mm' + ')'}
+                              </div>
+                          }                           
+                        </div>
+
+                        <div className={usedPromocode ? "item-aside-popup__price_strike" : "item-aside-popup__price"}>
+                          {(item.price * item.count).toFixed(2) + ' €' }                         
+                        </div>
+                      </div>   
+                     
+                      {
+                        usedPromocode && promocodeValue
+                          ?
+                          <div className="item-aside-popup__info-bottom">
+                            <div className="item-aside-popup__used-promocode">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M0 252.1V48C0 21.5 21.5 0 48 0h204.1a48 48 0 0 1 33.9 14.1l211.9 211.9c18.7 18.7 18.7 49.1 0 67.9L293.8 497.9c-18.7 18.7-49.1 18.7-67.9 0L14.1 286.1A48 48 0 0 1 0 252.1zM112 64c-26.5 0-48 21.5-48 48s21.5 48 48 48 48-21.5 48-48-21.5-48-48-48z"/></svg>
+                              {usedPromocode + ' (-' + (item.price * promocodeValue / 100 * item.count).toFixed(2) + ' €)'}
+                            </div>
+                            <div className="item-aside-popup__promo-price">
+                              {((item.price - (item.price * promocodeValue / 100)) * item.count).toFixed(2) + ' €'}                         
+                            </div>
+                          </div>   
+                          :
+                          ''
+                      }
+                    </div>
+                  </div>
+                )
+              }
+            </div>
             {user 
               ?
               <>
@@ -1029,7 +1083,7 @@ const SubmitPage = () => {
             <div className="aside-popup-cart__line">
               <div className="aside-popup-cart__text aside-popup-cart__text-delivery">
                 Envio
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119.1 8 256c0 137 111 248 248 248s248-111 248-248C504 119.1 393 8 256 8zm0 448c-110.5 0-200-89.4-200-200 0-110.5 89.5-200 200-200 110.5 0 200 89.5 200 200 0 110.5-89.4 200-200 200zm107.2-255.2c0 67.1-72.4 68.1-72.4 92.9V300c0 6.6-5.4 12-12 12h-45.6c-6.6 0-12-5.4-12-12v-8.7c0-35.7 27.1-50 47.6-61.5 17.6-9.8 28.3-16.5 28.3-29.6 0-17.2-22-28.7-39.8-28.7-23.2 0-33.9 11-48.9 30-4.1 5.1-11.5 6.1-16.7 2.1l-27.8-21.1c-5.1-3.9-6.3-11.1-2.6-16.4C184.8 131.5 214.9 112 261.8 112c49.1 0 101.5 38.3 101.5 88.8zM298 368c0 23.2-18.8 42-42 42s-42-18.8-42-42 18.8-42 42-42 42 18.8 42 42z"/></svg>
+                <svg onClick={openConditions} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119.1 8 256c0 137 111 248 248 248s248-111 248-248C504 119.1 393 8 256 8zm0 448c-110.5 0-200-89.4-200-200 0-110.5 89.5-200 200-200 110.5 0 200 89.5 200 200 0 110.5-89.4 200-200 200zm107.2-255.2c0 67.1-72.4 68.1-72.4 92.9V300c0 6.6-5.4 12-12 12h-45.6c-6.6 0-12-5.4-12-12v-8.7c0-35.7 27.1-50 47.6-61.5 17.6-9.8 28.3-16.5 28.3-29.6 0-17.2-22-28.7-39.8-28.7-23.2 0-33.9 11-48.9 30-4.1 5.1-11.5 6.1-16.7 2.1l-27.8-21.1c-5.1-3.9-6.3-11.1-2.6-16.4C184.8 131.5 214.9 112 261.8 112c49.1 0 101.5 38.3 101.5 88.8zM298 368c0 23.2-18.8 42-42 42s-42-18.8-42-42 18.8-42 42-42 42 18.8 42 42z"/></svg>
               </div>
               <div className="aside-popup-cart__text">{user ? (deliveryPrice > 0 ? deliveryPrice + ' €' : 'GRÁTIS') : "Depende do país"}</div>
             </div>
@@ -1071,7 +1125,8 @@ const SubmitPage = () => {
             </div>
           </div>
         </div>
-      </div>
+        </div>
+
     </div>
   );
 };

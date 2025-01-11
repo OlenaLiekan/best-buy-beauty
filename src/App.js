@@ -42,7 +42,7 @@ function App() {
 
   const [isPromoPage, setIsPromoPage] = React.useState(false);
 
-  const dispatch = useDispatch();
+  const [showConditions, setShowConditions] = React.useState(false);
 
   const serverDomain = 'https://bbb-server-a6ji.onrender.com/';
   const imagesCloud = 'https://res.cloudinary.com/bbbptcloud/image/upload/v1699129130/static/';
@@ -131,6 +131,8 @@ function App() {
           setIsBlackFriday,
           scroll,
           setScroll,
+          showConditions,
+          setShowConditions,
         }}
       >
         <SearchContext.Provider
