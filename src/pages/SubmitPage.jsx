@@ -1101,7 +1101,7 @@ const SubmitPage = () => {
                 &&
                 <div className="aside-popup-cart__text-group text-group">
                   <div className="text-group__label">Envio CTT</div>
-                  <div>Entrega em 2-4 dias úteis</div>
+                  <div>Entrega em 2-5 dias úteis</div>
                 </div>
               }
               {
