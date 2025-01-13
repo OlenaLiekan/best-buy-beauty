@@ -2,15 +2,39 @@ import React from 'react';
 import styles from './DeliveryConditions.module.scss';
 import { AuthContext } from '../../../../context';
 import { bodyUnlock } from '../../../../js/script';
+import axios from 'axios';
 
 const DeliveryConditions = () => {
 
-    const { setShowConditions } = React.useContext(AuthContext);
+    const { setShowConditions, serverDomain } = React.useContext(AuthContext);
 
+    const [oneProduct, setOneProduct] = React.useState({});
+    const [moreProducts, setMoreProducts] = React.useState({});
+    const [oneProductAz, setOneProductAz] = React.useState({});
+    const [moreProductsAz, setMoreProductsAz] = React.useState({});
+    const [freePtDelivery, setFreePtDelivery] = React.useState({});
+    const [freeAzDelivery, setFreeAzDelivery] = React.useState({});
+    const [spain, setSpain] = React.useState({});
+    const [otherCountry, setOtherCountry] = React.useState({});
+    
     const closeConditions = () => {
         setShowConditions(false);
         bodyUnlock();
     };
+
+    React.useEffect(() => {
+        axios.get(`${serverDomain}api/delivery`)
+            .then((res) => {
+                setOneProduct(res.data.find((delivery) => delivery.type === "Um produto"));
+                setMoreProducts(res.data.find((delivery) => delivery.type === "Mais produtos"));
+                setOneProductAz(res.data.find((delivery) => delivery.type === "Um produto (Açores)"));
+                setMoreProductsAz(res.data.find((delivery) => delivery.type === "Mais produtos (Açores)"));
+                setFreePtDelivery(res.data.find((delivery) => delivery.type === "Entrega grátis"));
+                setOtherCountry(res.data.find((delivery) => delivery.type === "Outro país"));
+                setSpain(res.data.find((delivery) => delivery.type === "Espanha"));
+                setFreeAzDelivery(res.data.find((delivery) => delivery.type === "Entrega grátis (Açores)"));
+            });
+    }, [serverDomain]);
 
     return (
         <>
@@ -24,23 +48,23 @@ const DeliveryConditions = () => {
                         <h4 className={styles.titleH4}>Portugal Continental</h4>
                         <ul className={styles.list}>
                             <li>Serviço de envio: CTT Expresso</li>
-                            <li>Encomendas com valor superior a 89.00 € têm portes gratuitos.</li>
-                            <li>Para encomendas inferiores a 89.00 €, o custo de envio varia entre 4.50 € e 4.90 €, dependendo da quantidade de itens.</li>
+                            <li>Encomendas com valor superior a {freePtDelivery.length ? freePtDelivery.requaredSum : '89.00'} € têm portes gratuitos.</li>
+                            <li>Para encomendas inferiores a {freePtDelivery.length ? freePtDelivery.requaredSum : '89.00'} €, o custo de envio varia entre {moreProducts.length ? moreProducts.price : '4.50'} € e {oneProduct.length ? oneProduct.price : '4.90'} €, dependendo da quantidade de itens.</li>
                             <li>Prazo de entrega: 1 a 2 dias úteis.</li>
                             <li>Envio à cobrança: Não realizamos.</li>
                         </ul>
         
                         <h4 className={styles.titleH4}>Açores e Madeira (Ilhas de Portugal)</h4>
                         <ul className={styles.list}>
-                            <li>Encomendas com valor superior a 199.00 € beneficiam de envio gratuito.</li>
-                            <li>Para encomendas inferiores a 89.00 €, o custo de envio varia entre 4.50 € e 4.90 €, dependendo da quantidade de itens.</li>
+                            <li>Encomendas com valor superior a {freeAzDelivery.length ? freeAzDelivery.requaredSum : '199.00'} € beneficiam de envio gratuito.</li>
+                            <li>Para encomendas inferiores a {freeAzDelivery.length ? freeAzDelivery.requaredSum : '199.00'} €, o custo de envio varia entre {moreProductsAz.length ? moreProductsAz.price : '4.50'} € e {oneProductAz.length ? oneProductAz.price : '4.90'} €, dependendo da quantidade de itens.</li>
                             <li>Prazo de entrega: 3 a 5 dias úteis.</li>
                             <li>Envio à cobrança: Não realizamos.</li>
                         </ul>
                         
                         <h4 className={styles.titleH4}>Espanha</h4>	
                         <ul className={styles.list}>
-                            <li>Custo de envio: 6.90 €.</li>
+                            <li>Custo de envio: {spain.length ? spain.price : '6.90'} €.</li>
                             <li>Prazo de entrega: de 2 a 5 dias úteis.</li>
                         </ul>
         
@@ -48,7 +72,7 @@ const DeliveryConditions = () => {
 
                         <h4 className={styles.titleH4}>Custos</h4>
                         <ul className={styles.list}>
-                            <li>Valores a partir de 8.90 €.</li>
+                            <li>Valores a partir de {otherCountry.length ? otherCountry.price : '8.90'} €.</li>
                             <li>Os preços de envio são calculados automaticamente pelo site, com base no peso e no destino da encomenda.</li>
                         </ul>
                             

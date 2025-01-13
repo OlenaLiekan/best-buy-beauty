@@ -177,6 +177,10 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
 
     }, [img, slide]);
 
+    React.useEffect(() => {
+        console.log(text[0].text);
+    }, [id]);
+
     return (
         <div className='product-card__content'>
             <div className="product-card__go-back go-back">
@@ -376,7 +380,9 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                         ?
                         paragraphs.map((p, i) => 
                             <p key={i} className={activeTitle === 0 ? 'description-product__text' : 'description-product__text_hidden'}>
-                                {p}
+                                {p.split(' ').map((word, index) => 
+                                    (word.includes('<b>') ? <strong key={index}>{word.replace('<b>', ' ').replace('</b>', ' ') + ' '}</strong> : (word + ' '))
+                                )}
                             </p>                        
                         )
                         : ''                        

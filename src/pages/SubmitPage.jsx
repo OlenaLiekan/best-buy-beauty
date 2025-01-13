@@ -315,6 +315,7 @@ const SubmitPage = () => {
     setPhone(newTelCode);
     setVisibleList(false);
     setCountryValue('');
+    window.alert(`Atenção!\nOs custos de entrega foram ajustados dependendo do país de entrega.`);
   };
 
   const onChangeCountryValue = (event) => {
@@ -806,7 +807,7 @@ const SubmitPage = () => {
                           {country.name} {country.telCode}
                         </li> 
                         )
-                      )
+                        )
                       :
                       countries.map((country) => (
                         <li

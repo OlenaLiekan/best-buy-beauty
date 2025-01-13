@@ -130,6 +130,7 @@
     display: flex;
     flex-direction: column;
     gap: 40px;
+    margin: 0 auto;
     h4 {
         align-self: center;
         text-align: center;
@@ -146,6 +147,15 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+.deliveryItems {
+    max-width: 400px;
+    flex-wrap: wrap;
+}
+
+.deliveryBlock {    
+    max-width: 400px;
 }
 
 .deliveryItem,
@@ -286,9 +296,9 @@
 }
 
 .formLineList {
-    @media(max-width: 579.98px) {
-        overflow: auto;
-        width: 90vw;        
+    @media(max-width: 991.98px) {
+        max-width: 90vw;
+        overflow: auto;    
     } 
 }
 
@@ -370,6 +380,13 @@
     margin-bottom: 30px;
     @media(max-width: 479.98px) {
         margin-bottom: 20px;
+    }
+}
+
+.deliveriesList {
+    flex-wrap: wrap;
+    @media(max-width: 991.98px) {
+        flex-wrap: nowrap;
     }
 }
 
