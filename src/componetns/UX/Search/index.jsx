@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./Search.module.scss";
 import debounce from 'lodash.debounce';
 import axios from "axios";
-import { scrollBodyLock, scrollBodyUnlock, camelize } from "../../../js/script";
+import { scrollBodyLock, scrollBodyUnlock, camelize, bodyLock, bodyUnlock } from "../../../js/script";
 
 import { SearchContext } from '../../../App';
 import { setSearch } from "../../../redux/slices/filterSlice";
@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context";
 
 const Search = () => { 
+
     const [items, setItems] = React.useState([]);
     const [types, setTypes] = React.useState([]);
     const [brands, setBrands] = React.useState([]);
@@ -25,27 +26,27 @@ const Search = () => {
     const navigate = useNavigate();
 
     const clearValueWithDelay = () => {
-        setTimeout(clearValue, 500);    
-        scrollBodyUnlock();
+        setTimeout(clearValue, 1000);    
     };
 
     const clearValue = () => {    
-        setValue('');        
-        setSearchValue(''); 
-        scrollBodyUnlock();
+        setValue('');         
     }
 
     const onClickClear = () => {
+        bodyUnlock();        
         setSearchValue('');
         setValue('');
-        inputRef.current.focus();   
-        scrollBodyUnlock();
+        inputRef.current.focus();  
+        setLockedSearch(false);        
     }
 
     const updateSearchValue = React.useCallback(
         debounce((str) => {
-            setSearchValue(str);        
-        }, 500),
+            setSearchValue(str);   
+            setValue('');
+            inputRef.current.blur(); 
+        }, 1000),
         [],
     );
 
@@ -53,6 +54,8 @@ const Search = () => {
         dispatch(setSearch());
         setValue(event.target.value);
         updateSearchValue(event.target.value);
+        bodyLock();
+        setLockedSearch(true);
     };
 
 
@@ -71,21 +74,11 @@ const Search = () => {
             setIsLoading(false);            
             window.scrollTo(0, 0);  
         } else {
-            scrollBodyUnlock();
-            setItems([]);            
-        }
-    }, [searchValue, serverDomain]);
-
-    React.useEffect(() => {
-        if (value) {
-            setLockedSearch(true);
-            scrollBodyLock();
-            console.log(value);
-        } else {
-            scrollBodyUnlock();
+            setItems([]);  
+            bodyUnlock();
             setLockedSearch(false);
         }
-    }, [value]);
+    }, [searchValue, serverDomain]);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/brand`)
@@ -133,9 +126,9 @@ const Search = () => {
                     onBlur={clearValueWithDelay}
                     className="search-header__input"
                     autoComplete="off" type="text"
-                    placeholder="Procurar"
+                    placeholder={searchValue.length ? searchValue : "Procurar"}
                 />
-                {value && (
+                {searchValue && (
                     <svg
                         onClick={onClickClear}
                         className={styles.clearIcon}
@@ -152,8 +145,8 @@ const Search = () => {
                     </svg>
                 )}
             </form>
-            {value || items.length ?
-                <div className={value ? "search-header__results" : "search-header__results_hidden"}>
+            {searchValue || items.length ?
+                <div className={searchValue ? "search-header__results" : "search-header__results_hidden"}>
                     <div className="search-header__body">
                         <ul className="search-header__list search-list">
                             {isLoading ? '' : items.map((item) =>
@@ -208,7 +201,7 @@ const Search = () => {
                                 </div>
                             )
                             }
-                            {!isLoading && !items.length ? <li className="search-list__item_none">Produto não encontrado</li> : ''}
+                            {!isLoading && !items.length ? <li className="search-list__item_none">Total de 0 resultados encontrados</li> : <li className="search-list__item_none">Total de {items.length ? items.length : 0} resultados mostrados</li>}
                         </ul>
                     </div>
                 </div>
