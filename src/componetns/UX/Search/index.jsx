@@ -45,17 +45,21 @@ const Search = () => {
         debounce((str) => {
             setSearchValue(str);   
             setValue('');
+            if (!str.length) {
+                bodyUnlock();
+                setLockedSearch(false);
+            }
             inputRef.current.blur(); 
         }, 1000),
-        [],
+        [searchValue],
     );
 
     const onChangeInput = (event) => { 
         dispatch(setSearch());
         setValue(event.target.value);
-        updateSearchValue(event.target.value);
         bodyLock();
-        setLockedSearch(true);
+        setLockedSearch(true);         
+        updateSearchValue(event.target.value);
     };
 
 
