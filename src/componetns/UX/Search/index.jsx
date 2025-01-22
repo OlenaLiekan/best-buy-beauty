@@ -99,6 +99,7 @@ const Search = () => {
     }, [serverDomain]);
 
     const showProduct = (typeId, id) => {
+        setSearchValue('');
         const path = types.find((type) => type.id === typeId);
         navigate(`/${camelize(path.name)}/${id}`); 
     }
