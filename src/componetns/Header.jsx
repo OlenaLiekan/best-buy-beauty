@@ -116,7 +116,7 @@ const Header = () => {
           <div className="body-header__popup popup-header">
             <div className="popup-header__content">
               <ul className="popup-header__list">
-                <li className="popup-header__item">
+                <li onClick={() => window.scrollTo(0,0)} className="popup-header__item">
                   <Link to={'/auth'} className="popup-header__link">                    
                     Meu perfil
                   </Link>                    
