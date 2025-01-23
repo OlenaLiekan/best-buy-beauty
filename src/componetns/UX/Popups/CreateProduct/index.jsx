@@ -192,7 +192,18 @@ const CreateProduct = () => {
             images.forEach((file) => {
                 formData.append('slide', file);
             });
-            createProduct(formData).then(data => success()).catch(err => message());
+            if (isLashes) {
+                const firstResult = info.length ? info.find((i) => i.title.toLowerCase() === 'curvatura') : false;
+                const secondResult = info.length ? info.find((i) => i.title.toLowerCase() === 'grossura') : false;
+                const thirdResult = info.length ? info.find((i) => i.title.toLowerCase() === 'tamanho') : false;
+                if (firstResult && secondResult && thirdResult) {
+                    createProduct(formData).then(data => success()).catch(err => message());
+                } else {
+                    window.alert("Adicionar propriedades: 'Curvatura', 'Grossura', 'Tamanho'");
+                }
+            } else {
+                createProduct(formData).then(data => success()).catch(err => message());                
+            }
         } else {
             window.alert('O preço promocional deve ser inferior ao preço padrão.');
         }
@@ -275,12 +286,12 @@ const CreateProduct = () => {
                 {info.map((i) => 
                     <div className={styles.line} key={i.number}>
                         <label htmlFor="info-product_title" className={styles.label}>Propriedade:</label>
-                        <input id="info-product_title" tabIndex="8" type='text' className={styles.formInputSmall}
+                        <input required id="info-product_title" tabIndex="8" type='text' className={styles.formInputSmall}
                             value={i.title}
                             onChange={(e) => changeInfo('title', e.target.value, i.number)}
                         /> 
                         <label htmlFor="info-product_description" className={styles.label}>Significado:</label>
-                        <input id="info-product_description" tabIndex="9" type='text' className={styles.formInputSmall}
+                        <input required id="info-product_description" tabIndex="9" type='text' className={styles.formInputSmall}
                             value={i.description}
                             onChange={(e) => changeInfo('description', e.target.value, i.number)}
                         />

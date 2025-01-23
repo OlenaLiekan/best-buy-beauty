@@ -203,8 +203,13 @@ const UpdateProduct = ({id, obj}) => {
         }
     }, [typeId, types]); 
 
+    React.useEffect(() => {
+
+    }, [info]);
+
     const updateProductItem = (e) => {
         e.preventDefault();
+
         if (price > +promoPrice) {
             const formData = new FormData();
             formData.set('name', name);
@@ -230,8 +235,27 @@ const UpdateProduct = ({id, obj}) => {
             formData.set('info', JSON.stringify(info));
             images.forEach((file) => {
                 formData.append('slide', file);
-            });           
-            updateProduct(formData, id).then(data => success()).catch(err => message());
+            });       
+            if (isLashes) {
+                const firstResult = info.length ? info.find((i) => i.title.toLowerCase() === 'curvatura') : false;
+                const secondResult = info.length ? info.find((i) => i.title.toLowerCase() === 'grossura') : false;
+                const thirdResult = info.length ? info.find((i) => i.title.toLowerCase() === 'tamanho') : false;
+                if (firstResult && secondResult && thirdResult) {
+                    updateProduct(formData, id).then(data => success()).catch(err => message());
+                } else {
+                    if (!firstResult) {
+                        window.alert("Propriedade de 'Curvatura' ausente.");
+                    }
+                    if (!secondResult) {
+                        window.alert("Propriedade de 'Grossura' ausente.");
+                    }
+                    if (!thirdResult) {
+                        window.alert("Propriedade de 'Tamanho' ausente.");
+                    }
+                }
+            } else {
+                updateProduct(formData, id).then(data => success()).catch(err => message());                
+            }
         } else {
             window.alert('O preço promocional deve ser inferior ao preço padrão.');
         }
@@ -349,12 +373,12 @@ const UpdateProduct = ({id, obj}) => {
                 {info.map((i) => 
                     <div className={styles.line} key={i.id}>
                         <label htmlFor={'info-product_title' + i.id} className={styles.label}>Propriedade:</label>
-                        <input id={'info-product_title' + i.id} tabIndex="8" type='text' className={styles.formInputSmall}
+                        <input required id={'info-product_title' + i.id} tabIndex="8" type='text' className={styles.formInputSmall}
                             value={i.title}
                             onChange={(e) => changeInfo('title', e.target.value, i.id)}
                         /> 
                         <label htmlFor={'info-product_description' + i.id } className={styles.label}>=</label>
-                        <input id={'info-product_description' + i.id } tabIndex="9" type='text' className={styles.formInputSmall}
+                        <input required id={'info-product_description' + i.id } tabIndex="9" type='text' className={styles.formInputSmall}
                             value={i.description}
                             onChange={(e) => changeInfo('description', e.target.value, i.id)}
                         />

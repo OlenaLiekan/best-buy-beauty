@@ -116,7 +116,15 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
             }            
         }
 
-    }, [dbItem, id]);
+        if (!dbItem && !itemLoading) {
+            const data = JSON.parse(localStorage.getItem('cart'));
+            const itemPosition = data.findIndex((item) => item.id === id);
+            data.splice(itemPosition, 1);
+            localStorage.setItem('cart', JSON.stringify(data));
+            setItemsUpdated(true);
+        }
+
+    }, [dbItem, itemLoading, id]);
 
     if (count === 0) {
         dispatch(

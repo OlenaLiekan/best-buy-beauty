@@ -177,9 +177,6 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
 
     }, [img, slide]);
 
-    React.useEffect(() => {
-        console.log(text[0].text);
-    }, [id]);
 
     return (
         <div className='product-card__content'>
