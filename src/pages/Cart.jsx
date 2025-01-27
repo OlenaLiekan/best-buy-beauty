@@ -7,13 +7,19 @@ import { scrollTop } from '../js/script';
 import CartItem from '../componetns/UX/CartItem';
 import CartEmpty from '../componetns/CartEmpty';
 import { clearItems } from '../redux/slices/cartSlice';
+import { AuthContext } from '../context';
 
 const Cart = () => { 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const {
+        updatedCart,
+        setUpdatedCart,
+    } = React.useContext(AuthContext);
+
     const { totalPrice, items } = useSelector((state) => state.cart);
     const totalCount = items.reduce((sum, item) => !item.available && item.available !== 'undefined' ? sum : sum + item.count, 0);
-    //const isMounted = React.useRef(false);
+    const isMounted = React.useRef(false);
 
     const onClickClear = () => { 
         if (window.confirm('Tem certeza de que deseja esvaziar o carrinho?')) {
@@ -24,11 +30,11 @@ const Cart = () => {
     };
 
     React.useEffect(() => {
-        //if (isMounted.current) {
+        if (isMounted.current) {
         const cartData = JSON.stringify(items);
-        localStorage.setItem('cart', cartData);      
-        /*}
-        isMounted.current = true;*/
+        localStorage.setItem('cart', cartData);  
+        }
+        isMounted.current = true;
     }, [items]);
 
     if (!totalPrice) {

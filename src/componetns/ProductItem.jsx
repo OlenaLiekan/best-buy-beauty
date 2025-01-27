@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import ProductCardSlider from './UX/ProductCardSlider';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem, minusItem } from '../redux/slices/cartSlice';
-import { camelize } from '../js/script';
+import { camelize, addItemToCart } from '../js/script';
 import axios from 'axios';
 import UpdateProduct from './UX/Popups/UpdateProduct';
 import { AuthContext } from '../context';
@@ -37,7 +37,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const [brandDiscount, setBrandDiscount] = React.useState(0);
     const [productAdded, setProductAdded] = React.useState(false);
     const [productDownvoted, setProductDownvoted] = React.useState(false);
-    const { isAuth, adminMode, updateProductMode, serverDomain, isBlackFriday } = React.useContext(AuthContext);
+    const { isAuth, adminMode, updateProductMode, serverDomain, isBlackFriday, imagesCloud } = React.useContext(AuthContext);
     
     const percents = +discountPrice > 0 ? 100 - (discountPrice * 100 / price).toFixed(0) : '';
     const finalPrice = brandDiscount > 0 && isBlackFriday ? (price * (100 - brandDiscount) / 100).toFixed(2) : price;
@@ -119,6 +119,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
         dispatch(addItem(item));
         setProductDownvoted(false);
         setProductAdded(true);
+        addItemToCart();
         setTimeout(() => {
             setProductAdded(false);
         }, 2000);
@@ -340,7 +341,13 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                             <button onClick={onClickMinus} className="quantity__minus">-</button>
                                             <div className="quantity__text">{isLashes ? lashesCount : addedCount}</div>
                                             <button onClick={onClickAdd} className="quantity__plus">+</button>
-                                        </div>                                  
+                                        <div className="product-card__motion">
+                                            <div className='product-card__img-clone'>
+                                                <img src={`${imagesCloud}` + img} alt="product" />
+                                            </div>                                            
+                                        </div>                                            
+                                        </div>    
+
                                         <button onClick={showCart} className="checkout">
                                             Comprar
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -348,7 +355,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                             </svg>
                                         </button>
                                     </>   
-                                : <div className='product-card__warning'>{company.name ? 'Selecione opções para adicionar item ao carrinho.' : ''}</div>   
+                                : <div className='product-card__warning'>{company.name ? 'Selecione opções para adicionar item ao carrinho.' : 'Carregando...'}</div>   
                                 }
                             </div>       
                             :

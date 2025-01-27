@@ -9,10 +9,19 @@ import axios from 'axios';
 const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, company, lengthArr, thicknessArr, curlArr, count, available }) => { 
 
     const [dbItem, setDBItem] = React.useState({});
-    const [itemsUpdated, setItemsUpdated] = React.useState(false);
     const [itemLoading, setItemLoading] = React.useState(false);
     const [brandDiscount, setBrandDiscount] = React.useState('');
-    const { imagesCloud, serverDomain, productUpdated, setProductUpdated, productRemoved, setProductRemoved, isBlackFriday} = React.useContext(AuthContext);
+    const {
+        imagesCloud,
+        serverDomain,
+        productUpdated,
+        setProductUpdated,
+        productRemoved,
+        setProductRemoved,
+        isBlackFriday,
+        updatedCart,
+        setUpdatedCart,
+    } = React.useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -55,7 +64,7 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
             setDBItem(res.data);
             setItemLoading(false);
         });
-    }, [id, itemsUpdated, available]);
+    }, [id, available]);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/brand`)
@@ -65,12 +74,6 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
                 }
             });
     }, [serverDomain, dbItem]);
-
-    React.useEffect(() => {
-        if (itemsUpdated) {
-            window.location.reload(); 
-        }
-    }, [itemsUpdated]);
 
     React.useEffect(() => {
         if (productUpdated === code) {
@@ -97,8 +100,9 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
     }, []);
 
     const currentItem = useSelector((state) => state.cart.items.find((obj) => obj.id === id));
+
     React.useEffect(() => {
-        setItemsUpdated(false);
+        setUpdatedCart(false);
         if (dbItem) {
             if (dbItem.available !== undefined && dbItem.available !== null) {
                 const itemPrice = +dbItem.discountPrice > 0 ? dbItem.discountPrice : (brandDiscount == 0 && !isBlackFriday ? dbItem.price : (dbItem.price * (100 - brandDiscount) / 100).toFixed(2));
@@ -111,22 +115,22 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
                     const itemPosition = data.findIndex((item) => item.id === id);
                     data.splice(itemPosition, 1, itemCopy);
                     localStorage.setItem('cart', JSON.stringify(data));
-                    setItemsUpdated(true);
+                    setUpdatedCart(true);                    
                 } 
             }            
         }
 
-        if (!dbItem && !itemLoading) {
+        if (!dbItem && !itemLoading && count > 0) {
             const data = JSON.parse(localStorage.getItem('cart'));
             const itemPosition = data.findIndex((item) => item.id === id);
             data.splice(itemPosition, 1);
             localStorage.setItem('cart', JSON.stringify(data));
-            setItemsUpdated(true);
+            setUpdatedCart(true);
         }
 
     }, [dbItem, itemLoading, id]);
 
-    if (count === 0) {
+    if (count === 0 || available === false) {
         dispatch(
             removeItem(isLashes ? index : id)
         );  

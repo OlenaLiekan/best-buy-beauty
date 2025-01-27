@@ -219,3 +219,46 @@ export const scrollBodyUnlock = () => {
   bodyEl.style.removeProperty('width');
   window.scrollTo(0, lastScrollPos);
 };
+
+export function addItemToCart() {
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.quantity__plus')) {
+      const cart = document.querySelector('._icon-cart');
+      const plusBtn = document.querySelector('.quantity__plus');
+      const product = document.querySelector('.product-card__motion');
+      const cartPos = {
+        left: cart.getBoundingClientRect().left,
+        top: cart.getBoundingClientRect().top,
+      };
+      const btnPos = {
+        left: plusBtn.getBoundingClientRect().left,
+        top: plusBtn.getBoundingClientRect().top,
+      };
+
+      product.style.display = `block`;
+      product.style.position = `fixed`;
+      product.style.left = `${btnPos.left - 10}px`;
+      product.style.top = `${btnPos.top - 10}px`;
+
+      product.style.overflow = `hidden`;
+      product.style.borderRadius = `50%`;
+      product.style.zIndex = `100`;
+      product.style.transition = `all 1.5s linear 0s`;
+      plusBtn.disabled = true;
+      plusBtn.style.backgroundColor = '#b4b4b4';
+
+      setTimeout(() => {
+        product.style.left = `${cartPos.left - 20}px`;
+        product.style.top = `${cartPos.top - 15}px`;
+        product.style.transform = `scale(0.3)`;
+        product.style.opacity = `80%`;
+      }, 500);
+
+      setTimeout(() => {
+        product.style.cssText = ``;
+        plusBtn.disabled = false;
+        plusBtn.style.backgroundColor = '#196fd7';
+      }, 2000);
+    }
+  });
+}

@@ -44,6 +44,8 @@ function App() {
 
   const [showConditions, setShowConditions] = React.useState(false);
 
+  const [updatedCart, setUpdatedCart] = React.useState(false);
+
   const serverDomain = 'https://bbb-server-a6ji.onrender.com/';
   const imagesCloud = 'https://res.cloudinary.com/bbbptcloud/image/upload/v1699129130/static/';
 
@@ -133,6 +135,8 @@ function App() {
           setScroll,
           showConditions,
           setShowConditions,
+          updatedCart,
+          setUpdatedCart,
         }}
       >
         <SearchContext.Provider
