@@ -50,7 +50,7 @@ const Search = () => {
                 setLockedSearch(false);
             }
             inputRef.current.blur(); 
-        }, 1000),
+        }, 2000),
         [searchValue],
     );
 
