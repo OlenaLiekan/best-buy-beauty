@@ -36,6 +36,7 @@ const UpdateProduct = ({id, obj}) => {
     const [deletedSlideId, setDeletedSlideId] = React.useState([]);
     const [checkedAvailable, setCheckedAvailable] = React.useState(true);
     const [checkedTop, setCheckedTop] = React.useState(false);
+    const [checkedExclusive, setCheckedExclusive] = React.useState(false);
     const [isPromo, setIsPromo] = React.useState(false);
 
     React.useEffect(() => {
@@ -55,6 +56,7 @@ const UpdateProduct = ({id, obj}) => {
         setObjSlides(obj.slide);
         setCheckedAvailable(obj.available);
         setCheckedTop(obj.topProduct);
+        setCheckedExclusive(obj.exclusiveProduct);
         setIsPromo(obj.isPromo);
         const brand = brands.find(brand => brand.id === obj.brandId);
         if (brand) {
@@ -225,6 +227,7 @@ const UpdateProduct = ({id, obj}) => {
             formData.append('isLashes', isLashes);
             formData.append('available', checkedAvailable);
             formData.append('topProduct', checkedTop);
+            formData.append('exclusiveProduct', checkedExclusive);
             formData.append('isPromo', promoPrice && +promoPrice > 0 ? true : false);
             if (deletedSlideId) {
                 formData.append('deletedSlideId', JSON.stringify(deletedSlideId));            
@@ -277,8 +280,18 @@ const UpdateProduct = ({id, obj}) => {
     const checkedCheckboxTop = () => {
         if (!checkedTop) {
             setCheckedTop(true);
+            setCheckedExclusive(false); 
         } else {
             setCheckedTop(false);            
+        }
+    }
+
+    const checkedCheckboxExclusive = () => {
+        if (!checkedExclusive) {
+            setCheckedExclusive(true);
+            setCheckedTop(false); 
+        } else {
+            setCheckedExclusive(false);            
         }
     }
 
@@ -300,7 +313,13 @@ const UpdateProduct = ({id, obj}) => {
                             Best-seller:
                         </label>
                         <input id="topCheckbox" type="checkbox" name="top" className={styles.formInputCheckbox} /> 
-                    </div>     
+                    </div>   
+                    <div className={styles.formLineCheckbox}>
+                        <label onClick={checkedCheckboxExclusive} htmlFor="exclusiveCheckbox" className={checkedExclusive ? styles.formLabelChecked : styles.formLabelCheckbox}>
+                            Exclusive:
+                        </label>
+                        <input id="exclusiveCheckbox" type="checkbox" name="exclusive" className={styles.formInputCheckbox} /> 
+                    </div>
                 </div>
                 <div className={styles.line}>
                     <label htmlFor="product-name" className={styles.label}>Nome:</label>

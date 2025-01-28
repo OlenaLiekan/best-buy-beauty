@@ -4,7 +4,7 @@ import { AuthContext } from '../context';
 import { useNavigate } from 'react-router-dom';
 
 
-const ProductBlock = ({ path, id, code, info, name, rating, available, topProduct, isLashes, price, brandId, img, discountPrice, isPromo }) => {
+const ProductBlock = ({ path, id, code, info, name, rating, available, topProduct, exclusiveProduct, isLashes, price, brandId, img, discountPrice, isPromo }) => {
 
     const navigate = useNavigate();
 
@@ -49,9 +49,9 @@ const ProductBlock = ({ path, id, code, info, name, rating, available, topProduc
     return (
         <div className="product-main__item item-product">
             <div className="item-product__body">
-                {topProduct
+                {topProduct || exclusiveProduct
                     ?
-                    <div className={available ? 'item-product__top-product' : 'item-product__top-product item-product__top-product-faded'}>Best-seller</div>
+                    <div className={available ? 'item-product__top-product' : 'item-product__top-product item-product__top-product-faded'}>{topProduct ? 'Best-seller' : 'Exclusive price'}</div>
                     :
                     ''
                 }

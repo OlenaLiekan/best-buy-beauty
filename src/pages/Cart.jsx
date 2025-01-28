@@ -7,15 +7,10 @@ import { scrollTop } from '../js/script';
 import CartItem from '../componetns/UX/CartItem';
 import CartEmpty from '../componetns/CartEmpty';
 import { clearItems } from '../redux/slices/cartSlice';
-import { AuthContext } from '../context';
 
 const Cart = () => { 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const {
-        updatedCart,
-        setUpdatedCart,
-    } = React.useContext(AuthContext);
 
     const { totalPrice, items } = useSelector((state) => state.cart);
     const totalCount = items.reduce((sum, item) => !item.available && item.available !== 'undefined' ? sum : sum + item.count, 0);
