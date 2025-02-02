@@ -14,6 +14,7 @@ const Cart = () => {
 
     const { totalPrice, items } = useSelector((state) => state.cart);
     const totalCount = items.reduce((sum, item) => !item.available && item.available !== 'undefined' ? sum : sum + item.count, 0);
+    
     //const isMounted = React.useRef(false);
 
     const onClickClear = () => { 

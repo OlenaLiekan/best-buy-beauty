@@ -6,7 +6,7 @@ import { addItem, minusItem, removeItem, clearItems  } from '../../redux/slices/
 import { AuthContext } from '../../context';
 import axios from 'axios';
     
-const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, company, lengthArr, thicknessArr, curlArr, count, available }) => { 
+const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, company, lengthArr, thicknessArr, curlArr, count, available }) => {
 
     const [dbItem, setDBItem] = React.useState({});
     const [itemLoading, setItemLoading] = React.useState(false);
@@ -27,12 +27,12 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
 
     const handleClick = () => {
         navigate(`/${path}/${id}`);
-        window.scrollTo(0, 0);            
+        window.scrollTo(0, 0);
     }
 
     const dispatch = useDispatch();
 
-    const onClickPlus = () => { 
+    const onClickPlus = () => {
         dispatch(
             addItem({
                 id,
@@ -43,34 +43,34 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
         );
     };
 
-    const onClickMinus = () => { 
+    const onClickMinus = () => {
         dispatch(
             minusItem(isLashes ? index : id),
         );
     };
 
-    const onClickRemove = () => { 
+    const onClickRemove = () => {
         if (window.confirm('Tem certeza de que deseja excluir o produto?')) {
             dispatch(
                 removeItem(isLashes ? index : id)
-            );            
+            );
         }
     };
 
     React.useEffect(() => {
         setItemLoading(true);
         axios.get(`${serverDomain}api/product/${id}`)
-        .then((res) => {
-            setDBItem(res.data);
-            setItemLoading(false);
-        });
+            .then((res) => {
+                setDBItem(res.data);
+                setItemLoading(false);
+            });
     }, [id, available]);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/brand`)
             .then((res) => {
                 if (dbItem && dbItem.brandId) {
-                    setBrandDiscount(res.data.find((brand) => brand.id === dbItem.brandId).discount);                    
+                    setBrandDiscount(res.data.find((brand) => brand.id === dbItem.brandId).discount);
                 }
             });
     }, [serverDomain, dbItem]);
@@ -86,7 +86,7 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
             dispatch(
                 removeItem(isLashes ? index : id)
             );
-            setProductRemoved('');  
+            setProductRemoved('');
         }
     }, [productUpdated, productRemoved]);
 
@@ -95,7 +95,7 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
             dispatch(
                 removeItem(isLashes ? index : id)
             );
-            setProductRemoved('');     
+            setProductRemoved('');
         }
     }, []);
 
@@ -115,26 +115,32 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
                     const itemPosition = data.findIndex((item) => item.id === id);
                     data.splice(itemPosition, 1, itemCopy);
                     localStorage.setItem('cart', JSON.stringify(data));
-                    setUpdatedCart(true);                    
-                } 
-            }            
+                    setUpdatedCart(true);
+                }
+            }
         }
 
         if (!dbItem && !itemLoading && count > 0) {
-            const data = JSON.parse(localStorage.getItem('cart'));
-            const itemPosition = data.findIndex((item) => item.id === id);
-            data.splice(itemPosition, 1);
-            localStorage.setItem('cart', JSON.stringify(data));
-            setUpdatedCart(true);
+            dispatch(
+                removeItem(isLashes ? index : id)
+            );
         }
 
     }, [dbItem, itemLoading, id]);
 
-    if (count === 0 || available === false) {
+    if (count === 0) {
         dispatch(
             removeItem(isLashes ? index : id)
         );  
-    } 
+    };
+
+    if (dbItem) {
+        if (dbItem.available === false) {
+            dispatch(
+                removeItem(isLashes ? index : id)
+            );         
+        }
+    };
 
     return (
         <div className="body-cart__item item__cart">
