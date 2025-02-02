@@ -5,10 +5,12 @@ import './scss/style.scss';
 import { AuthContext } from './context';
 import AppRoutes from './componetns/AppRoutes';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 export const SearchContext = React.createContext();
 
 function App() {
+  const navigate = useNavigate();
   const [searchValue, setSearchValue] = React.useState('');
   const [scroll, setScroll] = React.useState(0);
   const [lockedSearch, setLockedSearch] = React.useState(false);
@@ -64,6 +66,22 @@ function App() {
       localStorage.removeItem('adminMode');
     }
     setLoading(false);
+
+    if (isAuth) {
+      const loginDate = localStorage.getItem('date');
+      let result = Date.now() - loginDate;
+      if (result > 3000) {
+        if (adminMode) {
+          setAdminMode(false);
+          localStorage.removeItem('adminMode');
+        }
+        localStorage.removeItem('user');
+        setIsAuth(false);
+        localStorage.removeItem('auth');
+        localStorage.removeItem('date');
+        navigate('/login');
+      }
+    }
   }, [isAuth, adminMode]);
 
   React.useEffect(() => {

@@ -25,10 +25,9 @@ const AuthPage = () => {
             localStorage.setItem("adminMode", "true");            
         }*/
 
-        if (isAuth) {
             const loginDate = localStorage.getItem("date");        
-            let result = Date.now() - loginDate;
-                if ( result > 86399998) {
+            /*let result = Date.now() - loginDate;
+                if ( result > 3000) {
                     if (adminMode) {
                         setAdminMode(false);
                         localStorage.removeItem("adminMode");
@@ -37,10 +36,12 @@ const AuthPage = () => {
                     setIsAuth(false);    
                     localStorage.removeItem('auth');
                     localStorage.removeItem('date');
-                    navigate("/login");
-                } 
-        }
+                                           
+                }*/
+        
+
     }, [isAuth, createMode, updateMode, adminMode, user.role, setAdminMode, navigate, setIsAuth]);
+
 
     return (
         <div className="main__account account-main">
