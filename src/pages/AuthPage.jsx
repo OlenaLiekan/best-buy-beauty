@@ -21,25 +21,6 @@ const AuthPage = () => {
             localStorage.removeItem("adminMode", "true");
         }
 
-        /*if (adminMode) {
-            localStorage.setItem("adminMode", "true");            
-        }*/
-
-            const loginDate = localStorage.getItem("date");        
-            /*let result = Date.now() - loginDate;
-                if ( result > 3000) {
-                    if (adminMode) {
-                        setAdminMode(false);
-                        localStorage.removeItem("adminMode");
-                    }
-                    localStorage.removeItem('user');
-                    setIsAuth(false);    
-                    localStorage.removeItem('auth');
-                    localStorage.removeItem('date');
-                                           
-                }*/
-        
-
     }, [isAuth, createMode, updateMode, adminMode, user.role, setAdminMode, navigate, setIsAuth]);
 
 
