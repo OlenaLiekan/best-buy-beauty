@@ -32,8 +32,6 @@ const Header = () => {
   const data = localStorage.getItem('user');
   const user = JSON.parse(data);
 
-  const loginDate = localStorage.getItem('date') ? localStorage.getItem('date') : '';   
-
   React.useEffect(() => {
     if (!user) {
       setIsAuth(false);

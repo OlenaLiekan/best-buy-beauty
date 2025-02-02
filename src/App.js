@@ -70,7 +70,7 @@ function App() {
     if (isAuth) {
       const loginDate = localStorage.getItem('date');
       let result = Date.now() - loginDate;
-      if (result > 3000) {
+      if (result > 86399998) {
         if (adminMode) {
           setAdminMode(false);
           localStorage.removeItem('adminMode');
