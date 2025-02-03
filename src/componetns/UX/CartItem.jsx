@@ -6,7 +6,7 @@ import { addItem, minusItem, removeItem, clearItems  } from '../../redux/slices/
 import { AuthContext } from '../../context';
 import axios from 'axios';
     
-const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, company, lengthArr, thicknessArr, curlArr, count, available }) => {
+const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, company, lengthArr, thicknessArr, curlArr, count, available, exclusiveProduct, discountPrice }) => {
 
     const [dbItem, setDBItem] = React.useState({});
     const [itemLoading, setItemLoading] = React.useState(false);

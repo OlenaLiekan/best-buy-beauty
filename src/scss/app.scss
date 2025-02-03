@@ -77,14 +77,14 @@
         width: 200px;
         white-space: nowrap;
         overflow: hidden;
-        @media (max-width: 379.98px) {                                    
+        @media (max-width: 382.98px) {                                    
             font-size: 1rem;
             letter-spacing: 0.5px;
             width: 140px;
         }
-        @media (max-width: 319.98px) {
-            font-size: 0.8rem;       
-            width: 115px;
+        @media (max-width: 321.98px) {
+            font-size: 0.6rem;       
+            width: 90px;
         }
     }
     &__actions {
@@ -361,12 +361,18 @@
     &__price-block {
         display: flex;
         align-items: center;        
-        gap: 15px;
+        row-gap: 5px;
+        column-gap: 15px;
         flex-wrap: wrap;
     }
     &__strike {
         text-decoration: line-through;
         color: #848484;
+    }
+    &__promo {
+        &_red {
+            color: #b45a40;
+        }
     }
     &__percents {
         position: absolute;
@@ -2182,11 +2188,23 @@
         font-weight: 600;
         white-space: nowrap;
         color: #252525;
+        span {
+            font-size: 14px;
+            margin-right: 10px;
+            @media(max-width: 479.98px) {
+                font-size: 12px;
+                margin-right: 8px;
+            }
+            @media(max-width: 379.98px) {
+                font-size: 10px;
+                margin-right: 5px;
+            }
+        }
         @media(max-width: 479.98px) {
             font-size: 18px;
         }
         @media(max-width: 379.98px) {
-            font-size: 16px;
+            font-size: 15px;
         }
         &_strike {
             font-size: 20px;
@@ -2199,6 +2217,9 @@
             @media(max-width: 379.98px) {
                 font-size: 14px;
             }
+        }
+        &_red {
+            color: #b45a40;
         }
         &_percents {
             font-size: 14px;
@@ -2666,6 +2687,19 @@
     font-weight: 600;        
     color: #000;        
     gap: 10px;
+    @media(max-width: 479px) {
+        font-size: 20px;
+    }
+    span {
+        margin-right: 10px;
+        font-size: 16px;
+        @media(max-width: 479px) {
+            font-size: 14px;
+        }
+    }
+    &_red {
+        color: #b45a40;
+    }
     &-block {
         display: flex;
         flex-direction: column;

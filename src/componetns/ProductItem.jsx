@@ -12,7 +12,7 @@ import ReviewItem from './ReviewItem';
 import NewReview from './UX/Popups/NewReview';
 import { setCurrentPage } from '../redux/slices/filterSlice';
 
-const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, available, brandId, name, code, price, discountPrice, img}) => {
+const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, available, brandId, name, code, price, discountPrice, exclusiveProduct, img}) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -39,9 +39,14 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const [productDownvoted, setProductDownvoted] = React.useState(false);
     const { isAuth, adminMode, updateProductMode, serverDomain, isBlackFriday, imagesCloud } = React.useContext(AuthContext);
     
+    const cartItem = useSelector((state) => state.cart.items.find((obj) => obj.id === id));
+    const lashesItem = useSelector((state) => state.cart.items.find((obj) => obj.index === index));
+    const addedCount = cartItem ? cartItem.count : 0;
+    const lashesCount = lashesItem ? lashesItem.count : 0;
+
     const percents = +discountPrice > 0 ? 100 - (discountPrice * 100 / price).toFixed(0) : '';
     const finalPrice = brandDiscount > 0 && isBlackFriday ? (price * (100 - brandDiscount) / 100).toFixed(2) : price;
-    const priceValue = +discountPrice > 0 ? discountPrice : ( brandDiscount > 0 && isBlackFriday ? finalPrice : price );
+    const priceValue = +discountPrice > 0 && !exclusiveProduct ? discountPrice : ( brandDiscount > 0 && isBlackFriday ? finalPrice : price );
 
     const tabs = ['Descrição', 'Método de uso', 'Ingredientes'];
 
@@ -90,11 +95,6 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
             setIsWarning(true);
         }
     };
-
-    const cartItem = useSelector((state) => state.cart.items.find((obj) => obj.id === id));
-    const lashesItem = useSelector((state) => state.cart.items.find((obj) => obj.index === index));
-    const addedCount = cartItem ? cartItem.count : 0;
-    const lashesCount = lashesItem ? lashesItem.count : 0;
 
     const onClickAdd = () => {
         if (isWarning) {
@@ -273,7 +273,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                     ?
                                     <div className='price__value-block'>
                                         <div className='price__value-row'>
-                                            {percents
+                                            {percents && !exclusiveProduct
                                                 ?
                                                 <div className='price__value_percents'>
                                                     - {percents}%
@@ -293,15 +293,17 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                             <div className={
                                                 +discountPrice > 0 || (+brandDiscount > 0 && isBlackFriday)
                                                     ?
-                                                    "price__value_strike"
+                                                    (/*exclusiveProduct ? 'price__value' :*/ "price__value_strike")
                                                     : "price__value"
                                             }>
+                                                {/*<span>{exclusiveProduct && +discountPrice > 0 ? "1-9 unid:" : ''}</span>*/}
                                                 {price} €                                
                                             </div>                                              
                                         </div>
                                         {+discountPrice > 0 || (+brandDiscount > 0 && isBlackFriday)
                                             ?
-                                            <div className="price__value price__value_discount">
+                                            <div className={!exclusiveProduct ? "price__value price__value_discount" : "price__value price__value_red price__value_discount"}>
+                                                {/*<span>{exclusiveProduct && +discountPrice > 0 ? "10+ unid:" : ''}</span>*/}
                                                 {discountPrice > 0 ? discountPrice : finalPrice} €
                                             </div>
                                             :
