@@ -145,13 +145,37 @@ const SubmitPage = () => {
       const spain = deliveryPrices.find(
         (delivery) => delivery.type === "Espanha"
       );
+
+      const oneProductAz = deliveryPrices.find(
+        (delivery) => delivery.type === "Um produto (Açores)"
+      );
+      const moreProductsAz = deliveryPrices.find(
+        (delivery) => delivery.type === "Mais produtos (Açores)"
+      );
+      const freeDeliveryAz = deliveryPrices.find(
+        (delivery) => delivery.type === "Entrega grátis (Açores)"
+      );
+
       if (isPortugal) {
-        if (totalCount === 1 && totalPrice < freeDelivery.requiredSum) {
-          setDeliveryPrice(oneProduct.price);
-        } else if (totalCount > 1 && totalPrice < freeDelivery.requiredSum) {
-          setDeliveryPrice(moreProducts.price);
+        if (postalCode && postalCode[0] == 9) {
+          if (postalCode.length == 8) {
+            window.alert('Prestar atenção! Os custos de envio para as Ilhas dos Açores são calculados de forma diferente.');
+          }
+          if (totalCount === 1 && totalPrice < freeDeliveryAz.requiredSum) {
+            setDeliveryPrice(oneProductAz.price);
+          } else if (totalCount > 1 && totalPrice < freeDeliveryAz.requiredSum) {
+            setDeliveryPrice(moreProductsAz.price);
+          } else {
+            setDeliveryPrice(freeDeliveryAz.price);
+          }
         } else {
-          setDeliveryPrice(freeDelivery.price);
+          if (totalCount === 1 && totalPrice < freeDelivery.requiredSum) {
+            setDeliveryPrice(oneProduct.price);
+          } else if (totalCount > 1 && totalPrice < freeDelivery.requiredSum) {
+            setDeliveryPrice(moreProducts.price);
+          } else {
+            setDeliveryPrice(freeDelivery.price);
+          }          
         }
       } else if (isSpain) {
           setDeliveryPrice(spain.price);  
@@ -160,7 +184,7 @@ const SubmitPage = () => {
       }
       }
     }
-  }, [totalCount, totalPrice, deliveryPrices, isPortugal, isSpain]);
+  }, [totalCount, totalPrice, deliveryPrices, isPortugal, isSpain, postalCode]);
 
   React.useEffect(() => {
     if (user.id && !mainData) {
@@ -572,7 +596,7 @@ const SubmitPage = () => {
 
   return (
     <div className="cart__popup popup-cart">
-      {showConditions && <DeliveryConditions />}
+      {showConditions && <DeliveryConditions deliveryPrices={deliveryPrices} />}
         <div className="popup-cart__content">
           <div className="popup-cart__text">
             <p className="popup-cart__paragraph">
@@ -1093,8 +1117,9 @@ const SubmitPage = () => {
                 isPortugal && user
                 &&
                 <div className="aside-popup-cart__text-group text-group">
-                  <div className="text-group__label">{deliveryPrice > 0 ? "CTT Expresso" : "Portes grátis (CTT Expresso)" }</div>
-                  <div>Entrega em 1-2 dias úteis</div>
+                  <div className="text-group__label">{deliveryPrice > 0 ? "CTT Expresso" : "Portes grátis (CTT Expresso)"}</div>
+                  {postalCode && postalCode[0] == 9 ? <div>Ilhas de Portugal</div> : ''}  
+                  <div>{postalCode && postalCode[0] == 9 ? "Entrega em 3 a 5 dias úteis" : "Entrega em 1-2 dias úteis"}</div>
                 </div>
               }
               {
