@@ -28,9 +28,10 @@ const Cart = () => {
     React.useEffect(() => {
         //if (isMounted.current) {
         const cartData = JSON.stringify(items);
-        localStorage.setItem('cart', cartData);  
-        //}
-        //isMounted.current = true;
+        localStorage.setItem('cart', cartData); 
+        console.log(items);
+        /*}
+        isMounted.current = true;*/
     }, [items]);
 
     if (!totalPrice) {
@@ -61,7 +62,7 @@ const Cart = () => {
                         <div className="body-cart__items">
                             {
                                 items.map((item, i) => (
-                                    <CartItem key={i} {...item} />
+                                    <CartItem key={item.id+i} {...item} />
                                 ))
                             }
                         </div>

@@ -126,7 +126,7 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
             );
         }
 
-    }, [dbItem, itemLoading, id]);
+    }, [dbItem, itemLoading]);
 
     if (count === 0) {
         dispatch(
