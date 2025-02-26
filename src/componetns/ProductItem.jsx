@@ -46,7 +46,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
 
     const percents = +discountPrice > 0 ? 100 - (discountPrice * 100 / price).toFixed(0) : '';
     const finalPrice = brandDiscount > 0 && isBlackFriday ? (price * (100 - brandDiscount) / 100).toFixed(2) : price;
-    const priceValue = +discountPrice > 0 && !exclusiveProduct ? discountPrice : ( brandDiscount > 0 && isBlackFriday ? finalPrice : price );
+    const priceValue = +discountPrice > 0 ? discountPrice : ( brandDiscount > 0 && isBlackFriday ? finalPrice : price);
 
     const tabs = ['Descrição', 'Método de uso', 'Ingredientes'];
 
