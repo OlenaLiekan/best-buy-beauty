@@ -198,19 +198,17 @@ const Search = () => {
                                                 {item.discountPrice > 0
                                                     ?
                                                     <span className={!item.exclusiveProduct ? "info-search__promo" : "info-search__promo info-search__promo_red"}>
-                                                        {/*item.exclusiveProduct ? "10+ unid: " : ''*/}
                                                         {item.discountPrice}  €
                                                     </span>
                                                     :
                                                     brands.map((brand) => 
-                                                        brand.id == item.brandId && brand.discount > 0 && isBlackFriday ? (item.price * (100 - brand.discount) / 100).toFixed(2) + ' €' : ''
+                                                        brand.id == item.brandId && brand.discount > 0 && isBlackFriday && !item.exclusiveProduct ? (item.price * (100 - brand.discount) / 100).toFixed(2) + ' €' : ''
                                                     )
                                                 }          
                                                 {brands.map((brand) => 
                                                     brand.id == item.brandId
                                                     ?
-                                                    <span className={item.discountPrice > 0 || (brand.discount > 0 && isBlackFriday) ? (/*item.exclusiveProduct ? "" :*/ "info-search__strike") : ''}>
-                                                        {/*item.exclusiveProduct && item.discountPrice > 0 ? "1-9 unid: " : ''*/}
+                                                    <span className={item.discountPrice > 0 || (brand.discount > 0 && isBlackFriday && !item.exclusiveProduct) ? ("info-search__strike") : ''}>
                                                         {item.price} €
                                                     </span>
                                                     :
@@ -224,7 +222,7 @@ const Search = () => {
                                                     :
                                                     <div className="info-search__percents info-search__percents_black">
                                                         {brands.map((brand) => 
-                                                            brand.discount > 0 && isBlackFriday && brand.id === item.brandId ? <span>- {brand.discount}%</span> : '' 
+                                                            brand.discount > 0 && isBlackFriday && !item.exclusiveProduct && brand.id === item.brandId ? <span>- {brand.discount}%</span> : '' 
                                                         )}
                                                     </div>  
                                                 }

@@ -46,7 +46,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
 
     const percents = +discountPrice > 0 ? 100 - (discountPrice * 100 / price).toFixed(0) : '';
     const finalPrice = brandDiscount > 0 && isBlackFriday ? (price * (100 - brandDiscount) / 100).toFixed(2) : price;
-    const priceValue = +discountPrice > 0 ? discountPrice : ( brandDiscount > 0 && isBlackFriday ? finalPrice : price);
+    const priceValue = +discountPrice > 0 ? discountPrice : ( brandDiscount > 0 && isBlackFriday && !exclusiveProduct ? finalPrice : price);
 
     const tabs = ['Descrição', 'Método de uso', 'Ingredientes'];
 
@@ -282,7 +282,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                                 ''
                                             }
                                             {
-                                                brandDiscount > 0 && isBlackFriday && !percents
+                                                brandDiscount > 0 && isBlackFriday && !percents && !exclusiveProduct
                                                 ?
                                                 <div className='item-product__price_percents'>
                                                     -{brandDiscount}%
@@ -291,19 +291,17 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                                 '' 
                                             }
                                             <div className={
-                                                +discountPrice > 0 || (+brandDiscount > 0 && isBlackFriday)
+                                                +discountPrice > 0 || (+brandDiscount > 0 && isBlackFriday && !exclusiveProduct)
                                                     ?
-                                                    (/*exclusiveProduct ? 'price__value' :*/ "price__value_strike")
+                                                    ("price__value_strike")
                                                     : "price__value"
                                             }>
-                                                {/*<span>{exclusiveProduct && +discountPrice > 0 ? "1-9 unid:" : ''}</span>*/}
                                                 {price} €                                
                                             </div>                                              
                                         </div>
-                                        {+discountPrice > 0 || (+brandDiscount > 0 && isBlackFriday)
+                                        {+discountPrice > 0 || (+brandDiscount > 0 && isBlackFriday && !exclusiveProduct)
                                             ?
                                             <div className={!exclusiveProduct ? "price__value price__value_discount" : "price__value price__value_red price__value_discount"}>
-                                                {/*<span>{exclusiveProduct && +discountPrice > 0 ? "10+ unid:" : ''}</span>*/}
                                                 {discountPrice > 0 ? discountPrice : finalPrice} €
                                             </div>
                                             :

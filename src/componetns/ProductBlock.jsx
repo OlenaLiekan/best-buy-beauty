@@ -112,7 +112,7 @@ const ProductBlock = ({ path, id, code, info, name, rating, available, topProduc
                                     ''
                                 }
                                 {
-                                    brandDiscount > 0 && isBlackFriday && !percents
+                                    brandDiscount > 0 && isBlackFriday && !percents && !exclusiveProduct
                                     ?
                                     <div className='item-product__price_percents'>
                                         -{brandDiscount}%
@@ -120,15 +120,13 @@ const ProductBlock = ({ path, id, code, info, name, rating, available, topProduc
                                     :
                                     '' 
                                 }
-                                <div className={+discountPrice > 0 || (brandDiscount > 0 && isBlackFriday) ? (/*exclusiveProduct ? "item-product__price" :*/ "item-product__price item-product__price_strike") : "item-product__price"}>
-                                    {/*<span>{exclusiveProduct && +discountPrice > 0 ? "1-9 unid:" : ''}</span>*/}
+                                <div className={+discountPrice > 0 || (brandDiscount > 0 && isBlackFriday && !exclusiveProduct) ? ("item-product__price item-product__price_strike") : "item-product__price"}>
                                     {price} €
                                 </div>
                             </div>
-                            {+discountPrice > 0 || (+brandDiscount > 0 && isBlackFriday)
+                            {+discountPrice > 0 || (+brandDiscount > 0 && isBlackFriday && !exclusiveProduct)
                                 ?
-                                <div className={exclusiveProduct ? "item-product__price item-product__price_red item-product__price_discount" : "item-product__price item-product__price_discount"}>
-                                    {/*<span>{exclusiveProduct && +discountPrice > 0 ? "10+ unid:" : ''}</span>*/}     
+                                <div className={exclusiveProduct ? "item-product__price item-product__price_red item-product__price_discount" : "item-product__price item-product__price_discount"}>     
                                     {discountPrice > 0 ? discountPrice : finalPrice} €</div>
                                 : ''
                             }
