@@ -478,10 +478,8 @@
 }
 
 .testimonialsProduct {
-    color: #484848;
-    @media(max-width: 579.98px) {
-        font-size: 14px;
-    }
+    line-height: 1.2;        
+    font-size: 14px;
 }
 
 .testimonialsRating {
