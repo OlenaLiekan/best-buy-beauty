@@ -18,14 +18,12 @@ const NewReview = ({ userId, userName, productId, rating }) => {
     
     const success = () => {
         window.alert('Thank you for your review!');
-        setCurrentRate(0);
-        setReviewText('');
-        rating = +rating;
-        const newRating = rating === 0 ? rating + currentRate : (rating + currentRate) / 2; 
-        console.log((rating + currentRate) / 2);
+        const newRating = Number(rating) === 0 ? Number(rating) + currentRate : (Number(rating) + currentRate) / 2; 
         const formData = new FormData();
         formData.set('rating', newRating.toFixed(1));
         updateProduct(formData, productId).then();
+        setCurrentRate(0);
+        setReviewText('');
         setHideWindow(true);
     }
     

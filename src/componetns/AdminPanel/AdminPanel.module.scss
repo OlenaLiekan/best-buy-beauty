@@ -1,3 +1,24 @@
+.body {
+    min-height: 410px;
+    border-left: 2px solid #61616124;
+    padding: 20px 0 20px 88px;
+
+    @media(max-width: 991.98px) {
+        padding: 20px 0 20px 60px;
+    }
+
+    @media(max-width: 767.98px) {
+        padding: 40px 10px 20px;
+        border-left: 0;
+        border-top: 2px solid #61616124;
+        min-height: 0;
+    }
+
+    @media(max-width: 379.98px) {
+        padding: 30px 10px 20px;
+    }
+}
+
 .actions {
     display: flex;
     flex-direction: column;
@@ -28,18 +49,8 @@
     grid-template-columns: repeat(4, 100px);
     justify-content: center;
     gap: 20px;
-    @media (max-width: 767.98px) {
+    @media (max-width: 991.98px) {
         grid-template-columns: repeat(2, 100px);
-    }
-}
-
-.formActions {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    justify-content: center;
-    gap: 20px;
-    @media (max-width: 767.98px) {
-        grid-template-columns: repeat(1, 1fr);
     }
 }
 
@@ -126,7 +137,9 @@
 .deliveryBlock,
 .dataPaymentBlock,
 .productsListBlock,
-.promocodesBlock {
+.promocodesBlock,
+.testimonialsBlock,
+.promotionBlock {
     display: flex;
     flex-direction: column;
     gap: 40px;
@@ -138,7 +151,6 @@
         font-weight: 500;
         line-height: 1.4;
         max-width: 260px;
-        text-decoration: underline;
     }
 }
 
@@ -390,6 +402,186 @@
     }
 }
 
+.testimonialsList {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+
+.testimonialsItem {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.testimonialsComment,
+.testimonialsAnswer {
+    display: flex;
+    flex-direction: column; 
+    width: 300px;
+    @media(max-width: 379.98px) {
+        max-width: 220px;
+    }
+}
+
+.testimonialsComment {
+    align-self: flex-start;
+    border-radius: 20px 20px 20px 0;
+    border: 2px solid #1561bd11;
+    overflow: hidden;
+}
+
+.testimonialsTop,
+.testimonialsReplyTop {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    gap: 10px;
+}
+
+.testimonialsTop {
+   background-color: #1561bd11;
+}
+
+.testimonialsReplyTop {
+    background-color: #1561bdda;
+    color: #fff;
+    font-weight: 500;
+    align-items: flex-end;
+}
+
+.testimonialsTopLine {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+    gap: 20px;
+}
+
+.testimonialsName,
+.testimonialsReplyName {
+    font-size: 14px;
+}
+
+.testimonialsName {
+    color: #484848;
+}
+
+.testimonialsDate,
+.testimonialsReplyDate {
+    align-self: flex-end;
+    font-weight: 500;
+    font-size: 12px;
+}
+
+.testimonialsDate {
+    color: #686868;    
+}
+
+.testimonialsProduct {
+    color: #484848;
+    @media(max-width: 579.98px) {
+        font-size: 14px;
+    }
+}
+
+.testimonialsRating {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    gap: 5px;
+    @media(max-width: 479.98px) {
+        font-size: 16px;
+    }
+}
+
+.testimonialsRatingStar {
+    fill: #f0de68;
+}
+
+.testimonialsText,
+.testimonialsReplyText {
+    padding: 30px 15px;
+}
+
+.testimonialsAnswer {
+    margin-left: 40px;
+    align-self: flex-end;
+    border-radius: 20px 20px 0 20px;
+    overflow: hidden;
+    border: 2px solid #1561bdda;
+}
+
+.responseBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.responseIcon {
+    display: flex;
+    align-self: self-end;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    fill:#1561bda0;
+    margin-right: 30px;
+    &:hover {
+        transition: fill 0.3s ease 0s;
+        fill: #1561bd;
+    }
+}
+
+.responseTextarea {
+    margin-left: 40px;
+    align-self: flex-end;    
+    border-radius: 20px 20px 0 20px;
+    border: 2px solid #2525257c;
+    padding: 15px;
+    resize: none;
+    width: 300px;
+    min-height: 150px;
+    @media(max-width: 379.98px) {
+        width: 220px;
+    }
+}
+
+.responseActions {
+    margin-left: 40px;
+    display: flex;
+    flex-wrap: wrap;    
+    gap: 20px;
+    @media(max-width: 379.98px) {
+        flex-direction: column;
+        align-items: flex-end;
+        width: 220px;
+    }
+}
+
+.responseCancelBtn,
+.responseReplyBtn {
+    width: 140px;
+    border-radius: 20px;
+    padding: 15px 20px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.6px;
+    box-shadow: 3px 3px 3px #68686868;
+    @media(max-width: 379.98px) {
+        width: 100%;
+    }
+}
+
+.responseCancelBtn {
+    background-color: #252525;
+    color: #fff;
+}
+
+.responseReplyBtn {
+    background-color: #1560BD;
+    color: #fff;
+}
+
 .promocodesList {
     display: flex;
     flex-direction: column;
@@ -482,6 +674,7 @@
 .logoText {
     font-size: 24px;
     font-weight: 500;
+    margin-bottom: 60px;
 }
 
 .logoAction {
@@ -590,4 +783,79 @@
     font-weight: 500;
 }
 
+.promotionBlock {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+}
+
+.promotionBody,
+.promotionTop,
+.promotionBottom,
+.promotionBrands,
+.promotionItem,
+.promotionItemDisable,
+.promotionItems {
+    display: flex;
+    flex-direction: column;
+}
+
+.promotionItems {
+    gap: 40px;
+}
+
+.promotionItem,
+.promotionItemDisable {
+    padding: 20px;
+    border-radius: 20px;
+    border: 2px solid #6c7c61;
+    box-shadow: 5px 5px 10px #6c7c611d;
+    gap: 30px;
+}
+
+.promotionItemDisable {
+    opacity: 80%;
+}
+
+.promotionTop {
+    gap: 10px;    
+}
+
+.promotionTopLine {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.promotionTopLabel,
+.promotionBottomLabel {
+    font-weight: 500;
+}
+
+.promotionStatusOn {
+    color: #AD912B;
+}
+
+.promotionStatusOff {
+    color: #484848;
+}
+
+.promotionBottom {
+    gap: 20px;
+}
+
+.promotionBrands {
+    gap: 10px;
+}
+
+.promotionBrand {
+    display: flex;
+    gap: 5px;
+}
+
+.promotionBrandPercent {
+    font-weight: 500;
+    color: #AD912B;
+}
 

@@ -1,12 +1,23 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context';
 import AdminPanel from '../componetns/AdminPanel';
 import UserPanel from '../componetns/UserPanel/UserPanel';
-import { useNavigate } from 'react-router-dom';
+import AuthAsideMenu from '../componetns/AuthAsideMenu';
+import { ADMIN_MENU_ITEMS, USER_MENU_ITEMS } from '../constants';
 
 const AuthPage = () => {
 
-    const {isAuth, setIsAuth, adminMode, setAdminMode, createMode, updateMode} = React.useContext(AuthContext);
+    const {
+        isAuth,
+        setIsAuth,
+        adminMode,
+        setAdminMode,
+        createMode,
+        updateMode
+    } = React.useContext(AuthContext);
+
+    const menuItems = !adminMode ? USER_MENU_ITEMS : ADMIN_MENU_ITEMS;
 
     const navigate = useNavigate();
     const data = localStorage.getItem("user");
@@ -38,13 +49,20 @@ const AuthPage = () => {
                         </svg>
                     </h2>
                     <div className="account-main__body body-account">
-                        {
-                            !adminMode
-                                ?
-                                <UserPanel user={user} />
-                                :
-                                <AdminPanel />
-                        }
+                        <div className='body-account__wrapper'>
+                            <div className="body-account__container">
+                                <div className="body-account__content">
+                                    <AuthAsideMenu user={user} menuItems={menuItems} />
+                                    {
+                                        !adminMode
+                                            ?
+                                            <UserPanel user={user} />
+                                            :
+                                            <AdminPanel />
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1313,6 +1313,21 @@
     }
 }
 
+.body-account {
+    &__content {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
+        width: 92vw;
+    
+        @media(max-width: 767.98px) {
+            flex-direction: column;
+            width: 100%;
+        }
+    }
+}
+
 .form-user-info,
 .form-access {
     &__line {
