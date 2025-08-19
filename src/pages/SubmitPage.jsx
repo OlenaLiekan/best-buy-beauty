@@ -8,7 +8,7 @@ import { AuthContext } from "../context";
 //import { sendEmail } from "../http/productAPI";
 
 import { submitPurchase } from "../http/productAPI";
-import { bodyLock, closePopup } from "../js/script";
+import { bodyLock, checkedCheckbox, closePopup } from "../js/script";
 import { getCountryCallingCode, getCountries } from "libphonenumber-js";
 import DeliveryConditions from "../componetns/UX/Popups/DeliveryConditions";
 
@@ -63,6 +63,7 @@ const SubmitPage = () => {
   const [usedPromocode, setUsedPromocode] = React.useState('');
 
   const [countryValue, setCountryValue] = React.useState('');
+  const [checked, setChecked] = React.useState(false);
 
   const data = localStorage.getItem("user") ? localStorage.getItem("user") : "";
   const user = data ? JSON.parse(data) : "";
@@ -602,6 +603,15 @@ const SubmitPage = () => {
     }
   };
 
+  const onClickChecked = () => {
+    checkedCheckbox();
+    if (checked) {
+      setChecked(false);
+    } else {
+      setChecked(true);
+    }
+  }
+
   return (
     <div className="cart__popup popup-cart">
       {showConditions && <DeliveryConditions deliveryPrices={deliveryPrices} />}
@@ -959,11 +969,17 @@ const SubmitPage = () => {
                     value={comment}
                     onChange={onChangeComment}
                   />
-                </div>
+              </div>
+              <div className="popup-form__line popup-line__checkbox">
+                <label onClick={onClickChecked} htmlFor="verifyAddress" className={"form-login__label checkbox-label"}>
+                    Confirmo que o endereço está correto <span>*</span>
+                </label>
+                <input required id="verifyAddress" type="checkbox" name="verifyAddress" tabIndex="14" className="form-login__checkbox" /> 
+              </div>
               <button
                   disabled={deliveryPrices.length ? false : true}
                   type="submit"
-                  tabIndex="14"
+                  tabIndex="15"
                   className="popup-form__button checkout scroll-top"
                 >
                   Pagar {(+finalSum + +deliveryPrice).toFixed(2)} €
