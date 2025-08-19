@@ -53,6 +53,7 @@ const SubmitPage = () => {
   const [payment, setPayment] = React.useState("");
   const [resetForm, setResetForm] = React.useState(false);
   //const [timeMark, setTimeMark] = React.useState(6);
+  const [showPromocodeBlock, setShowPromocodeBlock] = React.useState(false);
   const [promocode, setPromocode] = React.useState('');
   const [availablePromocode, setAvailablePromocode] = React.useState(false);
   const [message, setMessage] = React.useState('');
@@ -591,7 +592,15 @@ const SubmitPage = () => {
     setAvailablePromocode(false);
     setUsedPromocode('');
     setPromocodeValue(0);
-  }
+  };
+
+  const onClickShowPromoLine = () => {
+    if (showPromocodeBlock) {
+      setShowPromocodeBlock(false);
+    } else {
+      setShowPromocodeBlock(true);
+    }
+  };
 
   return (
     <div className="cart__popup popup-cart">
@@ -1033,23 +1042,34 @@ const SubmitPage = () => {
             {user 
               ?
               <>
-                <div className="aside-popup-cart__line aside-popup-cart__line_promo">
-                  <input type="text"
-                    disabled={usedPromocode ? true : false}
-                    placeholder="Código de desconto"
-                    value={promocode}
-                    onChange={onChangePromocode}
-                    className="aside-popup-cart__input" />
-                  {
-                    !usedPromocode.length && promocode.length && !message
-                      ?
-                      <button onClick={onClickUsePromo} className="aside-popup-cart__btn" type="button">
-                        Aplicar
-                      </button>
-                      :
-                      <button disabled className="aside-popup-cart__btn aside-popup-cart__btn_disabled" type="button">
-                        Aplicar
-                      </button>
+                {showPromocodeBlock
+                  &&
+                  <div className="aside-popup-cart__line aside-popup-cart__line_promo">
+                    <input type="text"
+                      disabled={usedPromocode ? true : false}
+                      placeholder="Código de desconto"
+                      value={promocode}
+                      onChange={onChangePromocode}
+                      className="aside-popup-cart__input" />
+                    {
+                      !usedPromocode.length && promocode.length && !message
+                        ?
+                        <button onClick={onClickUsePromo} className="aside-popup-cart__btn" type="button">
+                          Aplicar
+                        </button>
+                        :
+                        <button disabled className="aside-popup-cart__btn aside-popup-cart__btn_disabled" type="button">
+                          Aplicar
+                        </button>
+                    }
+                  </div>  
+                }
+                <div className="aside-popup-cart__switch" onClick={(onClickShowPromoLine)}>
+                  {showPromocodeBlock
+                    ?
+                    promocode.length < 1 && '- Ocultar o campo do código promocional'
+                    :
+                    '+ Adicione um código promocional'
                   }
                 </div>
                 <div className={message ? "aside-popup-cart__line aside-popup-cart__line_msg aside-popup-cart__line_overflow" : "aside-popup-cart__line"}>

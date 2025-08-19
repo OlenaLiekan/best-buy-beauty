@@ -3441,6 +3441,17 @@
             }
         }
     }
+    &__switch {
+        color: #AD902B;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        line-height: 1.2;
+        cursor: pointer;
+        @media (max-width: 479.98px) {
+            text-align: center;
+            font-size: 14px;
+        }
+    }
     &__used-promocode {
         display: flex;
         justify-content: space-between;
