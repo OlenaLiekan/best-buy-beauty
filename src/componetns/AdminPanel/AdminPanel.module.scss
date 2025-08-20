@@ -477,6 +477,10 @@
     color: #686868;    
 }
 
+.testimonialsReplyDate {
+    color: #ffffffc6;
+}
+
 .testimonialsProduct {
     line-height: 1.2;        
     font-size: 14px;
@@ -557,7 +561,8 @@
 }
 
 .responseCancelBtn,
-.responseReplyBtn {
+.responseReplyBtn,
+.responseReplyBtnOff {
     width: 140px;
     border-radius: 20px;
     padding: 15px 20px;
@@ -565,6 +570,7 @@
     line-height: 1.2;
     letter-spacing: 0.6px;
     box-shadow: 3px 3px 3px #68686868;
+    transition: background-color 0.6s ease 0s;
     cursor: pointer;
     @media(max-width: 379.98px) {
         width: 100%;
@@ -574,11 +580,58 @@
 .responseCancelBtn {
     background-color: #252525;
     color: #fff;
+    &:hover {
+        background-color: #3a3a3a;
+    }
 }
 
 .responseReplyBtn {
     background-color: #1560BD;
     color: #fff;
+    &:hover {
+        background-color: #2475d7;
+    }
+}
+
+.responseReplyBtnOff {
+    background-color: #686868;
+    color: #ebebebd1;
+
+    &:hover {
+        background-color: #686868;
+    }
+}
+
+.editReplyLine {
+    display: flex;
+    align-items: flex-start;
+    align-self: self-start;
+    gap: 5px;
+    cursor: pointer;
+    transition: all 0.6s ease 0s;
+    &:hover {
+        .editReplyIcon {
+            fill: #fff;
+            transform: rotate(-10deg);            
+        }
+        .editReplyText {
+            color: #fff;
+        }
+    }
+}
+
+.editReplyIcon {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    fill: #ffffffc6;
+}
+
+.editReplyText {
+    color: #ffffffc6;
+    font-size: 18px;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
 }
 
 .promocodesList {

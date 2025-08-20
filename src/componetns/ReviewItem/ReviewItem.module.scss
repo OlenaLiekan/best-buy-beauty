@@ -4,7 +4,7 @@
     background-color: #fff;
     border-radius: 20px;
     overflow: hidden;
-    gap: 20px;
+
     padding: 20px 0 0 0;
     border: 2px solid #f7f6f6;
     box-shadow: 8px 8px 8px #d9d9d92b;
@@ -15,7 +15,7 @@
     flex-direction: column-reverse;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 20px;
+    gap: 15px;
 }
 
 .userName {
@@ -24,12 +24,16 @@
     color: #AD902B;
 }
 
-.date {
-    align-self: flex-end;
-    font-size: 10px;
+.date,
+.replyDate {
+    align-self: self-end;    
+    font-size: 12px;
     font-weight: 500;
+    color: #5c5c5c;
+}
+
+.date {
     padding-right: 20px;
-    color: #484848;
 }
 
 .body {
@@ -51,8 +55,34 @@
     fill: #e8c445;
 }
 
-.text {
+.text,
+.replyText {
+    line-height: 1.2;
+}
 
+.replyBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-top: 2px solid #ad912b79;
+    padding-top: 20px;
+}
 
+.replyRole {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    white-space: nowrap;
+    text-transform: uppercase;
+    svg {
+        width: 18px;
+        height: 18px;
+        fill: #252525bb;
+    }
+    @media(max-width: 579.98px) {
+        font-size: 14px;
+    }
 }
 

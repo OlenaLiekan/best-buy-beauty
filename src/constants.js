@@ -16,3 +16,5 @@ export const ADMIN_INITIAL_OPTIONS = [
   { name: 'Marca', path: ' ' },
   { name: 'Slide', path: ' ' },
 ];
+
+export const RATES = ['1', '2', '3', '4', '5'];

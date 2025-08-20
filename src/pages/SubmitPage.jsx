@@ -977,10 +977,16 @@ const SubmitPage = () => {
                 <input required id="verifyAddress" type="checkbox" name="verifyAddress" tabIndex="14" className="form-login__checkbox" /> 
               </div>
               <button
-                  disabled={deliveryPrices.length ? false : true}
-                  type="submit"
-                  tabIndex="15"
-                  className="popup-form__button checkout scroll-top"
+                disabled={deliveryPrices.length > 0 ? false : true}
+                type="submit"
+                tabIndex="15"
+                className={
+                  checked && deliveryPrices.length > 0
+                    ?
+                    "popup-form__button checkout scroll-top"
+                    :
+                    "popup-form__button checkout checkout_disabled scroll-top"
+                }
                 >
                   Pagar {(+finalSum + +deliveryPrice).toFixed(2)} €
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">

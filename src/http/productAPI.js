@@ -75,6 +75,16 @@ export const createReview = async review => {
   return data;
 };
 
+export const createReply = async reply => {
+  const { data } = await $authHost.post('api/reply', reply);
+  return data;
+};
+
+export const updateReply = async (reply, id) => {
+  const { data } = await $authHost.patch('api/reply/' + id, reply);
+  return data;
+};
+
 export const updateDelivery = async (delivery, id) => {
   const { data } = await $authHost.patch('api/delivery/' + id, delivery);
   return data;

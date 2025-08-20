@@ -4053,6 +4053,23 @@
         color: $mainColor;
         background-color: $whiteColor;
     }
+    &_disabled {
+        background-color: #6b6b6b;
+        border: 2px solid #6b6b6b;
+        color: #ebebebd1;
+        svg {
+            fill: #ebebebd1;
+        } 
+        &:hover {
+            background-color: #6b6b6b;
+            border: 2px solid #6b6b6b;
+            color: #ebebebd1;
+        
+            svg {
+                fill: #ebebebd1;
+            }
+        }
+    }
 }
 
 
