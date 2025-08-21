@@ -117,7 +117,8 @@ const AdminTestimonials = () => {
         setDeletedId(reviewId);
         window.alert('Comentário excluído com sucesso!');
         axios.delete(`${serverDomain}api/rating?id=${ratingId}`)
-            .then(() => 'Avaliação excluído com sucesso!').catch(err => 'Falha ao excluir a avaliação.'); 
+            .then(() => 'Avaliação excluído com sucesso!')
+            .catch(err => 'Falha ao excluir a avaliação.'); 
     };
 
     const addReply = (e) => {
