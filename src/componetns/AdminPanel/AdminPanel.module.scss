@@ -514,6 +514,38 @@
     border: 2px solid #1561bdda;
 }
 
+.testimonialsDeleteLine {
+    display: flex;
+    align-items: flex-end;
+    align-self: self-start;
+    gap: 8px;
+    transition: all 0.6s ease 0s;
+    cursor: pointer;
+    &:hover {
+        .testimonialsDeleteIcon {
+            fill: #1561bdb6;
+            transform: scale(1.1)
+        }
+        .testimonialsDeleteText {
+            color: #252525;
+        }
+    }
+}
+
+.testimonialsDeleteText {
+    font-weight: 500;
+    color: #2525257e;
+    font-size: 18px;
+    line-height: 1.2;
+    letter-spacing: 0.5px;    
+}
+
+.testimonialsDeleteIcon {
+    width: 22px;
+    height: 22px;
+    fill: #2525257e;
+}
+
 .responseBlock {
     display: flex;
     flex-direction: column;
@@ -621,7 +653,6 @@
 }
 
 .editReplyIcon {
-    position: relative;
     width: 18px;
     height: 18px;
     fill: #ffffffc6;

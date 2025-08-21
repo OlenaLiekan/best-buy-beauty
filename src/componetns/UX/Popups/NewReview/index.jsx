@@ -17,7 +17,7 @@ const NewReview = ({ userId, userName, productId, rating }) => {
     }
     
     const success = () => {
-        window.alert('Thank you for your review!');
+        window.alert('Obrigado pelo seu comentário!');
         /*const newRating = Number(rating) === 0 ? Number(rating) + Number(currentRate) : (Number(rating) + Number(currentRate)) / 2; 
         const formData = new FormData();
         formData.set('rating', newRating.toFixed(1));

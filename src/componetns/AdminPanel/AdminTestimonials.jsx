@@ -20,6 +20,7 @@ const AdminTestimonials = () => {
     const [loading, setLoading] = React.useState(false);
     const [replyText, setReplyText] = React.useState('');
     const [newReplyText, setNewReplyText] = React.useState('');
+    const [deletedId, setDeletedId] = React.useState('');
     
     const { serverDomain } = React.useContext(AuthContext);
 
@@ -35,12 +36,11 @@ const AdminTestimonials = () => {
     React.useEffect(() => {
         setReviewsLoading(true);
         axios.get(`${serverDomain}api/review`)
-            .then((res) => {
-                const testimonials = (res.data).reverse().slice(0, 10);                
-                setReviews(testimonials);  
+            .then((res) => {           
+                setReviews((res.data).reverse().slice(0, 10));  
                 setReviewsLoading(false);
             }); 
-    }, [serverDomain]);
+    }, [serverDomain, deletedId]);
 
     React.useEffect(() => {
         setRepliesLoading(true);
@@ -49,7 +49,7 @@ const AdminTestimonials = () => {
                 setReplies(res.data);  
                 setRepliesLoading(false);
             }); 
-    }, [serverDomain, replyEditMode]);
+    }, [serverDomain, replyEditMode, replyMode, deletedId]);
 
     React.useEffect(() => {
         setRatingsLoading(true);
@@ -59,7 +59,7 @@ const AdminTestimonials = () => {
                 setRatings(lastRatings);
                 setRatingsLoading(false);
             }); 
-    }, [serverDomain]);
+    }, [serverDomain, replyEditMode, replyMode, deletedId]);
 
     const onClickIcon = (id) => {
         setActiveReview('');
@@ -112,6 +112,13 @@ const AdminTestimonials = () => {
             window.alert('Resposta atualizada com sucesso!');   
         }
     };
+    
+    const deleted = (reviewId, ratingId) => {
+        setDeletedId(reviewId);
+        window.alert('Comentário excluído com sucesso!');
+        axios.delete(`${serverDomain}api/rating?id=${ratingId}`)
+            .then(() => 'Avaliação excluído com sucesso!').catch(err => 'Falha ao excluir a avaliação.'); 
+    };
 
     const addReply = (e) => {
         e.preventDefault();
@@ -132,6 +139,16 @@ const AdminTestimonials = () => {
             updateReply(formData, id).then(data => success()).catch(err => errorMessage());
         }
     };
+
+    const onClickRemove = (reviewId, ratingId) => {   
+        setDeletedId('');
+        if (window.confirm('Tem certeza de que deseja excluir o comentário?')) {
+            axios.delete(`${serverDomain}api/review?id=${reviewId}`)
+                .then(() => deleted(reviewId, ratingId)).catch(err => 'Falha ao excluir o comentário.');         
+        } else {
+            window.alert('Exclusão cancelada.');
+        }
+    };
     
     return (
         <div className={styles.testimonialsBlock}>
@@ -142,6 +159,22 @@ const AdminTestimonials = () => {
                         <li key={testimonial.id} className={styles.testimonialsItem}>
                             <div className={styles.testimonialsComment}>
                                 <div className={styles.testimonialsTop}>
+                                    <div onClick={
+                                        () => onClickRemove(
+                                            testimonial.id,
+                                            ratings.length > 0
+                                                &&
+                                                ratings.find(
+                                                    (rating) =>
+                                                    (rating.userId === testimonial.userId
+                                                        &&
+                                                        rating.productId === testimonial.productId))?.id
+                                        )} className={styles.testimonialsDeleteLine}>
+                                        <svg className={styles.testimonialsDeleteIcon} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                            <path d="M497.941 273.941c18.745-18.745 18.745-49.137 0-67.882l-160-160c-18.745-18.745-49.136-18.746-67.883 0l-256 256c-18.745 18.745-18.745 49.137 0 67.882l96 96A48.004 48.004 0 0 0 144 480h356c6.627 0 12-5.373 12-12v-40c0-6.627-5.373-12-12-12H355.883l142.058-142.059zm-302.627-62.627l137.373 137.373L265.373 416H150.628l-80-80 124.686-124.686z" />
+                                        </svg>    
+                                        <span className={styles.testimonialsDeleteText}>Excluir</span>
+                                    </div>
                                     <div className={styles.testimonialsDate}>
                                         {(testimonial.createdAt).replace('T',' ').slice(0, 19)}
                                     </div>                                   
@@ -174,7 +207,9 @@ const AdminTestimonials = () => {
                                         <div className={styles.testimonialsProduct}>
                                             {products.length > 0 && products.find((product) => (product.id === testimonial.productId))?.name}                                        
                                         </div>
-                                    </div>                                    
+                                    </div>     
+
+
                                 </div>
                                 <div className={styles.testimonialsText}>
                                     {testimonial.text}
@@ -210,17 +245,6 @@ const AdminTestimonials = () => {
                                     :
                                     <div className={styles.testimonialsAnswer}>
                                         <div className={styles.testimonialsReplyTop}>
-                                            <div className={styles.testimonialsReplyDate}>
-                                                {replies.length > 0
-                                                    &&
-                                                    replies.find(
-                                                        (ans) => (ans.reviewId === testimonial.id)
-                                                    )?.createdAt.replace('T', ' ').slice(0, 19)
-                                                }
-                                            </div>   
-                                            <div className={styles.testimonialsReplyName}>
-                                                Administrador
-                                            </div>
                                             <div onClick={
                                                 () => onClickEdit(replies.length > 0
                                                     &&
@@ -234,6 +258,18 @@ const AdminTestimonials = () => {
                                                 </svg>
                                                 <div className={styles.editReplyText}>Editar</div>
                                             </div>
+                                            <div className={styles.testimonialsReplyDate}>
+                                                {replies.length > 0
+                                                    &&
+                                                    replies.find(
+                                                        (ans) => (ans.reviewId === testimonial.id)
+                                                    )?.createdAt.replace('T', ' ').slice(0, 19)
+                                                }
+                                            </div>   
+                                            <div className={styles.testimonialsReplyName}>
+                                                Administrador
+                                            </div>
+
                                         </div>
                                         
                                         <div className={styles.testimonialsReplyText}>
