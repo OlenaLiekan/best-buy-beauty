@@ -30,7 +30,7 @@ const AdminProductCategories = () => {
         setIsLoading(true);
         axios.get(`${serverDomain}api/category`)
             .then((res) => {
-                setCategories(res.data);
+                setCategories(res.data.sort((a,b) => a.position - b.position));
                 setIsLoading(false);
             });
     }, [createMode]);
@@ -50,8 +50,8 @@ const AdminProductCategories = () => {
                 });
             }
         } catch (error) {
-        console.error('Error', error);
-        window.alert('Algo deu errado');
+            console.error('Error', error);
+            window.alert('Algo deu errado');
         } finally {
             setIsSaving(false);
         }
@@ -112,7 +112,7 @@ const AdminProductCategories = () => {
         const formData = new FormData();
         formData.set('name', categoryName);
         formData.set("subMenu", false);
-        formData.set("position", String(categories.length ? categories.length + 1 : 0));
+        formData.set("position", String(categories.length + 1));
         createCategory(formData).then(data => success()).catch(err => message());    
     };
 
@@ -143,29 +143,34 @@ const AdminProductCategories = () => {
                             {
                                 categories.length > 0 && !loading
                                 &&
-                                categories.map((category, i) =>
-                                    <li
-                                        key={category.id}
-                                        draggable={dragAndDropMode && !isSaving ? true : false}
-                                        onDragStart={(e) => handleDragStart(e, i)}
-                                        onDragOver={(e) => handleDragOver(e, i)}
-                                        onDrop={(e) => handleDrop(e, i)}
-                                        className={dragAndDropMode ? styles.categoriesItemActive : styles.categoriesItem}
-                                    >
-                                        <span className={
-                                            dragAndDropMode
-                                                ?
-                                                styles.categoriesDragHandleOn
-                                                :
-                                                styles.categoriesDragHandleOff
-                                        }>
-                                            ☰
-                                        </span>
-                                        <span className={styles.categoriesPosBadge}>#{i + 1} </span> 
-                                        {category.name}                   
-                                    </li>                    
-                                )
+                                <>
+                                    <li className={styles.categoriesItem}>Promoção</li>
+                                    {categories.map((category, i) =>
+                                        <li
+                                            key={category.id}
+                                            draggable={dragAndDropMode && !isSaving ? true : false}
+                                            onDragStart={(e) => handleDragStart(e, i)}
+                                            onDragOver={(e) => handleDragOver(e, i)}
+                                            onDrop={(e) => handleDrop(e, i)}
+                                            className={dragAndDropMode ? styles.categoriesItemActive : styles.categoriesItem}
+                                        >
+                                            <span className={
+                                                dragAndDropMode
+                                                    ?
+                                                    styles.categoriesDragHandleOn
+                                                    :
+                                                    styles.categoriesDragHandleOff
+                                            }>
+                                                ☰
+                                            </span>
+                                            <span className={styles.categoriesPosBadge}>#{i + 1} </span>
+                                            {category.name}
+                                        </li>
+                                    )}
+                                    <li className={styles.categoriesItem}>Marcas</li>
+                                </>    
                             }
+                            
                         </ul>
                         {
                             dragAndDropMode
