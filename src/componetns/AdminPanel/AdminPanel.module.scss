@@ -275,7 +275,8 @@
 }
 
 .promocodesLine, 
-.categoryFormLine {
+.categoryFormLine,
+.promotionFormDiscountLine {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -323,7 +324,8 @@
 .dataPaymentLabel,
 .logoLabel,
 .promocodesLabel,
-.categoryLabel {
+.categoryLabel,
+.promotionLabel {
     font-size: 16px;
     font-weight: 500;
     color: #252525;
@@ -345,7 +347,9 @@
 }
 
 .promocodesInput,
-.categoryInput {
+.categoryInput,
+.promotionInput,
+.promotionDiscountInput {
     padding: 10px 15px;
     border-bottom: 2px solid #acacacd2;
     outline: none;
@@ -604,7 +608,10 @@
 .responseReplyBtnOff, 
 .addCategoryBtn,
 .cancelAddCategoryBtn,
-.addCategoryDisabledBtn {
+.addPromotionBtn,
+.cancelAddPromotionBtn,
+.addCategoryDisabledBtn,
+.addPromotionDisabledBtn {
     width: 140px;
     border-radius: 20px;
     padding: 15px 20px;
@@ -768,6 +775,7 @@
     font-size: 24px;
     font-weight: 500;
     margin-bottom: 60px;
+    white-space: nowrap;
 }
 
 .logoAction {
@@ -881,6 +889,9 @@
     font-weight: 400;
     line-height: 1.2;
     letter-spacing: 0.5px;
+    @media(max-width: 379.98px) {
+        font-size: 14px;
+    }
 }
 
 .promotionBody,
@@ -918,6 +929,7 @@
 .promotionTopLine {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 10px;
 }
 
@@ -950,6 +962,134 @@
 .promotionBrandPercent {
     font-weight: 500;
     color: #AD912B;
+}
+
+.promotionInput {
+    width: 280px;
+    @media(max-width: 767.98px) {
+        width: 200px;
+    }
+}
+
+.promotionFormDiscountLine {
+    padding: 0 5px;
+    @media(max-width: 479.98px) {
+        padding: 0 15px;
+    }
+}
+
+.promotionDiscountInput {
+    width: 180px;
+    @media(max-width: 767.98px) {
+        width: 160px;
+    }
+}
+
+.promotionBrandsList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 280px;
+    margin-bottom: 30px;
+    @media(max-width: 767.98px) {
+        flex-wrap: nowrap;
+        overflow: scroll;
+    }
+    @media(max-width: 379.98px) {
+        max-width: 260px;
+    }
+}
+
+.promotionBrandsItem,
+.promotionBrandsItemActive {
+    border-radius: 15px;
+    padding: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 16px;
+    white-space: nowrap;
+    transition: all 0.3s ease 0s;
+}
+
+.promotionBrandsItemActive {
+    border: 2px solid #1560BD;
+    color: #1560BD;
+}
+
+.promotionBrandsItem {
+    border: 2px solid #48484894;
+    &:hover {
+        border: 2px solid #1560BD;
+        color: #1560BD;
+    }
+}
+
+.promotionTitle {
+    font-weight: 500;
+    width: 280px;
+    @media(max-width: 379.98px) {
+        width: 200px;
+        padding: 0 15px;
+    }
+}
+
+.promotionAddBrand {
+    display: flex;
+    width: 280px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    color: #252525ba;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+    margin: 15px 0 40px 0;   
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+    svg {
+        width: 18px;
+        height: 18px;
+        fill: #2475d7;
+    }
+    &:hover {
+        color: #252525;
+        svg {
+            fill: #1560BD;
+        }
+    }
+    @media(max-width: 479.98px) {
+        padding: 0 15px;
+    }
+}
+
+.addPromotionNextActions {
+    display: flex;
+    gap: 20px;
+    width: 280px;
+    @media(max-width: 379.98px) {
+        padding: 0 15px;   
+        flex-wrap: wrap;
+    }
+}
+
+.promoDate {
+    white-space: nowrap;
+    @media(max-width: 379.98px) {
+        font-size: 14px;
+    }
+}
+
+.brandsWithDiscounts {
+    display: flex;
+    flex-wrap: nowrap;
+    margin-top: 15px;
+    gap: 5px;
+    width: 280px;
+    @media(max-width: 379.98px) {
+        width: 200px;
+        padding: 0 15px;
+    }
 }
 
 .categoriesBlock {
@@ -1009,17 +1149,25 @@
     }
 }
 
-.createCategoryBtn {
+.createCategoryBtn,
+.createPromotionBtn {
     display: flex;
     align-items: center;
     gap: 15px;
-    margin-bottom: 60px;
-    border: 2px solid #6c7c61d2;
-    padding: 15px 20px;
-    border-radius: 20px;
-    box-shadow: 5px 5px 5px #6c7c6125;
     transition: all 0.3s ease 0s;
     cursor: pointer;
+    @media(max-width: 379.98px) {
+        margin-top: 30px;
+        gap: 10px;
+    }
+}
+
+.createCategoryBtn {
+    margin-bottom: 60px;
+    padding: 15px 20px;    
+    border-radius: 20px;    
+    border: 2px solid #6c7c61d2;
+    box-shadow: 5px 5px 5px #6c7c6125;
     &:hover {
         border: 2px solid #6c7c61;
         .createCategoryText {
@@ -1029,30 +1177,117 @@
             fill: #6c7c61;
         }
     }
+    @media(max-width: 379.98px) {
+        padding: 15px;
+    }
 }
 
-.createCategoryText {
-    color: #252525d3;
+.createPromotionBtn {
+    margin-bottom: 40px;
+    padding: 0;
+    &:hover {
+        .createPromotionText {
+            color: #252525;
+        }
+        .createPromotionIcon {
+            fill: #6c7c61;
+        }
+    }
+    @media (max-width: 379.98px) {
+        margin-bottom: 20px;
+    }
+}
+
+.createCategoryText,
+.createPromotionText {
     font-weight: 500;
     font-size: 18px;
     letter-spacing: 0.5px;
+    white-space: nowrap;
     transition: color 0.3s ease 0s;
+    @media(max-width: 379.98px) {
+        font-size: 16px;
+    }      
 }
 
-.createCategoryIcon {
+.createCategoryText {
+    color: #252525d3;  
+}
+
+.createPromotionText {
+    color: #484848;
+}
+
+.createCategoryIcon,
+.createPromotionIcon {
     width: 24px;
     height: 24px;
-    fill: #6c7c61d2;
     transition: fill 0.3s ease 0s;
 }
 
-.categoriesCreateForm {
+.createCategoryIcon {
+    fill: #6c7c61d2;    
+}
+
+.createPromotionIcon {
+    width: 36px;
+    height: 36px;
+    fill: #6c7c61d2;
+    @media(max-width: 379.98px) {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+.categoriesCreateForm,
+.promotionCreateForm {
     display: flex;
     flex-direction: column;
+    @media(max-width: 767.98px) {
+        align-self: center;
+    }
+}
+
+.categoriesCreateForm {
     gap: 50px;
 }
 
-.categoryFormLine {
+.promotionCreateForm {
+    gap: 30px;
+}
+
+.addPromotionBtn,
+.cancelAddPromotionBtn,
+.addPromotionDisabledBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.addPromotionBtn,
+.cancelAddPromotionBtn {
+    &:hover {
+        .promotionNextIcon {
+            fill: #fff;
+        }
+    }
+}
+
+.addPromotionDisabledBtn {
+    .promotionNextIcon {
+        fill: #ffffffac;
+    }
+}
+
+.promotionNextIcon {
+    width: 16px;
+    height: 16px;
+    fill: #fffffff0;
+}
+
+.categoryFormLine,
+.promotionFormLine {
     padding: 0 5px;
     margin-left: 0;
     max-width: 200px;
@@ -1113,7 +1348,8 @@
     }
 }
 
-.addCategoryActions {
+.addCategoryActions,
+.addPromotionActions {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -1121,7 +1357,8 @@
     margin-top: 40px;
 }
 
-.cancelAddCategoryBtn {
+.cancelAddCategoryBtn,
+.cancelAddPromotionBtn {
     background-color: #252525;
     color: #fff;
 
@@ -1130,7 +1367,8 @@
     }
 }
 
-.addCategoryBtn {
+.addCategoryBtn,
+.addPromotionBtn {
     background-color: #1560BD;
     color: #fff;
 
@@ -1139,10 +1377,11 @@
     }
 }
 
-.addCategoryDisabledBtn {
+.addCategoryDisabledBtn,
+.addPromotionDisabledBtn {
     background-color: #686868;
     color: #ebebebd1;
-
+    cursor: auto;
     &:hover {
         background-color: #686868;
     }

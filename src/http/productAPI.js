@@ -150,6 +150,21 @@ export const fetchOnePromocode = async id => {
   return data;
 };
 
+export const createPromotion = async promotion => {
+  const { data } = await $authHost.post('api/promotion', promotion);
+  return data;
+};
+
+export const fetchPromotions = async () => {
+  const { data } = await $host.get('api/promotion');
+  return data;
+};
+
+export const updatePromotion = async (promotion, id) => {
+  const { data } = await $authHost.patch('api/promotion/' + id, promotion);
+  return data;
+};
+
 export const submitPurchase = async orderData => {
   const { data } = await $host.post('api/sibs', orderData);
   return data;
