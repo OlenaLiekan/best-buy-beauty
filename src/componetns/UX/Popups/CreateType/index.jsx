@@ -12,10 +12,37 @@ const CreateType = () => {
     const inputRef = React.useRef();
     const [visibility, setVisibility] = React.useState(false);
     const [categories, setCategories] = React.useState([]);
+    const [types, setTypes] = React.useState([]);
     const [name, setName] = React.useState('');
     const [categoryId, setCategoryId] = React.useState(1);
     const [categoryName, setCategoryName] = React.useState('Selecione a Categoria');
+    const [withSubMenu, setWithSubMenu] = React.useState(true);
     const [img, setImg] = React.useState(null);
+
+    React.useEffect(() => {
+        if (categoryName !== 'Selecione a Categoria') {
+            axios
+                .get(
+                    `${serverDomain}api/type?categoryId=${categoryId}`,
+                )
+                .then((res) => {
+                    setTypes(res.data);
+                });            
+        }
+    }, [serverDomain, categoryId]);
+
+    React.useEffect(() => {
+        if (types.length > 0 && !withSubMenu) {
+            window.alert('Esta seção só pode ter uma subcategoria. A criação é proibida.');
+            setCategoryId(1);
+            setCategoryName('Selecione a Categoria');
+            setWithSubMenu(true);
+            setVisibility(false);  
+        } 
+        if (!withSubMenu && !types.length) {
+            setName(categoryName);
+        }
+    }, [types]);
 
     const success = () => {
         window.alert('Novo tipo adicionado com sucesso!');
@@ -40,10 +67,11 @@ const CreateType = () => {
         }
     }
 
-    const hideOptions = (id, name) => {
+    const hideOptions = (id, name, subMenu) => {
         setCategoryId(id);
         setCategoryName(name);
-        setVisibility(false);        
+        setWithSubMenu(subMenu);
+        setVisibility(false);                 
     }
 
     React.useEffect(() => {
@@ -53,7 +81,9 @@ const CreateType = () => {
             });
     }, [serverDomain]);
 
-    const submenuCategories = categories.filter((category) => category.subMenu);
+    //const submenuCategories = categories.filter((category) => category.subMenu);
+
+    const submenuCategories = categories.filter((category) => category);
 
     const onChangeName = (e) => {
         setName(e.target.value);
@@ -69,7 +99,7 @@ const CreateType = () => {
         formData.append('name', name.trim());
         formData.append('img', img);
         formData.append('categoryId', categoryId);
-        createType(formData).then(data => success()).catch(err => message());
+        createType(formData).then(data => success()).catch(err => message());            
     }
 
     return (
@@ -78,7 +108,13 @@ const CreateType = () => {
             <form onSubmit={pushType} className={styles.formType}>
                 <div className={styles.line}>
                     <label htmlFor="type-name" className={styles.label} placeholder='Name'>Nome:</label>
-                    <input id="type-name" required tabIndex="1" type='text' className={styles.formInput}
+                    <input
+                        id="type-name"
+                        readOnly={!withSubMenu && !types.length && categoryId > 1 ? true : false}
+                        required
+                        tabIndex="1"
+                        type='text'
+                        className={styles.formInput}
                         ref={inputRef}
                         value={name}
                         onChange={onChangeName}
@@ -92,13 +128,12 @@ const CreateType = () => {
                             <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
                         </svg>
                     </div>
-                    {visibility ? 
+                    {visibility && 
                         <div className={styles.options}>
                             {submenuCategories.map((category) => 
-                                <div key={category.name} onClick={() => hideOptions(category.id, category.name)} className={styles.option}>{category.name}</div>
+                                <div key={category.name} onClick={() => hideOptions(category.id, category.name, category.subMenu)} className={styles.option}>{category.name}</div>
                             )}                         
                         </div>  
-                        : ''
                     }
                 </div>
                 <svg className={styles.closePopup} onClick={closePopup} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 352 512">
