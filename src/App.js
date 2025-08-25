@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import './scss/app.scss';
 import './scss/style.scss';
 
@@ -43,6 +44,8 @@ function App() {
   const [productRemoved, setProductRemoved] = React.useState('');
 
   const [isPromoPage, setIsPromoPage] = React.useState(false);
+  const [firstDateArray, setFirstDateArray] = React.useState([]);
+  const [secondDateArray, setSecondDateArray] = React.useState([]);
 
   const [showConditions, setShowConditions] = React.useState(false);
 
@@ -87,15 +90,27 @@ function App() {
   }, [isAuth, adminMode]);
 
   React.useEffect(() => {
-    const startDate = new Date(2025, 7, 19).getTime();
-    const finishDate = new Date(2025, 7, 24, 23, 59, 0).getTime();
-    const currentTime = new Date().getTime();
-    if (currentTime >= startDate && currentTime <= finishDate) {
-      setIsBlackFriday(true);
-    } else {
-      setIsBlackFriday(false);
+    axios.get(`${serverDomain}api/promotion`).then(res => {
+      const lastPromo = res.data?.pop();
+      if (lastPromo) {
+        setFirstDateArray(lastPromo.startDate.split('-'));
+        setSecondDateArray(lastPromo.finishDate.split('-'));
+      }
+    });
+  }, [serverDomain]);
+
+  React.useEffect(() => {
+    if (firstDateArray.length > 0 && secondDateArray.length > 0) {
+      const startDate = new Date(firstDateArray.join()).getTime();
+      const finishDate = new Date(secondDateArray.join()).getTime() + 86340000;
+      const currentTime = new Date().getTime();
+      if (currentTime >= startDate && currentTime <= finishDate) {
+        setIsBlackFriday(true);
+      } else {
+        setIsBlackFriday(false);
+      }
     }
-  }, [isBlackFriday]);
+  }, [isBlackFriday, secondDateArray, firstDateArray]);
 
   const handleScroll = () => {
     setScroll(window.scrollY);

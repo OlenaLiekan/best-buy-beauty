@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { AuthContext } from '../../context';
 import styles from './AdminPanel.module.scss';
-import { createPromotion } from '../../http/productAPI';
+import { createPromotion, updateBrand } from '../../http/productAPI';
 
 const AdminPromotion = () => {
 
@@ -26,7 +26,7 @@ const AdminPromotion = () => {
             .then((res) => {
                 setBrandsList(res.data);
             });
-    }, [serverDomain]);
+    }, [serverDomain, createMode, nextStepMode]);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/promotion`)
@@ -36,6 +36,13 @@ const AdminPromotion = () => {
     }, [serverDomain, createMode]);
 
     const onClickShowForm = () => {
+        if (brandsList.length > 0) {
+            brandsList.forEach((item) => {
+                const formData = new FormData();
+                formData.set('discount', 0);
+                updateBrand(formData, item.id);
+            }); 
+        }
         setCreateMode(true);
     };
 
@@ -69,6 +76,29 @@ const AdminPromotion = () => {
         setFinishDate(e.target.value);
     };
 
+
+    React.useEffect(() => {
+        if (startDate) {
+            const now = new Date();
+            const startDateMs = new Date(startDate.split('-').join()).getTime();   
+            const currentTimeMs = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+            if (currentTimeMs.getTime() - 10800000 > startDateMs) {
+                window.alert('A data de início não pode ser menor que a data de hoje!');
+                setStartDate('');   
+            }
+        }
+
+        if (startDate && finishDate) {
+            const startDateMs = new Date(startDate.split('-').join()).getTime();
+            const finishDateMs = new Date(finishDate.split('-').join()).getTime();
+            if (finishDateMs <= startDateMs) {
+                window.alert('A data final deve ser posterior!');
+                console.log(finishDateMs, startDateMs);
+                setFinishDate('');
+            }
+        }
+    }, [startDate, finishDate]);
+
     const onChangeDiscount = (e) => {
         setPromotionDiscount(e.target.value);
     };
@@ -97,10 +127,10 @@ const AdminPromotion = () => {
     };
 
     const success = () => {
-        window.alert('A promoção foi criada com sucesso!');
+        window.alert('A promoção foi criada com sucesso!');  
         setNextStepMode(false);
         setCreateMode(false);      
-        setPromotionName('');
+        setPromotionName(''); 
         setStartDate('');
         setFinishDate('');   
         setActiveBrandId('');
@@ -114,15 +144,32 @@ const AdminPromotion = () => {
         window.alert('Falha ao criar promoção.');
     };
 
-    const pushPromotion = (e) => {
+    const errorMessage = () => {
+        window.alert('Descontos em marcas não são criados.');
+    };
+
+    const updated = () => {
+        const formData = new FormData();
+        formData.set('name', promotionName);
+        formData.set('startDate', startDate);
+        formData.set("finishDate", finishDate);
+        formData.set("info", JSON.stringify(info)); 
+        createPromotion(formData).then(data => success()).catch(err => message());
+    };
+
+    const pushPromotion = async (e) => {
         e.preventDefault();
         if (promotionName.length && startDate && finishDate && info.length > 0) {
-            const formData = new FormData();
-            formData.set('name', promotionName);
-            formData.set('startDate', startDate);
-            formData.set("finishDate", finishDate);
-            formData.set("info", JSON.stringify(info)); 
-            createPromotion(formData).then(data => success()).catch(err => message());
+            try {
+                info.forEach((item) => {
+                    const formData = new FormData();
+                    formData.set('discount', item.discount);
+                    updateBrand(formData, item.id);
+                });
+                updated();
+            } catch (error) {
+                errorMessage();
+            }
         }
     };
 
@@ -298,14 +345,17 @@ const AdminPromotion = () => {
                     </>
                     :
                     <>
-                        <div onClick={onClickShowForm} className={styles.createPromotionBtn}>
-                            <svg className={styles.createPromotionIcon} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
-                            </svg>
-                            <div className={styles.createPromotionText}>
-                                Crie uma promoção
-                            </div>
-                        </div> 
+                        {!isBlackFriday
+                            &&
+                            <div onClick={onClickShowForm} className={styles.createPromotionBtn}>
+                                <svg className={styles.createPromotionIcon} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                    <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
+                                </svg>
+                                <div className={styles.createPromotionText}>
+                                    Crie uma promoção
+                                </div>
+                            </div>                         
+                        } 
                         <div className={styles.promotionBody}>
                             <ul className={styles.promotionItems}>
                                 {
@@ -325,7 +375,7 @@ const AdminPromotion = () => {
                                                             Data de início:
                                                         </span>
                                                         <p className={styles.promoDate}>
-                                                            {promo.startDate}
+                                                            {promo.startDate.split('-').reverse().join('-')}
                                                         </p>
                                                     </div>
                                                     <div className={styles.promotionTopLine}>
@@ -333,7 +383,7 @@ const AdminPromotion = () => {
                                                             Data de término:
                                                         </span>
                                                         <p className={styles.promoDate}>
-                                                            {promo.finishDate}
+                                                            {promo.finishDate.split('-').reverse().join('-')}
                                                         </p>
                                                     </div>
                                                     <div className={styles.promotionTopLine}>
