@@ -24,7 +24,7 @@ const NewProductsBlock = () => {
     const order = 'DESC';
     axios.get(`${serverDomain}api/product?limit=8&sort=${sortBy}&order=${order}`)
       .then((res) => {
-        setItems(res.data.rows);
+        setItems((res.data.rows).filter((item) => item.newProduct));
         setIsLoading(false);
       });
     scrollTop();

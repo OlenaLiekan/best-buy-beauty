@@ -65,11 +65,11 @@ const CreateProduct = () => {
         setPromoPrice(e.target.value.trim());
     }
 
-    const onChangeNewProduct = () => {
-        if (newProduct) {
-            setNewProduct(false);  
+    const checkedNewProduct = () => {
+        if (!newProduct) {
+            setNewProduct(true);  
         } else {
-            setNewProduct(true);            
+            setNewProduct(false);            
         }
     };
 
@@ -226,38 +226,8 @@ const CreateProduct = () => {
             </svg>
             <form onSubmit={pushProduct} className={styles.formProduct}>
                 <div className={styles.line}>
-                    <label htmlFor="product-name" className={styles.label} placeholder='Name'>Nome:</label>
-                    <input id="product-name" required tabIndex="1" type='text' className={styles.formInput}
-                        ref={inputRef}
-                        value={name}
-                        onChange={onChangeName}
-                    />                    
-                </div>
-                <div className={styles.line}>
-                    <label htmlFor="product-code" className={styles.label}>Código:</label>
-                    <input id="product-code" required tabIndex="2" type='text' className={styles.formInputSmall}
-                        ref={inputRef}
-                        value={code}
-                        onChange={onChangeCode}
-                    /> 
-                    <label htmlFor="product-price" className={styles.label}>Preço:</label>                    
-                    <input id="product-price" required tabIndex="3" type='text' className={styles.formInputSmall} placeholder='0.00'
-                        ref={inputRef}
-                        value={price}
-                        onChange={onChangePrice}
-                    />
-                </div>
-                <div className={styles.line}>
-                    <label htmlFor="product-promo-price" className={styles.label}>Preço promocional:</label>                    
-                    <input id="product-promo-price" tabIndex="4" type='text' className={styles.formInputSmall} placeholder='0.00'
-                        ref={inputRef}
-                        value={promoPrice}
-                        onChange={onChangePromoPrice}
-                    />
-                </div>
-                <div className={styles.line}>
                     <span className={styles.label}>Marca:</span>
-                    <div onClick={toggleBrandOptions} required tabIndex="5" className={styles.formSelectBrands}>
+                    <div onClick={toggleBrandOptions} required tabIndex="1" className={styles.formSelectBrands}>
                         {brandName}
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                             <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
@@ -272,7 +242,7 @@ const CreateProduct = () => {
                         : ''
                     }
                     <span className={styles.label}>Tipo:</span>
-                    <div onClick={toggleTypeOptions} required tabIndex="6" className={styles.formSelectTypes}>
+                    <div onClick={toggleTypeOptions} required tabIndex="2" className={styles.formSelectTypes}>
                         {typeName}
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                             <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
@@ -287,15 +257,42 @@ const CreateProduct = () => {
                         : ""
                     }
                 </div>
-
                 <div className={styles.line}>
-                    <label htmlFor="product-promo-new" className={styles.label}>Não exibir em novos itens:</label>                    
-                    <input id="product-promo-new" tabIndex="7" type='checkbox' className={styles.formCheckbox}
-                        value={newProduct}
-                        onChange={onChangeNewProduct}
+                    <label htmlFor="product-name" className={styles.label} placeholder='Name'>Nome:</label>
+                    <input id="product-name" required tabIndex="3" type='text' className={styles.formInput}
+                        ref={inputRef}
+                        value={name}
+                        onChange={onChangeName}
+                    />                    
+                </div>
+                <div className={styles.line}>
+                    <label htmlFor="product-code" className={styles.label}>Código:</label>
+                    <input id="product-code" required tabIndex="4" type='text' className={styles.formInputSmall}
+                        ref={inputRef}
+                        value={code}
+                        onChange={onChangeCode}
+                    /> 
+                    <label htmlFor="product-price" className={styles.label}>Preço:</label>                    
+                    <input id="product-price" required tabIndex="5" type='text' className={styles.formInputSmall} placeholder='0.00'
+                        ref={inputRef}
+                        value={price}
+                        onChange={onChangePrice}
                     />
                 </div>
-                
+                <div className={styles.formLineCheckbox}>
+                    <label onClick={checkedNewProduct} htmlFor="newProductCheckbox" className={newProduct ? styles.formLabelChecked : styles.formLabelCheckbox}>
+                        Não exibir em novos itens:
+                    </label>
+                    <input id="newProductCheckbox" type="checkbox" tabIndex="6" name="new-product" className={styles.formInputCheckbox} /> 
+                </div>
+                <div className={styles.line}>
+                    <label htmlFor="product-promo-price" className={styles.label}>Preço promocional:</label>                    
+                    <input id="product-promo-price" tabIndex="7" type='text' className={styles.formInputSmall} placeholder='0.00'
+                        ref={inputRef}
+                        value={promoPrice}
+                        onChange={onChangePromoPrice}
+                    />
+                </div>
                 <div className={styles.line}>
                     <label htmlFor="product-file" className={styles.label}>Foto:</label>
                     <input id="product-file" required tabIndex="8" type='file' name='image' className={styles.formFile}

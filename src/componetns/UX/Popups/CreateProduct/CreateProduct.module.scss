@@ -24,6 +24,7 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    margin-top: 30px;
     @media(max-width: 371.98px) {
         gap: 15px;
     }
@@ -58,9 +59,9 @@
     }
 }
 
-.formCheckbox {
-    cursor: pointer;
-    
+.formInputCheckbox {
+    position: absolute;
+    opacity: 0;
 }
 
 .formInputSmall {
@@ -105,14 +106,55 @@
     }
 }
 
-.label {
+.label,
+.formLabelCheckbox,
+.formLabelChecked {
     font-size: 14px;
     font-weight: 500;
     margin-right: 10px;
+
     @media (max-width: 579.98px) {
         font-size: 12px;
         margin-right: 0;
     }
+}
+
+.formLabelCheckbox,
+.formLabelChecked {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+
+    &::before {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #1560BD;
+        background-color: #fff;
+        right: -34px;
+        border-radius: 5px;
+    }
+}
+
+.formLabelChecked {
+    &::after {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-radius: 2px;
+        background-color: #1560BD;
+        right: -30px;
+    }
+}
+
+.formLineCheckbox {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .textarea {
@@ -190,12 +232,12 @@
     border-radius: 0 0 20px 20px;
     overflow: hidden;
     z-index: 1;
-    top: 198px;
+    top: 70px;
     right: 35px;
 
     @media(max-width: 579.98px) {
         left: 20px;
-        top: 398px;
+        top: 150px;
     }
 }
 
@@ -213,12 +255,12 @@
     border-radius: 0 0 20px 20px;
     overflow: hidden;
     z-index: 3;
-    top: 198px;
+    top: 70px;
     left: 77px;
 
     @media(max-width: 579.98px) {
         left: 20px;
-        top: 338px;
+        top: 90px;
     }
 }
 
