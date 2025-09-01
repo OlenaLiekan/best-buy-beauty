@@ -515,6 +515,8 @@
 .testimonialsText,
 .testimonialsReplyText {
     padding: 30px 15px;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
 }
 
 .testimonialsAnswer {
@@ -919,7 +921,8 @@
 }
 
 .promotionItemDisable {
-    opacity: 80%;
+    opacity: 70%;
+    border: 2px solid #787878;
 }
 
 .promotionTop {

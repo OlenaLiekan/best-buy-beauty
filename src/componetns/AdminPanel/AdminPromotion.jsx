@@ -362,7 +362,16 @@ const AdminPromotion = () => {
                                     promoList.length > 0
                                         ?
                                         promoList.map((promo) => 
-                                            <li key={promo.id} className={styles.promotionItem}>
+                                            <li
+                                                key={promo.id}
+                                                className={
+                                                    new Date().getTime() <=
+                                                    new Date(promo.finishDate.split('-').join()).getTime() + 86340000
+                                                        ?
+                                                        styles.promotionItem
+                                                        :
+                                                        styles.promotionItemDisable
+                                                    }>
                                                 <div className={styles.promotionTop}>
                                                     <div className={styles.promotionTopLine}>
                                                         <span className={styles.promotionTopLabel}>
@@ -391,13 +400,21 @@ const AdminPromotion = () => {
                                                             Status:
                                                         </span>
                                                         <span className={
-                                                            isBlackFriday
+                                                            new Date().getTime() <=
+                                                            new Date(promo.finishDate.split('-').join()).getTime() + 86340000
                                                                 ?
                                                                 styles.promotionStatusOn
                                                                 :
                                                                 styles.promotionStatusOff
                                                         }>
-                                                            {isBlackFriday ? " Ativo" : " Concluído"}
+                                                            {
+                                                                new Date().getTime() <=
+                                                                new Date(promo.finishDate.split('-').join()).getTime() + 86340000
+                                                                    ?
+                                                                    " Ativo"
+                                                                    :
+                                                                    " Concluído"
+                                                            }
                                                         </span>
                                                     </div>                        
                                                 </div>

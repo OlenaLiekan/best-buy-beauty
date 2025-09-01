@@ -64,6 +64,7 @@ const CreateProduct = () => {
         setPromoPrice(e.target.value.trim());
     }
 
+
     const addInfo = () => {
         setInfo([...info, { title: "", description: "", number: Date.now() }]);
     }
@@ -277,62 +278,63 @@ const CreateProduct = () => {
                         : ""
                     }
                 </div>
+                
                 <div className={styles.line}>
                     <label htmlFor="product-file" className={styles.label}>Foto:</label>
-                    <input id="product-file" required tabIndex="7" type='file' name='image' className={styles.formFile}
+                    <input id="product-file" required tabIndex="8" type='file' name='image' className={styles.formFile}
                         onChange={selectFile}
                     />                    
                 </div>
                 {info.map((i) => 
                     <div className={styles.line} key={i.number}>
                         <label htmlFor="info-product_title" className={styles.label}>Propriedade:</label>
-                        <input required id="info-product_title" tabIndex="8" type='text' className={styles.formInputSmall}
+                        <input required id="info-product_title" tabIndex="9" type='text' className={styles.formInputSmall}
                             value={i.title}
                             onChange={(e) => changeInfo('title', e.target.value, i.number)}
                         /> 
                         <label htmlFor="info-product_description" className={styles.label}>Significado:</label>
-                        <input required id="info-product_description" tabIndex="9" type='text' className={styles.formInputSmall}
+                        <input required id="info-product_description" tabIndex="10" type='text' className={styles.formInputSmall}
                             value={i.description}
                             onChange={(e) => changeInfo('description', e.target.value, i.number)}
                         />
-                        <button type='button' tabIndex='10' className='info-product__remove' onClick={() => removeInfo(i.number)}>
+                        <button type='button' tabIndex='11' className='info-product__remove' onClick={() => removeInfo(i.number)}>
                             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                                 <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
                             </svg>                                     
                         </button>
                     </div>                    
                 )}
-                <button type='button' className={styles.infoButton} tabIndex="11" onClick={addInfo}>Adicionar informações</button>
+                <button type='button' className={styles.infoButton} tabIndex="12" onClick={addInfo}>Adicionar informações</button>
                 {slide.map((i) => 
                     <div className={styles.line} key={i.number}>
                         <label htmlFor="product-slide" className={styles.label}>Slide:</label>
-                        <input id="product-slide" tabIndex="12" type='file' name='slide' className={styles.formFile}
+                        <input id="product-slide" tabIndex="13" type='file' name='slide' className={styles.formFile}
                             onChange={(e) => changeSlide('slideImg', e.target.files[0], i.number)}
                         />
-                        <button type='button' tabIndex='13' className='slide-product__remove' onClick={() => removeSlide(i.number)}>
+                        <button type='button' tabIndex='14' className='slide-product__remove' onClick={() => removeSlide(i.number)}>
                             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                                 <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
                             </svg>                                     
                         </button>
                     </div>                
                 )}
-                <button type='button' className={styles.slideButton} tabIndex="14" onClick={addSlide}>Adicionar novo slide</button>
+                <button type='button' className={styles.slideButton} tabIndex="15" onClick={addSlide}>Adicionar novo slide</button>
                 <label htmlFor="product-about" className={styles.label}>Descrição:</label>
-                <textarea required id="product-about" tabIndex='15' className={styles.textarea}
+                <textarea required id="product-about" tabIndex='16' className={styles.textarea}
                     ref={inputRef}
                     value={text}
                     onChange={onChangeText} />
                 <label htmlFor="product-applying" className={styles.label}>Método de uso:</label>
-                <textarea id="product-applying" tabIndex='16' className={styles.textarea}
+                <textarea id="product-applying" tabIndex='17' className={styles.textarea}
                     ref={inputRef}
                     value={applying}
                     onChange={onChangeApplying} />
                 <label htmlFor="product-compound" className={styles.label}>Ingredientes:</label>
-                <textarea id="product-compound" tabIndex='17' className={styles.textarea}
+                <textarea id="product-compound" tabIndex='18' className={styles.textarea}
                     ref={inputRef}
                     value={compound}
                     onChange={onChangeCompound}/>
-                <button type='submit' tabIndex='18' className={styles.button}>Criar produto</button>
+                <button type='submit' tabIndex='19' className={styles.button}>Criar produto</button>
             </form>            
         </div>
     );
