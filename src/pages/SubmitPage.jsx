@@ -970,12 +970,48 @@ const SubmitPage = () => {
                     onChange={onChangeComment}
                   />
               </div>
+              <div className="popup-form__line">
+                <div className="popup-form__preview preview-popup-form">
+                  <h4 className="preview-popup-form__title">
+                    Representação de endereço:
+                  </h4>
+                  <div className="preview-popup-form__body">
+                    <div className="preview-popup-form__line">
+                      {username} {surname}
+                    </div>
+                    <div className="preview-popup-form__line">
+                      {firstAddress}, {secondAddress}, {city}, {country}, {region}, {postalCode}
+                    </div>
+                    <div className="preview-popup-form__line">{phone}</div>
+                    <div className="preview-popup-form__line">{email}</div>                    
+                  </div>
+                </div>
+              </div>
               <div className="popup-form__line popup-line__checkbox">
-                <label onClick={onClickChecked} htmlFor="verifyAddress" className={"form-login__label checkbox-label"}>
+                <label
+                  onClick={onClickChecked}
+                  htmlFor="verifyAddress"
+                  className={"form-login__label checkbox-label"}
+                >
                     Confirmo que o endereço está correto <span>*</span>
                 </label>
-                <input required id="verifyAddress" type="checkbox" name="verifyAddress" tabIndex="14" className="form-login__checkbox" /> 
+                <input
+                  required
+                  id="verifyAddress"
+                  type="checkbox"
+                  name="verifyAddress"
+                  tabIndex="14"
+                  className="form-login__checkbox"
+                /> 
               </div>
+              {
+                !checked &&
+                <div className="popup-form__line">
+                  <Link onClick={() => window.scrollTo(0, 0)} to={'/auth'} className="popup-form__link">
+                    Ou selecione outro endereço existente como seu endereço principal <span>aqui</span>.
+                  </Link>
+                </div>
+              }
               <button
                 disabled={deliveryPrices.length > 0 ? false : true}
                 type="submit"

@@ -3814,6 +3814,26 @@
             user-select: none;
         }
     }
+    &__link {
+        font-size: 15px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        line-height: 1.2;
+        color: #484848;
+        max-width: 360px;
+        margin-bottom: 30px;
+        transition: color 0.3s ease 0s;
+        &:hover {
+            color: #252525;
+        }
+        span {
+            color: #AD912B;
+        }
+    }
+    &__preview {
+        display: flex;
+        flex-direction: column;
+    }
     &__arrow{
         position: absolute;
         right: 10px;
@@ -3955,6 +3975,27 @@
     }
     &__button {
         letter-spacing: 1px;
+    }
+}
+
+.preview-popup-form {
+    margin-top: 30px;
+    &__title {
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 1.2;
+        letter-spacing: 0.5px;
+        margin-bottom: 15px;
+    }
+    &__body {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        font-size: 15px;
+        letter-spacing: 0.5px;
+        line-height: 1.2;
+        border-left: 2px solid #ad912bd7;
+        padding-left: 20px;
     }
 }
 
