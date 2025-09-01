@@ -911,6 +911,19 @@
     gap: 40px;
 }
 
+.deletePromoIcon {
+    align-self: flex-end;
+    width: 24px;
+    height: 24px;
+    fill: #25252571;
+    transition: all 0.3s ease 0s;
+    cursor: pointer;    
+    &:hover {
+        fill: #6c7c61;
+        transform: scale(1.2);
+    }
+}
+
 .promotionItem,
 .promotionItemDisable {
     padding: 20px;

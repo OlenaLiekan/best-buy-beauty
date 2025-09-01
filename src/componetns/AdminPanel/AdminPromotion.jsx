@@ -18,6 +18,7 @@ const AdminPromotion = () => {
     const [activeBrandId, setActiveBrandId] = React.useState('');
     const [info, setInfo] = React.useState([]);
     const [promotionDiscount, setPromotionDiscount] = React.useState('');
+    const [deletedPromoId, setDeletedPromoId] = React.useState('');
 
     const { isBlackFriday, serverDomain } = React.useContext(AuthContext);
 
@@ -33,7 +34,7 @@ const AdminPromotion = () => {
             .then((res) => {
                 setPromoList(res.data);
             });
-    }, [serverDomain, createMode]);
+    }, [serverDomain, createMode, deletedPromoId]);
 
     const onClickShowForm = () => {
         if (brandsList.length > 0) {
@@ -148,6 +149,11 @@ const AdminPromotion = () => {
         window.alert('Descontos em marcas não são criados.');
     };
 
+    const deleted = (deletedId) => {
+        window.alert('A promoção foi removida com sucesso!');
+        setDeletedPromoId(deletedId);
+    };
+
     const updated = () => {
         const formData = new FormData();
         formData.set('name', promotionName);
@@ -170,6 +176,16 @@ const AdminPromotion = () => {
             } catch (error) {
                 errorMessage();
             }
+        }
+    };
+
+    const onClickDeletePromo = (promoId, promoName) => {
+        setDeletedPromoId('');
+        if (window.confirm(`Tem certeza de que deseja excluir a promoção ${promoName}?`)) {
+            axios.delete(`${serverDomain}api/promotion?id=${promoId}`)
+                .then(() => deleted(promoId)).catch(err => 'Falha ao excluir a promoção.');         
+        } else {
+            window.alert('Exclusão cancelada.');
         }
     };
 
@@ -373,6 +389,16 @@ const AdminPromotion = () => {
                                                         styles.promotionItemDisable
                                                     }>
                                                 <div className={styles.promotionTop}>
+                                                   
+                                                    <svg
+                                                        onClick={() => onClickDeletePromo(promo.id, promo.name)}
+                                                        className={styles.deletePromoIcon}
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 512 512"
+                                                    >
+                                                        <path d="M497.941 273.941c18.745-18.745 18.745-49.137 0-67.882l-160-160c-18.745-18.745-49.136-18.746-67.883 0l-256 256c-18.745 18.745-18.745 49.137 0 67.882l96 96A48.004 48.004 0 0 0 144 480h356c6.627 0 12-5.373 12-12v-40c0-6.627-5.373-12-12-12H355.883l142.058-142.059zm-302.627-62.627l137.373 137.373L265.373 416H150.628l-80-80 124.686-124.686z" />
+                                                    </svg>                                                        
+                                                   
                                                     <div className={styles.promotionTopLine}>
                                                         <span className={styles.promotionTopLabel}>
                                                             Nome:
@@ -411,7 +437,11 @@ const AdminPromotion = () => {
                                                                 new Date().getTime() <=
                                                                 new Date(promo.finishDate.split('-').join()).getTime() + 86340000
                                                                     ?
-                                                                    " Ativo"
+                                                                    (new Date().getTime() <
+                                                                    new Date(promo.startDate.split('-').join()).getTime()  
+                                                                        ? " Esperando"
+                                                                        : " Ativo"
+                                                                    )
                                                                     :
                                                                     " Concluído"
                                                             }

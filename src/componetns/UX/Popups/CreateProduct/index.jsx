@@ -23,6 +23,7 @@ const CreateProduct = () => {
     const [code, setCode] = React.useState('');
     const [price, setPrice] = React.useState('');
     const [promoPrice, setPromoPrice] = React.useState('');
+    const [newProduct, setNewProduct] = React.useState(false);
     const { setCreateProductMode, serverDomain } = React.useContext(AuthContext);
     const [info, setInfo] = React.useState([]);
     const [slide, setSlide] = React.useState([]);
@@ -64,6 +65,13 @@ const CreateProduct = () => {
         setPromoPrice(e.target.value.trim());
     }
 
+    const onChangeNewProduct = () => {
+        if (newProduct) {
+            setNewProduct(false);  
+        } else {
+            setNewProduct(true);            
+        }
+    };
 
     const addInfo = () => {
         setInfo([...info, { title: "", description: "", number: Date.now() }]);
@@ -186,6 +194,7 @@ const CreateProduct = () => {
             formData.append('img', img);
             formData.append('info', JSON.stringify(info));
             formData.append('text', text);
+            formData.append('newProduct', !newProduct);
             formData.append('applying', applying);            
             formData.append('compound', compound);            
             formData.append('isLashes', isLashes);
@@ -277,6 +286,14 @@ const CreateProduct = () => {
                         </div>                          
                         : ""
                     }
+                </div>
+
+                <div className={styles.line}>
+                    <label htmlFor="product-promo-new" className={styles.label}>Não exibir em novos itens:</label>                    
+                    <input id="product-promo-new" tabIndex="7" type='checkbox' className={styles.formCheckbox}
+                        value={newProduct}
+                        onChange={onChangeNewProduct}
+                    />
                 </div>
                 
                 <div className={styles.line}>
