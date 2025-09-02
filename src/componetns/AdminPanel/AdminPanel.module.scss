@@ -815,12 +815,30 @@
 
 .promocodesItem {
     display: flex;
-    justify-content: space-between;
-    gap: 20px;
+    flex-direction: column;
     width: 240px;
     font-size: 16px;
     font-weight: 500;
     letter-spacing: 1px;
+}
+
+.promocodesItemTop {
+    display: flex;  
+    justify-content: space-between;      
+    gap: 20px;
+}
+
+.promocodesItemBottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 5px 0 0 30px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+
+.promocodesReusableMark {
+    color: #AD912B;
 }
 
 .promocodesName {
