@@ -8,14 +8,20 @@ const AdminPromocodes = () => {
 
     const [promocodes, setPromocodes] = React.useState([]);
     const [promocodesLoading, setPromocodesLoading] = React.useState(false);
+    const [brands, setBrands] = React.useState([]);
+    const [brandsLoading, setBrandsLoading] = React.useState(false);
+    const [activeBrandId, setActiveBrandId] = React.useState(0);
     const [editPromocodeMode, setEditPromocodeMode] = React.useState(false);
     const [createPromocodeMode, setCreatePromocodeMode] = React.useState(false);
     const [newName, setNewName] = React.useState('');
     const [newValue, setNewValue] = React.useState('');
+    const [applicabilityValue, setApplicabilityValue] = React.useState('Para todas as marcas');
     const [updatedName, setUpdatedName] = React.useState('');
     const [updatedValue, setUpdatedValue] = React.useState('');
     const [activePromocode, setActivePromocode] = React.useState('');
     const [showPromocodes, setShowPromocodes] = React.useState(false);
+    const [checkedReusable, setCheckedReusable] = React.useState(false);
+    const [showBrands, setShowBrands] = React.useState(false);
 
     const {
         serverDomain
@@ -24,6 +30,15 @@ const AdminPromocodes = () => {
     const message = () => {
         window.alert('Ocorreu um erro!');
     };
+
+    React.useEffect(() => {
+        setBrandsLoading(true);
+        axios.get(`${serverDomain}api/brand`)
+            .then((res) => {
+                setBrands(res.data);
+                setBrandsLoading(false);
+            });
+    }, [serverDomain, editPromocodeMode, createPromocodeMode, showPromocodes]);
 
     React.useEffect(() => {
         setPromocodesLoading(true);
@@ -88,6 +103,28 @@ const AdminPromocodes = () => {
         }
     };
 
+    const onClickShowBrands = () => {
+        if (showBrands) {
+            setShowBrands(false);
+        } else {
+            setShowBrands(true);
+        }
+    };
+
+    const onClickHideBrands = (brandId, brandName) => {
+        setActiveBrandId(brandId);
+        setApplicabilityValue(brandName);
+        setShowBrands(false);
+    };
+
+    const checkedCheckboxReusable = () => {
+        if (!checkedReusable) {
+            setCheckedReusable(true); 
+        } else {
+            setCheckedReusable(false);             
+        }
+    }
+
     const showPromocodesMenu = () => {
         setShowPromocodes(false);
         setEditPromocodeMode(false);
@@ -96,11 +133,13 @@ const AdminPromocodes = () => {
 
     const pushPromocode = (e) => {
         e.preventDefault();
-        if (newName.length && newValue.length) {
+        if (newName.length && newValue.length && activeBrandId) {
             const formData = new FormData();
             formData.set('name', newName);
             formData.set('value', newValue);
             formData.set("newMember", false);
+            formData.set("reusable", checkedReusable);
+            formData.set('brandId', activeBrandId);
             createPromocode(formData).then(data => success()).catch(err => message());
         }     
     };
@@ -157,6 +196,7 @@ const AdminPromocodes = () => {
                                         className={styles.promocodesInput}
                                         name='promocodeName'
                                         type="text"
+                                        tabIndex="1"
                                     />                        
                                 </div>
                                 <div className={styles.promocodesLine}>
@@ -168,10 +208,52 @@ const AdminPromocodes = () => {
                                         className={styles.promocodesInput}
                                         name='promocodeValue'
                                         type="text"
+                                        tabIndex="2"
                                     />
                                 </div>
-                                <button type='submit' className={styles.subBtn}>Confirme</button> 
-                                <button type='button' onClick={cancelEdit} className={styles.cancelBtn}>Cancelar</button>                     
+                                <div className={styles.promocodesLine}>
+                                    <label className={styles.promocodesLabel} htmlFor="applicability-value">Aplicabilidade: </label>
+                                    <input
+                                        readOnly
+                                        id="applicability-value"
+                                        value={applicabilityValue}
+                                        className={styles.promocodesInput}
+                                        name='applicabilityValue'
+                                        type="text"
+                                        tabIndex="3"
+                                    />
+                                    <svg onClick={onClickShowBrands} className={showBrands ? styles.promocodesArrowIconClicked : styles.promocodesArrowIcon} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                                        <path d="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z" />
+                                    </svg>
+                                    <div className={showBrands ? styles.promocodesBrandsBlock : styles.promocodesBrandsBlockHidden}>
+                                        <ul className={styles.promocodesBrandsList}>
+                                            {brands.length > 0 && !brandsLoading
+                                            ?
+                                            <>
+                                                <li onClick={() => onClickHideBrands(0, 'Para todas as marcas')} key={0} className={styles.promocodesBrandsItem}>
+                                                    Para todas as marcas
+                                                </li>
+                                                {brands.map((brand) =>
+                                                    <li onClick={() => onClickHideBrands(brand.id, brand.name)} key={brand.id} className={styles.promocodesBrandsItem}>
+                                                        {brand.name}
+                                                    </li>
+                                                )}                                                
+                                            </>
+
+                                                :
+                                            <li className={styles.promocodesBrandsLoading}>Carregando...</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div className={styles.promocodesCheckboxLine}>
+                                    <label onClick={checkedCheckboxReusable} htmlFor="reusableCheckbox" className={checkedReusable ? styles.formLabelChecked : styles.formLabelCheckbox}>
+                                        Reutilizável:
+                                    </label>
+                                    <input id="reusableCheckbox" type="checkbox" tabIndex="4" name="reusable-checkbox" className={styles.formInputCheckbox} /> 
+                                </div>
+                                <button type='submit' tabIndex="5" className={styles.subBtn}>Confirme</button> 
+                                <button type='button' tabIndex="6" onClick={cancelEdit} className={styles.cancelBtn}>Cancelar</button>                     
                             </form>                                
                         </>
                         :

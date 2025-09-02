@@ -179,12 +179,12 @@ const UserPanel = ({ user }) => {
         <div className={styles.body}>
             <div className={activeAuthOption === 0 ? styles.orders : styles.hidden}>
                 <ul className={styles.ordersList}>
-                    {ordersReverse.length && paidOrders.length
+                    {ordersReverse.length > 0 && paidOrders.length > 0
                         ?
                         paidOrders.map((transaction) => 
                             ordersReverse.map((order, index) =>  
-                                transaction.orderID === order.orderNumber 
-                        ?        
+                            (transaction.orderID === order.orderNumber 
+                        &&        
                         <li key={order.id} className={styles.ordersItem}>
                             <div className={styles.orderInfo}>
                                 <h4 onClick={() => setActiveIndex(index)} className={activeIndex === index ? styles.orderTitleGold : styles.orderTitle}>
@@ -222,22 +222,24 @@ const UserPanel = ({ user }) => {
                                 </div>
                             </div>
                         </li>
-                        :
-                        ''
+                        )
                     ))
                     :
                     <>
                         <span className={isLoading ? styles.orderTitle : styles.hidden}>
                             Por favor, aguarde. Informações do pedido carregando...
                         </span>
+
                         <h4 className={!isLoading ? styles.orderTitle : styles.hidden}>
                             <span>
                                 Você ainda não fez nenhum pedido.
                             </span>
                         </h4>
+  
                     </>  
                     }  
                 </ul>
+                
                 <button onClick={showAll} className={userPaidOrders.length > 10 ? styles.showOrders : styles.hidden}>
                     {allOrders ? 'Ocultar arquivo' : 'Mostre tudo'}
                 </button>
