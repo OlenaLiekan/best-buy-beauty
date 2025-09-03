@@ -54,6 +54,8 @@ const SubmitPage = () => {
   const [resetForm, setResetForm] = React.useState(false);
   //const [timeMark, setTimeMark] = React.useState(6);
   const [showPromocodeBlock, setShowPromocodeBlock] = React.useState(false);
+  const [showCommentTextarea, setShowCommentTextarea] = React.useState(false);
+  const [showAddressForm, setShowAddressForm] = React.useState(false);
   const [promocode, setPromocode] = React.useState('');
   const [availablePromocode, setAvailablePromocode] = React.useState(false);
   const [message, setMessage] = React.useState('');
@@ -341,7 +343,9 @@ const SubmitPage = () => {
     setPhone(newTelCode);
     setVisibleList(false);
     setCountryValue('');
-    window.alert(`Atenção!\nOs custos de entrega foram ajustados dependendo do país de entrega.`);
+    if (countryCode !== "PT") {
+      window.alert(`Atenção!\nOs custos de entrega foram ajustados dependendo do país de entrega.`);      
+    }
   };
 
   const onChangeCountryValue = (event) => {
@@ -399,6 +403,14 @@ const SubmitPage = () => {
       } else {
         setMessage('O código de desconto está incorreto ou já foi aplicado anteriormente.');
       }     
+  };
+
+  const onClickShowComment = () => {
+    if (showCommentTextarea) {
+      setShowCommentTextarea(false);
+    } else {
+      setShowCommentTextarea(true);
+    }
   };
 
   const openConditions = () => {
@@ -610,7 +622,16 @@ const SubmitPage = () => {
     } else {
       setChecked(true);
     }
-  }
+  };
+
+  const onClickShowAddressForm = () => {
+    if (showAddressForm) {
+      setShowAddressForm(false);
+    } else {
+      window.scrollTo(0, 0);
+      setShowAddressForm(true);
+    }
+  };
 
   return (
     <div className="cart__popup popup-cart">
@@ -661,315 +682,301 @@ const SubmitPage = () => {
                 <div className="popup-form__text">
                   Por favor, deixe seus dados para fazer um pedido.
                 </div>
-                <div className="popup-form__line">
-                  <label
-                    hidden
-                    htmlFor="user-company-input"
-                    className="popup-form__label"
-                  >
-                    NIF (opcional)
-                  </label>
-                  <input
-                    hidden
-                    id="user-company-input"
-                    tabIndex="3"
-                    autoComplete="new-password"
-                    type="text"
-                    name="Empresa"
-                    data-error="Error"
-                    placeholder="000000000"
-                    className="popup-form__input"
-                    value={company}
-                    onChange={onChangeCompany}
-                  />
-                </div>
-                <div className="popup-form__line">
-                  <label htmlFor="user-name-input" className="popup-form__label">
-                    Primeiro Nome
-                  </label>
-                  <input
-                    required
-                    id="user-name-input"
-                    tabIndex="1"
-                    autoComplete="new-password"
-                    type="text"
-                    name="nome"
-                    data-error="Error"
-                    placeholder="Nome"
-                    className="popup-form__input _req"
-                    value={username}
-                    onChange={onChangeUsername}
-                  />
-                </div>
-                <div className="popup-form__line">
-                  <label htmlFor="user-surname-input" className="popup-form__label">
-                    Último Nome
-                  </label>
-                  <input
-                    required
-                    id="user-surname-input"
-                    tabIndex="2"
-                    autoComplete="new-password"
-                    type="text"
-                    name="Sobrenome"
-                    data-error="Error"
-                    placeholder="Sobrenome"
-                    className="popup-form__input"
-                    value={surname}
-                    onChange={onChangeSurname}
-                  />
-                </div>
-                <div className="popup-form__line">
-                  <label
-                    htmlFor="user-f-address-input"
-                    className="popup-form__label"
-                  >
-                    Rua
-                  </label>
-                  <input
-                    required
-                    id="user-f-address-input"
-                    tabIndex="4"
-                    autoComplete="new-password"
-                    type="text"
-                    name="Morada_1"
-                    data-error="Error"
-                    className="popup-form__input"
-                    value={firstAddress}
-                    onChange={onChangeFAddress}
-                  />
-                </div>
-                <div className="popup-form__line">
-                  <label
-                    htmlFor="user-s-address-input"
-                    className="popup-form__label"
-                  >
-                    Número da porta
-                  </label>
-                  <input
-                    required
-                    id="user-s-address-input"
-                    tabIndex="5"
-                    autoComplete="new-password"
-                    type="text"
-                    name="Morada_2"
-                    data-error="Error"
-                    className="popup-form__input"
-                    value={secondAddress}
-                    onChange={onChangeSAddress}
-                  />
-                </div>
-                <div className="popup-form__line">
-                  <label htmlFor="user-city-input" className="popup-form__label">
-                    Cidade
-                  </label>
-                  <input
-                    required
-                    id="user-city-input"
-                    tabIndex="6"
-                    autoComplete="new-password"
-                    type="text"
-                    name="Cidade"
-                    data-error="Error"
-                    className="popup-form__input"
-                    value={city}
-                    onChange={onChangeCity}
-                  />
-                </div>
-                <div className="popup-form__line popup-form__line_select">
-                  <label htmlFor="user-country-input" className="popup-form__label">
-                    País
-                  </label>
-                  <input
-                    readOnly
-                    required
-                    onClick={showCountries}
-                    id="user-country-input"
-                    tabIndex="7"
-                    autoComplete="new-password"
-                    type="text"
-                    name="País"
-                    data-error="Error"
-                    className="popup-form__input popup-form__input_select"
-                    value={countries.find((c) => c.code === country)?.name || ""}
-                  />
-                  <svg
-                    onClick={showCountries}
-                    className={visibleList ? "popup-form__arrow popup-form_rotate" : "popup-form__arrow"}
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="1em"
-                    viewBox="0 0 448 512"
-                  >
-                    <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
-                  </svg>
-                  <div
-                    className={
-                      visibleList
-                        ? "popup-form__wrapper"
-                        : "popup-form__wrapper_hidden"
-                    }
-                >
-
-                    <ul
+              {showAddressForm &&
+                <>
+                  `<div className="popup-form__line">
+                    <label
+                      hidden
+                      htmlFor="user-company-input"
+                      className="popup-form__label"
+                    >
+                      NIF (opcional)
+                    </label>
+                    <input
+                      hidden
+                      id="user-company-input"
+                      autoComplete="new-password"
+                      type="text"
+                      name="Empresa"
+                      data-error="Error"
+                      placeholder="000000000"
+                      className="popup-form__input"
+                      value={company}
+                      onChange={onChangeCompany}
+                    />
+                  </div>
+                  <div className="popup-form__line">
+                    <label htmlFor="user-name-input" className="popup-form__label">
+                      Primeiro Nome
+                    </label>
+                    <input
+                      required
+                      id="user-name-input"
+                      tabIndex="1"
+                      autoComplete="new-password"
+                      type="text"
+                      name="nome"
+                      data-error="Error"
+                      placeholder="Nome"
+                      className="popup-form__input _req"
+                      value={username}
+                      onChange={onChangeUsername}
+                    />
+                  </div>
+                  <div className="popup-form__line">
+                    <label htmlFor="user-surname-input" className="popup-form__label">
+                      Último Nome
+                    </label>
+                    <input
+                      required
+                      id="user-surname-input"
+                      tabIndex="2"
+                      autoComplete="new-password"
+                      type="text"
+                      name="Sobrenome"
+                      data-error="Error"
+                      placeholder="Sobrenome"
+                      className="popup-form__input"
+                      value={surname}
+                      onChange={onChangeSurname}
+                    />
+                  </div>
+                  <div className="popup-form__line">
+                    <label
+                      htmlFor="user-f-address-input"
+                      className="popup-form__label"
+                    >
+                      Rua
+                    </label>
+                    <input
+                      required
+                      id="user-f-address-input"
+                      tabIndex="3"
+                      autoComplete="new-password"
+                      type="text"
+                      name="Morada_1"
+                      data-error="Error"
+                      className="popup-form__input"
+                      value={firstAddress}
+                      onChange={onChangeFAddress}
+                    />
+                  </div>
+                  <div className="popup-form__line">
+                    <label
+                      htmlFor="user-s-address-input"
+                      className="popup-form__label"
+                    >
+                      Número da porta
+                    </label>
+                    <input
+                      required
+                      id="user-s-address-input"
+                      tabIndex="4"
+                      autoComplete="new-password"
+                      type="text"
+                      name="Morada_2"
+                      data-error="Error"
+                      className="popup-form__input"
+                      value={secondAddress}
+                      onChange={onChangeSAddress}
+                    />
+                  </div>
+                  <div className="popup-form__line">
+                    <label htmlFor="user-city-input" className="popup-form__label">
+                      Cidade
+                    </label>
+                    <input
+                      required
+                      id="user-city-input"
+                      tabIndex="5"
+                      autoComplete="new-password"
+                      type="text"
+                      name="Cidade"
+                      data-error="Error"
+                      className="popup-form__input"
+                      value={city}
+                      onChange={onChangeCity}
+                    />
+                  </div>
+                  <div className="popup-form__line popup-form__line_select">
+                    <label htmlFor="user-country-input" className="popup-form__label">
+                      País
+                    </label>
+                    <input
+                      readOnly
+                      required
+                      onClick={showCountries}
+                      id="user-country-input"
+                      tabIndex="6"
+                      autoComplete="new-password"
+                      type="text"
+                      name="País"
+                      data-error="Error"
+                      className="popup-form__input popup-form__input_select"
+                      value={countries.find((c) => c.code === country)?.name || ""}
+                    />
+                    <svg
+                      onClick={showCountries}
+                      className={visibleList ? "popup-form__arrow popup-form_rotate" : "popup-form__arrow"}
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="1em"
+                      viewBox="0 0 448 512"
+                    >
+                      <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
+                    </svg>
+                    <div
                       className={
-                        visibleList ? "popup-form__list" : "popup-form__list_hidden"
+                        visibleList
+                          ? "popup-form__wrapper"
+                          : "popup-form__wrapper_hidden"
                       }
                   >
-                    <li className="popup-form__search-line">
-                      <input
-                        id="country-search-input"
-                        name="country_value"
-                        type="text"
-                        placeholder="Digite seu país"
-                        tabIndex="8"
-                        value={countryValue}
-                        onChange={onChangeCountryValue}
-                        className={"popup-form__search"}
-                      />
-                        <svg
-                          className="popup-form__search_svg"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 512 512">
-                          <path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 
-                          44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208
-                          208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4
-                          9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7
-                          0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128
-                          0 70.7-57.2 128-128 128z" />
-                        </svg>          
-                      </li>
-                    {countryValue
-                      ?
-                      countries.filter((country) => country.name.toLowerCase().includes(countryValue.toLowerCase())).map((country) => (
-                       <li
-                          onClick={() => onChangeCountry(country.code)}
-                          key={country.code}
-                          className={"popup-form__item"}
-                        >
-                          {country.name} {country.telCode}
-                        </li> 
-                        )
-                        )
-                      :
-                      countries.map((country) => (
-                        <li
-                          onClick={() => onChangeCountry(country.code)}
-                          key={country.code}
-                          className={"popup-form__item"}
-                        >
-                          {country.name} {country.telCode}
+
+                      <ul
+                        className={
+                          visibleList ? "popup-form__list" : "popup-form__list_hidden"
+                        }
+                    >
+                      <li className="popup-form__search-line">
+                        <input
+                          id="country-search-input"
+                          name="country_value"
+                          type="text"
+                          placeholder="Digite seu país"
+                          tabIndex="7"
+                          value={countryValue}
+                          onChange={onChangeCountryValue}
+                          className={"popup-form__search"}
+                        />
+                          <svg
+                            className="popup-form__search_svg"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512">
+                            <path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3
+                            44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208
+                            208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4
+                            9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7
+                            0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128
+                            0 70.7-57.2 128-128 128z" />
+                          </svg>
                         </li>
-                      ))}
-                    </ul>
+                      {countryValue
+                        ?
+                        countries.filter((country) => country.name.toLowerCase().includes(countryValue.toLowerCase())).map((country) => (
+                        <li
+                            onClick={() => onChangeCountry(country.code)}
+                            key={country.code}
+                            className={"popup-form__item"}
+                          >
+                            {country.name} {country.telCode}
+                          </li>
+                          )
+                          )
+                        :
+                        countries.map((country) => (
+                          <li
+                            onClick={() => onChangeCountry(country.code)}
+                            key={country.code}
+                            className={"popup-form__item"}
+                          >
+                            {country.name} {country.telCode}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                </div>
-                <div className="popup-form__line">
-                  <label htmlFor="user-region-input" className="popup-form__label">
-                    Concelho
-                  </label>
-                  <input
-                    required
-                    id="user-region-input"
-                    tabIndex="9"
-                    autoComplete="new-password"
-                    type="text"
-                    name="Concelho"
-                    data-error="Error"
-                    className="popup-form__input"
-                    value={region}
-                    onChange={onChangeRegion}
-                  />
-                </div>
-                <div className="popup-form__line">
-                  <label
-                    htmlFor="user-postal-code-input"
-                    className="popup-form__label"
-                  >
-                    Código postal/ZIP
-                  </label>
-                  <input
-                    required
-                    id="user-postal-code-input"
-                    tabIndex="10"
-                    autoComplete="new-password"
-                    type="text"
-                    pattern={
-                      country === "PT" ? "[0-9]{4}-[0-9]{3}" : "[0-9-A-Za-z]"
-                    }
-                    name="Código_postal/ZIP"
-                    data-error="Error"
-                    className="popup-form__input"
-                    value={postalCode}
-                    onChange={onChangePostalCode}
-                  />
-                </div>
-                <div className="popup-form__line">
-                  <label htmlFor="user-contact-input" className="popup-form__label">
-                    Telemóvel
-                  </label>
-                  <input
-                    required
-                    id="user-contact-input"
-                    tabIndex="11"
-                    autoComplete="new-password"
-                    type="tel"
-                    pattern="\+?[0-9\s\-\(\)]+"
-                    name="Telefone"
-                    data-error="Error"
-                    placeholder="+351XXXXXXXXXX"
-                    className="popup-form__input _req"
-                    value={phone}
-                    onChange={onChangePhone}
-                  />
-                </div>
-                <div className="popup-form__line">
-                  <label htmlFor="user-email-input" className="popup-form__label">
-                    E-mail
-                  </label>
-                  <input
-                    required
-                    id="user-email-input"
-                    tabIndex="12"
-                    autoComplete="new-password"
-                    type="email"
-                    name="email"
-                    data-error="Error"
-                    placeholder="example@email.com"
-                    className="popup-form__input _req _email"
-                    value={email}
-                    onChange={onChangeEmail}
-                  />
-                </div>
-                <div className="popup-form__line">
-                  <label hidden htmlFor="order" className="popup-form__label">
-                    Ordem:{" "}
-                  </label>
-                  <textarea
-                    hidden
-                    id="order"
-                    readOnly
-                    name="Ordem"
-                    value={order}
-                    className="popup-form__textarea _order"
-                  />
-                </div>
-                <div className="popup-form__line popup-line__textarea">
-                  <label htmlFor="user-comment" className="popup-form__label">
-                    Comentário
-                  </label>
-                  <textarea
-                    id="user-comment"
-                    tabIndex="13"
-                    className="popup-form__textarea"
-                    name="Comente"
-                    placeholder="Ola! Aqui você pode deixar suas dúvidas ou desejos."
-                    cols="10"
-                    rows="5"
-                    maxLength="150"
-                    value={comment}
-                    onChange={onChangeComment}
-                  />
-              </div>
+                  <div className="popup-form__line">
+                    <label htmlFor="user-region-input" className="popup-form__label">
+                      Concelho
+                    </label>
+                    <input
+                      required
+                      id="user-region-input"
+                      tabIndex="8"
+                      autoComplete="new-password"
+                      type="text"
+                      name="Concelho"
+                      data-error="Error"
+                      className="popup-form__input"
+                      value={region}
+                      onChange={onChangeRegion}
+                    />
+                  </div>
+                  <div className="popup-form__line">
+                    <label
+                      htmlFor="user-postal-code-input"
+                      className="popup-form__label"
+                    >
+                      Código postal/ZIP
+                    </label>
+                    <input
+                      required
+                      id="user-postal-code-input"
+                      tabIndex="9"
+                      autoComplete="new-password"
+                      type="text"
+                      pattern={
+                        country === "PT" ? "[0-9]{4}-[0-9]{3}" : "[0-9-A-Za-z]"
+                      }
+                      name="Código_postal/ZIP"
+                      data-error="Error"
+                      className="popup-form__input"
+                      value={postalCode}
+                      onChange={onChangePostalCode}
+                    />
+                  </div>
+                  <div className="popup-form__line">
+                    <label htmlFor="user-contact-input" className="popup-form__label">
+                      Telemóvel
+                    </label>
+                    <input
+                      required
+                      id="user-contact-input"
+                      tabIndex="10"
+                      autoComplete="new-password"
+                      type="tel"
+                      pattern="\+?[0-9\s\-\(\)]+"
+                      name="Telefone"
+                      data-error="Error"
+                      placeholder="+351XXXXXXXXXX"
+                      className="popup-form__input _req"
+                      value={phone}
+                      onChange={onChangePhone}
+                    />
+                  </div>
+                  <div className="popup-form__line">
+                    <label htmlFor="user-email-input" className="popup-form__label">
+                      E-mail
+                    </label>
+                    <input
+                      required
+                      id="user-email-input"
+                      tabIndex="11"
+                      autoComplete="new-password"
+                      type="email"
+                      name="email"
+                      data-error="Error"
+                      placeholder="example@email.com"
+                      className="popup-form__input _req _email"
+                      value={email}
+                      onChange={onChangeEmail}
+                    />
+                  </div>
+                  <div className="popup-form__line">
+                    <label hidden htmlFor="order" className="popup-form__label">
+                      Ordem:{" "}
+                    </label>
+                    <textarea
+                      hidden
+                      id="order"
+                      readOnly
+                      name="Ordem"
+                      value={order}
+                      className="popup-form__textarea _order"
+                    />
+                  </div>
+                </>
+              }
               <div className="popup-form__line">
                 <div className="popup-form__preview preview-popup-form">
                   <h4 className="preview-popup-form__title">
@@ -980,10 +987,39 @@ const SubmitPage = () => {
                       {username} {surname}
                     </div>
                     <div className="preview-popup-form__line">
-                      {firstAddress}, {secondAddress}, {city}, {country}, {region}, {postalCode}
+                      {firstAddress && firstAddress + ', '}
+                      {secondAddress && secondAddress + ', '}
+                      {city && city + ', '}
+                      {country + ', '}
+                      {region && region + ', '}
+                      <span className="preview-popup-form_no-wrap">{postalCode}</span>
+                      {firstAddress && secondAddress && city && region && postalCode
+                        ?
+                        ''
+                        : <span className="preview-popup-form__warning">
+                          <br />O endereço está incompleto!
+                        </span>
+                      }
                     </div>
-                    <div className="preview-popup-form__line">{phone}</div>
-                    <div className="preview-popup-form__line">{email}</div>                    
+                    <div className="preview-popup-form__line">
+                      {phone}
+                    </div>
+                    <div className="preview-popup-form__line">
+                      {email}
+                    </div> 
+                    <div onClick={onClickShowAddressForm} className="preview-popup-form__line">
+                      {
+                        showAddressForm
+                          ?
+                          <svg className="preview-popup-form__hide-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path d="M240.971 130.524l194.343 194.343c9.373 9.373 9.373 24.569 0 33.941l-22.667 22.667c-9.357 9.357-24.522 9.375-33.901.04L224 227.495 69.255 381.516c-9.379 9.335-24.544 9.317-33.901-.04l-22.667-22.667c-9.373-9.373-9.373-24.569 0-33.941L207.03 130.525c9.372-9.373 24.568-9.373 33.941-.001z" />
+                          </svg>
+                            :  
+                          <svg className="preview-popup-form__show-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
+                          </svg>
+                      }
+                    </div> 
                   </div>
                 </div>
               </div>
@@ -1000,7 +1036,7 @@ const SubmitPage = () => {
                   id="verifyAddress"
                   type="checkbox"
                   name="verifyAddress"
-                  tabIndex="14"
+                  tabIndex="12"
                   className="form-login__checkbox"
                 /> 
               </div>
@@ -1012,10 +1048,41 @@ const SubmitPage = () => {
                   </Link>
                 </div>
               }
+              <div className="popup-form__line popup-line__textarea">
+                <label onClick={onClickShowComment} htmlFor="user-comment" className="popup-form__label popup-form__label_comment">
+                  {showCommentTextarea ? 'Ocultar comentário' : 'Deixe um comentário'}
+                      {
+                        showCommentTextarea
+                          ?
+                          <svg className="popup-form__hide-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path d="M240.971 130.524l194.343 194.343c9.373 9.373 9.373 24.569 0 33.941l-22.667 22.667c-9.357 9.357-24.522 9.375-33.901.04L224 227.495 69.255 381.516c-9.379 9.335-24.544 9.317-33.901-.04l-22.667-22.667c-9.373-9.373-9.373-24.569 0-33.941L207.03 130.525c9.372-9.373 24.568-9.373 33.941-.001z" />
+                          </svg>
+                            :  
+                          <svg className="popup-form__show-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
+                          </svg>
+                      }
+                </label>
+                {showCommentTextarea
+                  &&
+                    <textarea
+                    id="user-comment"
+                    tabIndex="13"
+                    className="popup-form__textarea"
+                    name="Comente"
+                    placeholder="Ola! Aqui você pode deixar suas dúvidas ou desejos."
+                    cols="10"
+                    rows="5"
+                    maxLength="150"
+                    value={comment}
+                    onChange={onChangeComment}
+                  />
+                }
+              </div>
               <button
                 disabled={deliveryPrices.length > 0 ? false : true}
                 type="submit"
-                tabIndex="15"
+                tabIndex="14"
                 className={
                   checked && deliveryPrices.length > 0
                     ?
