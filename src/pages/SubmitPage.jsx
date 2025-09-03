@@ -85,8 +85,8 @@ const SubmitPage = () => {
     :
     []; 
   
-  const promoItemsPrices = promoItems ? promoItems.map((item) => item.price) : [];
-  const promoItemsSum = promoItemsPrices.length > 0 ? promoItemsPrices.reduce((sum, price) => sum + Number(price) , 0) : totalPrice;
+  const promoItemsPrices = promoItems ? promoItems.map((item) => item.price * item.count) : [];
+  const promoItemsSum = promoItemsPrices.length > 0 ? promoItemsPrices.reduce((sum, price) => sum + Number(price), 0) : totalPrice;
 
   const finalSum = promocodeValue && availablePromocode && message ? (totalPrice - (promoItemsSum * promocodeValue / 100 ).toFixed(2)) : totalPrice;
 
