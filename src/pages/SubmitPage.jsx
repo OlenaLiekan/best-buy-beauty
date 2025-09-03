@@ -546,7 +546,8 @@ const SubmitPage = () => {
         clientEmail: email,
         clientOrder: JSON.stringify(orderItems),
         clientCompany: company ? company : " ",
-        clientAddress: localStorage.getItem('clientAddress'),
+        clientAddress: `Rua: ${firstAddress}, Número da porta: ${secondAddress}, ${city}, ${region}, ${countryData.code}`,
+        clientPostalCode: postalCode,
         clientComment: comment ? comment : " ",
         orderTotal: localStorage.getItem('orderTotal'),
         totalCount: totalCount,
@@ -622,8 +623,8 @@ const SubmitPage = () => {
         if (response.success) {
           if (id > 0) {
             updateUser(formData, id).then((data) => success(response));
-          } else if (id === 0) {
-            success(response);
+          } else {
+            window.alert('Usuário não encontrado.');
           }
         } else {
           window.alert("Erro ao enviar o pedido. Tente novamente.");
