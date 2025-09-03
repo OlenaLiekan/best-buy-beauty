@@ -625,10 +625,10 @@ const SubmitPage = () => {
   };
 
   const onClickShowAddressForm = () => {
+    window.scrollTo(0, 0);
     if (showAddressForm) {
       setShowAddressForm(false);
     } else {
-      window.scrollTo(0, 0);
       setShowAddressForm(true);
     }
   };
