@@ -56,6 +56,9 @@ const SubmitPage = () => {
   const [showPromocodeBlock, setShowPromocodeBlock] = React.useState(false);
   const [showCommentTextarea, setShowCommentTextarea] = React.useState(false);
   const [showAddressForm, setShowAddressForm] = React.useState(false);
+
+  const [brands, setBrands] = React.useState([]);
+
   const [promocode, setPromocode] = React.useState('');
   const [availablePromocode, setAvailablePromocode] = React.useState(false);
   const [message, setMessage] = React.useState('');
@@ -63,6 +66,9 @@ const SubmitPage = () => {
   const [promocodeValue, setPromocodeValue] = React.useState(0);
   const [userPromocodes, setUserPromocodes] = React.useState([]);
   const [usedPromocode, setUsedPromocode] = React.useState('');
+  const [promocodeBrandId, setPromocodeBrandId] = React.useState(0);
+  const [promocodeBrandName, setPromocodeBrandName] = React.useState('');
+  const [promocodeReusable, setPromocodeReusable] = React.useState(false);
 
   const [countryValue, setCountryValue] = React.useState('');
   const [checked, setChecked] = React.useState(false);
@@ -72,7 +78,23 @@ const SubmitPage = () => {
   const symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   const orderItems = items.filter((item) => item.available);
 
-  const finalSum = promocodeValue && availablePromocode && message ? (totalPrice - (totalPrice * promocodeValue / 100 ).toFixed(2)) : totalPrice;
+
+  const promoItems = promocodeBrandName && promocodeBrandId > 0
+    ?
+    items.filter((item) => item.company === promocodeBrandName)
+    :
+    []; 
+  
+  const promoItemsPrices = promoItems ? promoItems.map((item) => item.price) : [];
+  const promoItemsSum = promoItemsPrices.length > 0 ? promoItemsPrices.reduce((sum, price) => sum + Number(price) , 0) : totalPrice;
+
+  const finalSum = promocodeValue && availablePromocode && message ? (totalPrice - (promoItemsSum * promocodeValue / 100 ).toFixed(2)) : totalPrice;
+
+  React.useEffect(() => {
+    axios.get(`${serverDomain}api/brand`).then((res) => {
+      setBrands(res.data);
+    });
+  }, [serverDomain]);
 
   React.useEffect(() => {
       axios.get(`${serverDomain}api/promocode`).then((res) => {
@@ -272,6 +294,18 @@ const SubmitPage = () => {
     }
   }, [telCode]);
 
+  React.useEffect(() => {
+    if (promocodeBrandId > 0) {
+      setPromocodeBrandName(
+        brands.length > 0
+          ?
+          brands.find((brand) => brand.id == promocodeBrandId)?.name
+          :
+          ''
+      )
+    }
+  }, [promocodeBrandId, brands]);
+
   const countries = getCountries().map((countryCode) => {
     return {
       code: countryCode,
@@ -383,12 +417,21 @@ const SubmitPage = () => {
   React.useEffect(() => {
     if (promocode && promocodes) {
       const match = promocodes.find((code) => promocode.toLowerCase() === code.name.toLowerCase());
+      setPromocodeReusable(match ? match.reusable : false);
+      setPromocodeBrandId(match ? match.brandId : 0);
       const usedPromo = userPromocodes.length ? userPromocodes.find((item) => item.name.toLowerCase() === promocode.toLowerCase()) : '';
-      if (match && !usedPromo) {
-        setAvailablePromocode(true);
-        setPromocodeValue(match.value);
-      } else {
-        setAvailablePromocode(false);
+      if (match) {
+        if (usedPromo) {
+          if (match.reusable) {
+            setAvailablePromocode(true);
+            setPromocodeValue(match.value);            
+          } else {
+            setAvailablePromocode(false);            
+          }
+        } else {
+          setAvailablePromocode(true);
+          setPromocodeValue(match.value); 
+        }
       }
     }
   }, [promocodes, promocode, usedPromocode, userPromocodes]);
@@ -1139,7 +1182,13 @@ const SubmitPage = () => {
                           }                           
                         </div>
 
-                        <div className={usedPromocode ? "item-aside-popup__price_strike" : "item-aside-popup__price"}>
+                        <div className={
+                          usedPromocode && (promocodeBrandId === '0' || item.company === promocodeBrandName)
+                            ?
+                            "item-aside-popup__price_strike"
+                            :
+                            "item-aside-popup__price"
+                        }>
                           {(item.price * item.count).toFixed(2) + ' €' }                         
                         </div>
                       </div>   
@@ -1147,15 +1196,20 @@ const SubmitPage = () => {
                       {
                         usedPromocode && promocodeValue
                           ?
-                          <div className="item-aside-popup__info-bottom">
-                            <div className="item-aside-popup__used-promocode">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M0 252.1V48C0 21.5 21.5 0 48 0h204.1a48 48 0 0 1 33.9 14.1l211.9 211.9c18.7 18.7 18.7 49.1 0 67.9L293.8 497.9c-18.7 18.7-49.1 18.7-67.9 0L14.1 286.1A48 48 0 0 1 0 252.1zM112 64c-26.5 0-48 21.5-48 48s21.5 48 48 48 48-21.5 48-48-21.5-48-48-48z"/></svg>
-                              {usedPromocode + ' (-' + (item.price * promocodeValue / 100 * item.count).toFixed(2) + ' €)'}
+                          (promocodeBrandId === '0' || item.company === promocodeBrandName
+                            ?
+                            <div className="item-aside-popup__info-bottom">
+                              <div className="item-aside-popup__used-promocode">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M0 252.1V48C0 21.5 21.5 0 48 0h204.1a48 48 0 0 1 33.9 14.1l211.9 211.9c18.7 18.7 18.7 49.1 0 67.9L293.8 497.9c-18.7 18.7-49.1 18.7-67.9 0L14.1 286.1A48 48 0 0 1 0 252.1zM112 64c-26.5 0-48 21.5-48 48s21.5 48 48 48 48-21.5 48-48-21.5-48-48-48z"/></svg>
+                                {usedPromocode + ' (-' + (item.price * promocodeValue / 100 * item.count).toFixed(2) + ' €)'}
+                              </div>
+                              <div className="item-aside-popup__promo-price">
+                                {((item.price - (item.price * promocodeValue / 100)) * item.count).toFixed(2) + ' €'}                         
+                              </div>
                             </div>
-                            <div className="item-aside-popup__promo-price">
-                              {((item.price - (item.price * promocodeValue / 100)) * item.count).toFixed(2) + ' €'}                         
-                            </div>
-                          </div>   
+                            :
+                            ''
+                          )  
                           :
                           ''
                       }
@@ -1227,6 +1281,17 @@ const SubmitPage = () => {
               </div>
               :
               ""
+            }
+            {promocodes.length > 0 && usedPromocode
+              ?
+              <div className="aside-popup-cart__line aside-popup-cart__line_label aside-popup-cart__line_overflow">
+                <div className="aside-popup-cart__discount-persent">
+                  {promocodeBrandName && promocodeBrandName + ', '}
+                  {promocodeReusable && 'Reutilizável'}
+                </div>
+              </div>
+              :
+              ''
             }
             <div className="aside-popup-cart__line">
               <div className="aside-popup-cart__text">
