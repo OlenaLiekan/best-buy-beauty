@@ -15,7 +15,7 @@ import ReviewItem from './ReviewItem';
 import NewReview from './UX/Popups/NewReview';
 import RelatedProductsBlock from './RelatedProductsBlock';
 
-const ProductItem = ({ obj, id, info, related, text, applying, compound, slide, typeId, rating, isLashes, available, brandId, name, code, price, discountPrice, exclusiveProduct, img}) => {
+const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, available, brandId, name, code, price, discountPrice, exclusiveProduct, img}) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -225,7 +225,12 @@ const ProductItem = ({ obj, id, info, related, text, applying, compound, slide, 
                                     <span>{avarageRating}</span>
                                 </div>
                             </div>
-                            <div className="info-product__number"><span className="label-bold">Código do produto:</span> {code}</div>
+                            <div className="info-product__number">
+                                <span className="label-bold">
+                                    Código do produto:
+                                </span>
+                                {code}
+                            </div>
                             <div className="info-product__brand"><span className="label-bold">Marca:</span> {company.name}</div>
                             {info.length && !isLashes ? info.map((obj) => 
                                 <div key={obj.id} className='info-product__volume'>  
@@ -476,6 +481,7 @@ const ProductItem = ({ obj, id, info, related, text, applying, compound, slide, 
                     }
                 </div>
             </div>
+            <RelatedProductsBlock related={obj.related} />
             <div className="product-card__reviews reviews">
                 {productRatings.length
                     ?                         
@@ -496,7 +502,6 @@ const ProductItem = ({ obj, id, info, related, text, applying, compound, slide, 
                 :
                     ''
             }  
-            <RelatedProductsBlock productId={id} />
         </div>
     );
 };

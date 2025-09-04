@@ -34,6 +34,21 @@ const CreateProduct = () => {
     const [text, setText] = React.useState('');
     const [applying, setApplying] = React.useState('');
     const [compound, setCompound] = React.useState('');
+    const [existingProduct, setExistingProduct] = React.useState('');
+    const [productListLoading, setProductListLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        setProductListLoading(true);
+        if (code.length >= 6) {
+            axios.get(`${serverDomain}api/product?limit=1000`)
+            .then((res) => {
+                setExistingProduct(res.data.rows.find(
+                    (item) => String(item.code) === String(code)
+                )); 
+                setProductListLoading(false);
+            });            
+        }
+    }, [serverDomain, code]);
 
     const success = () => {
         window.alert('Novo produtos adicionado com sucesso!');
@@ -192,6 +207,12 @@ const CreateProduct = () => {
             setCategoryId(id);
         }
     }, [typeId, types]); 
+
+    if (existingProduct) {
+        window.alert('Já existe um produto com este código. A duplicação é proibida. Escolha outro código.');
+        setCode('');
+        setExistingProduct('');
+    }
 
     const pushProduct = (e) => {
         e.preventDefault();
@@ -381,7 +402,9 @@ const CreateProduct = () => {
                     ref={inputRef}
                     value={compound}
                     onChange={onChangeCompound}/>
-                <button type='submit' tabIndex='22' className={styles.button}>Criar produto</button>
+                <button disabled={existingProduct ? true : false} type='submit' tabIndex='22' className={styles.button}>
+                    Criar produto
+                </button>
             </form>            
         </div>
     );

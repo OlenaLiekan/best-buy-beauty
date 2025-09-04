@@ -1,0 +1,19 @@
+.relatedProductsWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;  
+    margin-bottom: 30px;  
+}
+
+.relatedProducts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    width: 100%;
+    justify-content: center;
+    @media(max-width: 991.98px) {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        overflow-x: scroll;
+    }
+}
