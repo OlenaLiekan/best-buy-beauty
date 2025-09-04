@@ -73,6 +73,8 @@ const SubmitPage = () => {
   const [countryValue, setCountryValue] = React.useState('');
   const [checked, setChecked] = React.useState(false);
 
+  const [notAllowed, setNotAllowed] = React.useState(true);
+
   const data = localStorage.getItem("user") ? localStorage.getItem("user") : "";
   const user = data ? JSON.parse(data) : "";
   const symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -461,6 +463,16 @@ const SubmitPage = () => {
     window.scrollTo(0, 0);
     bodyLock();
   };
+
+  React.useEffect(() => {
+    if (user.id === 368) {
+      setNotAllowed(true);
+      window.alert(`Ola, ${user.firstName}! Infelizmente, não poderemos aceitar seus pedidos no futuro. Agradecemos a sua solicitação anterior e desejamos tudo de bom.`);
+    } else {
+      setNotAllowed(false);
+    }
+  }, [user.id]);
+
 
   const order =
     orderItems.map(
@@ -1123,11 +1135,11 @@ const SubmitPage = () => {
                 }
               </div>
               <button
-                disabled={deliveryPrices.length > 0 ? false : true}
+                disabled={deliveryPrices.length > 0 && !notAllowed ? false : true}
                 type="submit"
                 tabIndex="14"
                 className={
-                  checked && deliveryPrices.length > 0
+                  checked && deliveryPrices.length > 0 && !notAllowed
                     ?
                     "popup-form__button checkout scroll-top"
                     :
