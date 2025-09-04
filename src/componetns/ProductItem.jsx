@@ -1,16 +1,19 @@
 import React from 'react';
+import axios from 'axios';
 
 import { useNavigate, Link } from 'react-router-dom';
-import ProductCardSlider from './UX/ProductCardSlider';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem, minusItem } from '../redux/slices/cartSlice';
 import { camelize, addItemToCart } from '../js/script';
-import axios from 'axios';
-import UpdateProduct from './UX/Popups/UpdateProduct';
 import { AuthContext } from '../context';
+import { setCurrentPage } from '../redux/slices/filterSlice';
+import ProductCardSlider from './UX/ProductCardSlider';
+
+import UpdateProduct from './UX/Popups/UpdateProduct';
+
 import ReviewItem from './ReviewItem';
 import NewReview from './UX/Popups/NewReview';
-import { setCurrentPage } from '../redux/slices/filterSlice';
+import RelatedProductsBlock from './RelatedProductsBlock';
 
 const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, available, brandId, name, code, price, discountPrice, exclusiveProduct, img}) => {
 
@@ -38,7 +41,14 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const [brandDiscount, setBrandDiscount] = React.useState(0);
     const [productAdded, setProductAdded] = React.useState(false);
     const [productDownvoted, setProductDownvoted] = React.useState(false);
-    const { isAuth, adminMode, updateProductMode, serverDomain, isBlackFriday, imagesCloud } = React.useContext(AuthContext);
+    const {
+        isAuth,
+        adminMode,
+        updateProductMode,
+        serverDomain,
+        isBlackFriday,
+        imagesCloud
+    } = React.useContext(AuthContext);
     
     const cartItem = useSelector((state) => state.cart.items.find((obj) => obj.id === id));
     const lashesItem = useSelector((state) => state.cart.items.find((obj) => obj.index === index));
@@ -185,7 +195,6 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
         setPopupSlides(props); 
 
     }, [img, slide]);
-
 
     return (
         <div className='product-card__content'>
@@ -487,6 +496,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                 :
                     ''
             }  
+            <RelatedProductsBlock productId={id} />
         </div>
     );
 };

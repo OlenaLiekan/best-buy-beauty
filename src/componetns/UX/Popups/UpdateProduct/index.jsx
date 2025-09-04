@@ -25,6 +25,7 @@ const UpdateProduct = ({id, obj}) => {
     const [promoPrice, setPromoPrice] = React.useState(0);
     const { setUpdateProductMode, serverDomain, imagesCloud, setProductUpdated } = React.useContext(AuthContext);
     const [info, setInfo] = React.useState([]);
+    const [related, setRelated] = React.useState([]);
     const [slide, setSlide] = React.useState([]);
     const [objSlides, setObjSlides] = React.useState([]);
     const [img, setImg] = React.useState(null);
@@ -53,6 +54,7 @@ const UpdateProduct = ({id, obj}) => {
         setApplying(obj.applying[0] ? obj.applying[0].text : '');
         setCompound(obj.compound[0] ? obj.compound[0].text : '');
         setInfo(obj.info ? obj.info : []);
+        setRelated(obj.related ? obj.related : []);
         setImg(obj.img);
         setObjSlides(obj.slide);
         setCheckedAvailable(obj.available);
@@ -111,6 +113,18 @@ const UpdateProduct = ({id, obj}) => {
 
     const onChangeCompound = (e) => {
         setCompound(e.target.value);
+    }
+
+    const addRelated = () => {
+        setRelated([...related, { code: "", id: Date.now() }]);
+    }
+
+    const removeRelated = (id) => {
+        setRelated(related.filter(i => i.id !== id));
+    }
+
+    const changeRelated = (key, value, id) => {
+        setRelated(related.map(i => i.id === id ? { ...i, [key]: value } : i));
     }
 
     const addInfo = () => {
@@ -237,6 +251,7 @@ const UpdateProduct = ({id, obj}) => {
             if (img) {
                 formData.set('img', img);               
             }
+            formData.set('related', JSON.stringify(related));
             formData.set('info', JSON.stringify(info));
             images.forEach((file) => {
                 formData.append('slide', file);
@@ -406,26 +421,43 @@ const UpdateProduct = ({id, obj}) => {
                         onChange={selectFile}
                     />                    
                 </div>
-                {info.map((i) => 
+
+                {related.map((i) => 
                     <div className={styles.line} key={i.id}>
-                        <label htmlFor={'info-product_title' + i.id} className={styles.label}>Propriedade:</label>
+                        <label htmlFor={'info-product_title' + i.id} className={styles.label}>Código de produto adicional:</label>
                         <input required id={'info-product_title' + i.id} tabIndex="12" type='text' className={styles.formInputSmall}
-                            value={i.title}
-                            onChange={(e) => changeInfo('title', e.target.value, i.id)}
+                            value={i.code}
+                            onChange={(e) => changeRelated('code', e.target.value, i.id)}
                         /> 
-                        <label htmlFor={'info-product_description' + i.id } className={styles.label}>=</label>
-                        <input required id={'info-product_description' + i.id } tabIndex="13" type='text' className={styles.formInputSmall}
-                            value={i.description}
-                            onChange={(e) => changeInfo('description', e.target.value, i.id)}
-                        />
-                        <button type='button' tabIndex='14' className='info-product__remove' onClick={() => removeInfo(i.id)}>
+                        <button type='button' tabIndex='13' className='info-product__remove' onClick={() => removeRelated(i.id)}>
                             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                                 <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
                             </svg>                                     
                         </button>
                     </div>                    
                 )}
-                <button type='button' className={styles.infoButton} tabIndex="15" onClick={addInfo}>Adicionar informações</button>
+                <button type='button' className={styles.relatedButton} tabIndex="14" onClick={addRelated}>Anexar produto</button>
+
+                {info.map((i) => 
+                    <div className={styles.line} key={i.id}>
+                        <label htmlFor={'info-product_title' + i.id} className={styles.label}>Propriedade:</label>
+                        <input required id={'info-product_title' + i.id} tabIndex="15" type='text' className={styles.formInputSmall}
+                            value={i.title}
+                            onChange={(e) => changeInfo('title', e.target.value, i.id)}
+                        /> 
+                        <label htmlFor={'info-product_description' + i.id } className={styles.label}>=</label>
+                        <input required id={'info-product_description' + i.id } tabIndex="16" type='text' className={styles.formInputSmall}
+                            value={i.description}
+                            onChange={(e) => changeInfo('description', e.target.value, i.id)}
+                        />
+                        <button type='button' tabIndex='17' className='info-product__remove' onClick={() => removeInfo(i.id)}>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
+                            </svg>                                     
+                        </button>
+                    </div>                    
+                )}
+                <button type='button' className={styles.infoButton} tabIndex="18" onClick={addInfo}>Adicionar informações</button>
                 <div className={styles.lineImg}>                
                 {objSlides ? 
                     objSlides.map((s) => 
@@ -443,17 +475,17 @@ const UpdateProduct = ({id, obj}) => {
                 {slide.map((i) => 
                     <div className={styles.line} key={i.id}>
                         <label htmlFor="product-slide" className={styles.label}>Slide:</label>
-                        <input id="product-slide" tabIndex="16" type='file' className={styles.formFile}
+                        <input id="product-slide" tabIndex="19" type='file' className={styles.formFile}
                             onChange={(e) => changeSlide('slideImg', e.target.files[0], i.id)}
                         />
-                        <button type='button' tabIndex='17' className='slide-product__remove' onClick={() => removeSlide(i.id)}>
+                        <button type='button' tabIndex='20' className='slide-product__remove' onClick={() => removeSlide(i.id)}>
                             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                                 <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
                             </svg>                                     
                         </button>
                     </div>                
                 )}
-                <button type='button' className={styles.slideButton} tabIndex="18" onClick={addSlide}>Adicionar slide</button>
+                <button type='button' className={styles.slideButton} tabIndex="21" onClick={addSlide}>Adicionar slide</button>
                 <label htmlFor="product-about" className={styles.label}>Descrição:</label>
                 <textarea id="product-about" tabIndex='19' className={styles.textarea}
                     ref={inputRef}
@@ -461,16 +493,16 @@ const UpdateProduct = ({id, obj}) => {
                     onChange={onChangeText}
                 />
                 <label htmlFor="product-applying" className={styles.label}>Método de uso:</label>
-                <textarea id="product-applying" tabIndex='20' className={styles.textarea}
+                <textarea id="product-applying" tabIndex='22' className={styles.textarea}
                     ref={inputRef}
                     value={applying}
                     onChange={onChangeApplying} />
                 <label htmlFor="product-compound" className={styles.label}>Ingredientes:</label>
-                <textarea id="product-compound" tabIndex='21' className={styles.textarea}
+                <textarea id="product-compound" tabIndex='23' className={styles.textarea}
                     ref={inputRef}
                     value={compound}
                     onChange={onChangeCompound}/>
-                <button type='submit' tabIndex='22' className={styles.button}>Atualizar produto</button>
+                <button type='submit' tabIndex='24' className={styles.button}>Atualizar produto</button>
             </form>            
         </div>
     );
