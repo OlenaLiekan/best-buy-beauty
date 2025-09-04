@@ -15,7 +15,7 @@ import ReviewItem from './ReviewItem';
 import NewReview from './UX/Popups/NewReview';
 import RelatedProductsBlock from './RelatedProductsBlock';
 
-const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, available, brandId, name, code, price, discountPrice, exclusiveProduct, img}) => {
+const ProductItem = ({ obj, id, info, related, text, applying, compound, slide, typeId, rating, isLashes, available, brandId, name, code, price, discountPrice, exclusiveProduct, img}) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();

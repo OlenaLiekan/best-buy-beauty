@@ -87,7 +87,7 @@ const CreateProduct = () => {
     }
 
     const addRelated = () => {
-        setRelated([...related, { code: "", number: Date.now() }]);
+        setRelated([...related, { referenceCode: "", number: Date.now() }]);
     }
 
     const removeRelated = (number) => {
@@ -320,8 +320,8 @@ const CreateProduct = () => {
                             Código de produto adicional:
                         </label>
                         <input required id="info-product_title" tabIndex="9" type='text' className={styles.formInputSmall}
-                            value={i.code}
-                            onChange={(e) => changeRelated('code', e.target.value, i.number)}
+                            value={i.referenceCode}
+                            onChange={(e) => changeRelated('referenceCode', e.target.value, i.number)}
                         /> 
                         <button type='button' tabIndex='10' className='info-product__remove' onClick={() => removeRelated(i.number)}>
                             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">

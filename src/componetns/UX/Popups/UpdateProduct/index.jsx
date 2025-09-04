@@ -54,7 +54,7 @@ const UpdateProduct = ({id, obj}) => {
         setApplying(obj.applying[0] ? obj.applying[0].text : '');
         setCompound(obj.compound[0] ? obj.compound[0].text : '');
         setInfo(obj.info ? obj.info : []);
-        setRelated(obj.related ? obj.related : []);
+        setRelated(obj.related.length > 0 ? obj.related : []);
         setImg(obj.img);
         setObjSlides(obj.slide);
         setCheckedAvailable(obj.available);
@@ -116,7 +116,7 @@ const UpdateProduct = ({id, obj}) => {
     }
 
     const addRelated = () => {
-        setRelated([...related, { code: "", id: Date.now() }]);
+        setRelated([...related, { referenceCode: "", id: Date.now() }]);
     }
 
     const removeRelated = (id) => {
@@ -426,8 +426,8 @@ const UpdateProduct = ({id, obj}) => {
                     <div className={styles.line} key={i.id}>
                         <label htmlFor={'info-product_title' + i.id} className={styles.label}>Código de produto adicional:</label>
                         <input required id={'info-product_title' + i.id} tabIndex="12" type='text' className={styles.formInputSmall}
-                            value={i.code}
-                            onChange={(e) => changeRelated('code', e.target.value, i.id)}
+                            value={i.referenceCode}
+                            onChange={(e) => changeRelated('referenceCode', e.target.value, i.id)}
                         /> 
                         <button type='button' tabIndex='13' className='info-product__remove' onClick={() => removeRelated(i.id)}>
                             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
