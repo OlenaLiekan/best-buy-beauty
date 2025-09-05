@@ -213,7 +213,7 @@ const AdminPromocodes = () => {
 
     const editPromocode = (e) => {
         e.preventDefault();
-        if (updatedName && updatedValue && activeBrandId) {
+        if (updatedName && updatedValue && activeBrandId >= 0) {
             const formData = new FormData();
             const id = activePromocode;
             formData.append('name', updatedName);
