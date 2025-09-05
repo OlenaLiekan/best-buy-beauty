@@ -194,6 +194,7 @@ const AdminPromocodes = () => {
     };
 
     const showEditPromocodesMenu = (promocode) => {
+        window.scrollTo(0, 0);
         setActivePromocode(promocode.id);
         setUpdatedName(promocode.name);
         setUpdatedValue(promocode.value);
