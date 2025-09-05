@@ -85,12 +85,12 @@ const SubmitPage = () => {
     ?
     items.filter((item) => item.company === promocodeBrandName && !item.promoProduct)
     :
-    []; 
+    items.filter((item) => !item.promoProduct); 
   
   const promoItemsPrices = promoItems ? promoItems.map((item) => item.price * item.count) : [];
   const promoItemsSum = promoItemsPrices.length > 0 ? promoItemsPrices.reduce((sum, price) => sum + Number(price), 0) : totalPrice;
 
-  const finalSum = promocodeValue && availablePromocode && message && promoItemsPrices.length > 0 ? (totalPrice - (promoItemsSum * promocodeValue / 100 ).toFixed(2)) : totalPrice;
+  const finalSum = promocodeValue && availablePromocode && message ? (totalPrice - (promoItemsSum * promocodeValue / 100 ).toFixed(2)) : totalPrice;
 
   React.useEffect(() => {
     axios.get(`${serverDomain}api/brand`).then((res) => {
@@ -418,28 +418,29 @@ const SubmitPage = () => {
   }
 
   React.useEffect(() => {
-    if (promocode && promocodes) {
+    if (promocode && promocodes.length > 0) {
       const match = promocodes.find((code) => promocode.toLowerCase() === code.name.toLowerCase());
       setPromocodeReusable(match ? match.reusable : false);
       setPromocodeBrandId(match ? match.brandId : 0);
       const usedPromo = userPromocodes.length ? userPromocodes.find((item) => item.name.toLowerCase() === promocode.toLowerCase()) : '';
       if (match) {
-        if (promoItemsPrices.length > 0) {
-          if (usedPromo) {
-            if (match.reusable) {
-              setAvailablePromocode(true);
-              setPromocodeValue(match.value);            
-            } else {
-              setAvailablePromocode(false);            
-            }
-          } else {
+        if (usedPromo) {
+          if (match.reusable && promoItems.length > 0) {
             setAvailablePromocode(true);
-            setPromocodeValue(match.value); 
+            setPromocodeValue(match.value);
+          } else {
+            setAvailablePromocode(false);
           }
         } else {
-          setAvailablePromocode(false);
-          setPromocodeValue('');
+          if (promoItems.length > 0) {
+          setAvailablePromocode(true);
+            setPromocodeValue(match.value);
+          } else {
+            setAvailablePromocode(false);
+          }
         }
+      } else {
+        setAvailablePromocode(false);
       }
     }
   }, [promocodes, promocode, usedPromocode, userPromocodes, promoItemsPrices.length]);
@@ -1207,7 +1208,7 @@ const SubmitPage = () => {
                             :
                             "item-aside-popup__price"
                         }>
-                          {(item.price * item.count).toFixed(2) + ' €' }                         
+                          {(item.price * item.count).toFixed(2) + ' €' }                 
                         </div>
                       </div>   
                      
@@ -1222,7 +1223,7 @@ const SubmitPage = () => {
                                 {usedPromocode + ' (-' + (item.price * promocodeValue / 100 * item.count).toFixed(2) + ' €)'}
                               </div>
                               <div className="item-aside-popup__promo-price">
-                                {((item.price - (item.price * promocodeValue / 100)) * item.count).toFixed(2) + ' €'}                         
+                                {((item.price - (item.price * (promocodeValue / 100))) * item.count).toFixed(2) + ' €'}                         
                               </div>
                             </div>
                             :

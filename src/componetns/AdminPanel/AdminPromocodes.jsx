@@ -170,7 +170,7 @@ const AdminPromocodes = () => {
 
     const pushPromocode = (e) => {
         e.preventDefault();
-        if (newName.length && newValue.length && activeBrandId) {
+        if (newName.length && newValue.length && activeBrandId >= 0) {
             const formData = new FormData();
             formData.set('name', newName);
             formData.set('value', newValue);
