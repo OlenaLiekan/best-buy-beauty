@@ -81,16 +81,16 @@ const SubmitPage = () => {
   const orderItems = items.filter((item) => item.available);
 
 
-  const promoItems = promocodeBrandName && promocodeBrandId > 0
+  const promoItems = promocodeBrandName && promocodeBrandId > 0 
     ?
-    items.filter((item) => item.company === promocodeBrandName)
+    items.filter((item) => item.company === promocodeBrandName && !item.promoProduct)
     :
     []; 
   
   const promoItemsPrices = promoItems ? promoItems.map((item) => item.price * item.count) : [];
   const promoItemsSum = promoItemsPrices.length > 0 ? promoItemsPrices.reduce((sum, price) => sum + Number(price), 0) : totalPrice;
 
-  const finalSum = promocodeValue && availablePromocode && message ? (totalPrice - (promoItemsSum * promocodeValue / 100 ).toFixed(2)) : totalPrice;
+  const finalSum = promocodeValue && availablePromocode && message && promoItemsPrices.length > 0 ? (totalPrice - (promoItemsSum * promocodeValue / 100 ).toFixed(2)) : totalPrice;
 
   React.useEffect(() => {
     axios.get(`${serverDomain}api/brand`).then((res) => {
@@ -150,6 +150,7 @@ const SubmitPage = () => {
   React.useEffect(() => {
     axios.get(`${serverDomain}api/delivery`).then((res) => {
       setDeliveryPrices(res.data);
+      console.log(items);
     });
   }, [serverDomain]);
 
@@ -423,20 +424,25 @@ const SubmitPage = () => {
       setPromocodeBrandId(match ? match.brandId : 0);
       const usedPromo = userPromocodes.length ? userPromocodes.find((item) => item.name.toLowerCase() === promocode.toLowerCase()) : '';
       if (match) {
-        if (usedPromo) {
-          if (match.reusable) {
-            setAvailablePromocode(true);
-            setPromocodeValue(match.value);            
+        if (promoItemsPrices.length > 0) {
+          if (usedPromo) {
+            if (match.reusable) {
+              setAvailablePromocode(true);
+              setPromocodeValue(match.value);            
+            } else {
+              setAvailablePromocode(false);            
+            }
           } else {
-            setAvailablePromocode(false);            
+            setAvailablePromocode(true);
+            setPromocodeValue(match.value); 
           }
         } else {
-          setAvailablePromocode(true);
-          setPromocodeValue(match.value); 
+          setAvailablePromocode(false);
+          setPromocodeValue('');
         }
       }
     }
-  }, [promocodes, promocode, usedPromocode, userPromocodes]);
+  }, [promocodes, promocode, usedPromocode, userPromocodes, promoItemsPrices.length]);
 
   const onClickUsePromo = (e) => {
     e.preventDefault();
@@ -446,7 +452,7 @@ const SubmitPage = () => {
         setUsedPromocode(promocode);
         setPromocode('');
       } else {
-        setMessage('O código de desconto está incorreto ou já foi aplicado anteriormente.');
+        setMessage(promoItemsPrices.length > 0 ? 'O código de desconto está incorreto ou já foi aplicado anteriormente.' : 'O código de desconto não pode ser aplicado.');
       }     
   };
 
@@ -1195,7 +1201,7 @@ const SubmitPage = () => {
                         </div>
 
                         <div className={
-                          usedPromocode && (promocodeBrandId === '0' || item.company === promocodeBrandName)
+                          usedPromocode && (promocodeBrandId === '0' && !item.promoProduct || item.company === promocodeBrandName && !item.promoProduct)
                             ?
                             "item-aside-popup__price_strike"
                             :
@@ -1208,7 +1214,7 @@ const SubmitPage = () => {
                       {
                         usedPromocode && promocodeValue
                           ?
-                          (promocodeBrandId === '0' || item.company === promocodeBrandName
+                          (promocodeBrandId === '0' && !item.promoProduct || item.company === promocodeBrandName && !item.promoProduct
                             ?
                             <div className="item-aside-popup__info-bottom">
                               <div className="item-aside-popup__used-promocode">

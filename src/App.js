@@ -53,6 +53,9 @@ function App() {
 
   const [activeAuthOption, setActiveAuthOption] = React.useState(0);
 
+  const [promoList, setPromoList] = React.useState([]);
+  const [lastPromo, setLastPromo] = React.useState('');
+
   const serverDomain = 'https://bbb-server-a6ji.onrender.com/';
   const imagesCloud = 'https://res.cloudinary.com/bbbptcloud/image/upload/v1699129130/static/';
 
@@ -91,13 +94,16 @@ function App() {
 
   React.useEffect(() => {
     axios.get(`${serverDomain}api/promotion`).then(res => {
-      const lastPromo = res.data?.pop();
-      if (lastPromo) {
-        setFirstDateArray(lastPromo.startDate.split('-'));
-        setSecondDateArray(lastPromo.finishDate.split('-'));
-      }
+      setLastPromo(res.data.reverse().slice(-1)[0]);
     });
-  }, [serverDomain]);
+  }, [serverDomain, isBlackFriday]);
+
+  React.useEffect(() => {
+    if (lastPromo) {
+      setFirstDateArray(lastPromo.startDate.split('-'));
+      setSecondDateArray(lastPromo.finishDate.split('-'));
+    }
+  }, [serverDomain, lastPromo]);
 
   React.useEffect(() => {
     if (firstDateArray.length > 0 && secondDateArray.length > 0) {
@@ -110,7 +116,7 @@ function App() {
         setIsBlackFriday(false);
       }
     }
-  }, [isBlackFriday, secondDateArray, firstDateArray]);
+  }, [serverDomain, firstDateArray.length, secondDateArray.length, isBlackFriday]);
 
   const handleScroll = () => {
     setScroll(window.scrollY);

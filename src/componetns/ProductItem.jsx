@@ -133,6 +133,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
             lengthArr: lengthArr[activeLength],
             index,
             available,
+            promoProduct: brandDiscount > 0 && isBlackFriday || discountPrice > 0 ? true : false,
         };
         dispatch(addItem(item));
         setProductDownvoted(false);
