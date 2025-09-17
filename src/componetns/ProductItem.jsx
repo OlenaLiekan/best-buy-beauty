@@ -102,8 +102,8 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
             });
     }, [serverDomain]);
 
-    const typeNames = types.map((type) => camelize(type.name));
-    const path = typeNames.find((typeName, i) => i === typeId);
+    const productType = types.find((type) => type.id === typeId);
+    const path = productType ? camelize(productType.name) : "produtos";
 
     const showCart = () => {
         if (isLashes ? lashesCount : addedCount) {

@@ -28,6 +28,7 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
     const handleClick = () => {
         navigate(`/${path}/${id}`);
         window.scrollTo(0, 0);
+        console.log(path);
     }
 
     const dispatch = useDispatch();
