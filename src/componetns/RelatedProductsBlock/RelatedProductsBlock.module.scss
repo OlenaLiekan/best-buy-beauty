@@ -16,6 +16,9 @@
         flex-wrap: nowrap;
         overflow-x: scroll;
     }
+    @media(max-width: 479.98px) {
+        gap: 15px;
+    }
 }
 
 .relatedProductsTitle {
