@@ -592,6 +592,10 @@ const SubmitPage = () => {
     const id = user ? user.id : 0;
     const countryData = countries.find((c) => c.code === country);
 
+    if (id === 0) {
+      window.alert('Usuário não encontrado.');
+    }
+
     if (
       orderNumber &&
       username &&
@@ -607,54 +611,52 @@ const SubmitPage = () => {
       country &&
       finalSum &&
       totalCount &&
-      deliveryPrice
+      deliveryPrice &&
+      id > 0
     ) {
-      setResetForm(false);
-      formData.append("userId", id);
-      formData.append("items", JSON.stringify(orderItems));
-      formData.append("quantity", totalCount);
-      formData.append("deliveryPrice", deliveryPrice);
-      formData.append(
-        "sum",
-        (finalSum + Number(deliveryPrice)).toFixed(2)
-      );
-      formData.append("orderNumber", orderNumber);
-      formData.append("userOrder", order);
-      formData.append("userName", username);
-      formData.append("userSurname", surname);
-      formData.append("userEmail", email);
-      formData.append("userPhone", phone);
-      formData.append("paymentList", payment);
-      formData.append("userCompany", company ? company : " ");
-      formData.append(
-        "userAddress",
-        `Rua: ${firstAddress}, Número da porta: ${secondAddress}, ${city}, ${region}, ${country}`
-      );
-      formData.append("userPostalCode", postalCode);
-      formData.append("userComment", comment);
-      formData.append("countryCode", countryData.code);
-      formData.append("promocodeName", usedPromocode ? usedPromocode.toUpperCase() : '');
-      formData.append("promocodeValue", usedPromocode && promocodeValue ? promocodeValue : '');
+        setResetForm(false);
+        formData.append("userId", id);
+        formData.append("items", JSON.stringify(orderItems));
+        formData.append("quantity", totalCount);
+        formData.append("deliveryPrice", deliveryPrice);
+        formData.append(
+          "sum",
+          (finalSum + Number(deliveryPrice)).toFixed(2)
+        );
+        formData.append("orderNumber", orderNumber);
+        formData.append("userOrder", order);
+        formData.append("userName", username);
+        formData.append("userSurname", surname);
+        formData.append("userEmail", email);
+        formData.append("userPhone", phone);
+        formData.append("paymentList", payment);
+        formData.append("userCompany", company ? company : " ");
+        formData.append(
+          "userAddress",
+          `Rua: ${firstAddress}, Número da porta: ${secondAddress}, ${city}, ${region}, ${country}`
+        );
+        formData.append("userPostalCode", postalCode);
+        formData.append("userComment", comment);
+        formData.append("countryCode", countryData.code);
+        formData.append("promocodeName", usedPromocode ? usedPromocode.toUpperCase() : '');
+        formData.append("promocodeValue", usedPromocode && promocodeValue ? promocodeValue : '');
 
-      try {
-        const response = await submitPurchase(formData);
-        if (response.success) {
-          if (id > 0) {
-            updateUser(formData, id).then((data) => success(response));
+        try {
+          const response = await submitPurchase(formData);
+          if (response.success) {
+              updateUser(formData, id).then((data) => success(response));
           } else {
-            window.alert('Usuário não encontrado.');
+            window.alert("Erro ao enviar o pedido. Tente novamente.");
           }
-        } else {
-          window.alert("Erro ao enviar o pedido. Tente novamente.");
+        } catch (error) {
+          window.alert("Erro ao enviar pedido. Tente novamente.");
+          console.error(error);
         }
-      } catch (error) {
-        window.alert("Erro ao enviar pedido. Tente novamente.");
-      }
-    } else {
-      window.alert("Por favor, preencha todos os campos obrigatórios.");
-      setResetForm(true);
-      closePopup();
-      window.scrollTo(0, 0);
+      } else {
+        window.alert("Por favor, preencha todos os campos obrigatórios.");
+        setResetForm(true);
+        closePopup();
+        window.scrollTo(0, 0);
     }
   };
 
