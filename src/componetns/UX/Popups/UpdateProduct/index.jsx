@@ -124,7 +124,7 @@ const UpdateProduct = ({id, obj}) => {
     }
 
     const changeRelated = (key, value, id) => {
-        setRelated(related.map(i => i.id === id ? { ...i, [key]: value } : i));
+        setRelated(related.map(i => i.id === id ? { ...i, [key]: value.trim() } : i));
     }
 
     const addInfo = () => {

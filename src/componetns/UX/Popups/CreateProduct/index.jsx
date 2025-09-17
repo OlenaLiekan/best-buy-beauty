@@ -110,7 +110,7 @@ const CreateProduct = () => {
     }
 
     const changeRelated = (key, value, number) => {
-        setRelated(related.map(i => i.number === number ? { ...i, [key]: value } : i));
+        setRelated(related.map(i => i.number === number ? { ...i, [key]: value.trim() } : i));
     }
 
     const addSlide = () => {
