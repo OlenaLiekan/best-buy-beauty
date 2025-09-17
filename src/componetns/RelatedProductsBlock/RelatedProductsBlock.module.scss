@@ -1,6 +1,7 @@
 .relatedProductsWrapper {
     display: flex;
     flex-direction: column;
+    gap: 40px;
     width: 100%;  
     margin-bottom: 30px;  
 }
@@ -10,10 +11,21 @@
     flex-wrap: wrap;
     gap: 30px;
     width: 100%;
-    justify-content: center;
+    justify-content: flex-start;
     @media(max-width: 991.98px) {
-        justify-content: flex-start;
         flex-wrap: nowrap;
         overflow-x: scroll;
+    }
+}
+
+.relatedProductsTitle {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #252525;
+    @media(max-width: 991.98px) {
+        font-size: 16px;
     }
 }

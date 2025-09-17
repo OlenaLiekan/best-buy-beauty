@@ -129,12 +129,16 @@ const Search = () => {
     const updateProductOn = (typeId, id) => {
         setUpdateProductMode(true);
         const path = types.find((type) => type.id === typeId);
-        navigate(`/${camelize(path.name)}/${id}`); 
-    }
+        navigate(`/${camelize(path.name)}/${id}`);
+    };
+
+    const preventSubmit = (e) => {
+        e.preventDefault()
+    };
 
     return (
         <div className="body-header__search search-header">
-            <form className="search-header__form">
+            <form onSubmit={preventSubmit} className="search-header__form">
                 <div className="search-header__button _icon-search">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
