@@ -133,7 +133,7 @@ const Search = () => {
     };
 
     const preventSubmit = (e) => {
-        e.preventDefault()
+        e.preventDefault();
     };
 
     return (
