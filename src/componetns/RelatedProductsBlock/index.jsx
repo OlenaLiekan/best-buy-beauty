@@ -6,9 +6,13 @@ const RelatedProductsBlock = ({ related }) => {
 
     return (
         <div className={styles.relatedProductsWrapper}>
-            <h3 className={styles.relatedProductsTitle}>
-                Produtos relacionados
-            </h3>
+            {
+                related.length > 0
+                &&
+                <h3 className={styles.relatedProductsTitle}>
+                    Produtos relacionados
+                </h3>
+            }
             <ul className={styles.relatedProducts}>
                 {
                     related.length > 0 
