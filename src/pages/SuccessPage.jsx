@@ -143,8 +143,7 @@ const SuccessPage = () => {
                 )}
 
                 <p className="body-success__text">
-                  Data de entrega estimada 1 dia útil. Após recebermos o
-                  pagamento da compra.
+                  Data estimada de entrega: 1 a 2 dias úteis após o recebimento do pagamento da sua compra.
                 </p>
                 <h4 className="success-main__subtitle bottom-line">
                   Dados do pedido
