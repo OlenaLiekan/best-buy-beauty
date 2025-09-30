@@ -1570,4 +1570,186 @@
     background-color: #AD912B;
 }
 
+.ordersList {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    line-height: 1.2;
+    letter-spacing: 0.2px;
+    @media(max-width: 379.98px) {
+        font-size: 14px;
+    }
+}
+
+.ordersItem {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: #eaeaea3d;
+    border-radius: 20px;
+    padding: 15px 20px;
+    max-width: 300px;
+}
+
+.ordersItemTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 20px 20px 0 0;
+    gap: 20px;
+}
+
+.ordersItemIdentifier {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+}
+
+.orderNumber,
+.activeOrderNumber,
+.orderDate,
+.orderStatus,
+.orderStatusSuccess,
+.orderStatusDeclined,
+.orderStatusPending {
+    font-weight: 500;
+}
+
+.orderNumber {
+    width: 100px;
+    color: #252525;
+}
+
+.activeOrderNumber {
+    width: 100px;
+    color: #AD912B;
+}
+
+.orderDate {
+    font-size: 14px;
+    color: #787878;
+}
+
+.aside {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.orderStatus,
+.orderStatusSuccess,
+.orderStatusDeclined,
+.orderStatusPending {
+    text-align: center;
+    width: 110px;
+    padding: 8px 10px;
+    border-radius: 8px;      
+    color: #fff;  
+    @media(max-width: 379.98px) {
+        font-size: 14px;
+        width: 96px;
+        padding: 6px 8px;
+    }
+}
+
+.orderStatus {
+    background-color: #252525bc;
+}
+
+.orderStatusSuccess {
+    background-color:#67ab3ac0; 
+}
+
+.orderStatusDeclined {
+    background-color: #b74e36b8;
+}
+
+.orderStatusPending {
+    background-color: #b59627d8;
+}
+
+.ordersItemIcon,
+.ordersItemIconActive {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+    :hover {
+        fill: #AD912B;
+    }
+}
+
+.ordersItemIcon {
+    fill: #252525;
+}
+
+.ordersItemIconActive {
+    fill: #AD912B;
+    transform: rotate(-180deg);
+}
+
+.ordersItemDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.orderTransactionId,
+.orderPaymentMethod {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.userData {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.userAddress {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.userItems {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.userItem {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.orderResume {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-self: flex-end;
+}
+
+.userPromocode,
+.orderDeliveryPrice,
+.orderTotalSum {
+    display: flex;
+    align-self: flex-end;
+}
+
+.orderLabel {
+    font-weight: 500;
+    padding-right: 5px;
+}
+
+.warnOrderMsg {
+    color: #b74e36;
+}
+
+.loadingMsg {
+    color: #AD912B;
+}
 

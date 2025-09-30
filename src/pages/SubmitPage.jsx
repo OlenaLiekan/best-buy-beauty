@@ -150,7 +150,6 @@ const SubmitPage = () => {
   React.useEffect(() => {
     axios.get(`${serverDomain}api/delivery`).then((res) => {
       setDeliveryPrices(res.data);
-      console.log(items);
     });
   }, [serverDomain]);
 

@@ -14,6 +14,7 @@ import AdminProductCategories from './AdminProductCategories';
 import AdminProductAvailability from './AdminProductAvailability';
 import AdminTestimonials from './AdminTestimonials';
 import AdminDeliveryPrices from './AdminDeliveryPrices';
+import AdminOrders from './AdminOrders';
 
 const AdminPanel = () => {
 
@@ -50,7 +51,9 @@ const AdminPanel = () => {
 
                 { activeAuthOption === 5 && <AdminTestimonials/> }
 
-                { activeAuthOption === 6 && <AdminDeliveryPrices/> }
+                {activeAuthOption === 6 && <AdminDeliveryPrices />}
+                
+                { activeAuthOption === 7 && <AdminOrders/> }
 
         </div>
 

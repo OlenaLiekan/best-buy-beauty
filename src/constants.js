@@ -6,6 +6,7 @@ export const ADMIN_MENU_ITEMS = [
   'Lançamento da promoção',
   'Avaliações de clientes',
   'Valor da entrega',
+  'Lista de pedidos',
 ];
 
 export const USER_MENU_ITEMS = ['Histórico de pedidos', 'Endereços', 'Gerenciamento de contas'];
