@@ -136,7 +136,7 @@ const AdminDeliveryPrices = () => {
                 </div>
                 :
                 <div className={styles.deliveryBlock}>
-                    Carregando...
+                    <span className={styles.loadingMsg}>Carregando...</span>
                 </div>
             }
         </>
