@@ -118,26 +118,31 @@ const AdminOrders = () => {
                                         <div className={styles.userData}>
                                             <span>
                                                 {transaction.customerName}
-                                        </span>
-                                        {
-                                            transaction.phoneNumber || transaction.customerPhone
-                                                ?
+                                            </span>
+                                            {transaction.customerCompany && 
                                                 <span>
-                                                    {transaction.paymentMethod === "MBWAY"
-                                                        ?
-                                                        (transaction.phoneNumber
+                                                    {transaction.customerCompany}
+                                                </span>
+                                            }
+                                            {
+                                                transaction.phoneNumber || transaction.customerPhone
+                                                    ?
+                                                    <span>
+                                                        {transaction.paymentMethod === "MBWAY"
                                                             ?
-                                                            `+${transaction.phoneNumber.split('#').join('')}`
+                                                            (transaction.phoneNumber
+                                                                ?
+                                                                `+${transaction.phoneNumber.split('#').join('')}`
+                                                                :
+                                                                transaction.customerPhone
+                                                            )
                                                             :
-                                                            transaction.customerPhone
-                                                        )
-                                                        :
-                                                        (transaction.customerPhone && transaction.customerPhone)
-                                                    }
-                                                </span>   
-                                                :
-                                                ''
-                                        }
+                                                            (transaction.customerPhone && transaction.customerPhone)
+                                                        }
+                                                    </span>   
+                                                    :
+                                                    ''
+                                            }
 
                                             <span>{transaction.customerEmail}</span>
                                         </div>
