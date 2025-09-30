@@ -262,7 +262,11 @@ const AdminPromotion = () => {
                                                             }
                                                         key={brand.id}>{brand.name}
                                                     </li>      
-                                            ) : 'Carregando marcas'   
+                                                )
+                                                :
+                                                <span className={styles.loadingMsg}>
+                                                    Carregando marcas
+                                                </span>   
                                         }
                                         </ul>
 
@@ -301,7 +305,7 @@ const AdminPromotion = () => {
                                                 </div> 
                                             )
                                             :
-                                            'Não selecionado'
+                                            <span className={styles.warnMsg}>Não selecionado</span>
                                         }
                                     </div>
                                 </div>
@@ -470,7 +474,7 @@ const AdminPromotion = () => {
                                             </li>
                                         )
                                     :
-                                    'Carregando compartilhamentos...'
+                                    <span className={styles.loadingMsg}>Carregando compartilhamentos...</span>
                                 }
 
                             </ul>

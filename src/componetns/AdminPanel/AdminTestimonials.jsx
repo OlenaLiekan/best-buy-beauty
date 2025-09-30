@@ -153,8 +153,11 @@ const AdminTestimonials = () => {
     
     return (
         <div className={styles.testimonialsBlock}>
-            <h4>Avaliações de clientes</h4>
             <div>
+                {reviewsLoading && <span className={styles.loadingMsg}>
+                    Carregando comentários...
+                </span>
+                }
                 <ul className={styles.testimonialsList}>
                     {reviews.length > 0 && reviews.map((testimonial) =>
                         <li key={testimonial.id} className={styles.testimonialsItem}>
