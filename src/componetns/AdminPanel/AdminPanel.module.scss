@@ -1589,6 +1589,9 @@
     border-radius: 20px;
     padding: 15px 20px;
     max-width: 300px;
+    @media(max-width: 319.98px) {
+        max-width: 250px;
+    }
 }
 
 .ordersItemTop {
@@ -1616,13 +1619,19 @@
     font-weight: 500;
 }
 
-.orderNumber {
+.orderNumber,
+.activeOrderNumber {
     width: 100px;
-    color: #252525;
+    @media(max-width: 379.98px) {
+        width: 60px;
+    }
+}
+
+.orderNumber {
+    color: #252525;    
 }
 
 .activeOrderNumber {
-    width: 100px;
     color: #AD912B;
 }
 

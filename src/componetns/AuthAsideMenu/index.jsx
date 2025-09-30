@@ -5,6 +5,11 @@ import { AuthContext } from '../../context';
 const AuthAsideMenu = ({ user, menuItems }) => {
 
     const { activeAuthOption, setActiveAuthOption } = React.useContext(AuthContext);
+
+    const onClickMenuItem = (id) => {
+        setActiveAuthOption(id)
+        window.scrollTo(0, 100);
+    };
     
     return (
         <div className={styles.aside}>
@@ -15,7 +20,7 @@ const AuthAsideMenu = ({ user, menuItems }) => {
                 {menuItems.map((option, id) => 
                     <li key={id}
                         value={option}
-                        onClick={() => setActiveAuthOption(id)}
+                        onClick={() => onClickMenuItem(id)}
                         className={activeAuthOption === id ? styles.asideMenuItemBlack : styles.asideMenuItem}>
                         {option}
                     </li>                                

@@ -87,7 +87,7 @@ const AdminInitial = () => {
         if (isPromoPage) {
             setIsPromoPage(false);
         }
-        window.scrollTo(0, 0);
+        window.scrollTo(0,0);         
     };
 
 
