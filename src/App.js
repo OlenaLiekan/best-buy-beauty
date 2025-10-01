@@ -107,8 +107,18 @@ function App() {
 
   React.useEffect(() => {
     if (firstDateArray.length > 0 && secondDateArray.length > 0) {
-      const startDate = new Date(firstDateArray.join()).getTime();
-      const finishDate = new Date(secondDateArray.join()).getTime() + 86340000;
+      /* const startDate = new Date(firstDate).getTime();
+      const finishDate = new Date(secondDate).getTime() + 86340000;
+      const currentTime = new Date().getTime();*/
+
+      const startDate = new Date(
+        firstDateArray[0],
+        Number(firstDateArray[1]) - 1,
+        firstDateArray[2]
+      ).getTime();
+      const finishDate =
+        new Date(secondDateArray[0], Number(secondDateArray[1]) - 1, secondDateArray[2]).getTime() +
+        86340000;
       const currentTime = new Date().getTime();
       if (currentTime >= startDate && currentTime <= finishDate) {
         setIsBlackFriday(true);
@@ -116,7 +126,7 @@ function App() {
         setIsBlackFriday(false);
       }
     }
-  }, [serverDomain, firstDateArray.length, secondDateArray.length, isBlackFriday]);
+  }, [serverDomain, firstDateArray, secondDateArray, isBlackFriday]);
 
   const handleScroll = () => {
     setScroll(window.scrollY);
