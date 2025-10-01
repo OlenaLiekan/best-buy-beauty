@@ -22,9 +22,9 @@ const NewProductsBlock = () => {
     setIsLoading(true);
     const sortBy = 'id';        
     const order = 'DESC';
-    axios.get(`${serverDomain}api/product?limit=8&sort=${sortBy}&order=${order}`)
+    axios.get(`${serverDomain}api/product?limit=100&sort=${sortBy}&order=${order}`)
       .then((res) => {
-        setItems((res.data.rows).filter((item) => item.newProduct));
+        setItems((res.data.rows).filter((item) => item.newProduct).slice(0,8));
         setIsLoading(false);
       });
     scrollTop();
