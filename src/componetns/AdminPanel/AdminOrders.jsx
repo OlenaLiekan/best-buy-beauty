@@ -60,7 +60,7 @@ const AdminOrders = () => {
                                                 : 
                                                 (transaction.paymentStatus === 'Declined'
                                                     ?
-                                                    'Rejeitado'
+                                                    'Cancelbank'
                                                     :
                                                     (transaction.paymentStatus === 'Pending'
                                                         && 'Pendente'
