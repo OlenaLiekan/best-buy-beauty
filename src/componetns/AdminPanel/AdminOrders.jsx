@@ -14,7 +14,7 @@ const AdminOrders = () => {
     React.useEffect(() => {
         axios.get(`${serverDomain}api/sibs`)
             .then((res) => {
-                setTransactions(res.data.slice(0, 50));
+                setTransactions(res.data.slice(0, 100));
             });
     }, []);
 
