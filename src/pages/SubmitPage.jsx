@@ -317,45 +317,43 @@ const SubmitPage = () => {
   });
 
   const onChangeCompany = (event) => {
-    setCompany(event.target.value.slice(0, 9));
+    setCompany(event.target.value.trimStart().slice(0, 9));
   };
 
   const onChangeUsername = (event) => {
     setUsername(
       event.target.value
-        ? event.target.value[0].toUpperCase() + event.target.value.slice(1)
-        : ""
+        && (event.target.value[0].toUpperCase() + event.target.value.slice(1)).trimStart()
     );
   };
 
   const onChangeSurname = (event) => {
     setSurname(
       event.target.value
-        ? event.target.value[0].toUpperCase() + event.target.value.slice(1)
-        : ""
+        && (event.target.value[0].toUpperCase() + event.target.value.slice(1)).trimStart()
     );
   };
 
-  const onChangePhone = (event) => {
-    setPhone(event.target.value.slice(0, 13));
+  const onChangeEmail = (event) => {
+    setEmail(event.target.value.split(' ').join('').toLowerCase());
   };
 
-  const onChangeEmail = (event) => {
-    setEmail(event.target.value.toLowerCase());
+  const onChangePhone = (event) => {
+    setPhone(event.target.value.split(' ').join('').slice(0, 13));
   };
 
   const onChangeFAddress = (event) => {
-    setFirstAddress(event.target.value.split(',').join(' '));
+    setFirstAddress(event.target.value.trimStart().split(',').join(' '));
   };
 
   const onChangeSAddress = (event) => {
-    setSecondAddress(event.target.value.split(',').join(' '));
+    setSecondAddress(event.target.value.trimStart().split(',').join(' '));
   };
 
   const onChangeCity = (event) => {
     setCity(
       event.target.value
-        ? (event.target.value[0].toUpperCase() + event.target.value.slice(1)).split(',').join(' ')
+        ? (event.target.value[0].toUpperCase() + event.target.value.slice(1)).split(',').join(' ').trimStart()
         : ""
     );
   };
@@ -391,7 +389,7 @@ const SubmitPage = () => {
   const onChangeRegion = (event) => {
     setRegion(
       event.target.value
-        ? (event.target.value[0].toUpperCase() + event.target.value.slice(1)).split(',').join(' ')
+        ? (event.target.value[0].toUpperCase() + event.target.value.slice(1)).split(',').join(' ').trimStart()
         : ""
     );
   };
@@ -400,13 +398,13 @@ const SubmitPage = () => {
     if (country === "PT") {
       if (event.target.value.length > 4 && event.target.value[4] !== "-") {
         setPostalCode(
-          event.target.value.slice(0, 4) + "-" + event.target.value.slice(4, 8)
+          (event.target.value.slice(0, 4) + "-" + event.target.value.slice(4, 8)).split(' ').join('')
         );
       } else {
-        setPostalCode(event.target.value.slice(0, 8));
+        setPostalCode(event.target.value.trim().slice(0, 8));
       }
     } else {
-      setPostalCode(event.target.value.slice(0, 10));
+      setPostalCode(event.target.value.trim().slice(0, 10));
     }
   };
 
@@ -478,7 +476,6 @@ const SubmitPage = () => {
       setNotAllowed(false);
     }
   }, [user.id]);
-
 
   const order =
     orderItems.map(
@@ -1006,7 +1003,7 @@ const SubmitPage = () => {
                       value={phone}
                       onChange={onChangePhone}
                     />
-                  </div>
+                </div>
                   <div className="popup-form__line">
                     <label htmlFor="user-email-input" className="popup-form__label">
                       E-mail
