@@ -396,9 +396,9 @@ const SubmitPage = () => {
 
   const onChangePostalCode = (event) => {
     if (country === "PT") {
-      if (event.target.value.length > 4 && event.target.value[4] !== "-") {
+      if (event.target.value.trim().length > 4 && event.target.value.trim()[4] !== "-") {
         setPostalCode(
-          (event.target.value.slice(0, 4) + "-" + event.target.value.slice(4, 8)).split(' ').join('')
+          (event.target.value.trim().slice(0, 4) + "-" + event.target.value.trim().slice(4, 8))
         );
       } else {
         setPostalCode(event.target.value.trim().slice(0, 8));
