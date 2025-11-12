@@ -402,9 +402,12 @@ const SubmitPage = () => {
         );
       } else {
         setPostalCode(event.target.value.trim().split(' ').join('').slice(0, 8));
+        if (event.target.value.includes('-') && event.target.value[4] !== '-') {
+          setPostalCode(event.target.value.split(' ').join('').split('-').join('').slice(0,4) + "-" + event.target.value.split(' ').join('').split('-').join('').slice(4,7))
+        }
       }
     } else {
-      setPostalCode(event.target.value.trim().slice(0, 10));
+      setPostalCode(event.target.value.trim().split(' ').join('').slice(0, 10));
     }
   };
 
