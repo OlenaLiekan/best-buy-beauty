@@ -117,7 +117,7 @@ const ProductBlock = ({ path, id, code, info, related, name, rating, available, 
                     </div>
                     <div className='item-product__bottom'>
                         <div className={available ? "item-product__available" : "item-product__available item-product__available_no"}>
-                            {available ? 'Disponível' : 'Não disponível'}
+                            {available ? 'Disponível' : 'Esgotado'}
                         </div> 
                         <div className="item-product__price-block">
                             <div className="item-product__price-row">

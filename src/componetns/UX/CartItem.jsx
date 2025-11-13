@@ -190,7 +190,7 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
                 <div className="item-cart__actions">
                     {!itemLoading && dbItem && !dbItem.available || !itemLoading && !dbItem
                         ?
-                        <div className='item-cart__unavailable'>{itemLoading ? '' : "Não disponível" }</div>  
+                        <div className='item-cart__unavailable'>{itemLoading && "Esgotado" }</div>  
                         :
                         <>
                             <div className="item-cart__quantity quantity-cart quantity">

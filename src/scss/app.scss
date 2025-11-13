@@ -2474,6 +2474,20 @@
             }
         } 
     }
+    &__pc-v {
+        display: flex;
+        flex-direction: column;
+        @media(max-width: 579.98px) {
+            display: none;
+        }
+    }
+    &__mobile-v {
+        display: none;
+        @media(max-width: 579.98px) {
+            display: flex;
+            flex-direction: column;
+        }
+    }
 }
 .available {
     text-transform: uppercase;
@@ -2795,18 +2809,44 @@
 
 .titles-product {
     display: flex;
+    justify-content: space-between;
     gap: 20px;
-    overflow: auto;
+    @media(max-width: 579.98px) {
+        flex-direction: column;
+        gap: 15px;
+    }
+    &__column {
+        display: flex;
+        flex-direction: column;
+    }
+    &__icon {
+        display: none;         
+        @media(max-width: 579.98px) {
+            display: flex;
+            fill: #484848;
+            width: 22px;
+            height: 22px;         
+            transition: all 0.3s ease 0s;  
+            &:hover {
+                fill: #AD902B;
+            }         
+        }
+        &_active {
+            @media(max-width: 579.98px) {
+                transform: rotate(180deg);
+                fill: #AD902B;
+            }
+        }
+    }
 }
 
 .description-product {
     display: flex;
     max-width: 700px;
-    min-height: 200px;
     width: 100%;
     flex-direction: column;
     border-radius: 20px;
-    padding: 40px 20px;
+    padding: 40px 20px 10px 20px;
     background-color: #f7f6f677;
     border: 1px solid #f7f6f6;
     box-shadow: 10px 10px 10px #d9d9d92b;
@@ -2815,13 +2855,17 @@
         margin: 0 auto;
     }
     &__title {
+        display: flex;
+        align-items: flex-start;
+        gap: 5px;
         font-size: 20px;
         white-space: nowrap;
         font-weight: 500;
+        text-transform: uppercase;
         position: relative;
-        margin-bottom: 30px;
         cursor: pointer;
         color: #585858;
+        margin-bottom: 30px;
         &_active {
             color: #252525;
             &::after {
@@ -2838,15 +2882,14 @@
             }
         }
         @media(max-width: 579.98px) {
-            font-size: 18px;
+           justify-content: space-between; 
+           font-size: 18px;
         }
     }
     &__text {
         font-size: 16px;
         line-height: 1.44;
-        &:not(:last-child) {
-            margin-bottom: 15px;
-        }
+        margin-bottom: 15px;
         &_hidden {
             display: none;
         }
@@ -2857,6 +2900,7 @@
     &__pmu-link {
         color: #7f766a;
         transition: color 0.3s ease 0s;
+        overflow-wrap: break-word;
     }
     &__pmu-link:hover {
         color: #AD902B;
@@ -2895,7 +2939,6 @@
         display: flex;
         flex-direction: column;
         gap: 40px;
-
     }
 }
 
