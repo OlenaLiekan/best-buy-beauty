@@ -59,7 +59,7 @@ function App() {
   const serverDomain = 'https://bbb-server-a6ji.onrender.com/';
   const imagesCloud = 'https://res.cloudinary.com/bbbptcloud/image/upload/v1699129130/static/';
 
-  React.useEffect(() => {
+  /*React.useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const hasFbclid = urlParams.has('fbclid');
 
@@ -69,7 +69,7 @@ function App() {
       const cleanUrl = 'https://best-buy-beauty.com/' + window.location.hash;
       window.location.replace(cleanUrl);
     }
-  }, []);
+  }, []);*/
 
   React.useEffect(() => {
     if (localStorage.getItem('auth', 'true')) {
