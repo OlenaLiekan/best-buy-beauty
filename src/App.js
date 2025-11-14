@@ -59,17 +59,26 @@ function App() {
   const serverDomain = 'https://bbb-server-a6ji.onrender.com/';
   const imagesCloud = 'https://res.cloudinary.com/bbbptcloud/image/upload/v1699129130/static/';
 
-  /*React.useEffect(() => {
+  React.useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const hasFbclid = urlParams.has('fbclid');
+    const hasRoute = urlParams.has('#');
 
     if (hasFbclid) {
       console.log('🔄 Facebook click ID detected - cleaning URL');
 
-      const cleanUrl = 'https://best-buy-beauty.com/' + window.location.hash;
-      window.location.replace(cleanUrl);
+      if (hasRoute) {
+        const hashPart = window.location.href.split('#')[1];
+        const cleanUrlWithRoute = 'https://best-buy-beauty.com/#' + hashPart;
+        window.location.replace(cleanUrlWithRoute);
+        console.log(`Redirected to ${cleanUrlWithRoute}`);
+      } else {
+        const cleanUrl = 'https://best-buy-beauty.com/';
+        window.location.replace(cleanUrl);
+        console.log(`Redirected to ${cleanUrl}`);
+      }
     }
-  }, []);*/
+  }, []);
 
   React.useEffect(() => {
     if (localStorage.getItem('auth', 'true')) {
