@@ -34,7 +34,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const [productRatings, setProductRatings] = React.useState([]);
     const [avarageRating, setAvarageRating] = React.useState(0);
     const [index, setIndex] = React.useState('');
-    const [activeTitle, setActiveTitle] = React.useState(null);
+    const [activeTitles, setActiveTitles] = React.useState([]);
     const [isWarning, setIsWarning] = React.useState(false);
     const [popupSlides, setPopupSlides] = React.useState([]);
     const [company, setCompany] = React.useState({});
@@ -372,7 +372,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                         </div>    
 
                                         <button onClick={showCart} className="checkout">
-                                            Adicionar
+                                            Ver cesto
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                                 <path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z" />
                                             </svg>
@@ -399,17 +399,17 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                     <div className="product-card__titles titles-product">
                         {tabs.map((tab, index) => 
                             <div key={index} className='titles-product__column'>
-                                <h3 onClick={() => setActiveTitle(index === activeTitle ? null : index)} className={activeTitle === index ? 'description-product__title description-product__title_active' : 'description-product__title'}>
+                                <h3 onClick={() => setActiveTitles(activeTitles.includes(index) ? activeTitles.filter((title) => title != index) : [...activeTitles, index])} className={activeTitles.includes(index) ? 'description-product__title description-product__title_active' : 'description-product__title'}>
                                     {tab}
-                                    <svg key={index} className={index === activeTitle ? 'titles-product__icon titles-product__icon_active' : 'titles-product__icon'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                    <svg key={index} className={activeTitles.includes(index) ? 'titles-product__icon titles-product__icon_active' : 'titles-product__icon'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                         <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
                                     </svg>
                                 </h3>
-                                <div className='product-card__mobile-v'>
+                                <div className='product-card__column-v'>
                                     {text.length && index === 0
                                         ?
                                         paragraphs.map((p, i) => 
-                                            <p key={i} className={activeTitle === 0 ? 'description-product__text' : 'description-product__text_hidden'}>
+                                            <p key={i} className={activeTitles.includes(0) ? 'description-product__text' : 'description-product__text_hidden'}>
                                                 {p.split(' ').map((word, index) => 
                                                     (word.includes('<b>') ? <strong key={index}>{word.replace('<b>', ' ').replace('</b>', ' ') + ' '}</strong> : (word + ' '))
                                                 )}
@@ -418,7 +418,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                         : ''                        
                                     }
                                     <p className={
-                                        activeTitle === 0 && typeId === 21 && index === 0
+                                        activeTitles.includes(0) && typeId === 21 && index === 0
                                             ?
                                             'description-product__text'
                                             :
@@ -430,7 +430,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                         </Link>
                                     </p>
                                     <p className={
-                                        activeTitle === 0 && typeId === 21 && index === 0
+                                        activeTitles.includes(0) && typeId === 21 && index === 0
                                             ?
                                             'description-product__text'
                                             :
@@ -442,7 +442,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                         </Link>
                                     </p>
                                     <p className={
-                                        activeTitle === 0 && typeId === 21 && index === 0
+                                        activeTitles.includes(0) && typeId === 21 && index === 0
                                             ?
                                             'description-product__text'
                                             :
@@ -454,7 +454,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                         </Link>
                                     </p>
                                     <p className={
-                                        activeTitle === 0 && typeId === 21 && index === 0
+                                        activeTitles.includes(0) && typeId === 21 && index === 0
                                             ?
                                             'description-product__text'
                                             :
@@ -468,7 +468,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                     {applying.length && index === 1
                                         ? 
                                         paragraphsApplying.map((p, i) => 
-                                            <p key={i} className={activeTitle === 1 ? 'description-product__text' : 'description-product__text_hidden'}>
+                                            <p key={i} className={activeTitles.includes(1) ? 'description-product__text' : 'description-product__text_hidden'}>
                                                 {p}
                                             </p>                        
                                         )
@@ -477,7 +477,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                     {compound.length && index === 2
                                         ? 
                                         paragraphsCompound.map((p, i) => 
-                                            <p key={i} className={activeTitle === 2 ? 'description-product__text' : 'description-product__text_hidden'}>
+                                            <p key={i} className={activeTitles.includes(2) ? 'description-product__text' : 'description-product__text_hidden'}>
                                                 {p}
                                             </p>                        
                                         )
@@ -486,85 +486,6 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                 </div>
                             </div>                     
                         )}
-                    </div>
-                    <div className="product-card__pc-v">
-                        {text.length
-                            ?
-                            paragraphs.map((p, i) => 
-                                <p key={i} className={activeTitle === 0 ? 'description-product__text' : 'description-product__text_hidden'}>
-                                    {p.split(' ').map((word, index) => 
-                                        (word.includes('<b>') ? <strong key={index}>{word.replace('<b>', ' ').replace('</b>', ' ') + ' '}</strong> : (word + ' '))
-                                    )}
-                                </p>                        
-                            )
-                            : ''                        
-                        }
-                        <p className={
-                            activeTitle === 0 && typeId === 21
-                                ?
-                                'description-product__text'
-                                :
-                                'description-product__text_hidden'
-                        }>
-                            Download the Pigment Color Chart: <br/>
-                            <Link to='https://drive.google.com/file/d/1jcjdMGNQ32Umey6bjRMv1m7X-lUAR-XX/view?usp=sharing' className="description-product__pmu-link">
-                                https://drive.google.com/file/d/1jcjdMGNQ32Umey6bjRMv1m7X-lUAR-XX/view?usp=sharing
-                            </Link>
-                        </p>
-                        <p className={
-                            activeTitle === 0 && typeId === 21
-                                ?
-                                'description-product__text'
-                                :
-                                'description-product__text_hidden'
-                        }>
-                            Download the brochure for pigments: <br />
-                            <Link to="https://drive.google.com/file/d/1EvZCS-BGTRn07VJvy63oniTtbWVV1NXG/view?usp=sharing" className="description-product__pmu-link">
-                                https://drive.google.com/file/d/1EvZCS-BGTRn07VJvy63oniTtbWVV1NXG/view?usp=sharing
-                            </Link>
-                        </p>
-                        <p className={
-                            activeTitle === 0 && typeId === 21
-                                ?
-                                'description-product__text'
-                                :
-                                'description-product__text_hidden'
-                        }>
-                            Download the REACH Compliance Declaration: <br />
-                            <Link to="https://drive.google.com/file/d/1m9XfvNJa8MvPpt6WSIWHcyjJtP-ncL_L/view?usp=sharing" className="description-product__pmu-link">
-                                https://drive.google.com/file/d/1m9XfvNJa8MvPpt6WSIWHcyjJtP-ncL_L/view?usp=sharing
-                            </Link>
-                        </p>
-                        <p className={
-                            activeTitle === 0 && typeId === 21
-                                ?
-                                'description-product__text'
-                                :
-                                'description-product__text_hidden'
-                        }>
-                            Download the Safety Data Sheet: <br />
-                            <Link to="https://drive.google.com/file/d/15W1lCaZ7Gs8momCtqaWxtj1GahRXL2nu/view?usp=sharing" className="description-product__pmu-link">
-                                https://drive.google.com/file/d/15W1lCaZ7Gs8momCtqaWxtj1GahRXL2nu/view?usp=sharing
-                            </Link>
-                        </p>
-                        {applying.length
-                            ? 
-                            paragraphsApplying.map((p, i) => 
-                                <p key={i} className={activeTitle === 1 ? 'description-product__text' : 'description-product__text_hidden'}>
-                                    {p}
-                                </p>                        
-                            )
-                            : ''                        
-                        }
-                        {compound.length
-                            ? 
-                            paragraphsCompound.map((p, i) => 
-                                <p key={i} className={activeTitle === 2 ? 'description-product__text' : 'description-product__text_hidden'}>
-                                    {p}
-                                </p>                        
-                            )
-                            : ''                        
-                        }
                     </div>
                 </div>
             </div>

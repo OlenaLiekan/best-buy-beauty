@@ -2474,19 +2474,9 @@
             }
         } 
     }
-    &__pc-v {
+    &__column-v {
         display: flex;
         flex-direction: column;
-        @media(max-width: 579.98px) {
-            display: none;
-        }
-    }
-    &__mobile-v {
-        display: none;
-        @media(max-width: 579.98px) {
-            display: flex;
-            flex-direction: column;
-        }
     }
 }
 .available {
@@ -2810,32 +2800,24 @@
 .titles-product {
     display: flex;
     justify-content: space-between;
-    gap: 20px;
-    @media(max-width: 579.98px) {
-        flex-direction: column;
-        gap: 15px;
-    }
+    flex-direction: column;
     &__column {
         display: flex;
         flex-direction: column;
     }
-    &__icon {
-        display: none;         
-        @media(max-width: 579.98px) {
-            display: flex;
-            fill: #484848;
-            width: 22px;
-            height: 22px;         
-            transition: all 0.3s ease 0s;  
-            &:hover {
-                fill: #AD902B;
-            }         
-        }
+    &__icon {     
+        display: flex;
+        fill: #7f756b;
+        width: 24px;
+        height: 24px;         
+        transition: all 0.3s ease 0s;  
+        &:hover {
+            fill: #AD902B;
+        }         
+    
         &_active {
-            @media(max-width: 579.98px) {
-                transform: rotate(180deg);
-                fill: #AD902B;
-            }
+            transform: rotate(180deg);
+            fill: #AD902B;
         }
     }
 }
@@ -2845,18 +2827,16 @@
     max-width: 700px;
     width: 100%;
     flex-direction: column;
-    border-radius: 20px;
     padding: 40px 20px 10px 20px;
-    background-color: #f7f6f677;
-    border: 1px solid #f7f6f6;
-    box-shadow: 10px 10px 10px #d9d9d92b;
+    background-color: #fff;
     @media (max-width: 991.98px) {
         max-width: 600px;
         margin: 0 auto;
     }
     &__title {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
+        justify-content: space-between;
         gap: 5px;
         font-size: 20px;
         white-space: nowrap;
@@ -2864,22 +2844,11 @@
         text-transform: uppercase;
         position: relative;
         cursor: pointer;
-        color: #585858;
-        margin-bottom: 30px;
+        color: #252525;
+        padding: 25px 0;
+        border-top: 2px solid #7f756b;
         &_active {
-            color: #252525;
-            &::after {
-                content: "";
-                position: absolute;
-                width: 100%;
-                height: 2px;
-                top: 34px;
-                left: 0;
-                background-color: #AD902B;
-                @media(max-width: 579.98px) {
-                    top: 28px;
-                }
-            }
+            color: #000;
         }
         @media(max-width: 579.98px) {
            justify-content: space-between; 
