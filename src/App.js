@@ -59,7 +59,7 @@ function App() {
   const serverDomain = 'https://bbb-server-a6ji.onrender.com/';
   const imagesCloud = 'https://res.cloudinary.com/bbbptcloud/image/upload/v1699129130/static/';
 
-  React.useEffect(() => {
+  /*React.useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const hasFbclid = urlParams.has('fbclid');
     const hasRoute = urlParams.has('#');
@@ -77,6 +77,21 @@ function App() {
         window.location.replace(cleanUrl);
         console.log(`Redirected to ${cleanUrl}`);
       }
+    }
+  }, []);*/
+
+  React.useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const hasFbclid = urlParams.has('fbclid');
+    const hasUtm = urlParams.has('utm_source');
+
+    if (hasFbclid || hasUtm) {
+      console.log('📱 Instagram redirect detected');
+
+      const cleanUrl = 'https://best-buy-beauty.com/';
+      console.log('Redirecting to clean URL:', cleanUrl);
+
+      window.location.href = cleanUrl;
     }
   }, []);
 
