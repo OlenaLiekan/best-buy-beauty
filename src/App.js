@@ -91,7 +91,13 @@ function App() {
       const cleanUrl = 'https://best-buy-beauty.com/';
       console.log('Redirecting to clean URL:', cleanUrl);
 
-      window.open(cleanUrl, '_blank');
+      const result = window.confirm(
+        'Para que o site funcione corretamente, utilize um navegador diferente do Instagram. Agradecemos a sua compreensão.'
+      );
+      if (result) {
+        window.location.href = cleanUrl;
+        window.open(cleanUrl, '_blank');
+      }
     }
   }, []);
 
