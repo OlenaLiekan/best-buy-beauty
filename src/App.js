@@ -91,7 +91,7 @@ function App() {
       const cleanUrl = 'https://best-buy-beauty.com/';
       console.log('Redirecting to clean URL:', cleanUrl);
 
-      window.location.href = cleanUrl;
+      window.open(cleanUrl, '_blank');
     }
   }, []);
 
