@@ -92,7 +92,7 @@ function App() {
       console.log('Redirecting to clean URL:', cleanUrl);
 
       window.alert(
-        'Para o correto funcionamento do site, bem como para realizar e pagar seu pedido, utilize um navegador diferente do Instagram. Agradecemos a sua compreensão.'
+        'Para o correto funcionamento do site https://best-buy-beauty.com, bem como para realizar e pagar seu pedido, utilize um navegador diferente do Instagram. Agradecemos a sua compreensão.'
       );
 
       window.location.href = cleanUrl;
