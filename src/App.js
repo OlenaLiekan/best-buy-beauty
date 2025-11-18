@@ -92,7 +92,7 @@ function App() {
       console.log('Redirecting to clean URL:', cleanUrl);
 
       const result = window.confirm(
-        'Para que o site funcione corretamente, utilize um navegador diferente do Instagram. Agradecemos a sua compreensão.'
+        'Para o correto funcionamento do site, bem como para realizar e pagar seu pedido, utilize um navegador diferente do Instagram. Agradecemos a sua compreensão.'
       );
       if (result) {
         window.location.href = cleanUrl;
