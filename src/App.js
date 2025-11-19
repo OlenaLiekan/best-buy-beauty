@@ -59,43 +59,25 @@ function App() {
   const serverDomain = 'https://bbb-server-a6ji.onrender.com/';
   const imagesCloud = 'https://res.cloudinary.com/bbbptcloud/image/upload/v1699129130/static/';
 
-  /*React.useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const hasFbclid = urlParams.has('fbclid');
-    const hasRoute = urlParams.has('#');
-
-    if (hasFbclid) {
-      console.log('🔄 Facebook click ID detected - cleaning URL');
-
-      if (hasRoute) {
-        const hashPart = window.location.href.split('#')[1];
-        const cleanUrlWithRoute = 'https://best-buy-beauty.com/#' + hashPart;
-        window.location.replace(cleanUrlWithRoute);
-        console.log(`Redirected to ${cleanUrlWithRoute}`);
-      } else {
-        const cleanUrl = 'https://best-buy-beauty.com/';
-        window.location.replace(cleanUrl);
-        console.log(`Redirected to ${cleanUrl}`);
-      }
-    }
-  }, []);*/
-
   React.useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const hasFbclid = urlParams.has('fbclid');
     const hasUtm = urlParams.has('utm_source');
+    const hasRoute = urlParams.has('#');
 
     if (hasFbclid || hasUtm) {
       console.log('📱 Instagram redirect detected');
 
-      const cleanUrl = 'https://best-buy-beauty.com/';
-      console.log('Redirecting to clean URL:', cleanUrl);
-
-      window.alert(
-        'Para o correto funcionamento do site https://best-buy-beauty.com, bem como para realizar e pagar seu pedido, utilize um navegador diferente do Instagram. Agradecemos a sua compreensão.'
-      );
-
-      window.location.href = cleanUrl;
+      if (hasRoute) {
+        const hashPart = window.location.href.split('#')[1];
+        const cleanUrlWithRoute = 'https://best-buy-beauty.com/#' + hashPart;
+        window.location.href(cleanUrlWithRoute);
+        console.log(`Redirected to ${cleanUrlWithRoute}`);
+      } else {
+        const cleanUrl = 'https://best-buy-beauty.com/';
+        window.location.href(cleanUrl);
+        console.log(`Redirected to ${cleanUrl}`);
+      }
     }
   }, []);
 
