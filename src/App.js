@@ -71,11 +71,11 @@ function App() {
       if (hasRoute) {
         const hashPart = window.location.href.split('#')[1];
         const cleanUrlWithRoute = 'https://best-buy-beauty.com/#' + hashPart;
-        window.location.href(cleanUrlWithRoute);
+        window.location.replace(cleanUrlWithRoute);
         console.log(`Redirected to ${cleanUrlWithRoute}`);
       } else {
         const cleanUrl = 'https://best-buy-beauty.com/';
-        window.location.href(cleanUrl);
+        window.location.replace(cleanUrl);
         console.log(`Redirected to ${cleanUrl}`);
       }
     }
