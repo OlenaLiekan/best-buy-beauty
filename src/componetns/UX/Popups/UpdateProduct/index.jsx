@@ -8,6 +8,9 @@ import { updateProduct} from '../../../../http/productAPI';
 const UpdateProduct = ({id, obj}) => {
 
     const inputRef = React.useRef();
+    const textRef = React.useRef(null);
+    const applyingRef = React.useRef(null);
+    const compoundRef = React.useRef(null);
     const navigate = useNavigate();
 
     const [brands, setBrands] = React.useState([]);
@@ -40,6 +43,13 @@ const UpdateProduct = ({id, obj}) => {
     const [checkedExclusive, setCheckedExclusive] = React.useState(false);
     const [checkedNewProduct, setCheckedNewProduct] = React.useState(false);
     const [isPromo, setIsPromo] = React.useState(false);
+
+    const [visibleDescription, setVisibleDescription] = React.useState(true);
+    const [visibleApplying, setVisibleApplying] = React.useState(false);
+    const [visibleCompound, setVisibleCompound] = React.useState(false);
+
+    const [activeField, setActiveField] = React.useState('text');
+    const [selectedColor, setSelectedColor] = React.useState('#000000');
 
     React.useEffect(() => {
         setName(obj.name);
@@ -223,6 +233,79 @@ const UpdateProduct = ({id, obj}) => {
     React.useEffect(() => {
 
     }, [info]);
+
+    const insertTag = (tag) => {
+
+        const textarea = getActiveTextarea();
+        if (!textarea) return;
+
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const selectedText = textarea.value.substring(start, end);
+        
+        let newText = '';
+        
+        if (selectedText) {
+            newText = textarea.value.substring(0, start) + 
+            `<${tag}>${selectedText}</${tag}>` + 
+            textarea.value.substring(end);
+        } else {
+            newText = textarea.value.substring(0, start) + 
+            `<${tag}></${tag}>` + 
+            textarea.value.substring(end);
+        }
+        updateFieldValue(newText);
+    };
+
+    const applyColor = () => {
+        const textarea = getActiveTextarea();
+        if (!textarea) return;
+
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const selectedText = textarea.value.substring(start, end);
+        
+        let newText = '';
+        
+        if (selectedText) {
+            newText = textarea.value.substring(0, start) + 
+                    `<span style="color: ${selectedColor}">${selectedText}</span>` + 
+                    textarea.value.substring(end);
+        } else {
+            newText = textarea.value.substring(0, start) + 
+                    `<span style="color: ${selectedColor}"></span>` + 
+                    textarea.value.substring(end);
+        }
+
+        updateFieldValue(newText);
+    };
+
+    const handleColorChange = (color) => {
+        setSelectedColor(color);
+    };
+
+    const getActiveTextarea = () => {
+        switch (activeField) {
+            case 'text': return textRef.current;
+            case 'applying': return applyingRef.current;
+            case 'compound': return compoundRef.current;
+            default: return null;
+        }
+    };
+
+    const updateFieldValue = (newValue) => {
+        switch (activeField) {
+            case 'text': 
+                setText(newValue);
+                break;
+            case 'applying': 
+                setApplying(newValue);
+                break;
+            case 'compound': 
+                setCompound(newValue);
+                break;
+        }
+    };
 
     const updateProductItem = (e) => {
         e.preventDefault();
@@ -486,22 +569,89 @@ const UpdateProduct = ({id, obj}) => {
                     </div>                
                 )}
                 <button type='button' className={styles.slideButton} tabIndex="21" onClick={addSlide}>Adicionar slide</button>
-                <label htmlFor="product-about" className={styles.label}>Descrição:</label>
-                <textarea id="product-about" tabIndex='19' className={styles.textarea}
-                    ref={inputRef}
-                    value={text}
-                    onChange={onChangeText}
-                />
-                <label htmlFor="product-applying" className={styles.label}>Método de uso:</label>
-                <textarea id="product-applying" tabIndex='22' className={styles.textarea}
-                    ref={inputRef}
-                    value={applying}
-                    onChange={onChangeApplying} />
-                <label htmlFor="product-compound" className={styles.label}>Ingredientes:</label>
-                <textarea id="product-compound" tabIndex='23' className={styles.textarea}
-                    ref={inputRef}
-                    value={compound}
-                    onChange={onChangeCompound}/>
+                
+                <div className={styles.miniEditor}>
+                    <div className={styles.toolbar}>
+                        <button 
+                            type="button" 
+                            onClick={() => insertTag('strong')}
+                            className={styles.toolBtn}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                                <path d="M333.49 238a122 122 0 0 0 27-65.21C367.87 96.49 308 32 233.42 32H34a16 16 0 0 0-16 16v48a16 16 0 0 0 16 16h31.87v288H34a16 16 0 0 0-16 16v48a16 16 0 0 0 16 16h209.32c70.8 0 134.14-51.75 141-122.4 4.74-48.45-16.39-92.06-50.83-119.6zM145.66 112h87.76a48 48 0 0 1 0 96h-87.76zm87.76 288h-87.76V288h87.76a56 56 0 0 1 0 112z" />
+                            </svg>
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onClick={() => insertTag('em')}
+                            className={styles.toolBtn}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                                <path d="M320 48v32a16 16 0 0 1-16 16h-62.76l-80 320H208a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16H16a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16h62.76l80-320H112a16 16 0 0 1-16-16V48a16 16 0 0 1 16-16h192a16 16 0 0 1 16 16z" />
+                            </svg>
+                        </button>
+                        <button 
+                            type="button"
+                            onClick={applyColor}
+                            className={styles.toolBtn}
+                        >
+                            <svg style={{ fill: `${selectedColor}`}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path d="M432 416h-23.41L277.88 53.69A32 32 0 0 0 247.58 32h-47.16a32 32 0 0 0-30.3 21.69L39.41 416H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16h-19.58l23.3-64h152.56l23.3 64H304a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM176.85 272L224 142.51 271.15 272z" />
+                            </svg>
+                        </button>
+                        <div className={styles.colorBtn}>
+                            <input 
+                                type="color" 
+                                value={selectedColor}
+                                onChange={(e) => handleColorChange(e.target.value)}
+                                className={styles.colorPicker}
+                            />
+                        </div>
+                    </div>
+                    <div className={styles.textareaTab}>
+                        <label htmlFor="product-about" className={styles.label}>Descrição:</label>       
+                        <svg onClick={() => setVisibleDescription(visibleDescription ? false : true) } className={visibleDescription ? styles.arrowUp : styles.arrowDown} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
+                        </svg>   
+                    </div>
+
+                    <textarea hidden={visibleDescription ? false : true} id="product-about" tabIndex='19' className={styles.textarea}
+                        ref={textRef}
+                        value={text}
+                        onChange={onChangeText}
+                        onFocus={() => setActiveField('text')}
+                    />
+
+                    <div className={styles.textareaTab}>
+                        <label htmlFor="product-applying" className={styles.label}>Método de uso:</label> 
+                        <svg onClick={() => setVisibleApplying(visibleApplying ? false : true) } className={visibleApplying ? styles.arrowUp : styles.arrowDown} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
+                        </svg> 
+                    </div>
+                    
+                    <textarea hidden={visibleApplying ? false : true} id="product-applying" tabIndex='22' className={styles.textarea}
+                        ref={applyingRef}
+                        value={applying}
+                        onChange={onChangeApplying}
+                        onFocus={() => setActiveField('applying')}
+                    />
+
+                    <div className={styles.textareaTab}>
+                        <label htmlFor="product-compound" className={styles.label}>Ingredientes:</label>  
+                        <svg onClick={() => setVisibleCompound(visibleCompound ? false : true) } className={visibleCompound ? styles.arrowUp : styles.arrowDown} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
+                        </svg>
+                    </div>
+                    
+                    <textarea hidden={visibleCompound ? false : true} id="product-compound" tabIndex='23' className={styles.textarea}
+                        ref={compoundRef}
+                        value={compound}
+                        onChange={onChangeCompound}
+                        onFocus={() => setActiveField('compound')}
+                    />
+
+                </div>
                 <button type='submit' tabIndex='24' className={styles.button}>Atualizar produto</button>
             </form>            
         </div>

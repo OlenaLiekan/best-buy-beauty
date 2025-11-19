@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import parse from 'html-react-parser';
 
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -410,9 +411,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                         ?
                                         paragraphs.map((p, i) => 
                                             <p key={i} className={activeTitles.includes(0) ? 'description-product__text' : 'description-product__text_hidden'}>
-                                                {p.split(' ').map((word, index) => 
-                                                    (word.includes('<b>') ? <strong key={index}>{word.replace('<b>', ' ').replace('</b>', ' ') + ' '}</strong> : (word + ' '))
-                                                )}
+                                                {parse(`${p}`)}
                                             </p>                        
                                         )
                                         : ''                        
@@ -469,7 +468,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                         ? 
                                         paragraphsApplying.map((p, i) => 
                                             <p key={i} className={activeTitles.includes(1) ? 'description-product__text' : 'description-product__text_hidden'}>
-                                                {p}
+                                                {parse(`${p}`)}
                                             </p>                        
                                         )
                                         : ''                        
@@ -478,7 +477,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                         ? 
                                         paragraphsCompound.map((p, i) => 
                                             <p key={i} className={activeTitles.includes(2) ? 'description-product__text' : 'description-product__text_hidden'}>
-                                                {p}
+                                                {parse(`${p}`)}
                                             </p>                        
                                         )
                                         : ''                     
