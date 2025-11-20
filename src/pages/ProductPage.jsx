@@ -26,16 +26,35 @@ const ProductPage = ({type}) => {
     const { categoryId, brandId, sort, currentPage } = useSelector((state) => state.filter);
 
     const { searchValue } = React.useContext(SearchContext);
-    const { isAuth, adminMode, createProductMode, setCreateProductMode, serverDomain, isPromoPage } = React.useContext(AuthContext);
+    const { isAuth, adminMode, createProductMode, setCreateProductMode, serverDomain, imagesCloud, isPromoPage } = React.useContext(AuthContext);
 
     const [items, setItems] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(true);
+    const [brandIsLoading, setBrandIsLoading] = React.useState(true);
 
     const [subItems, setSubItems] = React.useState([]);
+
+    const [brand, setBrand] = React.useState('');
 
     const onChangeBrand = (id) => {
         dispatch(setBrandId(id));
     };  
+
+    React.useEffect(() => {
+        if (brandId !== 30 && brandId !== 0) {
+            setBrandIsLoading(true);
+            axios.get(`${serverDomain}api/brand/${brandId}`)
+            .then((res) => {
+                if (res.data) {
+                    setBrand(res.data);
+                    setBrandIsLoading(false);
+                }
+            });
+        } else {
+            setBrand('');
+        }
+    }, [serverDomain, brandId]);
+
 
     const onChangePage = (number) => { 
         dispatch(setCurrentPage(number));            
@@ -89,18 +108,24 @@ const ProductPage = ({type}) => {
             <div className="product-main__container">
                 <div className="product-main__content">
                     {type.id == 21
-                        ?
+                        &&
                         <div className='product-main__banner'>
                             <div className="img"></div>
                         </div>
-                        :
-                        ''
                     }
                     {type.id == 21
                         ?
                         ''
                         : 
                         <Brands type={type} brandId={brandId} products={items} onChangeBrand={onChangeBrand} />
+                    }
+                    {brandId > 0 && brand
+                        ?
+                        <div className='product-main__brand-banner'>
+                            <img src={`${imagesCloud}` + brand.img}/>
+                        </div>
+                        :
+                        ''
                     }
                     <Sort arrItem={type} />
                     {isAuth && adminMode && createProductMode ? <CreateProduct /> : ''}
@@ -113,7 +138,7 @@ const ProductPage = ({type}) => {
                         </h2> 
                         :
                         <h1 className='product-main__type'>
-                            {type.id > 0 ? type.name : (isPromoPage ? 'Produtos promocionais' : 'Todos os produtos')}
+                            {type.id > 0 ? type.name : (isPromoPage ? 'Produtos promocionais' : (brandId > 0 ? (brandId == 30 ? 'Sem marca' : '') : 'Todos os produtos'))}
                         </h1>                        
                     }
                     <div className="product-main__items">

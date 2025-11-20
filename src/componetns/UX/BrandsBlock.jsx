@@ -30,7 +30,6 @@ const BrandsBlock = () => {
   const [id, setId] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(true);
   const dispatch = useDispatch();
-  const slidesCount = Math.ceil(brands.length / 3);
 
   const message = () => {
     window.alert('Ocorreu um erro!');        

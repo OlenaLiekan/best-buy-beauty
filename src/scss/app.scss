@@ -1871,6 +1871,20 @@
             background: url('../../src/assets/img/banner2.jpg') 85% 0 / cover no-repeat;
         }         
     }
+    &__brand-banner {
+        position: relative;
+        max-width: 1400px;
+        height: 200px;
+        margin: 20px 0 60px 0;
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    }
     &__items {
         display: grid;
         grid-template-columns: repeat(4, minmax(220px, 300px));
