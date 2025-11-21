@@ -135,6 +135,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
             index,
             available,
             promoProduct: brandDiscount > 0 && isBlackFriday || discountPrice > 0 ? true : false,
+            exclusiveProduct,
         };
         dispatch(addItem(item));
         setProductDownvoted(false);
