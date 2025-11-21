@@ -85,12 +85,87 @@ const AdminOrders = () => {
                                 </div>
                             </div>
                             <span className={styles.orderDate}>
-                                {transaction.startTime.replace('T', ' ').slice(0,19)}
+                                {transaction.startTime.replace('T', ' ').slice(0, 19)}
+                                {transaction.sentToClient || transaction.sentToShop || transaction.sentReferencePaid
+                                    ?
+                                    <svg
+                                        className={
+                                            (
+                                                transaction.paymentMethod === 'REFERENCE'
+                                                ?
+                                                transaction.sentToClient === "Success" && transaction.sentToShop === "Success" && transaction.sentReferencePaid === 'Success'
+                                                :
+                                                transaction.sentToClient === "Success" && transaction.sentToShop === "Success"
+                                            )
+                                            ?
+                                            styles.sentEmailsIcon
+                                            :
+                                            (transaction.paymentMethod === 'REFERENCE' && transaction.sentToClient === 'Success'
+                                                ?
+                                                styles.sentEmailsIconPending
+                                                :
+                                                styles.sentEmailsIconError
+                                            )
+                                        }
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 640 640">
+                                        <path
+                                            d="M125.4 128C91.5 128 64 155.5 64 189.4C64 190.3 64 191.1 64.1 192L64 192L64 448C64 483.3 92.7 512 128 512L512 512C547.3 512 576 483.3 576 448L576 192L575.9 192C575.9 191.1 576 190.3 576 189.4C576 155.5 548.5 128 514.6 128L125.4 128zM528 256.3L528 448C528 456.8 520.8 464 512 464L128 464C119.2 464 112 456.8 112 448L112 256.3L266.8 373.7C298.2 397.6 341.7 397.6 373.2 373.7L528 256.3zM112 189.4C112 182 118 176 125.4 176L514.6 176C522 176 528 182 528 189.4C528 193.6 526 197.6 522.7 200.1L344.2 335.5C329.9 346.3 310.1 346.3 295.8 335.5L117.3 200.1C114 197.6 112 193.6 112 189.4z"
+                                        />
+                                    </svg>
+                                    :
+                                    ''
+                                }
+
                             </span>
+
                             {i === activeOrderIndex
                                 && 
-                                (
+                                (                                
                                     <div className={styles.ordersItemDetails}>
+                                    {
+                                        transaction.paymentStatus === 'Success' || transaction.paymentStatus === 'Pending'
+                                            ?
+                                            <div className={styles.orderTransporterDetails}>
+                                                <div className={styles.TDText}>
+                                                    E-mails enviados: {
+                                                        0 +
+                                                        (transaction.sentToClient === "Success" ? 1 : 0) +
+                                                        (transaction.sentToShop === "Success" ? 1 : 0) +
+                                                        (transaction.sentReferencePaid === "Success" ? 1 : 0)
+                                                    }
+                                                </div>
+                                                <div className={styles.TDText}>
+                                                    Erro ao enviar: {
+                                                        0 +
+                                                        (transaction.sentToClient === "Failed" ? 1 : 0) +
+                                                        (transaction.sentToShop === "Failed" ? 1 : 0) +
+                                                        (transaction.sentReferencePaid === "Failed" ? 1 : 0)                                    
+                                                    }                                    
+                                                </div>
+                                                <div className={styles.TDTextPending}>
+                                                    {transaction.paymentMethod === 'REFERENCE' && transaction.sentToClient === 'Success' && !transaction.sentReferencePaid
+                                                        &&
+                                                        'O cliente recebeu um e-mail com os detalhes do pagamento.'
+                                                    }
+                                                </div>
+                                                <div className={styles.TDTextError}>
+                                                    {(transaction.sentToClient === 'Failed' && !transaction.paymentMethod === "REFERENCE") || transaction.sentReferencePaid === 'Failed' || transaction.sentToShop === 'Failed'
+                                                        ?
+                                                        <div className={styles.errorsList}>
+                                                            <span>Não enviado:</span>
+                                                            <span>{transaction.sentToClient === "Failed" && 'E-mail para o cliente'}</span>
+                                                            <span>{transaction.sentToShop === "Failed" && 'E-mail para a loja'}</span>
+                                                            <span>{transaction.sentReferencePaid === "Failed" && 'E-mail ao cliente confirmando o pagamento da referência.'}</span>
+                                                        </div>
+                                                        :
+                                                        ''
+                                                    }
+                                                </div>
+                                            </div>   
+                                            :
+                                            ''
+                                    }
                                         <div className={styles.orderTransactionId}>
                                             <span className={styles.orderLabel}>
                                                 transactionID:
