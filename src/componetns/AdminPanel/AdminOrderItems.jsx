@@ -39,7 +39,7 @@ const AdminOrderItems = ({ userId, transactionOrderId }) => {
                             <li key={product.id} className={styles.userItem}>
                                 <span className={styles.orderLabel}>{i + 1}. {product.title}</span>
                                 {product.description && product.description.split('\n').map((info, index) => 
-                                    <div key={index}>{info}</div>
+                                    <div key={index}>{info.split(',').join('')}</div>
                                 )}
                             </li>                        
                         )

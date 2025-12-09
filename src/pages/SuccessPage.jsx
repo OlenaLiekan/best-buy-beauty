@@ -13,7 +13,7 @@ const SuccessPage = () => {
   const [detailsVisibility, setDetailsVisibility] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
   const [existingPromocode, setExistingPromocode] = React.useState('');
-  const { serverDomain} = React.useContext(AuthContext);
+  const { serverDomain, imagesCloud} = React.useContext(AuthContext);
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -200,31 +200,35 @@ const SuccessPage = () => {
                       }
                       key={i}
                     >
-                      <p className="bold">
-                        {i + 1}. {item.name}
-                      </p>
-                      <p>Marca: {item.company}</p>
-                      <p>Código: {item.code}</p>
-                      {item.curlArr ? <p>Curvatura: {item.curlArr}</p> : ""}
-                      {item.thicknessArr ? (
-                        <p>Grossura: {item.thicknessArr} mm</p>
-                      ) : (
-                        ""
-                      )}
-                      {item.lengthArr ? (
-                        <p>Tamanho: {item.lengthArr} mm</p>
-                      ) : (
-                        ""
-                      )}
-                      {item.info && !item.isLashes
-                        ? item.info.map((p, i) => (
-                            <p key={i}>
-                              {p.title}: {p.description}
-                            </p>
-                          ))
-                        : ""}
-                      <p>Preço: {item.price} €</p>
-                      <p>Quantidade: {item.count}</p>
+                      <div className="body-success__line-image">
+                        <img src={`${imagesCloud}` + item.img} alt="product" />
+                      </div>
+                      <div className="body-success__line-aside">
+                        <p className="bold">
+                          {item.name}
+                        </p>
+                        <div className="body-success__line-price">
+                          <div>{item.company} ({item.code}) x {item.count}</div>
+                          <span>{(item.price * item.count).toFixed(2)} €</span>
+                        </div>
+                        {item.isLashes &&
+                          <div className="body-success__line-info">
+                            {item.curlArr && item.curlArr + (item.thicknessArr || item.lengthArr ? ' / ' : '')}
+                            {item.thicknessArr && item.thicknessArr + ' mm' + (item.lengthArr && ' / ')}
+                            {item.lengthArr && item.lengthArr + ' mm'}                          
+                          </div>                        
+                        }
+                        <div className="body-success__line-info">
+                          {item.info && !item.isLashes
+                            ? item.info.map((p, i) => (
+                                <span key={i}>
+                                  {p.description}
+                                  {item.info.length !== (i + 1) && <span> / </span>}
+                                </span>
+                              ))
+                            : ""}                        
+                        </div>
+                      </div>                      
                     </div>
                   ))}
                   <div className="body-success__line">

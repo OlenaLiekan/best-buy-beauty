@@ -1805,6 +1805,11 @@
     align-self: flex-end;
 }
 
+.userPromocode {
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
 .orderLabel {
     font-weight: 500;
     padding-right: 5px;

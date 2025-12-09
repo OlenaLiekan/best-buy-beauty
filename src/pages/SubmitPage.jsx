@@ -541,7 +541,7 @@ const SubmitPage = () => {
     localStorage.setItem("clientCountry", countryData);
     localStorage.setItem("clientComment", comment ? comment : " ");
     if (promocodeValue && usedPromocode) {
-      localStorage.setItem("promocodeDiscount", (totalPrice * promocodeValue / 100).toFixed(2));
+      localStorage.setItem("promocodeDiscount", (totalPrice - finalSum).toFixed(2));
       localStorage.setItem("promocode", usedPromocode.toUpperCase());
     } else {
       localStorage.removeItem("promocodeDiscount");
