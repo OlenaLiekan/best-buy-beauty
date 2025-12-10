@@ -542,10 +542,12 @@ const SubmitPage = () => {
     localStorage.setItem("clientComment", comment ? comment : " ");
     if (promocodeValue && usedPromocode) {
       localStorage.setItem("promocodeDiscount", (totalPrice - finalSum).toFixed(2));
-      localStorage.setItem("promocode", usedPromocode.toUpperCase());
+      localStorage.setItem("promocodeName", usedPromocode.toUpperCase());
+      localStorage.setItem("promocodeBrandId", promocodeBrandId);
     } else {
       localStorage.removeItem("promocodeDiscount");
-      localStorage.removeItem("promocode");
+      localStorage.removeItem("promocodeName");
+      localStorage.removeItem("promocodeBrandId");
     }
     localStorage.setItem(
       "orderTotal",

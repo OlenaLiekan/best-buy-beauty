@@ -126,6 +126,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
             code,
             price: priceValue,
             company: company.name,
+            brandId,
             img,
             path,
             isLashes,

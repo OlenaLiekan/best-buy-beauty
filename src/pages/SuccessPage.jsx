@@ -34,7 +34,8 @@ const SuccessPage = () => {
     ? localStorage.getItem("clientComment")
     : "Sem comentários";
   const promocodeDiscount = localStorage.getItem('promocodeDiscount') ? localStorage.getItem('promocodeDiscount') : '';
-  const promocode = localStorage.getItem('promocode') ? localStorage.getItem('promocode') : '';
+  const promocode = localStorage.getItem('promocodeName') ? localStorage.getItem('promocodeName') : '';
+  const promocodeBrandId = localStorage.getItem('promocodeBrandId') ? localStorage.getItem('promocodeBrandId') : '';
   const totalCount = localStorage.getItem("totalCount");
   const deliveryPrice = localStorage.getItem("deliveryPrice");
   const clientOrder = localStorage.getItem("clientOrder");
@@ -46,6 +47,7 @@ const SuccessPage = () => {
       setDetailsVisibility(false);
     } else {
       setDetailsVisibility(true);
+      console.log(items);
     }
   };
 
@@ -203,13 +205,25 @@ const SuccessPage = () => {
                       <div className="body-success__line-image">
                         <img src={`${imagesCloud}` + item.img} alt="product" />
                       </div>
-                      <div className="body-success__line-aside">
-                        <p className="bold">
-                          {item.name}
-                        </p>
+                      <div className="body-success__line-aside aside-line">
+                        <div className="bold aside-line__box">
+                          <div className="aside-line__product-name">{item.name}</div>
+                          {!item.promoProduct && !item.exclusiveProduct && item.brandId == promocodeBrandId
+                            &&
+                            <div className="aside-line__old-price">
+                              {(item.price * item.count).toFixed(2)} €
+                            </div>                            
+                          }
+                        </div>
                         <div className="body-success__line-price">
                           <div>{item.company} ({item.code}) x {item.count}</div>
-                          <span>{(item.price * item.count).toFixed(2)} €</span>
+                          <span>
+                            {!item.promoProduct && !item.exclusiveProduct && item.brandId == promocodeBrandId
+                              ?
+                              (item.price * item.count).toFixed(2) - (item.price * item.count / 100 * 10).toFixed(2)
+                              :
+                              (item.price * item.count).toFixed(2)} €
+                          </span>
                         </div>
                         {item.isLashes &&
                           <div className="body-success__line-info">
@@ -228,6 +242,19 @@ const SuccessPage = () => {
                               ))
                             : ""}                        
                         </div>
+                        <div className="body-success__line-info info-line">
+                          {!item.promoProduct && !item.exclusiveProduct && item.brandId == promocodeBrandId
+                            ?
+                            <>
+                              <svg className="info-line__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                <path d="M0 252.118V48C0 21.49 21.49 0 48 0h204.118a48 48 0 0 1 33.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137 0 67.882L293.823 497.941c-18.745 18.745-49.137 18.745-67.882 0L14.059 286.059A48 48 0 0 1 0 252.118zM112 64c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48z" />
+                              </svg>   
+                              {promocode + ` (-${(item.price * item.count / 100 * 10).toFixed(2)} €)`}
+                            </>
+                            :
+                            ''
+                          }
+                        </div>
                       </div>                      
                     </div>
                   ))}
@@ -238,7 +265,7 @@ const SuccessPage = () => {
                   {
                     promocodeDiscount 
                       ?
-                      <div className="body-success__line">
+                      <div className="body-success__line body-success__line-discount">
                         <div>Desconto {promocode}</div>
                         <div>- {promocodeDiscount} €</div>
                       </div>                      

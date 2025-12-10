@@ -4247,6 +4247,9 @@
         font-weight: 500;
         gap: 40px;
         font-size: 16px;
+        &-discount {
+            color: #a1882c;
+        }
         svg {
             width: 16px;
             @media(max-width: 479.98px) {
@@ -4399,6 +4402,35 @@
     }
     &__button {
         width: 100%;
+    }
+}
+
+.info-line {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    &__icon {
+        width: 14px;
+        height: 14px;
+        transform: scaleX(-1);
+        fill: #9e9e9eff;
+    }
+}
+
+.aside-line {
+    &__box {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+    &__product-name {
+        max-width: 240px;
+    }
+    &__old-price {
+        font-size: 12px;
+        color: #727272;
+        text-decoration: line-through;
     }
 }
 
