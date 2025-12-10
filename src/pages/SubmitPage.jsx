@@ -544,10 +544,12 @@ const SubmitPage = () => {
       localStorage.setItem("promocodeDiscount", (totalPrice - finalSum).toFixed(2));
       localStorage.setItem("promocodeName", usedPromocode.toUpperCase());
       localStorage.setItem("promocodeBrandId", promocodeBrandId);
+      localStorage.setItem("promocodeValue", promocodeValue);
     } else {
       localStorage.removeItem("promocodeDiscount");
       localStorage.removeItem("promocodeName");
       localStorage.removeItem("promocodeBrandId");
+      localStorage.removeItem("promocodeValue");
     }
     localStorage.setItem(
       "orderTotal",

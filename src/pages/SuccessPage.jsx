@@ -35,6 +35,7 @@ const SuccessPage = () => {
     : "Sem comentários";
   const promocodeDiscount = localStorage.getItem('promocodeDiscount') ? localStorage.getItem('promocodeDiscount') : '';
   const promocode = localStorage.getItem('promocodeName') ? localStorage.getItem('promocodeName') : '';
+  const promocodeValue = localStorage.getItem('promocodeValue') ? localStorage.getItem('promocodeValue') : '';
   const promocodeBrandId = localStorage.getItem('promocodeBrandId') ? localStorage.getItem('promocodeBrandId') : '';
   const totalCount = localStorage.getItem("totalCount");
   const deliveryPrice = localStorage.getItem("deliveryPrice");
@@ -48,6 +49,7 @@ const SuccessPage = () => {
     } else {
       setDetailsVisibility(true);
       console.log(items);
+      console.log(promocodeDiscount);
     }
   };
 
@@ -208,7 +210,7 @@ const SuccessPage = () => {
                       <div className="body-success__line-aside aside-line">
                         <div className="bold aside-line__box">
                           <div className="aside-line__product-name">{item.name}</div>
-                          {!item.promoProduct && !item.exclusiveProduct && item.brandId == promocodeBrandId
+                          {!item.promoProduct && !item.exclusiveProduct && (promocodeBrandId > 0 ? item.brandId == promocodeBrandId : +promocodeBrandId === 0)
                             &&
                             <div className="aside-line__old-price">
                               {(item.price * item.count).toFixed(2)} €
@@ -218,9 +220,9 @@ const SuccessPage = () => {
                         <div className="body-success__line-price">
                           <div>{item.company} ({item.code}) x {item.count}</div>
                           <span>
-                            {!item.promoProduct && !item.exclusiveProduct && item.brandId == promocodeBrandId
+                            {!item.promoProduct && !item.exclusiveProduct && (promocodeBrandId > 0 ? item.brandId == promocodeBrandId : +promocodeBrandId === 0)
                               ?
-                              (item.price * item.count).toFixed(2) - (item.price * item.count / 100 * 10).toFixed(2)
+                              (item.price * item.count).toFixed(2) - ((item.price * item.count / 100) * promocodeValue).toFixed(2)
                               :
                               (item.price * item.count).toFixed(2)} €
                           </span>
@@ -243,13 +245,13 @@ const SuccessPage = () => {
                             : ""}                        
                         </div>
                         <div className="body-success__line-info info-line">
-                          {!item.promoProduct && !item.exclusiveProduct && item.brandId == promocodeBrandId
+                          {!item.promoProduct && !item.exclusiveProduct && (promocodeBrandId > 0 ? item.brandId == promocodeBrandId : +promocodeBrandId === 0)
                             ?
                             <>
                               <svg className="info-line__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                 <path d="M0 252.118V48C0 21.49 21.49 0 48 0h204.118a48 48 0 0 1 33.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137 0 67.882L293.823 497.941c-18.745 18.745-49.137 18.745-67.882 0L14.059 286.059A48 48 0 0 1 0 252.118zM112 64c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48z" />
                               </svg>   
-                              {promocode + ` (-${(item.price * item.count / 100 * 10).toFixed(2)} €)`}
+                              {promocode + ` (-${((item.price * item.count / 100) * promocodeValue).toFixed(2)} €)`}
                             </>
                             :
                             ''
