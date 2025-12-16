@@ -24,9 +24,9 @@ const UpdateUser = ({userId}) => {
 
     React.useEffect(() => {
         if (user.id) {
-            setUsername(user.firstName);
-            setSurname(user.lastName);
-            setPhone(user.phone);
+            setUsername(user.firstName.trimStart());
+            setSurname(user.lastName.trimStart());
+            setPhone(user.phone.trimStart());
             setEmail(user.email);         
         }
     }, [user.id]);
@@ -41,15 +41,15 @@ const UpdateUser = ({userId}) => {
     }, [emailValue, user.email, serverDomain]);
 
     const onChangeUsername = (event) => { 
-        setUsername(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
+        setUsername(event.target.value ? (event.target.value[0].toUpperCase() + event.target.value.slice(1)).trimStart() : '');            
     };
 
     const onChangeSurname = (event) => { 
-        setSurname(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');
+        setSurname(event.target.value ? (event.target.value[0].toUpperCase() + event.target.value.slice(1)).trimStart() : '');
     };
 
     const onChangePhone = (event) => { 
-        setPhone(event.target.value.slice(0,13));
+        setPhone(event.target.value.trimStart().slice(0,13));
     };
 
     const updateEmailValue = React.useCallback(
@@ -84,10 +84,10 @@ const UpdateUser = ({userId}) => {
             const formData = new FormData();
             const id = userId;
             formData.set('id', id);
-            formData.set('firstName', username);
-            formData.set('lastName', surname);
+            formData.set('firstName', username.trimStart());
+            formData.set('lastName', surname.trimStart());
             formData.set('email', email);
-            formData.set('phone', phone);
+            formData.set('phone', phone.trimStart());
             updateUser(formData, id).then((data) => success()).catch(err => message());            
         }
     }

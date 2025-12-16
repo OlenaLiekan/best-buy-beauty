@@ -31,15 +31,15 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
     };
 
     const onChangeUsername = (event) => { 
-        setUsername(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
+        setUsername(event.target.value ? (event.target.value[0].toUpperCase() + event.target.value.slice(1)).trimStart() : '');            
     };
 
     const onChangeSurname = (event) => { 
-        setSurname(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');
+        setSurname(event.target.value ? (event.target.value[0].toUpperCase() + event.target.value.slice(1)).trimStart() : '');
     };
 
     const onChangePhone = (event) => { 
-        setPhone(event.target.value.slice(0, 13));
+        setPhone(event.target.value.trimStart().slice(0, 13));
     };
 
     const onChangeEmail = (event) => { 
@@ -128,10 +128,10 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
         const id = userId;
         const countryData = countries.find((c) => c.code === country);
         formData.append('userId', id);
-        formData.append('crFirstName', username);
-        formData.append('crLastName', surname);
+        formData.append('crFirstName', username.trimStart());
+        formData.append('crLastName', surname.trimStart());
         formData.append('crEmail', email);
-        formData.append('crPhone', phone);
+        formData.append('crPhone', phone.trimStart());
         formData.append('company', company);            
         formData.append('firstAddress', firstAddress);
         formData.append('secondAddress', secondAddress);

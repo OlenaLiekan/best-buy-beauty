@@ -58,7 +58,7 @@ const Registration = () => {
             const promocodeValue = promocode.value;
             const formData = new FormData();
             formData.set('userEmail', email);
-            formData.set('userName', firstName);
+            formData.set('userName', firstName.trimStart());
             formData.set('promocode', promocodeName);
             formData.set('promocodeValue', promocodeValue);
             newMember(formData).then((data) => console.log('promocode sent')).catch((err) => console.log('error'));     
@@ -68,7 +68,7 @@ const Registration = () => {
     const createAccount = async (e) => {
         e.preventDefault();
         try {
-            await registration(email, password, firstName, lastName, phone); 
+            await registration(email, password, firstName.trimStart(), lastName.trimStart(), phone.trimStart()); 
             window.scrollTo(0, 0);            
             navigate('/login');
             window.alert('Parabéns! Sua conta foi criada com sucesso.');
@@ -94,15 +94,15 @@ const Registration = () => {
     );
 
     const onChangeUsername = (event) => { 
-        setFirstName(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');
+        setFirstName(event.target.value ? (event.target.value[0].toUpperCase() + event.target.value.slice(1)).trimStart() : '');
     };
 
     const onChangeSurname = (event) => { 
-        setLastName(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');
+        setLastName(event.target.value ? (event.target.value[0].toUpperCase() + event.target.value.slice(1)).trimStart() : '');
     };
 
     const onChangePhone = (event) => { 
-        setPhone(event.target.value.slice(0, 13));
+        setPhone(event.target.value.trimStart().slice(0, 13));
     };
 
     const onChangeEmail = (event) => { 

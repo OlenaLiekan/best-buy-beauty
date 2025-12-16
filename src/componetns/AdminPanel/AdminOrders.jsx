@@ -100,7 +100,7 @@ const AdminOrders = () => {
                                                 ?
                                                 styles.sentEmailsIcon
                                                 :
-                                                (transaction.paymentMethod === 'REFERENCE' && transaction.sentToClient === 'Success'
+                                                (transaction.paymentMethod === 'REFERENCE' && (transaction.sentToClient === 'Success' || (transaction.sentToClient === null && transaction.paymentStatus === 'Pending'))
                                                     ?
                                                     styles.sentEmailsIconPending
                                                     :

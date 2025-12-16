@@ -32,10 +32,10 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
     React.useEffect(() => {
         const currentAddress = addresses.find((address) => address.id === addressId);
         if (currentAddress) {
-            setUsername(currentAddress.firstName);
-            setSurname(currentAddress.lastName);
+            setUsername(currentAddress.firstName.trimStart());
+            setSurname(currentAddress.lastName.trimStart());
             setCompany(currentAddress.company ? currentAddress.company : company);
-            setPhone(currentAddress.phone);
+            setPhone(currentAddress.phone.trimStart());
             setEmail(currentAddress.email);
             setFirstAddress(currentAddress.firstAddress);
             setSecondAddress(currentAddress.secondAddress ? currentAddress.secondAddress : secondAddress);
@@ -52,15 +52,15 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
     };
 
     const onChangeUsername = (event) => { 
-        setUsername(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');            
+        setUsername(event.target.value ? (event.target.value[0].toUpperCase() + event.target.value.slice(1)).trimStart() : '');            
     };
 
     const onChangeSurname = (event) => { 
-        setSurname(event.target.value ? event.target.value[0].toUpperCase() + event.target.value.slice(1) : '');
+        setSurname(event.target.value ? (event.target.value[0].toUpperCase() + event.target.value.slice(1)).trimStart() : '');
     };
 
     const onChangePhone = (event) => { 
-        setPhone(event.target.value.slice(0, 13));
+        setPhone(event.target.value.trimStart().slice(0, 13));
         console.log(phone);
     };
 
@@ -150,10 +150,10 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
         const id = userId;
         const countryData = countries.find((c) => c.code === country);
         formData.set('updatedAddressId', addressId);
-        formData.set('upFirstName', username);
-        formData.set('upLastName', surname);
+        formData.set('upFirstName', username.trimStart());
+        formData.set('upLastName', surname.trimStart());
         formData.set('upEmail', email);
-        formData.set('upPhone', phone);
+        formData.set('upPhone', phone.trimStart());
         formData.set('company', company ? company : ' ');            
         formData.set('firstAddress', firstAddress);
         formData.set('secondAddress', secondAddress);
