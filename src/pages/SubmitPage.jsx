@@ -528,8 +528,8 @@ const SubmitPage = () => {
 
     localStorage.setItem("orderId", orderNumber);
     localStorage.setItem("orderDate", today);
-    localStorage.setItem("clientName", username);
-    localStorage.setItem("clientSurname", surname);
+    localStorage.setItem("clientName", username.trimStart());
+    localStorage.setItem("clientSurname", surname.trimStart());
     localStorage.setItem("clientPhone", phone);
     localStorage.setItem("clientEmail", email);
     localStorage.setItem("clientOrder", JSON.stringify(orderItems));
@@ -562,8 +562,8 @@ const SubmitPage = () => {
     const orderData = {
         orderId: orderNumber,
         orderDate: today,
-        clientName: username,
-        clientSurname: surname,
+        clientName: username.trimStart(),
+        clientSurname: surname.trimStart(),
         clientPhone: phone,
         clientEmail: email,
         clientOrder: JSON.stringify(orderItems),
@@ -628,8 +628,8 @@ const SubmitPage = () => {
         );
         formData.append("orderNumber", orderNumber);
         formData.append("userOrder", order);
-        formData.append("userName", username);
-        formData.append("userSurname", surname);
+        formData.append("userName", username.trimStart());
+        formData.append("userSurname", surname.trimStart());
         formData.append("userEmail", email);
         formData.append("userPhone", phone);
         formData.append("paymentList", payment);

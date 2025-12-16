@@ -1,5 +1,5 @@
 .body {
-    min-height: 410px;
+    min-height: 470px;
     border-left: 2px solid #61616124;
     padding: 20px 0 20px 88px;
 
@@ -1707,7 +1707,8 @@
 }
 
 .sentEmailsIcon,
-.sentEmailsIconError {
+.sentEmailsIconError,
+.sentEmailsIconPending {
     width: 24px;
     height: 24px;
 }
