@@ -643,6 +643,7 @@ const SubmitPage = () => {
         formData.append("countryCode", countryData.code);
         formData.append("promocodeName", usedPromocode ? usedPromocode.toUpperCase() : '');
         formData.append("promocodeValue", usedPromocode && promocodeValue ? promocodeValue : '');
+        formData.append("promocodeBrandId", promocodeBrandId && promocodeBrandId ? promocodeBrandId : '');
 
         try {
           const response = await submitPurchase(formData);
