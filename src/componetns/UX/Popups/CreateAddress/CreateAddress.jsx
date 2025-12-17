@@ -75,10 +75,8 @@ const CreateAddress = ({userId, addressId, existingMainAddress}) => {
     };
 
     const checkedCheckbox = () => {
-        if (!checked && !existingMainAddress) {
+        if (!checked) {
             setChecked(true);
-        } else if (!checked && existingMainAddress) {
-            window.alert('Você já tem um endereço principal. Edite-o, limpe a propriedade de prioridade para selecionar outro endereço como principal.');
         } else {
             setChecked(false);            
         }

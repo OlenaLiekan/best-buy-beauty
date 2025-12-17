@@ -97,12 +97,12 @@ const UpdateAddress = ({userId, addressId, addresses, existingMainAddress}) => {
     };
 
     const checkedCheckbox = () => {
-        if (!checked && existingMainAddress.id === addressId) {
+        if (!checked) {
+            setChecked(true);     
+        } else if (!checked && existingMainAddress.id === addressId) {
             setChecked(true);
-        } else if (!checked && existingMainAddress.id !== addressId) {
-            window.alert('Você já tem um endereço principal. Edite-o, limpe a propriedade de prioridade para selecionar outro endereço como principal.');
         } else {
-            setChecked(false);            
+            setChecked(false);
         }
     }
 
