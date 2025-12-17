@@ -285,7 +285,7 @@ const UserPanel = ({ user }) => {
                                         }
                                     </h3>
                                     <div className={visibleMain ? styles.paragraphs : styles.hidden}>
-                                        <p className={styles.addressLine}>{mainAddress.firstName} {mainAddress.lastName}</p>
+                                        <p className={styles.addressLine}>{mainAddress.firstName + ' ' + mainAddress.lastName}</p>
                                         <p className={styles.addressLine}>{mainAddress.email}</p>
                                         <p className={styles.addressLine}>{mainAddress.phone}</p>
                                         <p className={styles.addressLine}>{mainAddress.company}</p>
