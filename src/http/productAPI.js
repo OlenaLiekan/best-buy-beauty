@@ -80,6 +80,26 @@ export const updateProduct = async (product, id) => {
   return data;
 };
 
+export const createKit = async kit => {
+  const { data } = await $authHost.post('api/kit', kit);
+  return data;
+};
+
+export const fetchKits = async () => {
+  const { data } = await $host.get('api/kit');
+  return data;
+};
+
+export const fetchOneKit = async id => {
+  const { data } = await $host.get('api/kit/' + id);
+  return data;
+};
+
+export const updateKit = async (kit, id) => {
+  const { data } = await $authHost.patch('api/kit/' + id, kit);
+  return data;
+};
+
 export const createRating = async rating => {
   const { data } = await $authHost.post('api/rating', rating);
   return data;
