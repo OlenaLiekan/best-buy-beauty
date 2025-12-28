@@ -210,7 +210,7 @@ const SuccessPage = () => {
                       <div className="body-success__line-aside aside-line">
                         <div className="bold aside-line__box">
                           <div className="aside-line__product-name">{item.name}</div>
-                          {!item.promoProduct && !item.exclusiveProduct && (promocodeBrandId > 0 ? item.brandId == promocodeBrandId : +promocodeBrandId === 0)
+                          {promocodeValue && !item.promoProduct && !item.exclusiveProduct && (promocodeBrandId > 0 ? item.brandId == promocodeBrandId : +promocodeBrandId === 0)
                             &&
                             <div className="aside-line__old-price">
                               {(item.price * item.count).toFixed(2)} €
@@ -220,7 +220,7 @@ const SuccessPage = () => {
                         <div className="body-success__line-price">
                           <div>{item.company} ({item.code}) x {item.count}</div>
                           <span>
-                            {!item.promoProduct && !item.exclusiveProduct && (promocodeBrandId > 0 ? item.brandId == promocodeBrandId : +promocodeBrandId === 0)
+                            {promocodeValue && !item.promoProduct && !item.exclusiveProduct && (promocodeBrandId > 0 ? item.brandId == promocodeBrandId : +promocodeBrandId === 0)
                               ?
                               (item.price * item.count).toFixed(2) - ((item.price * item.count / 100) * promocodeValue).toFixed(2)
                               :
@@ -245,7 +245,7 @@ const SuccessPage = () => {
                             : ""}                        
                         </div>
                         <div className="body-success__line-info info-line">
-                          {!item.promoProduct && !item.exclusiveProduct && (promocodeBrandId > 0 ? item.brandId == promocodeBrandId : +promocodeBrandId === 0)
+                          {promocodeValue && !item.promoProduct && !item.exclusiveProduct && (promocodeBrandId > 0 ? item.brandId == promocodeBrandId : +promocodeBrandId === 0)
                             ?
                             <>
                               <svg className="info-line__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
