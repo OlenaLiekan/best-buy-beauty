@@ -188,7 +188,7 @@ const CreateProduct = () => {
     }
 
     React.useEffect(() => {
-        axios.get(`${serverDomain}/api/kit`)
+        axios.get(`${serverDomain}api/kit`)
             .then((res) => {
                 setKits(res.data);
             });
@@ -430,7 +430,7 @@ const CreateProduct = () => {
 
     const pushProduct = (e) => {
         e.preventDefault();
-        if (price > +promoPrice) {
+        if (!kitCreation && !showKitMenu && price > +promoPrice) {
             const formData = new FormData();
             formData.append('name', name);
             formData.append('code', code);
