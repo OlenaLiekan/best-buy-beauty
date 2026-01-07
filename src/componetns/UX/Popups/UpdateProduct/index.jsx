@@ -4,6 +4,7 @@ import styles from './UpdateProduct.module.scss';
 import { AuthContext } from '../../../../context';
 import { useNavigate } from 'react-router-dom';
 import { updateProduct} from '../../../../http/productAPI';
+import UpdateKit from '../UpdateKit';
 
 const UpdateProduct = ({id, obj}) => {
 
@@ -15,18 +16,23 @@ const UpdateProduct = ({id, obj}) => {
 
     const [brands, setBrands] = React.useState([]);
     const [types, setTypes] = React.useState([]);
+    const [kits, setKits] = React.useState([]);
     const [typeId, setTypeId] = React.useState(1);
     const [categoryId, setCategoryId] = React.useState(0);
     const [brandId, setBrandId] = React.useState(1);
+    const [kitId, setKitId] = React.useState(0);
     const [typeName, setTypeName] = React.useState('Selecione o tipo');
     const [brandName, setBrandName] = React.useState('Selecione a marca');
+    const [kitName, setKitName] = React.useState('Selecione um conjunto');
     const [typesVisibility, setTypesVisibility] = React.useState(false);
     const [brandsVisibility, setBrandsVisibility] = React.useState(false);
+    const [kitsVisibility, setKitsVisibility] = React.useState(false);
     const [name, setName] = React.useState('');
+    const [variant, setVariant] = React.useState('');
     const [code, setCode] = React.useState('');
     const [price, setPrice] = React.useState(0);
     const [promoPrice, setPromoPrice] = React.useState(0);
-    const { setUpdateProductMode, serverDomain, imagesCloud, setProductUpdated } = React.useContext(AuthContext);
+    const { setUpdateProductMode, serverDomain, imagesCloud, setProductUpdated, kitEditing, setKitEditing, kitEditingMenu, setKitEditingMenu } = React.useContext(AuthContext);
     const [info, setInfo] = React.useState([]);
     const [related, setRelated] = React.useState([]);
     const [slide, setSlide] = React.useState([]);
@@ -53,6 +59,7 @@ const UpdateProduct = ({id, obj}) => {
 
     React.useEffect(() => {
         setName(obj.name);
+        setVariant(obj.variant ? obj.variant : '');
         setCode(obj.code);
         setPrice(obj.price);
         setPromoPrice(obj.discountPrice ? obj.discountPrice : promoPrice);
@@ -99,6 +106,10 @@ const UpdateProduct = ({id, obj}) => {
 
     const onChangeName = (e) => {
         setName(e.target.value);
+    }
+
+    const onChangeVariant = (e) => {
+        setVariant(e.target.value);
     }
 
     const onChangeCode = (e) => {
@@ -171,6 +182,13 @@ const UpdateProduct = ({id, obj}) => {
     }
 
     React.useEffect(() => {
+        axios.get(`${serverDomain}api/kit`)
+            .then((res) => {
+                setKits(res.data);
+            });
+    }, [serverDomain]);
+
+    React.useEffect(() => {
         axios.get(`${serverDomain}api/brand`)
             .then((res) => {
                 setBrands(res.data);
@@ -190,6 +208,7 @@ const UpdateProduct = ({id, obj}) => {
         } else {
             setBrandsVisibility(true);
             setTypesVisibility(false);
+            setKitsVisibility(false);
         }
     }
 
@@ -198,6 +217,17 @@ const UpdateProduct = ({id, obj}) => {
             setTypesVisibility(false);
         } else {
             setTypesVisibility(true);
+            setBrandsVisibility(false);
+            setKitsVisibility(false);
+        }
+    }
+
+    const toggleKitOptions = () => {
+        if (kitsVisibility) {
+            setKitsVisibility(false);
+        } else {
+            setKitsVisibility(true);
+            setTypesVisibility(false);
             setBrandsVisibility(false);
         }
     }
@@ -212,6 +242,12 @@ const UpdateProduct = ({id, obj}) => {
         setTypeId(id);
         setTypeName(name);
         setTypesVisibility(false);
+    }
+
+    const hideKitOptions = (id, name) => {
+        setKitId(id);
+        setKitName(name);
+        setKitsVisibility(false);
     }
 
     React.useEffect(() => {
@@ -313,21 +349,23 @@ const UpdateProduct = ({id, obj}) => {
         if (price > +promoPrice) {
             const formData = new FormData();
             formData.set('name', name);
+            formData.set('variant', variant);
             formData.set('code', code);
             formData.set('price', price);
             formData.set('discountPrice', promoPrice === '' ? 0 : promoPrice);
-            formData.append('categoryId', categoryId);
+            formData.set('kitId', kitId);
+            formData.set('categoryId', categoryId);
             formData.set('brandId', brandId);
             formData.set('typeId', typeId);
             formData.set('text', text);
-            formData.append('applying', applying);            
-            formData.append('compound', compound);  
-            formData.append('isLashes', isLashes);
+            formData.set('applying', applying);            
+            formData.set('compound', compound);  
+            formData.set('isLashes', isLashes);
             formData.append('available', checkedAvailable);
             formData.append('topProduct', checkedTop);
             formData.append('exclusiveProduct', checkedExclusive);
-            formData.append('newProduct', !checkedNewProduct);
-            formData.append('isPromo', promoPrice && +promoPrice > 0 ? true : false);
+            formData.set('newProduct', !checkedNewProduct);
+            formData.set('isPromo', promoPrice && +promoPrice > 0 ? true : false);
             if (deletedSlideId) {
                 formData.append('deletedSlideId', JSON.stringify(deletedSlideId));            
             }
@@ -403,257 +441,344 @@ const UpdateProduct = ({id, obj}) => {
         }
     }
 
+    const onClickProceed = () => {
+        setKitEditingMenu(false);
+        setKitEditing(true);
+    };
+
+    const onClickSkip = () => {
+        setKitEditingMenu(false);
+        setKitEditing(false);
+    };    
+
+    const onClickReturn = () => {
+        setKitEditingMenu(true);
+        setKitEditing(false);
+    }; 
+
     return (
         <div className={styles.updateProduct}>
+            {!kitEditing && !kitEditingMenu || !kitEditingMenu && kitEditing
+                ?
+                <button type='button' onClick={onClickReturn} className={styles.backBtn}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path d="M257.5 445.1l-22.2 22.2c-9.4 9.4-24.6 9.4-33.9 0L7 273c-9.4-9.4-9.4-24.6 0-33.9L201.4 44.7c9.4-9.4 24.6-9.4 33.9 0l22.2 22.2c9.5 9.5 9.3 25-.4 34.3L136.6 216H424c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24H136.6l120.5 114.8c9.8 9.3 10 24.8.4 34.3z" />
+                    </svg>
+                    Voltar
+                </button> 
+                :
+                ''
+            }
             <svg onClick={closeUpdatePopup} className={styles.close} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 352 512">
                 <path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" />
             </svg>
-            <form onSubmit={updateProductItem} className={styles.formProduct}>
-                <div className={styles.line}>
-                    <span className={styles.label}>Marca:</span>
-                    <div onClick={toggleBrandOptions} required tabIndex="1" className={styles.formSelectBrands}>
-                        {brandName}
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
-                            <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
-                        </svg>
-                    </div>
-                    {brandsVisibility ? 
-                        <div className={styles.brandOptions}>
-                            {brands ? brands.map((brand) => 
-                                <div key={brand.name} value={brand.id} onClick={() => hideBrandOptions(brand.id, brand.name)} className={styles.option}>{brand.name}</div> 
-                            ) : ""}                            
-                        </div>                        
-                        : ''
-                    }
-                    <span className={styles.label}>Tipo:</span>
-                    <div onClick={toggleTypeOptions} required tabIndex="2" className={styles.formSelectTypes}>
-                        {typeName}
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
-                            <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
-                        </svg>
-                    </div>  
-                    {typesVisibility ? 
-                        <div className={styles.typeOptions}>
-                            {types ? types.map((type) => 
-                                <div key={type.name} onClick={() => hideTypeOptions(type.id, type.name)} value={type.name} className={styles.option}>{type.name}</div>
-                            ) : ''}                            
-                        </div>                          
-                        : ""
-                    }
-                </div>
-                <div className={styles.line}>
-                    <label htmlFor="product-name" className={styles.label}>Nome:</label>
-                    <input id="product-name" required tabIndex="3" type='text' className={styles.formInput}
-                        ref={inputRef}
-                        value={name}
-                        onChange={onChangeName}
-                    />                    
-                </div>
 
-                <div className={styles.line}>
-                    <label htmlFor="product-code" className={styles.label}>Código:</label>
-                    <input id="product-code" required tabIndex="4" type='text' className={styles.formInputSmall}
-                        ref={inputRef}
-                        value={code}
-                        onChange={onChangeCode}
-                    /> 
-                    <label htmlFor="product-price" className={styles.label}>Preço:</label>                    
-                    <input id="product-price" required tabIndex="5" type='text' className={styles.formInputSmall}
-                        ref={inputRef}
-                        value={price}
-                        onChange={onChangePrice}
-                    />
-                </div>
-                <div className={styles.checkboxes}>
-                    <div className={styles.formLineCheckbox}>
-                        <label onClick={checkedCheckboxAvailable} htmlFor="availableCheckbox" className={checkedAvailable ? styles.formLabelChecked : styles.formLabelCheckbox}>
-                            Disponível:
-                        </label>
-                        <input id="availableCheckbox" tabIndex="6" type="checkbox" name="agree" className={styles.formInputCheckbox} /> 
-                    </div>     
-                    <div className={styles.formLineCheckbox}>
-                        <label onClick={checkedCheckboxTop} htmlFor="topCheckbox" className={checkedTop ? styles.formLabelChecked : styles.formLabelCheckbox}>
-                            Best-seller:
-                        </label>
-                        <input id="topCheckbox" type="checkbox" tabIndex="7" name="top" className={styles.formInputCheckbox} /> 
-                    </div>   
-                    <div className={styles.formLineCheckbox}>
-                        <label onClick={checkedCheckboxExclusive} htmlFor="exclusiveCheckbox" className={checkedExclusive ? styles.formLabelChecked : styles.formLabelCheckbox}>
-                            Exclusive:
-                        </label>
-                        <input id="exclusiveCheckbox" type="checkbox" tabIndex="8" name="exclusive" className={styles.formInputCheckbox} /> 
-                    </div>
-                    <div className={styles.formLineCheckbox}>
-                        <label onClick={checkedCheckboxNewProduct} htmlFor="newProductCheckbox" className={checkedNewProduct ? styles.formLabelChecked : styles.formLabelCheckbox}>
-                            Não exibir em novos itens:
-                        </label>
-                        <input id="newProductCheckbox" type="checkbox" tabIndex="9" name="new-product" className={styles.formInputCheckbox} /> 
-                    </div>
-                </div>
-                <div className={styles.line}>
-                    <label htmlFor="product-promo-price" className={styles.label}>Preço promocional:</label>                    
-                    <input id="product-promo-price" tabIndex="10" type='text' className={styles.formInputSmall} placeholder='0.00'
-                        ref={inputRef}
-                        value={promoPrice}
-                        onChange={onChangePromoPrice}
-                    />
-                </div>
-                <div className={styles.line}>
-                    <label htmlFor="product-file" className={styles.label}>Foto:</label>
-                    <input id="product-file" tabIndex="11" type='file' className={styles.formFile}
-                        onChange={selectFile}
-                    />                    
-                </div>
-
-                {related.map((i) => 
-                    <div className={styles.line} key={i.id}>
-                        <label htmlFor={'info-product_title' + i.id} className={styles.label}>Código de produto adicional:</label>
-                        <input required id={'info-product_title' + i.id} tabIndex="12" type='text' className={styles.formInputSmall}
-                            value={i.referenceCode}
-                            onChange={(e) => changeRelated('referenceCode', e.target.value, i.id)}
-                        /> 
-                        <button type='button' tabIndex='13' className='info-product__remove' onClick={() => removeRelated(i.id)}>
-                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
-                                <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
-                            </svg>                                     
-                        </button>
-                    </div>                    
-                )}
-                <button type='button' className={styles.relatedButton} tabIndex="14" onClick={addRelated}>Anexar produto</button>
-
-                {info.map((i) => 
-                    <div className={styles.line} key={i.id}>
-                        <label htmlFor={'info-product_title' + i.id} className={styles.label}>Propriedade:</label>
-                        <input required id={'info-product_title' + i.id} tabIndex="15" type='text' className={styles.formInputSmall}
-                            value={i.title}
-                            onChange={(e) => changeInfo('title', e.target.value, i.id)}
-                        /> 
-                        <label htmlFor={'info-product_description' + i.id } className={styles.label}>=</label>
-                        <input required id={'info-product_description' + i.id } tabIndex="16" type='text' className={styles.formInputSmall}
-                            value={i.description}
-                            onChange={(e) => changeInfo('description', e.target.value, i.id)}
-                        />
-                        <button type='button' tabIndex='17' className='info-product__remove' onClick={() => removeInfo(i.id)}>
-                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
-                                <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
-                            </svg>                                     
-                        </button>
-                    </div>                    
-                )}
-                <button type='button' className={styles.infoButton} tabIndex="18" onClick={addInfo}>Adicionar informações</button>
-                <div className={styles.lineImg}>                
-                {objSlides ? 
-                    objSlides.map((s) => 
-                        <div key={s.id} className={styles.imgBox}> 
-                            <img src={ s.slideImg ? `${imagesCloud}` + s.slideImg : ''} alt='slide'/>  
-                            <svg onClick={() => removeImage(s.id)} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
-                                <path d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z" />
-                            </svg>
-                        </div>
-                    )
+            {
+                kitEditingMenu || kitEditing
+                    ? 
+                    <div className={styles.kitBlock}>
+                        {kitEditingMenu
+                            &&
+                            <div className={styles.kitMenuActions}>
+                                <button type='button' onClick={onClickProceed} className={styles.button}>
+                                    Editar conjunto
+                                </button>
+                                <button type='button' onClick={onClickSkip} className={styles.button}>
+                                    Pular
+                                </button>
+                            </div>
+                        }
+                        {kitEditing
+                            &&
+                            <UpdateKit />                 
+                        }
+                    </div>      
                     :
-                    ""
-                    }
-                </div>
-                {slide.map((i) => 
-                    <div className={styles.line} key={i.id}>
-                        <label htmlFor="product-slide" className={styles.label}>Slide:</label>
-                        <input id="product-slide" tabIndex="19" type='file' className={styles.formFile}
-                            onChange={(e) => changeSlide('slideImg', e.target.files[0], i.id)}
-                        />
-                        <button type='button' tabIndex='20' className='slide-product__remove' onClick={() => removeSlide(i.id)}>
-                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
-                                <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
-                            </svg>                                     
-                        </button>
-                    </div>                
-                )}
-                <button type='button' className={styles.slideButton} tabIndex="21" onClick={addSlide}>Adicionar slide</button>
-                
-                <div className={styles.miniEditor}>
-                    <div className={styles.toolbar}>
-                        <button 
-                            type="button" 
-                            onClick={() => insertTag('strong')}
-                            className={styles.toolBtn}
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-                                <path d="M333.49 238a122 122 0 0 0 27-65.21C367.87 96.49 308 32 233.42 32H34a16 16 0 0 0-16 16v48a16 16 0 0 0 16 16h31.87v288H34a16 16 0 0 0-16 16v48a16 16 0 0 0 16 16h209.32c70.8 0 134.14-51.75 141-122.4 4.74-48.45-16.39-92.06-50.83-119.6zM145.66 112h87.76a48 48 0 0 1 0 96h-87.76zm87.76 288h-87.76V288h87.76a56 56 0 0 1 0 112z" />
-                            </svg>
-                        </button>
-                        
-                        <button 
-                            type="button" 
-                            onClick={() => insertTag('em')}
-                            className={styles.toolBtn}
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-                                <path d="M320 48v32a16 16 0 0 1-16 16h-62.76l-80 320H208a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16H16a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16h62.76l80-320H112a16 16 0 0 1-16-16V48a16 16 0 0 1 16-16h192a16 16 0 0 1 16 16z" />
-                            </svg>
-                        </button>
-                        <button 
-                            type="button"
-                            onClick={applyColor}
-                            className={styles.toolBtn}
-                        >
-                            <svg style={{ fill: `${selectedColor}`}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                <path d="M432 416h-23.41L277.88 53.69A32 32 0 0 0 247.58 32h-47.16a32 32 0 0 0-30.3 21.69L39.41 416H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16h-19.58l23.3-64h152.56l23.3 64H304a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM176.85 272L224 142.51 271.15 272z" />
-                            </svg>
-                        </button>
-                        <div className={styles.colorBtn}>
-                            <input 
-                                type="color" 
-                                value={selectedColor}
-                                onChange={(e) => handleColorChange(e.target.value)}
-                                className={styles.colorPicker}
+                    ''        
+            }
+
+            {
+                !kitEditingMenu && !kitEditing
+                    ?
+                    <form onSubmit={updateProductItem} className={styles.formProduct}>
+                        <div className={styles.line}>
+                            <span className={styles.label}>Marca:</span>
+                            <div onClick={toggleBrandOptions} required tabIndex="1" className={styles.formSelectBrands}>
+                                {brandName}
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                    <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
+                                </svg>
+                            </div>
+                            {brandsVisibility ? 
+                                <ul className={styles.brandOptions}>
+                                    {brands ? brands.map((brand) => 
+                                        <li key={brand.name} value={brand.id} onClick={() => hideBrandOptions(brand.id, brand.name)} className={styles.option}>{brand.name}</li> 
+                                    ) : ""}                            
+                                </ul>                        
+                                : ''
+                            }
+                            <span className={styles.label}>Tipo:</span>
+                            <div onClick={toggleTypeOptions} required tabIndex="2" className={styles.formSelectTypes}>
+                                {typeName}
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                    <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
+                                </svg>
+                            </div>  
+                            {typesVisibility ? 
+                                <ul className={styles.typeOptions}>
+                                    {types ? types.map((type) => 
+                                        <li key={type.name} onClick={() => hideTypeOptions(type.id, type.name)} value={type.name} className={styles.option}>{type.name}</li>
+                                    ) : ''}                            
+                                </ul>                          
+                                : ""
+                            }
+                        </div>
+                        <div className={styles.line}>
+                            <span className={styles.label}>Conjunto:</span>
+                            <div onClick={toggleKitOptions} required tabIndex="3" className={styles.formSelectKits}>
+                                {kitName}
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                    <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
+                                </svg>
+                            </div>
+                            {kitsVisibility ?
+                                <ul className={styles.kitOptions}>
+                                    <li className={styles.option} onClick={() => hideKitOptions(0, 'Sem conjunto')}>Sem conjunto</li>
+                                    {kits ? kits.map((kit) =>
+                                        <li key={kit.name} value={kit.id} onClick={() => hideKitOptions(kit.id, kit.name)} className={styles.option}>{kit.name}</li>
+                                    ) : ""}
+                                </ul>
+                                : ''
+                                }
+                        </div>
+                        <div className={styles.line}>
+                            <label htmlFor="product-name" className={styles.label}>Nome:</label>
+                            <input id="product-name" required tabIndex="4" type='text' className={styles.formInput}
+                                ref={inputRef}
+                                value={name}
+                                onChange={onChangeName}
+                            />                    
+                        </div>
+                        {
+                            kitId > 0 
+                            &&
+                            <div className={styles.line}>
+                                <label htmlFor="product-variant" className={styles.label} placeholder='Variant'>Variante:</label>
+                                <input id="product-variant" required={kitId > 0 ? true : false} tabIndex="5" type='text' className={styles.formInputSmall}
+                                    ref={inputRef}
+                                    value={variant}
+                                    onChange={onChangeVariant}
+                                />
+                            </div>                                  
+                         } 
+
+                        <div className={styles.line}>
+                            <label htmlFor="product-code" className={styles.label}>Código:</label>
+                            <input id="product-code" required tabIndex="6" type='text' className={styles.formInputSmall}
+                                ref={inputRef}
+                                value={code}
+                                onChange={onChangeCode}
+                            /> 
+                            <label htmlFor="product-price" className={styles.label}>Preço:</label>                    
+                            <input id="product-price" required tabIndex="7" type='text' className={styles.formInputSmall}
+                                ref={inputRef}
+                                value={price}
+                                onChange={onChangePrice}
                             />
                         </div>
-                    </div>
-                    <div className={styles.textareaTab}>
-                        <label htmlFor="product-about" className={styles.label}>Descrição:</label>       
-                        <svg onClick={() => setVisibleDescription(visibleDescription ? false : true) } className={visibleDescription ? styles.arrowUp : styles.arrowDown} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
-                        </svg>   
-                    </div>
+                        <div className={styles.checkboxes}>
+                            <div className={styles.formLineCheckbox}>
+                                <label onClick={checkedCheckboxAvailable} htmlFor="availableCheckbox" className={checkedAvailable ? styles.formLabelChecked : styles.formLabelCheckbox}>
+                                    Disponível:
+                                </label>
+                                <input id="availableCheckbox" tabIndex="8" type="checkbox" name="agree" className={styles.formInputCheckbox} /> 
+                            </div>     
+                            <div className={styles.formLineCheckbox}>
+                                <label onClick={checkedCheckboxTop} htmlFor="topCheckbox" className={checkedTop ? styles.formLabelChecked : styles.formLabelCheckbox}>
+                                    Best-seller:
+                                </label>
+                                <input id="topCheckbox" type="checkbox" tabIndex="9" name="top" className={styles.formInputCheckbox} /> 
+                            </div>   
+                            <div className={styles.formLineCheckbox}>
+                                <label onClick={checkedCheckboxExclusive} htmlFor="exclusiveCheckbox" className={checkedExclusive ? styles.formLabelChecked : styles.formLabelCheckbox}>
+                                    Exclusive:
+                                </label>
+                                <input id="exclusiveCheckbox" type="checkbox" tabIndex="10" name="exclusive" className={styles.formInputCheckbox} /> 
+                            </div>
+                            <div className={styles.formLineCheckbox}>
+                                <label onClick={checkedCheckboxNewProduct} htmlFor="newProductCheckbox" className={checkedNewProduct ? styles.formLabelChecked : styles.formLabelCheckbox}>
+                                    Não exibir em novos itens:
+                                </label>
+                                <input id="newProductCheckbox" type="checkbox" tabIndex="11" name="new-product" className={styles.formInputCheckbox} /> 
+                            </div>
+                        </div>
+                        <div className={styles.line}>
+                            <label htmlFor="product-promo-price" className={styles.label}>Preço promocional:</label>                    
+                            <input id="product-promo-price" tabIndex="12" type='text' className={styles.formInputSmall} placeholder='0.00'
+                                ref={inputRef}
+                                value={promoPrice}
+                                onChange={onChangePromoPrice}
+                            />
+                        </div>
+                        <div className={styles.line}>
+                            <label htmlFor="product-file" className={styles.label}>Foto:</label>
+                            <input id="product-file" tabIndex="13" type='file' className={styles.formFile}
+                                onChange={selectFile}
+                            />                    
+                        </div>
 
-                    <textarea hidden={visibleDescription ? false : true} id="product-about" tabIndex='19' className={styles.textarea}
-                        ref={textRef}
-                        value={text}
-                        onChange={onChangeText}
-                        onFocus={() => setActiveField('text')}
-                    />
+                        {related.map((i) => 
+                            <div className={styles.line} key={i.id}>
+                                <label htmlFor={'info-product_title' + i.id} className={styles.label}>Código de produto adicional:</label>
+                                <input required id={'info-product_title' + i.id} tabIndex="14" type='text' className={styles.formInputSmall}
+                                    value={i.referenceCode}
+                                    onChange={(e) => changeRelated('referenceCode', e.target.value, i.id)}
+                                /> 
+                                <button type='button' tabIndex='15' className='info-product__remove' onClick={() => removeRelated(i.id)}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                        <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
+                                    </svg>                                     
+                                </button>
+                            </div>                    
+                        )}
+                        <button type='button' className={styles.relatedButton} tabIndex="16" onClick={addRelated}>Anexar produto</button>
 
-                    <div className={styles.textareaTab}>
-                        <label htmlFor="product-applying" className={styles.label}>Método de uso:</label> 
-                        <svg onClick={() => setVisibleApplying(visibleApplying ? false : true) } className={visibleApplying ? styles.arrowUp : styles.arrowDown} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
-                        </svg> 
-                    </div>
-                    
-                    <textarea hidden={visibleApplying ? false : true} id="product-applying" tabIndex='22' className={styles.textarea}
-                        ref={applyingRef}
-                        value={applying}
-                        onChange={onChangeApplying}
-                        onFocus={() => setActiveField('applying')}
-                    />
+                        {info.map((i) => 
+                            <div className={styles.line} key={i.id}>
+                                <label htmlFor={'info-product_title' + i.id} className={styles.label}>Propriedade:</label>
+                                <input required id={'info-product_title' + i.id} tabIndex="17" type='text' className={styles.formInputSmall}
+                                    value={i.title}
+                                    onChange={(e) => changeInfo('title', e.target.value, i.id)}
+                                /> 
+                                <label htmlFor={'info-product_description' + i.id } className={styles.label}>=</label>
+                                <input required id={'info-product_description' + i.id } tabIndex="18" type='text' className={styles.formInputSmall}
+                                    value={i.description}
+                                    onChange={(e) => changeInfo('description', e.target.value, i.id)}
+                                />
+                                <button type='button' tabIndex='19' className='info-product__remove' onClick={() => removeInfo(i.id)}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                        <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
+                                    </svg>                                     
+                                </button>
+                            </div>                    
+                        )}
+                        <button type='button' className={styles.infoButton} tabIndex="20" onClick={addInfo}>Adicionar informações</button>
+                        <div className={styles.lineImg}>                
+                        {objSlides ? 
+                            objSlides.map((s) => 
+                                <div key={s.id} className={styles.imgBox}> 
+                                    <img src={ s.slideImg ? `${imagesCloud}` + s.slideImg : ''} alt='slide'/>  
+                                    <svg onClick={() => removeImage(s.id)} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                        <path d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z" />
+                                    </svg>
+                                </div>
+                            )
+                            :
+                            ""
+                            }
+                        </div>
+                        {slide.map((i) => 
+                            <div className={styles.line} key={i.id}>
+                                <label htmlFor="product-slide" className={styles.label}>Slide:</label>
+                                <input id="product-slide" tabIndex="21" type='file' className={styles.formFile}
+                                    onChange={(e) => changeSlide('slideImg', e.target.files[0], i.id)}
+                                />
+                                <button type='button' tabIndex='22' className='slide-product__remove' onClick={() => removeSlide(i.id)}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                        <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
+                                    </svg>                                     
+                                </button>
+                            </div>                
+                        )}
+                        <button type='button' className={styles.slideButton} tabIndex="23" onClick={addSlide}>Adicionar slide</button>
+                        
+                        <div className={styles.miniEditor}>
+                            <div className={styles.toolbar}>
+                                <button 
+                                    type="button" 
+                                    onClick={() => insertTag('strong')}
+                                    className={styles.toolBtn}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                                        <path d="M333.49 238a122 122 0 0 0 27-65.21C367.87 96.49 308 32 233.42 32H34a16 16 0 0 0-16 16v48a16 16 0 0 0 16 16h31.87v288H34a16 16 0 0 0-16 16v48a16 16 0 0 0 16 16h209.32c70.8 0 134.14-51.75 141-122.4 4.74-48.45-16.39-92.06-50.83-119.6zM145.66 112h87.76a48 48 0 0 1 0 96h-87.76zm87.76 288h-87.76V288h87.76a56 56 0 0 1 0 112z" />
+                                    </svg>
+                                </button>
+                                
+                                <button 
+                                    type="button" 
+                                    onClick={() => insertTag('em')}
+                                    className={styles.toolBtn}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                                        <path d="M320 48v32a16 16 0 0 1-16 16h-62.76l-80 320H208a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16H16a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16h62.76l80-320H112a16 16 0 0 1-16-16V48a16 16 0 0 1 16-16h192a16 16 0 0 1 16 16z" />
+                                    </svg>
+                                </button>
+                                <button 
+                                    type="button"
+                                    onClick={applyColor}
+                                    className={styles.toolBtn}
+                                >
+                                    <svg style={{ fill: `${selectedColor}`}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                        <path d="M432 416h-23.41L277.88 53.69A32 32 0 0 0 247.58 32h-47.16a32 32 0 0 0-30.3 21.69L39.41 416H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16h-19.58l23.3-64h152.56l23.3 64H304a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM176.85 272L224 142.51 271.15 272z" />
+                                    </svg>
+                                </button>
+                                <div className={styles.colorBtn}>
+                                    <input 
+                                        type="color" 
+                                        value={selectedColor}
+                                        onChange={(e) => handleColorChange(e.target.value)}
+                                        className={styles.colorPicker}
+                                    />
+                                </div>
+                            </div>
+                            <div className={styles.textareaTab}>
+                                <label htmlFor="product-about" className={styles.label}>Descrição:</label>       
+                                <svg onClick={() => setVisibleDescription(visibleDescription ? false : true) } className={visibleDescription ? styles.arrowUp : styles.arrowDown} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                    <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
+                                </svg>   
+                            </div>
 
-                    <div className={styles.textareaTab}>
-                        <label htmlFor="product-compound" className={styles.label}>Ingredientes:</label>  
-                        <svg onClick={() => setVisibleCompound(visibleCompound ? false : true) } className={visibleCompound ? styles.arrowUp : styles.arrowDown} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
-                        </svg>
-                    </div>
-                    
-                    <textarea hidden={visibleCompound ? false : true} id="product-compound" tabIndex='23' className={styles.textarea}
-                        ref={compoundRef}
-                        value={compound}
-                        onChange={onChangeCompound}
-                        onFocus={() => setActiveField('compound')}
-                    />
+                            <textarea hidden={visibleDescription ? false : true} id="product-about" tabIndex='24' className={styles.textarea}
+                                ref={textRef}
+                                value={text}
+                                onChange={onChangeText}
+                                onFocus={() => setActiveField('text')}
+                            />
 
-                </div>
-                <button type='submit' tabIndex='24' className={styles.button}>Atualizar produto</button>
-            </form>            
+                            <div className={styles.textareaTab}>
+                                <label htmlFor="product-applying" className={styles.label}>Método de uso:</label> 
+                                <svg onClick={() => setVisibleApplying(visibleApplying ? false : true) } className={visibleApplying ? styles.arrowUp : styles.arrowDown} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                    <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
+                                </svg> 
+                            </div>
+                            
+                            <textarea hidden={visibleApplying ? false : true} id="product-applying" tabIndex='25' className={styles.textarea}
+                                ref={applyingRef}
+                                value={applying}
+                                onChange={onChangeApplying}
+                                onFocus={() => setActiveField('applying')}
+                            />
+
+                            <div className={styles.textareaTab}>
+                                <label htmlFor="product-compound" className={styles.label}>Ingredientes:</label>  
+                                <svg onClick={() => setVisibleCompound(visibleCompound ? false : true) } className={visibleCompound ? styles.arrowUp : styles.arrowDown} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                    <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
+                                </svg>
+                            </div>
+                            
+                            <textarea hidden={visibleCompound ? false : true} id="product-compound" tabIndex='26' className={styles.textarea}
+                                ref={compoundRef}
+                                value={compound}
+                                onChange={onChangeCompound}
+                                onFocus={() => setActiveField('compound')}
+                            />
+
+                        </div>
+                        <button type='submit' tabIndex='27' className={styles.button}>Atualizar produto</button>
+                    </form> 
+                    :
+                    ''
+            }
         </div>
     );
 };

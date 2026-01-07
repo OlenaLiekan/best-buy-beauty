@@ -30,12 +30,16 @@ const ProductCard = () => {
         }
         window.scrollTo(0, 0);
         fetchProduct();
-    }, [id, navigate, serverDomain]);   
+    }, [id, navigate, serverDomain]);  
 
     return (
         <div className="main__product-card product-card">
             <div className="product-card__container">
-                {isLoading ? <Loader /> : <ProductItem obj={item} key={item.id} {...item} />}
+                {isLoading
+                    ?
+                    <Loader />
+                    :
+                    <ProductItem obj={item} key={item.id} {...item} />}
             </div>
         </div>
     );

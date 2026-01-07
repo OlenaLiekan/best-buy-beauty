@@ -2,6 +2,8 @@
     position: relative;
     margin: 0 auto;
     max-width: 600px;
+    min-width: 300px;
+    min-height: 300px;
     border: 2px solid #7f766a;
     border-radius: 20px;
     padding: 20px;
@@ -9,7 +11,7 @@
     margin-bottom: 100px;
 
     @media(max-width: 371.98px) {
-        overflow: hidden;
+        min-width: 240px;
         width: 250px;
     }
 
@@ -36,7 +38,8 @@
 .formInput,
 .formInputSmall,
 .formSelectBrands,
-.formSelectTypes {
+.formSelectTypes,
+.formSelectKits {
     font-size: 13px;
     height: 32px;
     border: 2px solid #dcdcdc;
@@ -74,7 +77,8 @@
 }
 
 .formSelectTypes,
-.formSelectBrands {
+.formSelectBrands,
+.formSelectKits {
     width: 200px;
     cursor: pointer;
     display: flex;
@@ -83,11 +87,15 @@
 }
 
 .formSelectBrands {
-    z-index: 4;
+    z-index: 7;
 }
 
 .formSelectTypes {
-    z-index: 2;
+    z-index: 5;
+}
+
+.formSelectKits {
+    z-index: 3;
 }
 
 .formFile {
@@ -234,32 +242,63 @@
     display: block;
     font-size: 18px;
     font-weight: 600;
-    color: #252525;
+    color: #7f766a;
     padding: 15px 20px;
     border-radius: 20px;
-    border: 2px solid #1560BD;
+    border: 2px solid #7f766a;
     background-color: #fff;
     outline: none;
     box-shadow: 3px 3px 3px #7f766a3e;
     transition: all 0.6s ease 0s;
-
     &:hover {
         color: #fff;
-        border: 2px solid #1560BD;
-        background-color: #1560BD;
+        border: 2px solid #252525;
+        background-color: #252525;
     }
-
     @media (max-width: 579.98px) {
         font-size: 16px;
     }
 }
 
-.close {
+.close,
+.backBtn {
     position: absolute;
+    cursor: pointer;
+}
+
+.close {
     top: 15px;
     right: 20px;
     font-size: 1.6rem;
-    cursor: pointer;
+}
+
+.backBtn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+    top: 20px;
+    left: 20px;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: #7f766a;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease 0s;
+
+    &:hover {
+        color: #252525;
+
+        svg {
+            fill: #252525;
+        }
+    }
+
+    svg {
+        width: 16px;
+        height: 16px;
+        fill: #7f766a;
+    }
 }
 
 .infoButton,
@@ -281,7 +320,9 @@
     }
 }
 
-.typeOptions {
+.typeOptions,
+.brandOptions,
+.kitOptions {
     position: absolute;
     width: 200px;
     padding-top: 15px;
@@ -293,8 +334,11 @@
     border-bottom: 2px solid #f4f4f4;
     box-shadow: 3px 3px 3px #f4f4f4a8;
     border-radius: 0 0 20px 20px;
-    overflow: hidden;
-    z-index: 1;
+    overflow: hidden;    
+}
+
+.typeOptions {
+    z-index: 4;
     top: 70px;
     left: 335px;
 
@@ -305,25 +349,24 @@
 }
 
 .brandOptions {
-    position: absolute;
-    width: 200px;
-    padding-top: 15px;
-    display: flex;
-    flex-direction: column;
-    background-color: #fff;
-    border-left: 2px solid #f4f4f4;
-    border-right: 2px solid #f4f4f4;
-    border-bottom: 2px solid #f4f4f4;
-    box-shadow: 3px 3px 3px #f4f4f4a8;
-    border-radius: 0 0 20px 20px;
-    overflow: hidden;
-    z-index: 3;
+    z-index: 6;
     top: 70px;
     left: 77px;
 
     @media(max-width: 602.98px) {
         left: 20px;
         top: 90px;
+    }
+}
+
+.kitOptions {
+    z-index: 2;
+    top: 120px;
+    left: 99px;
+
+    @media(max-width: 602.98px) {
+        left: 20px;
+        top: 220px;
     }
 }
 
@@ -415,4 +458,18 @@
 
 .arrowUp {
     transform: rotate(-180deg);
+}
+
+.kitBlock {
+    display: flex;
+    flex-direction: column;
+}
+
+.kitMenuActions {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-top: 50px;
+    width: 220px;
+    align-self: center;
 }

@@ -1,0 +1,158 @@
+.updateKitWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.typeOptions,
+.brandOptions,
+.kitOptions {
+    position: absolute;
+    width: 200px;
+    padding-top: 15px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-left: 2px solid #f4f4f4;
+    border-right: 2px solid #f4f4f4;
+    border-bottom: 2px solid #f4f4f4;
+    box-shadow: 3px 3px 3px #f4f4f4a8;
+    border-radius: 0 0 20px 20px;
+    overflow: hidden;
+}
+
+.typeOptions {
+    z-index: 2;
+    top: 120px;
+    left: 335px;
+
+    @media(max-width: 602.98px) {
+        left: 20px;
+        top: 220px;
+    }
+}
+
+.brandOptions {
+    z-index: 4;
+    top: 120px;
+    left: 77px;
+
+    @media(max-width: 602.98px) {
+        left: 20px;
+        top: 160px;
+    }
+}
+
+.kitOptions {
+    z-index: 6;
+    top: 70px;
+    left: 99px;
+
+    @media(max-width: 602.98px) {
+        left: 20px;
+        top: 90px;
+    }
+}
+
+.formSelectBrands,
+.formSelectTypes,
+.formSelectKit {
+    font-size: 13px;
+    height: 32px;
+    border: 2px solid #dcdcdc;
+    border-radius: 20px;
+    padding: 0 10px;
+    outline: none;
+
+    &:not(:last-child) {
+        margin-right: 15px;
+    }
+
+    @media (max-width: 602.98px) {
+        font-size: 12px;
+        margin-right: 0;
+    }
+}
+
+.formSelectTypes,
+.formSelectBrands,
+.formSelectKit {
+    width: 200px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.formSelectBrands {
+    z-index: 5;
+}
+
+.formSelectTypes {
+    z-index: 3;
+}
+
+.formSelectKit {
+    z-index: 7;
+}
+
+.optionsTitle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+    color: #7f766a;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+
+    &:hover {
+        color: #252525;
+
+        svg {
+            fill: #252525;
+        }
+    }
+}
+
+.optionsTitleIcon,
+.optionsTitleIconActive {
+    width: 20px;
+    height: 20px;
+}
+
+.optionsTitleIconActive {
+    transform: rotate(-180deg);
+}
+
+.optionsBody {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.kitSearchInput {
+    padding: 10px 32px 10px 10px;
+    border-bottom: 1.5px solid #f0f0f0ab;
+    font-size: 14px;
+    &::placeholder {
+        font-size: 13px;
+    }
+    outline: none;
+}
+
+.deleteIcon {
+    position: absolute;
+    top: 25px;
+    right: 10px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.listMsg {
+    color: #252525;
+    font-size: 12px;
+    padding: 10px;
+}

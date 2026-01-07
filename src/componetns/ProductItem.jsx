@@ -16,7 +16,7 @@ import ReviewItem from './ReviewItem';
 import NewReview from './UX/Popups/NewReview';
 import RelatedProductsBlock from './RelatedProductsBlock';
 
-const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, available, brandId, name, code, price, discountPrice, exclusiveProduct, img}) => {
+const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, available, brandId, name, code, price, discountPrice, exclusiveProduct, img, kitId}) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -42,6 +42,8 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const [brandDiscount, setBrandDiscount] = React.useState(0);
     const [productAdded, setProductAdded] = React.useState(false);
     const [productDownvoted, setProductDownvoted] = React.useState(false);
+    const [kitVariants, setKitVariants] = React.useState([]);
+    const [activeVariantId, setActiveVariantId] = React.useState('');
     const {
         isAuth,
         adminMode,
@@ -72,6 +74,21 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     }, [user, productRatings]);
 
     React.useEffect(() => {
+        if (kitId > 0 && !isLashes) {
+            setActiveVariantId(id);
+        }
+    }, [kitId, id]);
+
+    React.useEffect(() => {
+        if (kitId > 0) {
+            axios.get(`${serverDomain}api/product?limit=24&kitId=${kitId}`)
+            .then((res) => {
+                setKitVariants(res.data.rows);
+            });
+        }
+    }, [serverDomain, kitId]);
+
+    React.useEffect(() => {
         if (id) {
             axios.get(`${serverDomain}api/rating?productId=${id}`)
                 .then((res) => {
@@ -79,7 +96,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                 });
         }
     }, [id, serverDomain]);
-
+    
     React.useEffect(() => {
         if (productRatings.length > 0) {
             const calcRating = (productRatings.map((rating) => rating.name).reduce((acc, rate) => acc + rate, 0) / productRatings.length).toFixed(1);
@@ -185,9 +202,9 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
         setIndex(id + curlArr[activeCurl] + thicknessArr[activeThickness] + lengthArr[activeLength]); 
     }, [id, activeCurl, activeLength, activeThickness, curlArr, thicknessArr, lengthArr]);
     
-    const paragraphs = text.length ? text[0].text.split('\r\n') : '';
-    const paragraphsApplying = applying.length ? applying[0].text.split('\r\n') : '';
-    const paragraphsCompound = compound.length ? compound[0].text.split('\r\n') : '';
+    const paragraphs = text.length > 0 ? text[0].text.split('\r\n') : '';
+    const paragraphsApplying = applying.length > 0 ? applying[0].text.split('\r\n') : '';
+    const paragraphsCompound = compound.length > 0 ? compound[0].text.split('\r\n') : '';
 
     React.useEffect(() => {
         let props = [];
@@ -200,6 +217,12 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
         setPopupSlides(props); 
 
     }, [img, slide]);
+
+    React.useEffect(() => {
+        if (activeVariantId && id !== activeVariantId) {
+            navigate(`/${path}/${activeVariantId}`);
+        }
+    }, [activeVariantId, id]);
 
     return (
         <div className='product-card__content'>
@@ -237,7 +260,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                 {code}
                             </div>
                             <div className="info-product__brand"><span className="label-bold">Marca:</span> {company.name}</div>
-                            {info.length && !isLashes ? info.map((obj) => 
+                            {info.length > 0 && !isLashes ? info.map((obj) => 
                                 <div key={obj.id} className='info-product__volume'>  
                                     <span className="label-bold">
                                         {obj.title}:
@@ -247,6 +270,25 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                     </div>
                                 </div>                                    
                             ) :
+                                ''
+                            }
+
+                            {!isLashes && kitVariants.length > 0
+                                ?
+                                    <div className='variants__select'>
+                                        <ul className='variants__list list-variants'>
+                                            {kitVariants.map((variant) =>
+                                                <li
+                                                    key={variant.id}
+                                                    onClick={() => setActiveVariantId(variant.id)}
+                                                    className={variant.id === activeVariantId ? 'activeVariant' : 'itemVariant'}
+                                                >
+                                                    {variant.variant}
+                                                </li>
+                                            )}
+                                        </ul>                                    
+                                    </div>
+                                :
                                 ''
                             }
                             
@@ -410,7 +452,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                     </svg>
                                 </h3>
                                 <div className='product-card__column-v'>
-                                    {text.length && index === 0
+                                    {text.length > 0 && index === 0
                                         ?
                                         paragraphs.map((p, i) => 
                                             <p key={i} className={activeTitles.includes(0) ? 'description-product__text' : 'description-product__text_hidden'}>
@@ -467,7 +509,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                             https://drive.google.com/file/d/15W1lCaZ7Gs8momCtqaWxtj1GahRXL2nu/view?usp=sharing
                                         </Link>
                                     </p>
-                                    {applying.length && index === 1
+                                    {applying.length > 0 && index === 1 && paragraphsApplying.length > 0 && activeTitles.length > 0
                                         ? 
                                         paragraphsApplying.map((p, i) => 
                                             <p key={i} className={activeTitles.includes(1) ? 'description-product__text' : 'description-product__text_hidden'}>
@@ -476,7 +518,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                         )
                                         : ''                        
                                     }
-                                    {compound.length && index === 2
+                                    {compound.length > 0 && index === 2
                                         ? 
                                         paragraphsCompound.map((p, i) => 
                                             <p key={i} className={activeTitles.includes(2) ? 'description-product__text' : 'description-product__text_hidden'}>
@@ -493,7 +535,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
             </div>
             <RelatedProductsBlock related={obj.related} />
             <div className="product-card__reviews reviews">
-                {productRatings.length
+                {productRatings.length > 0 
                     ?                         
                     <div className="reviews__items">
                         {reviewItem ? reviewItem : ''}

@@ -56,6 +56,12 @@ function App() {
   const [promoList, setPromoList] = React.useState([]);
   const [lastPromo, setLastPromo] = React.useState('');
 
+  const [kitCreation, setKitCreation] = React.useState(false);
+  const [showKitMenu, setShowKitMenu] = React.useState(true);
+
+  const [kitEditing, setKitEditing] = React.useState(false);
+  const [kitEditingMenu, setKitEditingMenu] = React.useState(true);
+
   const serverDomain = 'https://bbb-server-a6ji.onrender.com/';
   const imagesCloud = 'https://res.cloudinary.com/bbbptcloud/image/upload/v1699129130/static/';
 
@@ -212,6 +218,14 @@ function App() {
           setUpdatedCart,
           activeAuthOption,
           setActiveAuthOption,
+          showKitMenu,
+          setShowKitMenu,
+          kitCreation,
+          setKitCreation,
+          kitEditing,
+          setKitEditing,
+          kitEditingMenu,
+          setKitEditingMenu,
         }}
       >
         <SearchContext.Provider
