@@ -63,7 +63,10 @@ const AdminOrders = () => {
                                                     'Cancelbank'
                                                     :
                                                     (transaction.paymentStatus === 'Pending'
-                                                        && 'Pendente'
+                                                        ?
+                                                        'Pendente'
+                                                        :
+                                                        transaction.paymentStatus === 'Timeout' && 'Timeout'
                                                     )
                                                 )
                                             )
