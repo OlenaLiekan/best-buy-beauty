@@ -2773,7 +2773,6 @@
 .variants {
     &__list {
         display: grid;
-        grid-template-columns: repeat(5, 1fr);
         gap: 5px;
         li {
             cursor: pointer;
@@ -2790,6 +2789,22 @@
                 background-color: $mainColor;
             } 
         }
+    }
+}
+
+.length,
+.thick,
+.curl,
+.variants {
+    &__list {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+.variants {
+    &__list {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
