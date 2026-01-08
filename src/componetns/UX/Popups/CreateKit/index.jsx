@@ -131,8 +131,12 @@ const CreateKit = () => {
         formData.append('isLashes', isLashes);
         formData.append('categoryId', categoryId);
         formData.append('isPromo', promoPrice && +promoPrice > 0 ? true : false);
-        formData.append('price', price ? price : null);             
-        formData.append('discountPrice', promoPrice ? promoPrice : null);            
+        if (price) {
+            formData.append('price', price);            
+        }
+        if (promoPrice) {
+            formData.append('discountPrice', promoPrice);               
+        }       
         formData.append('img', img);            
         formData.append('newProduct', !newProduct);
         createKit(formData).then(data => success()).catch(err => message());
