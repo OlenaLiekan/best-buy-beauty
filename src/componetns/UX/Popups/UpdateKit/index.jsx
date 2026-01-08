@@ -73,7 +73,7 @@ const UpdateKit = () => {
 
     React.useEffect(() => {
         const searchParams = kitSearchValue ? `?name=${kitSearchValue}` : '';
-        axios.get(`${serverDomain}/api/kit${searchParams}`)
+        axios.get(`${serverDomain}api/kit${searchParams}`)
             .then((res) => {
                 setKits(res.data);
             });
@@ -197,9 +197,15 @@ const UpdateKit = () => {
             formData.set('isLashes', isLashes);
             formData.set('categoryId', categoryId);
             formData.set('isPromo', promoPrice && +promoPrice > 0 ? true : false);
-            formData.set('price', price ? price : null);             
-            formData.set('discountPrice', promoPrice ? promoPrice : null);            
-            formData.set('img', img);            
+            if (price) {
+                formData.set('price', price);                        
+            }
+            if (promoPrice) {
+                formData.set('discountPrice', promoPrice);   
+            }
+            if (img) {
+                formData.set('img', img);       
+            }     
             formData.set('newProduct', !newProduct);
             updateKit(formData, kitId).then(data => success()).catch(err => message());            
         }
@@ -308,7 +314,7 @@ const UpdateKit = () => {
                             <div className={kitStyles.optionsBody}>
                                 <div className={styles.line}>
                                     <label htmlFor="product-price" className={styles.label}>Preço:</label>
-                                    <input id="product-price" required tabIndex="5" type='text' className={styles.formInputSmall} placeholder='0.00'
+                                    <input id="product-price" tabIndex="5" type='text' className={styles.formInputSmall} placeholder='0.00'
                                         ref={inputRef}
                                         value={price}
                                         onChange={onChangePrice}
