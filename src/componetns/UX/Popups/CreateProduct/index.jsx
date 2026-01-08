@@ -49,7 +49,7 @@ const CreateProduct = () => {
     const [info, setInfo] = React.useState([]);
     const [slide, setSlide] = React.useState([]);
     const [img, setImg] = React.useState(null);
-    const [kitImg, setKitImg] = React.useState(null);
+    const [kitImg, setKitImg] = React.useState('');
     const [images, setImages] = React.useState([]);
     const [isLashes, setIsLashes] = React.useState(false);
     const [text, setText] = React.useState('');
@@ -192,7 +192,7 @@ const CreateProduct = () => {
             .then((res) => {
                 setKits(res.data);
             });
-    }, [serverDomain]);
+    }, [serverDomain, kitCreation, showKitMenu]);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/brand`)
@@ -248,7 +248,7 @@ const CreateProduct = () => {
                 setBrandName('Selecione a marca');
                 setTypeName('Selecione o tipo');
                 if (selectedKit.img) {
-                    setKitImg(null);                
+                    setKitImg('');                
                 }
                 if (selectedKit.newProduct) {
                     setNewProduct(false);
@@ -263,7 +263,7 @@ const CreateProduct = () => {
             setPromoPrice('');     
             setBrandName('Selecione a marca');
             setTypeName('Selecione o tipo');
-            setKitImg(null);                
+            setKitImg('');                
             setNewProduct(false); 
             setVariant('');
             setShareKitParams(false);
@@ -439,8 +439,12 @@ const CreateProduct = () => {
             formData.append('categoryId', categoryId);
             formData.append('brandId', brandId);
             formData.append('typeId', typeId);
-            formData.append('img', img);
-            formData.append('kitImg', kitImg);
+            if (img) {
+                formData.append('img', img);                
+            }
+            if (kitImg) {
+                formData.append('kitImg', kitImg);
+            }
             formData.append('related', JSON.stringify(related));
             formData.append('info', JSON.stringify(info));
             formData.append('text', text);
@@ -636,7 +640,7 @@ const CreateProduct = () => {
                                 </div>
                                 <div className={styles.formFileName}>
                                     {kitImg}
-                                    <svg onClick={() => setKitImg(null)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                                    <svg onClick={() => setKitImg('')} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
                                         <path d="M576 64H205.26A63.97 63.97 0 0 0 160 82.75L9.37 233.37c-12.5 12.5-12.5 32.76 0 45.25L160 429.25c12 12 28.28 18.75 45.25 18.75H576c35.35 0 64-28.65 64-64V128c0-35.35-28.65-64-64-64zm-84.69 254.06c6.25 6.25 6.25 16.38 0 22.63l-22.62 22.62c-6.25 6.25-16.38 6.25-22.63 0L384 301.25l-62.06 62.06c-6.25 6.25-16.38 6.25-22.63 0l-22.62-22.62c-6.25-6.25-6.25-16.38 0-22.63L338.75 256l-62.06-62.06c-6.25-6.25-6.25-16.38 0-22.63l22.62-22.62c6.25-6.25 16.38-6.25 22.63 0L384 210.75l62.06-62.06c6.25-6.25 16.38-6.25 22.63 0l22.62 22.62c6.25 6.25 6.25 16.38 0 22.63L429.25 256l62.06 62.06z" />
                                     </svg>
                                 </div>
