@@ -457,7 +457,7 @@ const UpdateProduct = ({id, obj}) => {
     }; 
 
     return (
-        <div className={styles.updateProduct}>
+        <div className={!kitEditingMenu ? styles.updateProduct : styles.updateProductKit}>
             {!kitEditing && !kitEditingMenu || !kitEditingMenu && kitEditing
                 ?
                 <button type='button' onClick={onClickReturn} className={styles.backBtn}>
