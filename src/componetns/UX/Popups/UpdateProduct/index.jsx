@@ -59,6 +59,11 @@ const UpdateProduct = ({id, obj}) => {
 
     React.useEffect(() => {
         setName(obj.name);
+        setKitId(obj.kitId ? obj.kitId : 0);
+        const kit = kits.find(kit => kit.id === obj.kitId);
+        if (kit) {
+            setKitName(kit.name);            
+        }
         setVariant(obj.variant ? obj.variant : '');
         setCode(obj.code);
         setPrice(obj.price);
@@ -86,7 +91,7 @@ const UpdateProduct = ({id, obj}) => {
         if (type) {
             setTypeName(type.name);            
         } 
-    }, [obj, brands, types]);
+    }, [obj, brands, types, kits]);
 
     const success = () => {
         window.alert('Dados do produto atualizados com sucesso!');

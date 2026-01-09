@@ -275,19 +275,22 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
 
                             {!isLashes && kitVariants.length > 0
                                 ?
-                                    <div className='variants__select'>
-                                        <ul className='variants__list list-variants'>
-                                            {kitVariants.map((variant) =>
-                                                <li
-                                                    key={variant.id}
-                                                    onClick={() => setActiveVariantId(variant.id)}
-                                                    className={variant.id === activeVariantId ? 'activeVariant' : 'itemVariant'}
-                                                >
-                                                    {variant.variant}
-                                                </li>
-                                            )}
-                                        </ul>                                    
+                                <div className='variants__select'>
+                                    <div className='variants__title'>
+                                        ESCOLHER:
                                     </div>
+                                    <ul className='variants__list list-variants'>
+                                        {kitVariants.map((variant) =>
+                                            <li
+                                                key={variant.id}
+                                                onClick={() => setActiveVariantId(variant.id)}
+                                                className={variant.id === activeVariantId ? 'activeVariant' : 'itemVariant'}
+                                            >
+                                                {variant.variant}
+                                            </li>
+                                        )}
+                                    </ul>                                    
+                                </div>
                                 :
                                 ''
                             }

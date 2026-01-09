@@ -2769,10 +2769,18 @@
 
 .length,
 .thick,
+.curl {
+    &__list {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+.length,
+.thick,
 .curl,
 .variants {
     &__list {
-        display: grid;
         gap: 5px;
         li {
             cursor: pointer;
@@ -2792,19 +2800,11 @@
     }
 }
 
-.length,
-.thick,
-.curl,
 .variants {
     &__list {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-    }
-}
-
-.variants {
-    &__list {
-        grid-template-columns: repeat(3, 1fr);
+        display: flex;
+        max-width: 250px;
+        flex-wrap: wrap;
     }
 }
 
@@ -2825,10 +2825,17 @@
 
 .curl,
 .thick,
-.length,
-.variants {
+.length {
     &__select {
         display: flex;        
+    }
+}
+
+.variants {
+    &__select {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
     }
 }
 
