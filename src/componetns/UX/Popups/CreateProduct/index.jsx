@@ -77,7 +77,8 @@ const CreateProduct = () => {
         }
     }, [serverDomain, code]);
 
-    const success = () => {
+    const success = (data) => {
+        console.log(data);
         window.alert('Novo produtos adicionado com sucesso!');
         setCreateProductMode(false);  
         navigate('/auth');
@@ -468,7 +469,7 @@ const CreateProduct = () => {
                     window.alert("Adicionar propriedades: 'Curvatura', 'Grossura', 'Tamanho'");
                 }
             } else {
-                createProduct(formData).then(data => success()).catch(err => message());                
+                createProduct(formData).then(data => success(data)).catch(err => message());                
             }
         } else {
             window.alert('O preço promocional deve ser inferior ao preço padrão.');
@@ -589,6 +590,7 @@ const CreateProduct = () => {
                             onChange={onChangeName}
                         />
                     </div>
+                        
                     {
                         kitId > 0 
                         &&
