@@ -99,8 +99,8 @@ const UpdateKit = () => {
             setBrandId(selectedKit.brandId);
             setTypeId(selectedKit.typeId);
             setName(selectedKit.name);
-            setPrice(selectedKit.price ? selectedKit.price.toFixed(2) : '');
-            setPromoPrice(selectedKit.discountPrice ? selectedKit.discountPrice.toFixed(2) : '');
+            setPrice(selectedKit.price ? selectedKit.price : '');
+            setPromoPrice(selectedKit.discountPrice ? selectedKit.discountPrice : '');
             if (selectedKit.newProduct) {
                 setNewProduct(false);
             } else {
