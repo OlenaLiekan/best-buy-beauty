@@ -34,6 +34,7 @@
 
 .formInput, 
 .formInputSmall,
+.formInputExtraSmall,
 .formSelectBrands,
 .formSelectTypes,
 .formSelectKits {
@@ -69,6 +70,10 @@
 
 .formInputSmall {
     max-width: 150px;
+}
+
+.formInputExtraSmall {
+    max-width: 80px;
 }
 
 .formSelectTypes,
@@ -174,6 +179,11 @@
         font-size: 12px;
         margin-right: 0;
     }
+}
+
+.label {
+    display: flex;
+    align-items: center;
 }
 
 .formLabelCheckbox,
@@ -453,5 +463,68 @@
     flex-direction: column;
     gap: 30px;
     margin-top: 50px;
+}
+
+.lineImg {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+
+    @media(max-width: 371.98px) {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+    }
+}
+
+.imgBox {
+    position: relative;
+    height: 80px;
+
+    @media(max-width: 479.98px) {
+        height: 50px;
+    }
+
+    img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    svg {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 24px;
+        height: 24px;
+        z-index: 0;
+        background-color: #ffffffbd;
+        padding: 5px;
+        border-radius: 0 0 0 5px;
+        cursor: pointer;
+
+        &:hover {
+            transform: scale(1.3);
+        }
+    }
+}
+
+.addVariantLine {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.addVariantText {
+    font-size: 14px;
+    color: #7f766a;
+}
+
+.addVariantIcon {
+    width: 16px;
+    height: 16px;
 }
 

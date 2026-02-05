@@ -48,6 +48,7 @@ const CreateProduct = () => {
     const [related, setRelated] = React.useState([]);
     const [info, setInfo] = React.useState([]);
     const [slide, setSlide] = React.useState([]);
+    const [kitSlides, setKitSlides] = React.useState([]);
     const [img, setImg] = React.useState(null);
     const [kitImg, setKitImg] = React.useState('');
     const [images, setImages] = React.useState([]);
@@ -77,8 +78,7 @@ const CreateProduct = () => {
         }
     }, [serverDomain, code]);
 
-    const success = (data) => {
-        console.log(data);
+    const success = () => {
         window.alert('Novo produtos adicionado com sucesso!');
         setCreateProductMode(false);  
         navigate('/auth');
@@ -189,6 +189,13 @@ const CreateProduct = () => {
     }
 
     React.useEffect(() => {
+        axios.get(`${serverDomain}api/type`)
+            .then((res) => {
+                setTypes(res.data.slice(1));
+            });
+    }, [serverDomain]);
+
+    React.useEffect(() => {
         axios.get(`${serverDomain}api/kit`)
             .then((res) => {
                 setKits(res.data);
@@ -203,27 +210,23 @@ const CreateProduct = () => {
     }, [serverDomain]);
 
     React.useEffect(() => {
-        axios.get(`${serverDomain}api/type`)
-            .then((res) => {
-                setTypes(res.data.slice(1));
-            });
-    }, [serverDomain]);
-
-    React.useEffect(() => {
         if (kits.length > 0 && kitId && types.length > 0 && brands.length > 0) {
-            const selectedKit = kits.find((kit) => kit.id == kitId);        
-            if (shareKitParams) {
+            const selectedKit = kits.find((kit) => kit.id == kitId); 
+            if (shareKitParams && selectedKit) {
                 setTypeId(selectedKit.typeId);
                 setBrandId(selectedKit.brandId);
                 setName(selectedKit.name);
                 if (selectedKit.price) {
-                    setPrice(selectedKit.price.toFixed(2));                
+                    setPrice(selectedKit.price);                
                 }
                 if (selectedKit.discountPrice) {
-                    setPromoPrice(selectedKit.discountPrice.toFixed(2));                
+                    setPromoPrice(selectedKit.discountPrice);                
                 }
                 if (selectedKit.img) {
                     setKitImg(selectedKit.img);                
+                }
+                if (selectedKit.slide) {
+                    setKitSlides(selectedKit.slide);        
                 }
                 const kitBrand = brands.find((brand) => brand.id == selectedKit.brandId);
                 const kitBrandName = kitBrand.name;
@@ -235,6 +238,29 @@ const CreateProduct = () => {
                     setNewProduct(false);
                 } else {
                     setNewProduct(true);
+                }
+                if (selectedKit.related) {
+                    if (selectedKit.length > 0) {
+                        selectedKit.related.forEach((item) => {
+                            setRelated([...related, {referenceCode: item.referenceCode, number: item.createdAt}]);
+                        });                        
+                    }
+                }
+                if (selectedKit.info) {
+                    if (selectedKit.info.length > 0) {
+                        selectedKit.info.forEach((i) => {
+                            setInfo([...info, { title: i.title, description: i.description, number: Date.now() }]);
+                        });                        
+                    }
+                }
+                if (selectedKit.text) {
+                    setText(selectedKit.text.text);
+                }
+                if (selectedKit.applying) {
+                    setApplying(selectedKit.applying.text);
+                }
+                if (selectedKit.compound) {
+                    setCompound(selectedKit.compound.text);
                 }
             } else {
                 setTypeId(1);
@@ -254,6 +280,21 @@ const CreateProduct = () => {
                 if (selectedKit.newProduct) {
                     setNewProduct(false);
                 }
+                if (selectedKit.related) {
+                    setRelated([]);
+                }
+                if (selectedKit.info) {
+                    setInfo([]);
+                }
+                if (selectedKit.text) {
+                    setText('');
+                }
+                if (selectedKit.applying) {
+                    setApplying('');
+                }
+                if (selectedKit.compound) {
+                    setCompound('');
+                }
             }
         }
         if (kitId === 0) {
@@ -266,6 +307,11 @@ const CreateProduct = () => {
             setTypeName('Selecione o tipo');
             setKitImg('');                
             setNewProduct(false); 
+            setRelated([]);
+            setInfo([]);
+            setText('');
+            setApplying('');
+            setCompound('');
             setVariant('');
             setShareKitParams(false);
         }
@@ -429,6 +475,15 @@ const CreateProduct = () => {
         setKitCreation(false);
     }; 
 
+    const removeImage = (id) => {
+        setKitSlides(kitSlides.filter((s) => s.id !== id));
+    }
+
+    const addVariantToName = () => {
+        setName('');
+        setName(kitName.trimEnd() + ' ' + variant);
+    }
+
     const pushProduct = (e) => {
         e.preventDefault();
         if (!kitCreation && !showKitMenu && price > +promoPrice) {
@@ -456,9 +511,16 @@ const CreateProduct = () => {
             formData.append('kitId', kitId);
             formData.append('variant', variant);
             formData.append('isPromo', promoPrice && +promoPrice > 0 ? true : false);
-            images.forEach((file) => {
-                formData.append('slide', file);
-            });
+            if (images.length > 0) {
+                images.forEach((file) => {
+                    formData.append('slide', file);
+                });
+            }
+            if (kitSlides.length > 0) {
+                kitSlides.forEach((slide) => {
+                    formData.append('kitSlide', slide);
+                });
+            }
             if (isLashes) {
                 const firstResult = info.length ? info.find((i) => i.title.toLowerCase() === 'curvatura') : false;
                 const secondResult = info.length ? info.find((i) => i.title.toLowerCase() === 'grossura') : false;
@@ -469,7 +531,7 @@ const CreateProduct = () => {
                     window.alert("Adicionar propriedades: 'Curvatura', 'Grossura', 'Tamanho'");
                 }
             } else {
-                createProduct(formData).then(data => success(data)).catch(err => message());                
+                createProduct(formData).then(data => success()).catch(err => message());                
             }
         } else {
             window.alert('O preço promocional deve ser inferior ao preço padrão.');
@@ -581,15 +643,7 @@ const CreateProduct = () => {
                             </label>
                             <input id="shareKitParamsCheckbox" type="checkbox" tabIndex="4" name="share-kit-params" className={styles.formInputCheckbox} />
                         </div>                            
-                    }    
-                    <div className={styles.line}>
-                        <label htmlFor="product-name" className={styles.label} placeholder='Name'>Nome:</label>
-                        <input id="product-name" required tabIndex="5" type='text' className={styles.formInput}
-                            ref={inputRef}
-                            value={name}
-                            onChange={onChangeName}
-                        />
-                    </div>
+                    }   
                         
                     {
                         kitId > 0 
@@ -599,10 +653,26 @@ const CreateProduct = () => {
                             <input id="product-variant" required={kitId > 0 ? true : false} tabIndex="6" type='text' className={styles.formInputSmall}
                                 ref={inputRef}
                                 value={variant}
-                                onChange={onChangeVariant}
-                            />
+                                        onChange={onChangeVariant}
+                                />
+                                <div className={styles.addVariantLine} onClick={addVariantToName} >
+                                    <svg className={styles.addVariantIcon} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                        <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
+                                    </svg>
+                                    <div className={styles.addVariantText}>Adicionar ao nome</div>                                     
+                                </div>
                         </div>                                  
-                    }    
+                    }  
+                        
+                    <div className={styles.line}>
+                        <label htmlFor="product-name" className={styles.label} placeholder='Name'>Nome:</label>
+                        <input id="product-name" required tabIndex="5" type='text' className={styles.formInput}
+                            ref={inputRef}
+                            value={name}
+                            onChange={onChangeName}
+                        />
+                    </div>
+                          
                     <div className={styles.line}>
                         <label htmlFor="product-code" className={styles.label}>Código:</label>
                         <input id="product-code" required tabIndex="7" type='text' className={styles.formInputSmall}
@@ -692,6 +762,22 @@ const CreateProduct = () => {
                         </div>
                     )}
                     <button type='button' className={styles.infoButton} tabIndex="18" onClick={addInfo}>Adicionar informações</button>
+                    
+                    <div className={styles.lineImg}> 
+                        {
+                            kitSlides.length > 0
+                                &&
+                                kitSlides.map((kitSlide) => 
+                                    <div key={kitSlide.id} className={styles.imgBox}> 
+                                        <img src={ kitSlide.slideImg ? `${imagesCloud}` + kitSlide.slideImg : ''} alt='slide'/>  
+                                        <svg onClick={() => removeImage(kitSlide.id)} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                            <path d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z" />
+                                        </svg>
+                                    </div>
+                                )    
+                        }
+                    </div>
+                        
                     {slide.map((i) =>
                         <div className={styles.line} key={i.number}>
                             <label htmlFor="product-slide" className={styles.label}>Slide:</label>
@@ -704,7 +790,7 @@ const CreateProduct = () => {
                                 </svg>
                             </button>
                         </div>
-                    )}
+                        )}
                     <button type='button' className={styles.slideButton} tabIndex="21" onClick={addSlide}>Adicionar novo slide</button>
                     <div className={styles.miniEditor}>
                         <div className={styles.toolbar}>
