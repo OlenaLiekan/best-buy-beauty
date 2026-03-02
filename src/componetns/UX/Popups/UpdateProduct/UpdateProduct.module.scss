@@ -45,6 +45,7 @@
 
 .formInput,
 .formInputSmall,
+.formInputExtraSmall,
 .formSelectBrands,
 .formSelectTypes,
 .formSelectKits {
@@ -79,6 +80,10 @@
     max-width: 150px;
 }
 
+.formInputExtraSmall {
+    max-width: 80px;
+}
+
 .formInputCheckbox {
     position: absolute;
     opacity: 0;
@@ -92,6 +97,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background-color: #fff;
 }
 
 .formSelectBrands {
@@ -104,6 +110,12 @@
 
 .formSelectKits {
     z-index: 3;
+}
+
+.fotoLine {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .formFile {
@@ -333,6 +345,8 @@
 .kitOptions {
     position: absolute;
     width: 200px;
+    max-height: 250px;
+    min-height: 100px;
     padding-top: 15px;
     display: flex;
     flex-direction: column;
@@ -342,7 +356,7 @@
     border-bottom: 2px solid #f4f4f4;
     box-shadow: 3px 3px 3px #f4f4f4a8;
     border-radius: 0 0 20px 20px;
-    overflow: hidden;    
+    overflow-y: scroll;    
 }
 
 .typeOptions {
@@ -480,4 +494,40 @@
     margin-top: 50px;
     width: 220px;
     align-self: center;
+}
+
+.kitSearchInput {
+    padding: 10px 32px 10px 10px;
+    border-bottom: 1.5px solid #f0f0f0ab;
+    font-size: 14px;
+
+    &::placeholder {
+        font-size: 13px;
+    }
+
+    outline: none;
+    margin-bottom: 10px;
+}
+
+.deleteIcon {
+    position: absolute;
+    top: 25px;
+    right: 10px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.listMsg {
+    color: #252525;
+    font-size: 12px;
+    padding: 0 10px;
+}
+
+.kitProductsList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 14px;
+    margin: 20px 0;
 }

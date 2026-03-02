@@ -25,6 +25,7 @@ import SubmitPage from "../pages/SubmitPage";
 import SIBSForm from "../pages/sibsForm";
 import MBWay from "../pages/MBWay";
 import ResetPassword from "../pages/ResetPassword";
+import Favorites from "../pages/Favorites";
 
 const AppRoutes = () => {
   const { isAuth, serverDomain } = React.useContext(AuthContext);
@@ -69,8 +70,9 @@ const AppRoutes = () => {
         <Route path="cart" element={<Cart arr={types} />} />
         <Route path="order" element={<SubmitPage />} />
         <Route path="send-email" element={<SuccessPage />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<NotFound text={'Desculpe, página não encontrada.'} />} />
         <Route path="about" element={<About />} />
+        <Route path="favorites" element={<Favorites />} />
         <Route path="payment&delivery" element={<Payment />} />
         <Route path="faq" element={<Faq />} />
         <Route path="terms" element={<Terms />} />

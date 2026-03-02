@@ -9,6 +9,9 @@
 .kitOptions {
     position: absolute;
     width: 200px;
+    max-height: 250px;
+    min-height: 100px;
+    overflow-y: auto;
     padding-top: 15px;
     display: flex;
     flex-direction: column;
@@ -18,7 +21,6 @@
     border-bottom: 2px solid #f4f4f4;
     box-shadow: 3px 3px 3px #f4f4f4a8;
     border-radius: 0 0 20px 20px;
-    overflow: hidden;
 }
 
 .typeOptions {
@@ -54,11 +56,13 @@
     }
 }
 
+
 .formSelectBrands,
 .formSelectTypes,
 .formSelectKit {
     font-size: 13px;
     height: 32px;
+    background-color: #fff;
     border: 2px solid #dcdcdc;
     border-radius: 20px;
     padding: 0 10px;
@@ -96,12 +100,14 @@
     z-index: 7;
 }
 
-.optionsTitle {
+.optionsTitle,
+.paramsTitle {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin: 10px 0;
+    margin-bottom: 10px;
     color: #7f766a;
+    font-size: 16px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease 0s;
@@ -113,6 +119,23 @@
             fill: #252525;
         }
     }
+
+    @media(max-width: 579.98px) {
+        font-size: 12px;
+    }
+
+    @media(max-width: 379.98px) {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+.optionsTitle {
+    margin: 0 0 10px 0;
+}
+
+.paramsTitle {
+    margin: 30px 0 10px 0;
 }
 
 .optionsTitleIcon,
@@ -132,6 +155,99 @@
     margin-bottom: 20px;
 }
 
+.optionsRow,
+.kitProductRow,
+.kitProductRowActive {
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    font-size: 14px;
+
+    @media (max-width: 579.98px) {
+        flex-wrap: wrap;
+    }
+
+    @media (max-width: 379.98px) {
+        font-size: 12px;
+    }
+}
+
+.optionsRow {
+    gap: 15px;
+}
+
+.kitProductRow,
+.kitProductRowActive {
+    cursor: pointer;
+    column-gap: 15px;
+    row-gap: 10px;
+}
+
+.infoWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 15px;
+}
+
+.kitProductRow {
+    color: #5a5a5a;
+    &:hover {
+        color: #252525;
+    }
+}
+
+.kitProductRowActive {
+    color: #AD912B;
+    font-weight: 500;
+}
+
+.removeVariantsIcon,
+.minusIcon {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+}
+
+.removeVariantsIcon {
+    margin-left: 10px;
+}
+
+.generateBtn,
+.updatePricesBtn {
+    padding: 8px;
+    background-color: #fff;
+    border: 2px solid #1560BD;
+    box-shadow: 2px 2px 2px #2525251e;
+    color: #252525;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    width: 180px;
+    border-radius: 20px;
+    transition: all 0.3s ease 0s;
+
+    &:disabled,
+    &:disabled:hover {
+        border: 2px solid #878787;
+        color: #878787;
+        background-color: #fff;
+    }
+
+    &:hover {
+        background-color: #1560BD;
+        color: #fff;
+    }
+
+    @media (max-width: 579.98px) {
+        font-size: 14px;
+        width: 150px;
+    }
+}
+
+.updatePricesBtn {
+    margin-top: 20px;
+}
+
 .kitSearchInput {
     padding: 10px 32px 10px 10px;
     border-bottom: 1.5px solid #f0f0f0ab;
@@ -140,6 +256,7 @@
         font-size: 13px;
     }
     outline: none;
+    margin-bottom: 10px;
 }
 
 .deleteIcon {
@@ -154,5 +271,36 @@
 .listMsg {
     color: #252525;
     font-size: 12px;
-    padding: 10px;
+    padding: 0 10px;
 }
+
+.kitProductsList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 14px;
+    margin: 20px 0;
+}
+
+.priceMsgWarn {
+    color: #ad342b;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 15px 0;
+}
+
+.removeSelectedIcon {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+}
+
+.line {
+    margin-top: 20px;
+}
+
+.removeLine {
+    display: flex;
+    align-items: center;
+}
+

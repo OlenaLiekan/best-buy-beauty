@@ -6,7 +6,7 @@ import { addItem, minusItem, removeItem, clearItems  } from '../../redux/slices/
 import { AuthContext } from '../../context';
 import axios from 'axios';
     
-const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, company, lengthArr, thicknessArr, curlArr, count, available, exclusiveProduct, discountPrice }) => {
+const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price, company, lengthArr, thicknessArr, curlArr, count, available, exclusiveProduct, discountPrice, kitId, variant }) => {
 
     const [dbItem, setDBItem] = React.useState({});
     const [itemLoading, setItemLoading] = React.useState(false);
@@ -24,47 +24,41 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
     } = React.useContext(AuthContext);
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const isOldLashesModel = isLashes && (!kitId || kitId === 0);
+    const isNewLashesModel = isLashes && kitId > 0;
+
+    React.useEffect(() => {
+        setItemLoading(true);
+        axios.get(`${serverDomain}api/product/${id}`)
+        .then((res) => {
+            setDBItem(res.data);
+            setItemLoading(false);
+        })
+        .catch(() => setItemLoading(false));
+    }, [id, serverDomain]);
 
     const handleClick = () => {
         navigate(`/${path}/${id}`);
         window.scrollTo(0, 0);
     }
 
-    const dispatch = useDispatch();
-
     const onClickPlus = () => {
-        dispatch(
-            addItem({
-                id,
-                lengthArr,
-                thicknessArr,
-                curlArr,
-            }),
-        );
+        dispatch(addItem(obj));
     };
 
     const onClickMinus = () => {
-        dispatch(
-            minusItem(isLashes ? index : id),
-        );
+        dispatch(minusItem(obj));
     };
+    
 
     const onClickRemove = () => {
         if (window.confirm('Tem certeza de que deseja excluir o produto?')) {
-            dispatch(
-                removeItem(isLashes ? index : id)
-            );
+            dispatch(removeItem(obj));
         }
     };
-
-    React.useEffect(() => {
-        setItemLoading(true);
-        axios.get(`${serverDomain}api/product/${id}`)
-            .then((res) => {
-                setDBItem(res.data);
-                setItemLoading(false);
-            });
-    }, [id, available]);
+    
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/brand`)
@@ -77,31 +71,73 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
 
     React.useEffect(() => {
         if (productUpdated === code) {
-            dispatch(
-                removeItem(isLashes ? index : id)
-            );
+            if (isOldLashesModel) {
+                dispatch(removeItem({ 
+                    id, 
+                    isLashes: true, 
+                    kitId: 0,
+                    lengthArr, 
+                    thicknessArr, 
+                    curlArr 
+                }));
+            } else {
+                dispatch(removeItem({ id, kitId }));
+            }
             setProductUpdated('');
         }
+    }, [productUpdated, code]);
+    
+    React.useEffect(() => {
         if (productRemoved === code) {
-            dispatch(
-                removeItem(isLashes ? index : id)
-            );
+            if (isOldLashesModel) {
+                dispatch(removeItem({ 
+                    id, 
+                    isLashes: true, 
+                    kitId: 0,
+                    lengthArr, 
+                    thicknessArr, 
+                    curlArr 
+                }));
+            } else {
+                dispatch(removeItem({ id, kitId }));
+            }
             setProductRemoved('');
         }
-    }, [productUpdated, productRemoved]);
+    }, [productRemoved, code]);
 
     React.useEffect(() => {
         if (!itemLoading && !dbItem) {
-            dispatch(
-                removeItem(isLashes ? index : id)
-            );
-            setProductRemoved('');
+            if (isOldLashesModel) {
+                dispatch(removeItem({ 
+                    id, 
+                    isLashes: true, 
+                    kitId: 0,
+                    lengthArr, 
+                    thicknessArr, 
+                    curlArr 
+                }));
+            } else {
+                dispatch(removeItem({ id, kitId }));
+            }
         }
-    }, []);
+    }, [itemLoading, dbItem]);
 
-    const currentItem = useSelector((state) => state.cart.items.find((obj) => obj.id === id));
+    const currentItem = useSelector((state) => {
+        if (isOldLashesModel) {
+        return state.cart.items.find(
+            obj => obj.isLashes && 
+                !obj.kitId &&
+                obj.id === id &&
+                obj.curlArr === curlArr &&
+                obj.thicknessArr === thicknessArr &&
+                obj.lengthArr === lengthArr
+        );
+        } else {
+            return state.cart.items.find(obj => obj.id === id);
+        }
+    });
 
-    React.useEffect(() => {
+    /*React.useEffect(() => {
         setUpdatedCart(false);
         if (dbItem) {
             if (dbItem.available !== undefined && dbItem.available !== null) {
@@ -126,26 +162,111 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
             );
         }
 
-    }, [dbItem, itemLoading]);
+    }, [dbItem, itemLoading]);*/
+
+    React.useEffect(() => {
+        setUpdatedCart(false);
+        
+        if (dbItem && currentItem) {
+
+            let actualPrice;
+            if (+dbItem.discountPrice > 0) {
+                actualPrice = dbItem.discountPrice;
+            } else if (brandDiscount > 0 && isBlackFriday) {
+                actualPrice = (dbItem.price * (100 - brandDiscount) / 100).toFixed(2);
+            } else {
+                actualPrice = dbItem.price;
+            }
+
+            const priceChanged = currentItem.price !== actualPrice;
+            const availableChanged = currentItem.available !== dbItem.available;
+
+            if (priceChanged || availableChanged) {
+
+                let itemCopy = { ...currentItem };
+                itemCopy.available = dbItem.available;
+                itemCopy.price = actualPrice;
+
+                const data = JSON.parse(localStorage.getItem('cart')) || [];
+                
+                if (isOldLashesModel) {
+
+                    const itemPosition = data.findIndex(
+                        item => item.isLashes && 
+                                !item.kitId &&
+                                item.id === id &&
+                                item.curlArr === curlArr &&
+                                item.thicknessArr === thicknessArr &&
+                                item.lengthArr === lengthArr
+                    );
+                    if (itemPosition !== -1) {
+                        data.splice(itemPosition, 1, itemCopy);
+                    }
+                    } else {
+
+                    const itemPosition = data.findIndex(item => item.id === id);
+                    if (itemPosition !== -1) {
+                        data.splice(itemPosition, 1, itemCopy);
+                    }
+                }
+                
+                localStorage.setItem('cart', JSON.stringify(data));
+                setUpdatedCart(true);
+            }
+        }
+
+        if (!dbItem && !itemLoading && count > 0) {
+            if (isOldLashesModel) {
+                dispatch(removeItem({ 
+                id, 
+                isLashes: true, 
+                kitId: 0,
+                lengthArr, 
+                thicknessArr, 
+                curlArr 
+                }));
+            } else {
+                dispatch(removeItem({ id, kitId }));
+            }
+        }
+    }, [dbItem, itemLoading, brandDiscount, isBlackFriday]);
 
     if (count === 0) {
-        dispatch(
-            removeItem(isLashes ? index : id)
-        );  
-    };
-
-    if (dbItem) {
-        if (dbItem.available === false) {
-            dispatch(
-                removeItem(isLashes ? index : id)
-            );         
+        if (isOldLashesModel) {
+            dispatch(removeItem({ 
+                id, 
+                isLashes: true, 
+                kitId: 0,
+                lengthArr, 
+                thicknessArr, 
+                curlArr 
+            }));
+        } else {
+            dispatch(removeItem({ id, kitId }));
         }
-    };
+    }
+
+    if (dbItem && dbItem.available === false) {
+        if (isOldLashesModel) {
+            dispatch(removeItem({ 
+                id, 
+                isLashes: true, 
+                kitId: 0,
+                lengthArr, 
+                thicknessArr, 
+                curlArr 
+            }));
+        } else {
+            dispatch(removeItem({ id, kitId }));
+        }
+    }
+
+    const isAvailable = dbItem?.available !== undefined ? dbItem.available : available;
 
     return (
         <div className="body-cart__item item__cart">
             <div className="item-cart__content">
-                <div className={dbItem && dbItem.available ? "item-cart__product-block" : "item-cart__product-block item-cart__product-block_faded"}>
+                <div className={isAvailable ? "item-cart__product-block" : "item-cart__product-block item-cart__product-block_faded"}>
                     <div onClick={handleClick} className="item-cart__image">
                         <img src={`${imagesCloud}` + img} alt="product" />
                     </div>                        
@@ -176,19 +297,25 @@ const CartItem = ({ path, info, isLashes, name, img, id, index, code, price, com
                             ''
                         }
                         {
-                            isLashes
-                            ?
+                            isOldLashesModel
+                            &&
                                 <div className='info-cart__line'>
                                     <span>Opções: </span>
                                     {curlArr} / {thicknessArr} / {lengthArr} mm
                                 </div>                                    
-                            :
-                            ''
+                        }
+
+                        {
+                            isNewLashesModel
+                            &&
+                            <div className='info-cart__line'>
+                                {variant}
+                            </div>                       
                         }
                     </div>                                         
                 </div>
                 <div className="item-cart__actions">
-                    {!itemLoading && dbItem && !dbItem.available || !itemLoading && !dbItem
+                    {!isAvailable
                         ?
                         <div className='item-cart__unavailable'>{itemLoading && "Esgotado" }</div>  
                         :

@@ -9,6 +9,10 @@ const initialState = {
   items,
 };
 
+const isOldLashesModel = item => {
+  return item.isLashes && !item.kitId;
+};
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
@@ -20,52 +24,81 @@ const cartSlice = createSlice({
             }, 0);
         },*/
     addItem(state, action) {
-      const findItem = state.items.find(obj => obj.id === action.payload.id && !obj.isLashes);
-      const lashesItem = state.items.find(
-        obj =>
-          obj.id === action.payload.id &&
-          obj.isLashes &&
-          obj.curlArr === action.payload.curlArr &&
-          obj.thicknessArr === action.payload.thicknessArr &&
-          obj.lengthArr === action.payload.lengthArr
-      );
-      if (findItem) {
-        findItem.count++;
-      } else if (lashesItem) {
-        lashesItem.count++;
+      const newItem = action.payload;
+
+      if (isOldLashesModel(newItem)) {
+        const existingItem = state.items.find(
+          obj =>
+            isOldLashesModel(obj) &&
+            obj.id === newItem.id &&
+            obj.curlArr === newItem.curlArr &&
+            obj.thicknessArr === newItem.thicknessArr &&
+            obj.lengthArr === newItem.lengthArr
+        );
+
+        if (existingItem) {
+          existingItem.count++;
+        } else {
+          state.items.push({ ...newItem, count: 1 });
+        }
       } else {
-        state.items.push({
-          ...action.payload,
-          count: 1,
-        });
+        const existingItem = state.items.find(obj => obj.id === newItem.id);
+        if (existingItem) {
+          existingItem.count++;
+        } else {
+          state.items.push({ ...newItem, count: 1 });
+        }
       }
+
       state.totalPrice = calcTotalPrice(state.items);
     },
-    minusItem(state, action) {
-      const findItem = state.items.find(obj => obj.id === action.payload && !obj.isLashes);
-      const lashesItem = state.items.find(obj => obj.index === action.payload && obj.isLashes);
 
-      if (findItem && findItem.count > 0) {
-        findItem.count--;
-      } else if (lashesItem && lashesItem.count > 0) {
-        lashesItem.count--;
+    minusItem(state, action) {
+      const payload = action.payload;
+
+      if (payload.isLashes && !payload.kitId) {
+        const item = state.items.find(
+          obj =>
+            isOldLashesModel(obj) &&
+            obj.id === payload.id &&
+            obj.curlArr === payload.curlArr &&
+            obj.thicknessArr === payload.thicknessArr &&
+            obj.lengthArr === payload.lengthArr
+        );
+        if (item && item.count > 0) {
+          item.count--;
+        }
+      } else {
+        const item = state.items.find(obj => obj.id === payload.id);
+        if (item && item.count > 0) {
+          item.count--;
+        }
       }
-      state.totalPrice = state.items.reduce((sum, obj) => {
-        return obj.available ? obj.price * obj.count + sum : 0 + sum;
-      }, 0);
+
+      state.totalPrice = calcTotalPrice(state.items);
     },
+
     removeItem(state, action) {
-      const findItem = state.items.find(obj => obj.id === action.payload && !obj.isLashes);
-      const lashesItem = state.items.find(obj => obj.index === action.payload && obj.isLashes);
-      if (findItem) {
-        state.items = state.items.filter(obj => obj.id !== action.payload);
-      } else if (lashesItem) {
-        state.items = state.items.filter(obj => obj.index !== action.payload);
+      const payload = action.payload;
+
+      if (payload.isLashes && !payload.kitId) {
+        state.items = state.items.filter(
+          obj =>
+            !(
+              isOldLashesModel(obj) &&
+              obj.id === payload.id &&
+              obj.curlArr === payload.curlArr &&
+              obj.thicknessArr === payload.thicknessArr &&
+              obj.lengthArr === payload.lengthArr
+            )
+        );
+      } else {
+        state.items = state.items.filter(obj => obj.id !== payload.id);
       }
-      state.totalPrice = state.items.reduce((sum, obj) => {
-        return obj.available ? obj.price * obj.count + sum : 0 + sum;
-      }, 0);
+
+      state.totalPrice = calcTotalPrice(state.items);
     },
+
     clearItems(state) {
       state.items = [];
       state.totalPrice = 0;

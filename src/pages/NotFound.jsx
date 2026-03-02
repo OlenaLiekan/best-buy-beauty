@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { scrollTop } from '../js/script';
 import notFoundImg from "../assets/img/03.png";
 
-const NotFound = () => { 
+const NotFound = ({text}) => { 
     return (
         <div className="main__not-found not-found">
             <div className="not-found__container">
@@ -14,7 +14,7 @@ const NotFound = () => {
                     </div>
                     <div className="not-found__body">
                         <h1 className="not-found__title">
-                            Desculpe, página não encontrada.
+                            {text}
                         </h1>
                         <div className="not-found__link">
                             <Link to='/' onClick={scrollTop} className="not-found__link-back scroll-top">

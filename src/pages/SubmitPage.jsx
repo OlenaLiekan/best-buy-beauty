@@ -1199,11 +1199,13 @@ const SubmitPage = () => {
                         <div className="item-aside-popup__name">
                           {item.name}
                           {
-                            item.isLashes
-                              &&
+                            item.isLashes && !item.kitId
+                              ?
                               <div>
                                 {'(' + item.curlArr + "/" + item.thicknessArr + '/' + item.lengthArr + ' mm' + ')'}
                               </div>
+                              :
+                              ''
                           }                           
                         </div>
 

@@ -16,7 +16,7 @@ import ReviewItem from './ReviewItem';
 import NewReview from './UX/Popups/NewReview';
 import RelatedProductsBlock from './RelatedProductsBlock';
 
-const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, available, brandId, name, code, price, discountPrice, exclusiveProduct, img, kitId}) => {
+const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, rating, isLashes, available, brandId, name, code, price, discountPrice, exclusiveProduct, img, kitId, variant}) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -42,8 +42,15 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const [brandDiscount, setBrandDiscount] = React.useState(0);
     const [productAdded, setProductAdded] = React.useState(false);
     const [productDownvoted, setProductDownvoted] = React.useState(false);
+    const [kitVariantsList, setKitVariantsList] = React.useState('');
     const [kitVariants, setKitVariants] = React.useState([]);
     const [activeVariantId, setActiveVariantId] = React.useState('');
+    const [firstOptionsList, setFirstOptionsList] = React.useState([]);
+    const [secondOptionsList, setSecondOptionsList] = React.useState([]);
+    const [thirdOptionsList, setThirdOptionsList] = React.useState([]);
+    const [firstSelectedOption, setFirstSelectedOption] = React.useState('');
+    const [secondSelectedOption, setSecondSelectedOption] = React.useState('');
+    const [thirdSelectedOption, setThirdSelectedOption] = React.useState('');
     const {
         isAuth,
         adminMode,
@@ -52,6 +59,8 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
         isBlackFriday,
         imagesCloud
     } = React.useContext(AuthContext);
+    
+    const { items } = useSelector((state) => state.cart);
     
     const cartItem = useSelector((state) => state.cart.items.find((obj) => obj.id === id));
     const lashesItem = useSelector((state) => state.cart.items.find((obj) => obj.index === index));
@@ -68,6 +77,15 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const user = JSON.parse(data);
 
     React.useEffect(() => {
+        const cartData = JSON.stringify(items);
+        localStorage.setItem('cart', cartData); 
+    }, [items]);
+    
+    const isOldLashesModel = (isLashes, kitId) => {
+        return isLashes && (!kitId || kitId === 0);
+    };
+
+    React.useEffect(() => {
         if (user) {
             setUserRate(productRatings.find((productRating) => productRating.userId === user.id));
         }
@@ -78,6 +96,15 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
             setActiveVariantId(id);
         }
     }, [kitId, id]);
+
+    React.useEffect(() => {
+        if (kitId > 0) {
+            axios.get(`${serverDomain}api/kit/` + kitId)
+            .then((res) => {
+                setKitVariantsList(res.data.variantsList);
+            });
+        }
+    }, [serverDomain, kitId]);
 
     React.useEffect(() => {
         if (kitId > 0) {
@@ -124,7 +151,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const path = productType ? camelize(productType.name) : "produtos";
 
     const showCart = () => {
-        if (isLashes ? lashesCount : addedCount) {
+        if (isLashes && !kitId ? lashesCount : addedCount) {
             window.scrollTo(0, 0);
             navigate('/cart');                
         } else {
@@ -148,15 +175,23 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
             img,
             path,
             isLashes,
-            curlArr: curlArr[activeCurl],
-            thicknessArr: thicknessArr[activeThickness],
-            lengthArr: lengthArr[activeLength],
-            index,
             available,
             promoProduct: brandDiscount > 0 && isBlackFriday || discountPrice > 0 ? true : false,
             exclusiveProduct,
+            kitId,
+            variant
         };
-        dispatch(addItem(item));
+        if (isOldLashesModel) {
+            dispatch(addItem({
+                ...item,
+                index,
+                curlArr: curlArr[activeCurl],
+                thicknessArr: thicknessArr[activeThickness],
+                lengthArr: lengthArr[activeLength],
+            }))
+        } else {
+            dispatch(addItem(item));            
+        }
         setProductDownvoted(false);
         setProductAdded(true);
         addItemToCart();
@@ -165,10 +200,17 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
         }, 2000);
     };
 
-    const onClickMinus = () => { 
-        dispatch(
-            minusItem(isLashes ? index : id)
-        );
+    const onClickMinus = (item) => { 
+        if (isOldLashesModel) {
+            dispatch(minusItem({
+                ...item, 
+                curlArr: curlArr[activeCurl],
+                thicknessArr: thicknessArr[activeThickness],
+                lengthArr: lengthArr[activeLength],
+            }));
+        } else {
+            dispatch(minusItem(item));
+        }
         if (lashesCount || addedCount > 0) {
             setProductAdded(false);
             setProductDownvoted(true);
@@ -188,7 +230,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
 
 
     React.useEffect(() => {
-        if (isLashes) {
+        if (isLashes && !kitId) {
             setCurlArr((Object.values(info).find((obj) => obj.title === 'Curvatura')).description.split(','));
             setCurl(Object.values(info).find((obj) => obj.title === 'Curvatura'));
             setThicknessArr((Object.values(info).find((obj) => obj.title === 'Grossura')).description.split(','));
@@ -196,7 +238,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
             setLengthArr((Object.values(info).find((obj) => obj.title === 'Tamanho')).description.split(','));
             setLengthP(Object.values(info).find((obj) => obj.title === 'Tamanho'));
         }       
-    }, [isLashes, info]);
+    }, [isLashes, info, kitId]);
 
     React.useEffect(() => {
         setIndex(id + curlArr[activeCurl] + thicknessArr[activeThickness] + lengthArr[activeLength]); 
@@ -219,10 +261,57 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     }, [img, slide]);
 
     React.useEffect(() => {
-        if (activeVariantId && id !== activeVariantId) {
+        if (kitVariantsList?.includes('|')) {
+            const firstList = kitVariantsList?.split('|')[0].split(',');
+            setFirstOptionsList(firstList);
+            const secondList = kitVariantsList?.split('|')[1].split(',');       
+            setSecondOptionsList(secondList);
+            if (isLashes && kitId) {
+                const thirdList = kitVariantsList?.split('|')[2].split(',');       
+                setThirdOptionsList(thirdList);
+            }
+        }
+    }, [serverDomain, kitVariantsList]);
+
+
+    React.useEffect(() => {
+        if (kitVariantsList) {
+            if (!isLashes) {
+                if (firstSelectedOption && secondSelectedOption) {
+                    const result = firstSelectedOption + secondSelectedOption;
+                    const selectedVariant = kitVariants.find((kitVariant) => kitVariant.variant.split(',').join('').split(' ').join('').toLowerCase() === result.split(' ').join('').toLowerCase());
+                    if (selectedVariant) {
+                        if (selectedVariant.id != id) {
+                            navigate(`/${path}/${selectedVariant.id}`);                    
+                        }
+                    } else {
+                        window.alert(`Desculpe, esta opção [${firstSelectedOption.trim()} ${secondSelectedOption.trim()}] não está disponível. Por favor, escolha outra.`);
+                        setFirstSelectedOption('');
+                        setSecondSelectedOption('');
+                    }
+                }                
+            } else {
+                if (kitId) {
+                    if (firstSelectedOption && secondSelectedOption && thirdSelectedOption) {
+                        const result = firstSelectedOption + secondSelectedOption + thirdSelectedOption;
+                        const selectedVariant = kitVariants.find((kitVariant) => kitVariant.variant.split(' ').join('').toLowerCase() === result.split(' ').join('').toLowerCase());
+                        if (selectedVariant) {
+                            if (selectedVariant.id != id) {
+                                navigate(`/${path}/${selectedVariant.id}`);                    
+                            }
+                        }
+                    } 
+                }
+            }
+        } 
+
+    }, [firstSelectedOption, secondSelectedOption, thirdSelectedOption]);
+
+    React.useEffect(() => {
+        if (activeVariantId && id != activeVariantId) {
             navigate(`/${path}/${activeVariantId}`);
         }
-    }, [activeVariantId, id]);
+    }, [serverDomain, activeVariantId]);
 
     return (
         <div className='product-card__content'>
@@ -260,7 +349,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                 {code}
                             </div>
                             <div className="info-product__brand"><span className="label-bold">Marca:</span> {company.name}</div>
-                            {info.length > 0 && !isLashes ? info.map((obj) => 
+                            {info.length > 0 && kitId ? info.map((obj) => 
                                 <div key={obj.id} className='info-product__volume'>  
                                     <span className="label-bold">
                                         {obj.title}:
@@ -273,29 +362,65 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                 ''
                             }
 
-                            {!isLashes && kitVariants.length > 1
+                            {kitId && kitVariants.length > 1 && kitVariantsList
                                 ?
                                 <div className='variants__select'>
                                     <div className='variants__title'>
                                         ESCOLHER:
                                     </div>
-                                    <ul className='variants__list list-variants'>
-                                        {kitVariants.map((variant) =>
-                                            <li
-                                                key={variant.id}
-                                                onClick={() => setActiveVariantId(variant.id)}
-                                                className={variant.id === activeVariantId ? 'activeVariant' : 'itemVariant'}
-                                            >
-                                                {variant.variant}
-                                            </li>
-                                        )}
-                                    </ul>                                    
+
+                                    { 
+                                        firstOptionsList.length > 0
+                                        &&
+                                        secondOptionsList.length > 0
+                                            ?
+                                            <>
+                                                <ul className='variants__list list-variants'>
+                                                    {firstOptionsList.map((option) => 
+                                                        <li key={option} onClick={() => setFirstSelectedOption(option)} className={firstSelectedOption === option ? 'activeVariant' : 'itemVariant'}>
+                                                            {option}
+                                                        </li>
+                                                    )}
+                                                </ul>                                            
+    
+                                                <ul className='variants__list list-variants'>
+                                                    {secondOptionsList.map((option) => 
+                                                        <li key={option} onClick={() => setSecondSelectedOption(option)} className={secondSelectedOption === option ? 'activeVariant' : 'itemVariant'}>
+                                                            {option}
+                                                        </li>
+                                                    )}
+                                                </ul>   
+                                                
+                                                {
+                                                    isLashes && kitId 
+                                                    ?
+                                                    <ul className='variants__list list-variants'>
+                                                        {thirdOptionsList.map((option) => 
+                                                            <li key={option} onClick={() => setThirdSelectedOption(option)} className={thirdSelectedOption === option ? 'activeVariant' : 'itemVariant'}>
+                                                                {option}
+                                                            </li>
+                                                        )}
+                                                    </ul>   
+                                                    :
+                                                    ''
+                                                }
+
+                                            </>  
+                                            :
+                                            <ul className='variants__list list-variants'>
+                                                {kitVariants.map((product) => 
+                                                    <li key={product.id} onClick={() => setActiveVariantId(product.id)} className={activeVariantId === product.id ? 'activeVariant' : 'itemVariant'}>
+                                                        {product.variant}
+                                                    </li>
+                                                )}                                               
+                                            </ul>
+                                    }   
                                 </div>
                                 :
                                 ''
                             }
                             
-                            {isLashes
+                            {isLashes && !kitId
                                 ?
                                 <>
                                     <div className="info-product__curl">
@@ -404,20 +529,20 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                             ?
                             <div className="product-card__actions">
 
-                                {(!isLashes && company.name) || (activeCurl !== null && activeLength !== null && activeThickness !== null && company.name) 
+                                {(kitId && company.name) || (!kitId && activeCurl !== null && activeLength !== null && activeThickness !== null && company.name) 
                                     ?
                                     <>
                                         <div className="product-card__quantity quantity">
                                             <span className={productAdded ? "quantity__product-added" : "quantity__product-added quantity__product-added_hidden"}>Produto adicionado ao carrinho</span>
                                             <span className={productDownvoted ? "quantity__product-added" : "quantity__product-added quantity__product-added_hidden"}>O produto foi rejeitado</span>
-                                            <button onClick={onClickMinus} className="quantity__minus">-</button>
-                                            <div className="quantity__text">{isLashes ? lashesCount : addedCount}</div>
-                                            <button onClick={onClickAdd} className="quantity__plus">+</button>
-                                        <div className="product-card__motion">
-                                            <div className='product-card__img-clone'>
-                                                <img src={`${imagesCloud}` + img} alt="product" />
+                                            <button onClick={() => onClickMinus(obj)} className="quantity__minus">-</button>
+                                            <div className="quantity__text">{isLashes && !kitId ? lashesCount : addedCount}</div>
+                                            <button onClick={onClickAdd} className="quantity__plus quantity__plus-motion">+</button>
+                                            <div className="product-card__motion">
+                                                <div className='product-card__img-clone'>
+                                                    <img src={`${imagesCloud}` + img} alt="product" />
+                                                </div>                                            
                                             </div>                                            
-                                        </div>                                            
                                         </div>    
 
                                         <button onClick={showCart} className="checkout">

@@ -61,7 +61,7 @@ const Cart = () => {
                         <div className="body-cart__items">
                             {
                                 items.map((item, i) => (
-                                    <CartItem key={item.id+i} {...item} />
+                                    <CartItem key={item.isLashes && !item.kitId ? item.id + i : item.id } {...item} obj={item} />
                                 ))
                             }
                         </div>

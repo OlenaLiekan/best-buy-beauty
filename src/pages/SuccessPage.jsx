@@ -48,8 +48,6 @@ const SuccessPage = () => {
       setDetailsVisibility(false);
     } else {
       setDetailsVisibility(true);
-      console.log(items);
-      console.log(promocodeDiscount);
     }
   };
 
@@ -227,15 +225,18 @@ const SuccessPage = () => {
                               (item.price * item.count).toFixed(2)} €
                           </span>
                         </div>
-                        {item.isLashes &&
+                        {item.isLashes && !item.kitId
+                          ?
                           <div className="body-success__line-info">
                             {item.curlArr && item.curlArr + (item.thicknessArr || item.lengthArr ? ' / ' : '')}
                             {item.thicknessArr && item.thicknessArr + ' mm' + (item.lengthArr && ' / ')}
                             {item.lengthArr && item.lengthArr + ' mm'}                          
-                          </div>                        
+                          </div>    
+                          :
+                          ''
                         }
                         <div className="body-success__line-info">
-                          {item.info && !item.isLashes
+                          {item.info && item.kitId
                             ? item.info.map((p, i) => (
                                 <span key={i}>
                                   {p.description}

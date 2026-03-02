@@ -4,11 +4,12 @@
     gap: 20px;
 }
 
-.optionsTitle {
+.optionsTitle,
+.paramsTitle {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin: 10px 0;
+    margin-bottom: 10px;
     color: #7f766a;
     font-size: 16px;
     font-weight: 500;
@@ -22,7 +23,16 @@
     }
     @media(max-width: 579.98px) {
         font-size: 12px;
+        width: 100%;
+        justify-content: space-between;        
     }
+}
+
+.optionsTitle {
+    margin: 0 0 10px 0;
+}
+.paramsTitle {
+    margin: 30px 0 10px 0;
 }
 
 .optionsTitleIcon,
@@ -40,4 +50,58 @@
     flex-direction: column;
     gap: 20px;
     margin-bottom: 20px;  
+}
+
+.optionsRow {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    @media (max-width: 579.98px) {
+        flex-wrap: wrap;
+    }
+}
+
+.removeVariantsIcon,
+.minusIcon {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+}
+
+.removeVariantsIcon {
+    margin-left: 10px;
+}
+
+.generateBtn {
+    padding: 8px;
+    background-color: #fff;
+    border: 2px solid #1560BD;
+    box-shadow: 2px 2px 2px #2525251e;
+    color: #252525;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    width: 180px;
+    border-radius: 20px;
+    transition: all 0.3s ease 0s;
+    &:disabled,
+    &:disabled:hover {
+        border: 2px solid #878787;
+        color: #878787;
+        background-color: #fff;
+    }    
+    &:hover {
+        background-color: #1560BD;
+        color: #fff;
+    }
+    @media (max-width: 579.98px) {
+        font-size: 14px;
+        width: 150px;
+    }
+}
+
+.productCombination,
+.productPrice {
+    @media(max-width: 579.98px) {
+        font-size: 14px;
+    }
 }

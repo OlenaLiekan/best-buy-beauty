@@ -3,8 +3,9 @@ import React from 'react';
 import styles from './CreateProduct.module.scss';
 import { AuthContext } from '../../../../context';
 import { useNavigate } from 'react-router-dom';
-import { createProduct} from '../../../../http/productAPI';
+import { createKit, createProduct} from '../../../../http/productAPI';
 import CreateKit from '../CreateKit';
+import debounce from 'lodash.debounce';
 
 const CreateProduct = () => {
 
@@ -24,6 +25,8 @@ const CreateProduct = () => {
     const [typeName, setTypeName] = React.useState('Selecione o tipo');
     const [brandName, setBrandName] = React.useState('Selecione a marca');
     const [kitName, setKitName] = React.useState('Selecione um conjunto');
+    const [kitValue, setKitValue] = React.useState(''); 
+    const [kitSearchValue, setKitSearchValue] = React.useState(''); 
     const [typesVisibility, setTypesVisibility] = React.useState(false);
     const [brandsVisibility, setBrandsVisibility] = React.useState(false);
     const [kitsVisibility, setKitsVisibility] = React.useState(false);
@@ -85,8 +88,55 @@ const CreateProduct = () => {
         window.scrollTo(0, 0);  
     }
 
+    const kitMessage = () => {
+        window.alert('Erro ao criar conjunto!');        
+    }
+
     const message = () => {
-        window.alert('Ocorreu um erro!');        
+        window.alert('Erro na criação do produto!');        
+    }
+
+    const kitSuccess = (id) => {
+        window.alert('Conjunto criado com sucesso!');  
+        if (!kitCreation && !showKitMenu && price > +promoPrice) {
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('code', code);
+            formData.append('price', price);
+            formData.append('discountPrice', promoPrice ? promoPrice : 0);
+            formData.append('categoryId', categoryId);
+            formData.append('brandId', brandId);
+            formData.append('typeId', typeId);
+            if (img) {
+                formData.append('img', img);                
+            }
+            if (kitImg) {
+                formData.append('kitImg', kitImg);
+            }
+            formData.append('related', JSON.stringify(related));
+            formData.append('info', JSON.stringify(info));
+            formData.append('text', text);
+            formData.append('newProduct', !newProduct);
+            formData.append('applying', applying);            
+            formData.append('compound', compound);            
+            formData.append('isLashes', isLashes);
+            formData.append('kitId', id);
+            formData.append('variant', variant);
+            formData.append('isPromo', promoPrice && +promoPrice > 0 ? true : false);
+            if (images.length > 0) {
+                images.forEach((file) => {
+                    formData.append('slide', file);
+                });
+            }
+            if (kitSlides.length > 0) {
+                kitSlides.forEach((slide) => {
+                    formData.append('kitSlide', slide);
+                });
+            }
+            createProduct(formData).then(data => success()).catch(err => message());                
+        } else {
+            window.alert('O preço promocional deve ser inferior ao preço padrão.');
+        }
     }
 
     const selectFile = (event) => {
@@ -95,6 +145,18 @@ const CreateProduct = () => {
 
     const onChangeName = (e) => {
         setName(e.target.value);
+    }
+
+    const updateKitValue = React.useCallback(
+        debounce((str) => {
+            setKitSearchValue(str);
+        }, 600),
+        [],
+    );
+
+    const onChangeKitValue = (e) => {
+        setKitValue(e.target.value);
+        updateKitValue(e.target.value);
     }
 
     const onChangeVariant = (e) => {
@@ -187,6 +249,14 @@ const CreateProduct = () => {
     const closeCreatePopup = () => {
         setCreateProductMode(false);
     }
+
+    React.useEffect(() => {
+        const searchParams = kitSearchValue ? `?name=${kitSearchValue}` : '';
+        axios.get(`${serverDomain}api/kit${searchParams}`)
+            .then((res) => {
+                setKits(res.data);
+            });
+    }, [serverDomain, kitSearchValue]);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/type`)
@@ -481,60 +551,31 @@ const CreateProduct = () => {
 
     const addVariantToName = () => {
         setName('');
-        setName(kitName.trimEnd() + ' ' + variant);
+        setName(kitName.trimEnd() + ' ' + (variant.includes(',') ? variant.split(',').join(' ') : variant));
     }
+
+    const clearKitValue = () => {
+        setKitValue('');
+        setKitSearchValue('');
+    };
 
     const pushProduct = (e) => {
         e.preventDefault();
-        if (!kitCreation && !showKitMenu && price > +promoPrice) {
-            const formData = new FormData();
-            formData.append('name', name);
-            formData.append('code', code);
-            formData.append('price', price);
-            formData.append('discountPrice', promoPrice ? promoPrice : 0);
-            formData.append('categoryId', categoryId);
-            formData.append('brandId', brandId);
-            formData.append('typeId', typeId);
-            if (img) {
-                formData.append('img', img);                
-            }
-            if (kitImg) {
-                formData.append('kitImg', kitImg);
-            }
-            formData.append('related', JSON.stringify(related));
-            formData.append('info', JSON.stringify(info));
-            formData.append('text', text);
-            formData.append('newProduct', !newProduct);
-            formData.append('applying', applying);            
-            formData.append('compound', compound);            
-            formData.append('isLashes', isLashes);
-            formData.append('kitId', kitId);
-            formData.append('variant', variant);
-            formData.append('isPromo', promoPrice && +promoPrice > 0 ? true : false);
-            if (images.length > 0) {
-                images.forEach((file) => {
-                    formData.append('slide', file);
-                });
-            }
-            if (kitSlides.length > 0) {
-                kitSlides.forEach((slide) => {
-                    formData.append('kitSlide', slide);
-                });
-            }
-            if (isLashes) {
-                const firstResult = info.length ? info.find((i) => i.title.toLowerCase() === 'curvatura') : false;
-                const secondResult = info.length ? info.find((i) => i.title.toLowerCase() === 'grossura') : false;
-                const thirdResult = info.length ? info.find((i) => i.title.toLowerCase() === 'tamanho') : false;
-                if (firstResult && secondResult && thirdResult) {
-                    createProduct(formData).then(data => success()).catch(err => message());
-                } else {
-                    window.alert("Adicionar propriedades: 'Curvatura', 'Grossura', 'Tamanho'");
-                }
+        if (!kitId) {
+            if (window.confirm('Nenhum conjunto de produtos foi selecionado. Deseja criar um conjunto automaticamente?')) {
+                const kitFormData = new FormData();
+                kitFormData.append('name', name);
+                kitFormData.append('variantsList', '');
+                kitFormData.append('brandId', brandId);
+                kitFormData.append('typeId', typeId);   
+                kitFormData.append('isLashes', isLashes);
+                kitFormData.append('categoryId', categoryId);
+                createKit(kitFormData).then(data => kitSuccess(data.id)).catch(err => kitMessage());
             } else {
-                createProduct(formData).then(data => success()).catch(err => message());                
+                window.alert('Criação cancelada.');
             }
         } else {
-            window.alert('O preço promocional deve ser inferior ao preço padrão.');
+            kitSuccess(kitId);
         }
     }
 
@@ -619,17 +660,33 @@ const CreateProduct = () => {
                     <div className={styles.line}>
                         <span className={styles.label}>Conjunto:</span>
                         <div onClick={toggleKitOptions} tabIndex="3" className={styles.formSelectKits}>
-                            {kitName}
+                            {kitName.length > 23 ? kitName.slice(0,22) + '...' : kitName}
                             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                                 <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
                             </svg>
                         </div>
-                        {kitsVisibility ?
+                            {kitsVisibility ?
+                           
                             <ul className={styles.kitOptions}>
-                                <li className={styles.option} onClick={() => hideKitOptions(0, 'Sem conjunto')}>Sem conjunto</li>
-                                {kits ? kits.map((kit) =>
+                                {
+                                    <input id="kit-search" type='text' className={styles.kitSearchInput}
+                                        ref={inputRef}
+                                        value={kitValue}
+                                        onChange={onChangeKitValue}
+                                        placeholder={`Procure um conjunto...`}
+                                    />
+                                }
+                                {
+                                    kitValue
+                                    &&
+                                    <svg className={styles.deleteIcon} onClick={clearKitValue} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                                        <path d="M576 64H205.26A63.97 63.97 0 0 0 160 82.75L9.37 233.37c-12.5 12.5-12.5 32.76 0 45.25L160 429.25c12 12 28.28 18.75 45.25 18.75H576c35.35 0 64-28.65 64-64V128c0-35.35-28.65-64-64-64zm-84.69 254.06c6.25 6.25 6.25 16.38 0 22.63l-22.62 22.62c-6.25 6.25-16.38 6.25-22.63 0L384 301.25l-62.06 62.06c-6.25 6.25-16.38 6.25-22.63 0l-22.62-22.62c-6.25-6.25-6.25-16.38 0-22.63L338.75 256l-62.06-62.06c-6.25-6.25-6.25-16.38 0-22.63l22.62-22.62c6.25-6.25 16.38-6.25 22.63 0L384 210.75l62.06-62.06c6.25-6.25 16.38-6.25 22.63 0l22.62 22.62c6.25 6.25 6.25 16.38 0 22.63L429.25 256l62.06 62.06z" />
+                                    </svg>                                
+                                }
+                                {!kitSearchValue && <li className={styles.option} onClick={() => hideKitOptions(0, 'Sem conjunto')}>Sem conjunto</li>}
+                                {kits.length > 0 ? kits.map((kit) =>
                                     <li key={kit.name} value={kit.id} onClick={() => hideKitOptions(kit.id, kit.name)} className={styles.option}>{kit.name}</li>
-                                ) : ""}
+                                ) : <span className={styles.listMsg}>{kitSearchValue ? 'Não encontrado' : 'Nenhuma lista disponível'}</span>}
                             </ul>
                             : ''
                             }
@@ -650,10 +707,11 @@ const CreateProduct = () => {
                         &&
                         <div className={styles.line}>
                             <label htmlFor="product-variant" className={styles.label} placeholder='Variant'>Variante:</label>
-                            <input id="product-variant" required={kitId > 0 ? true : false} tabIndex="6" type='text' className={styles.formInputSmall}
-                                ref={inputRef}
-                                value={variant}
-                                        onChange={onChangeVariant}
+                                <input id="product-variant" required={kitId > 0 ? true : false} tabIndex="5" type='text' className={styles.formInputSmall}
+                                    placeholder="banana, 5ml" 
+                                    ref={inputRef}
+                                    value={variant}
+                                    onChange={onChangeVariant}
                                 />
                                 <div className={styles.addVariantLine} onClick={addVariantToName} >
                                     <svg className={styles.addVariantIcon} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -666,7 +724,7 @@ const CreateProduct = () => {
                         
                     <div className={styles.line}>
                         <label htmlFor="product-name" className={styles.label} placeholder='Name'>Nome:</label>
-                        <input id="product-name" required tabIndex="5" type='text' className={styles.formInput}
+                        <input id="product-name" required tabIndex="6" type='text' className={styles.formInput}
                             ref={inputRef}
                             value={name}
                             onChange={onChangeName}

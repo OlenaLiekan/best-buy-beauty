@@ -5,6 +5,7 @@ import { AuthContext } from '../../../../context';
 import { useNavigate } from 'react-router-dom';
 import { updateProduct} from '../../../../http/productAPI';
 import UpdateKit from '../UpdateKit';
+import debounce from 'lodash.debounce';
 
 const UpdateProduct = ({id, obj}) => {
 
@@ -24,6 +25,9 @@ const UpdateProduct = ({id, obj}) => {
     const [typeName, setTypeName] = React.useState('Selecione o tipo');
     const [brandName, setBrandName] = React.useState('Selecione a marca');
     const [kitName, setKitName] = React.useState('Selecione um conjunto');
+    const [kitVariantsList, setKitVariantsList] = React.useState('');
+    const [kitValue, setKitValue] = React.useState(''); 
+    const [kitSearchValue, setKitSearchValue] = React.useState(''); 
     const [typesVisibility, setTypesVisibility] = React.useState(false);
     const [brandsVisibility, setBrandsVisibility] = React.useState(false);
     const [kitsVisibility, setKitsVisibility] = React.useState(false);
@@ -62,7 +66,8 @@ const UpdateProduct = ({id, obj}) => {
         setKitId(obj.kitId ? obj.kitId : 0);
         const kit = kits.find(kit => kit.id === obj.kitId);
         if (kit) {
-            setKitName(kit.name);            
+            setKitName(kit.name);
+            setKitVariantsList(kit.variantsList);
         }
         setVariant(obj.variant ? obj.variant : '');
         setCode(obj.code);
@@ -112,6 +117,19 @@ const UpdateProduct = ({id, obj}) => {
     const onChangeName = (e) => {
         setName(e.target.value);
     }
+
+    const updateKitValue = React.useCallback(
+        debounce((str) => {
+            setKitSearchValue(str);
+        }, 600),
+        [],
+    );
+
+    const onChangeKitValue = (e) => {
+        setKitValue(e.target.value);
+        updateKitValue(e.target.value);
+    }
+    
 
     const onChangeVariant = (e) => {
         setVariant(e.target.value);
@@ -185,6 +203,14 @@ const UpdateProduct = ({id, obj}) => {
     const closeUpdatePopup = () => {
         setUpdateProductMode(false);
     }
+
+    React.useEffect(() => {
+        const searchParams = kitSearchValue ? `?name=${kitSearchValue}` : '';
+        axios.get(`${serverDomain}api/kit${searchParams}`)
+            .then((res) => {
+                setKits(res.data);
+            });
+    }, [serverDomain, kitSearchValue]);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/kit`)
@@ -348,65 +374,6 @@ const UpdateProduct = ({id, obj}) => {
         }
     };
 
-    const updateProductItem = (e) => {
-        e.preventDefault();
-
-        if (price > +promoPrice) {
-            const formData = new FormData();
-            formData.set('name', name);
-            formData.set('variant', variant);
-            formData.set('code', code);
-            formData.set('price', price);
-            formData.set('discountPrice', promoPrice === '' ? 0 : promoPrice);
-            formData.set('kitId', kitId);
-            formData.set('categoryId', categoryId);
-            formData.set('brandId', brandId);
-            formData.set('typeId', typeId);
-            formData.set('text', text);
-            formData.set('applying', applying);            
-            formData.set('compound', compound);  
-            formData.set('isLashes', isLashes);
-            formData.append('available', checkedAvailable);
-            formData.append('topProduct', checkedTop);
-            formData.append('exclusiveProduct', checkedExclusive);
-            formData.set('newProduct', !checkedNewProduct);
-            formData.set('isPromo', promoPrice && +promoPrice > 0 ? true : false);
-            if (deletedSlideId) {
-                formData.append('deletedSlideId', JSON.stringify(deletedSlideId));            
-            }
-            if (img) {
-                formData.set('img', img);               
-            }
-            formData.set('related', JSON.stringify(related));
-            formData.set('info', JSON.stringify(info));
-            images.forEach((file) => {
-                formData.append('slide', file);
-            });       
-            if (isLashes) {
-                const firstResult = info.length ? info.find((i) => i.title.toLowerCase() === 'curvatura') : false;
-                const secondResult = info.length ? info.find((i) => i.title.toLowerCase() === 'grossura') : false;
-                const thirdResult = info.length ? info.find((i) => i.title.toLowerCase() === 'tamanho') : false;
-                if (firstResult && secondResult && thirdResult) {
-                    updateProduct(formData, id).then(data => success()).catch(err => message());
-                } else {
-                    if (!firstResult) {
-                        window.alert("Propriedade de 'Curvatura' ausente.");
-                    }
-                    if (!secondResult) {
-                        window.alert("Propriedade de 'Grossura' ausente.");
-                    }
-                    if (!thirdResult) {
-                        window.alert("Propriedade de 'Tamanho' ausente.");
-                    }
-                }
-            } else {
-                updateProduct(formData, id).then(data => success()).catch(err => message());                
-            }
-        } else {
-            window.alert('O preço promocional deve ser inferior ao preço padrão.');
-        }
-    }
-
     const removeImage = (id) => {
         setObjSlides(objSlides.filter((s) => s.id !== id));
         setDeletedSlideId([...deletedSlideId, id]);
@@ -460,6 +427,71 @@ const UpdateProduct = ({id, obj}) => {
         setKitEditingMenu(true);
         setKitEditing(false);
     }; 
+
+    const clearKitValue = () => {
+        setKitValue('');
+        setKitSearchValue('');
+    };
+
+
+    const updateProductItem = (e) => {
+        e.preventDefault();
+
+        if (price > +promoPrice) {
+            const formData = new FormData();
+            formData.set('name', name);
+            formData.set('variant', variant);
+            formData.set('code', code);
+            formData.set('price', price);
+            formData.set('discountPrice', promoPrice === '' ? 0 : promoPrice);
+            formData.set('kitId', kitId);
+            formData.set('categoryId', categoryId);
+            formData.set('brandId', brandId);
+            formData.set('typeId', typeId);
+            formData.set('text', text);
+            formData.set('applying', applying);            
+            formData.set('compound', compound);  
+            formData.set('isLashes', isLashes);
+            formData.append('available', checkedAvailable);
+            formData.append('topProduct', checkedTop);
+            formData.append('exclusiveProduct', checkedExclusive);
+            formData.set('newProduct', !checkedNewProduct);
+            formData.set('isPromo', promoPrice && +promoPrice > 0 ? true : false);
+            if (deletedSlideId) {
+                formData.append('deletedSlideId', JSON.stringify(deletedSlideId));            
+            }
+            if (img) {
+                formData.set('img', img);               
+            }
+            formData.set('related', JSON.stringify(related));
+            formData.set('info', JSON.stringify(info));
+            images.forEach((file) => {
+                formData.append('slide', file);
+            });       
+            if (isLashes && !kitId) {
+                const firstResult = info.length ? info.find((i) => i.title.toLowerCase() === 'curvatura') : false;
+                const secondResult = info.length ? info.find((i) => i.title.toLowerCase() === 'grossura') : false;
+                const thirdResult = info.length ? info.find((i) => i.title.toLowerCase() === 'tamanho') : false;
+                if (firstResult && secondResult && thirdResult) {
+                    updateProduct(formData, id).then(data => success()).catch(err => message());
+                } else {
+                    if (!firstResult) {
+                        window.alert("Propriedade de 'Curvatura' ausente.");
+                    }
+                    if (!secondResult) {
+                        window.alert("Propriedade de 'Grossura' ausente.");
+                    }
+                    if (!thirdResult) {
+                        window.alert("Propriedade de 'Tamanho' ausente.");
+                    }
+                }
+            } else {
+                updateProduct(formData, id).then(data => success()).catch(err => message());                
+            }
+        } else {
+            window.alert('O preço promocional deve ser inferior ao preço padrão.');
+        }
+    }
 
     return (
         <div className={!kitEditingMenu ? styles.updateProduct : styles.updateProductKit}>
@@ -541,17 +573,32 @@ const UpdateProduct = ({id, obj}) => {
                         <div className={styles.line}>
                             <span className={styles.label}>Conjunto:</span>
                             <div onClick={toggleKitOptions} required tabIndex="3" className={styles.formSelectKits}>
-                                {kitName}
-                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                {kitName.length > 23 ? kitName.slice(0,22) + '...' : kitName}
+                                <svg className={styles.formSelectKitsIcon} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                                     <path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" />
                                 </svg>
                             </div>
                             {kitsVisibility ?
                                 <ul className={styles.kitOptions}>
-                                    <li className={styles.option} onClick={() => hideKitOptions(0, 'Sem conjunto')}>Sem conjunto</li>
-                                    {kits ? kits.map((kit) =>
+                                    {
+                                        <input id="kit-search" type='text' className={styles.kitSearchInput}
+                                            ref={inputRef}
+                                            value={kitValue}
+                                            onChange={onChangeKitValue}
+                                            placeholder={`Procure um conjunto...`}
+                                        />
+                                    }
+                                    {
+                                        kitValue
+                                        &&
+                                        <svg className={styles.deleteIcon} onClick={clearKitValue} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                                            <path d="M576 64H205.26A63.97 63.97 0 0 0 160 82.75L9.37 233.37c-12.5 12.5-12.5 32.76 0 45.25L160 429.25c12 12 28.28 18.75 45.25 18.75H576c35.35 0 64-28.65 64-64V128c0-35.35-28.65-64-64-64zm-84.69 254.06c6.25 6.25 6.25 16.38 0 22.63l-22.62 22.62c-6.25 6.25-16.38 6.25-22.63 0L384 301.25l-62.06 62.06c-6.25 6.25-16.38 6.25-22.63 0l-22.62-22.62c-6.25-6.25-6.25-16.38 0-22.63L338.75 256l-62.06-62.06c-6.25-6.25-6.25-16.38 0-22.63l22.62-22.62c6.25-6.25 16.38-6.25 22.63 0L384 210.75l62.06-62.06c6.25-6.25 16.38-6.25 22.63 0l22.62 22.62c6.25 6.25 6.25 16.38 0 22.63L429.25 256l62.06 62.06z" />
+                                        </svg>                                
+                                    }
+                                    {!kitSearchValue && <li className={styles.option} onClick={() => hideKitOptions(0, 'Sem conjunto')}>Sem conjunto</li>}
+                                    {kits.length > 0 ? kits.map((kit) =>
                                         <li key={kit.name} value={kit.id} onClick={() => hideKitOptions(kit.id, kit.name)} className={styles.option}>{kit.name}</li>
-                                    ) : ""}
+                                    ) : <span className={styles.listMsg}>{kitSearchValue ? 'Não encontrado' : 'Nenhuma lista disponível'}</span>}
                                 </ul>
                                 : ''
                                 }
@@ -569,7 +616,7 @@ const UpdateProduct = ({id, obj}) => {
                             &&
                             <div className={styles.line}>
                                 <label htmlFor="product-variant" className={styles.label} placeholder='Variant'>Variante:</label>
-                                <input id="product-variant" required={kitId > 0 ? true : false} tabIndex="5" type='text' className={styles.formInputSmall}
+                                <input id="product-variant" required={kitId > 0 && kitVariantsList ? true : false} tabIndex="5" type='text' className={styles.formInputSmall}
                                     ref={inputRef}
                                     value={variant}
                                     onChange={onChangeVariant}

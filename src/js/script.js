@@ -222,9 +222,9 @@ export const scrollBodyUnlock = () => {
 
 export function addItemToCart() {
   document.addEventListener('click', function (e) {
-    if (e.target.closest('.quantity__plus')) {
+    if (e.target.closest('.quantity__plus-motion')) {
       const cart = document.querySelector('._icon-cart');
-      const plusBtn = document.querySelector('.quantity__plus');
+      const plusBtn = document.querySelector('.quantity__plus-motion');
       const product = document.querySelector('.product-card__motion');
       const cartPos = {
         left: cart.getBoundingClientRect().left,
