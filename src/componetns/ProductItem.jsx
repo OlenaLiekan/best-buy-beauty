@@ -273,7 +273,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                 ''
                             }
 
-                            {!isLashes && kitVariants.length > 0
+                            {!isLashes && kitVariants.length > 1
                                 ?
                                 <div className='variants__select'>
                                     <div className='variants__title'>
