@@ -293,7 +293,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                 if (kitId) {
                     if (firstSelectedOption && secondSelectedOption && thirdSelectedOption) {
                         const result = firstSelectedOption + secondSelectedOption + thirdSelectedOption;
-                        const selectedVariant = kitVariants.find((kitVariant) => kitVariant.variant.split(' ').join('').toLowerCase() === result.split(' ').join('').toLowerCase());
+                        const selectedVariant = kitVariants.find((kitVariant) => kitVariant.variant.split(',').join('').split(' ').join('').toLowerCase() === result.split(' ').join('').toLowerCase());
                         if (selectedVariant) {
                             if (selectedVariant.id != id) {
                                 navigate(productType ? `/${camelize(productType.name)}/${selectedVariant.id}` : `/produtos/${selectedVariant.id}`);                    
