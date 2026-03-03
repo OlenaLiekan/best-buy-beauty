@@ -281,7 +281,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                     const selectedVariant = kitVariants.find((kitVariant) => kitVariant.variant.split(',').join('').split(' ').join('').toLowerCase() === result.split(' ').join('').toLowerCase());
                     if (selectedVariant) {
                         if (selectedVariant.id != id) {
-                            navigate(`/${path}/${selectedVariant.id}`);                    
+                            navigate(productType ? `/${camelize(productType.name)}/${selectedVariant.id}` : `/produtos/${selectedVariant.id}`);                    
                         }
                     } else {
                         window.alert(`Desculpe, esta opção [${firstSelectedOption.trim()} ${secondSelectedOption.trim()}] não está disponível. Por favor, escolha outra.`);
@@ -296,14 +296,13 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                         const selectedVariant = kitVariants.find((kitVariant) => kitVariant.variant.split(' ').join('').toLowerCase() === result.split(' ').join('').toLowerCase());
                         if (selectedVariant) {
                             if (selectedVariant.id != id) {
-                                navigate(`/${path}/${selectedVariant.id}`);                    
+                                navigate(productType ? `/${camelize(productType.name)}/${selectedVariant.id}` : `/produtos/${selectedVariant.id}`);                    
                             }
                         }
                     } 
                 }
             }
         } 
-
     }, [firstSelectedOption, secondSelectedOption, thirdSelectedOption]);
 
     React.useEffect(() => {
