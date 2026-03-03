@@ -44,7 +44,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const [productDownvoted, setProductDownvoted] = React.useState(false);
     const [kitVariantsList, setKitVariantsList] = React.useState('');
     const [kitVariants, setKitVariants] = React.useState([]);
-    const [activeVariantId, setActiveVariantId] = React.useState('');
+    const [activeVariantId, setActiveVariantId] = React.useState(id);
     const [firstOptionsList, setFirstOptionsList] = React.useState([]);
     const [secondOptionsList, setSecondOptionsList] = React.useState([]);
     const [thirdOptionsList, setThirdOptionsList] = React.useState([]);
@@ -148,7 +148,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     }, [serverDomain]);
 
     const productType = types.find((type) => type.id === typeId);
-    const path = productType ? `/${camelize(productType.name)}/${id}` : `/produtos/${id}`;
+    const path = productType ? `/${camelize(productType.name)}/${activeVariantId}` : `/produtos/${activeVariantId}`;
 
     const showCart = () => {
         if (isLashes && !kitId ? lashesCount : addedCount) {
@@ -308,7 +308,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
 
     React.useEffect(() => {
         if (activeVariantId && id != activeVariantId) {
-            navigate(`/${path}/${activeVariantId}`);
+            navigate(`${path}`);
         }
     }, [serverDomain, activeVariantId]);
 

@@ -254,7 +254,7 @@ const ProductBlock = ({ type, path, id, code, info, related, name, rating, avail
                             <span>{avarageRating}</span>
                         </div>
                         { 
-                            variants.length > 1 
+                            variants.length > 1 && !isLashes
                             &&
                             <>
                                 <ul className='item-product__variants'>
