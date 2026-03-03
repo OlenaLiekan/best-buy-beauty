@@ -298,7 +298,12 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                             if (selectedVariant.id != id) {
                                 navigate(productType ? `/${camelize(productType.name)}/${selectedVariant.id}` : `/produtos/${selectedVariant.id}`);                    
                             }
-                        }
+                        } else {
+                        window.alert(`Desculpe, esta opção [${firstSelectedOption.trim()} ${secondSelectedOption.trim()} ${thirdSelectedOption.trim()}] não está disponível. Por favor, escolha outra.`);
+                        setFirstSelectedOption('');
+                        setSecondSelectedOption('');
+                        setThirdSelectedOption('');
+                    }
                     } 
                 }
             }

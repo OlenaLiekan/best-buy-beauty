@@ -41,7 +41,7 @@ const UpdateKit = () => {
     const [priceMsg, setPriceMsg] = React.useState(false);
 
     const [newProduct, setNewProduct] = React.useState(false);
-    const { setKitEditingMenu, setKitEditing, serverDomain, imagesCloud } = React.useContext(AuthContext);
+    const { setKitEditingMenu, setUpdateProductMode, setKitEditing, serverDomain, imagesCloud } = React.useContext(AuthContext);
     const [img, setImg] = React.useState(null);
     const [kitImg, setKitImg] = React.useState('');
     const [isLashes, setIsLashes] = React.useState(false);
@@ -234,7 +234,6 @@ const UpdateKit = () => {
             const selectedKit = kits.find((kit) => kit.id == kitId);
             setBrandId(selectedKit.brandId);
             setTypeId(selectedKit.typeId);
-            setVariants(selectedKit.variantsList ? selectedKit.variantsList : '')
             setName(selectedKit.name);
             setPrice(selectedKit.price ? selectedKit.price : '');
             setPromoPrice(selectedKit.discountPrice ? selectedKit.discountPrice : '');
@@ -243,15 +242,18 @@ const UpdateKit = () => {
             } else {
                 setNewProduct(true);
             }
+            if (selectedKit.variantsList) {
+                setOptionsList(selectedKit.variantsList);
+            }
             setKitImg(selectedKit.img);
             setKitSlides(selectedKit.slide);
             const kitBrandName = brands.find((brand) => brand.id == selectedKit.brandId).name;
             setBrandName(kitBrandName);
             const kitTypeName = types.find((type) => type.id == selectedKit.typeId).name;
             setTypeName(kitTypeName);
-            setText(selectedKit.text ? selectedKit.text.text : '');
-            setApplying(selectedKit.applying ? selectedKit.applying.text : '');
-            setCompound(selectedKit.compound ? selectedKit.compound.text : '');
+            setText(selectedKit.text ? selectedKit.text[0].text : '');
+            setApplying(selectedKit.applying ? selectedKit.applying[0].text : '');
+            setCompound(selectedKit.compound ? selectedKit.compound[0].text : '');
             setInfo(selectedKit.info ? selectedKit.info : []);
             setRelated(selectedKit.related ? selectedKit.related : []);
             setProductsToUpdate([]);
@@ -398,11 +400,12 @@ const UpdateKit = () => {
 
     const success = () => {
         window.alert('Conjunto alterado com sucesso!');
+
         if (productsToUpdate.length > 0 && kitId) {
             productsToUpdate.forEach((productToUpdate) => {
                 const formUpdateData = new FormData();
-                formUpdateData.set('price', price);
-                updateProduct(formUpdateData, productToUpdate.id).then(data => setSuccessfullyUpdated([...successfullyUpdated, productToUpdate.code])).catch(err => setFailedToUpdate([...failedToUpdate, productToUpdate.code])).finally(showListMsg);
+                formUpdateData.set('price', newPrice);
+                updateProduct(formUpdateData, productToUpdate.id).then(data => setSuccessfullyUpdated([...successfullyUpdated, productToUpdate.code])).catch(err => setFailedToUpdate([...failedToUpdate, productToUpdate.code]));
             });
         }
         if (productsToCreate.length > 0 && kitId) {
@@ -441,11 +444,14 @@ const UpdateKit = () => {
                         formCreateData.append('kitSlide', slide);
                     });
                 }
-                createProduct(formCreateData).then(data => setSuccessfullyCreated([...successfullyCreated, product.code])).catch(err => setFailedToCreate([...failedToCreate, product.code])).finally(showListMsg);
+                createProduct(formCreateData).then(data => setSuccessfullyCreated([...successfullyCreated, product.code])).catch(err => setFailedToCreate([...failedToCreate, product.code]));
             });
-            setKitEditing(false);
-            setKitEditingMenu(false);
         }
+        //showListMsg();            
+        setKitEditing(false);
+        setKitEditingMenu(false);
+        setKitId('');
+        setUpdateProductMode(false);
     }
 
     const showListMsg = () => {
@@ -492,7 +498,7 @@ const UpdateKit = () => {
                 const duplicate = productsToCreate.find((product) => product.variant === current.join(','));
                 if (depth === groups.length && !duplicate) {
                     result.push({
-                        name: name + ' ' + current.join(' '),
+                        name: name + ' ' + current.join(','),
                         code: '',       
                         price: productPrice,          
                         discountPrice: promoPrice,
@@ -777,7 +783,7 @@ const UpdateKit = () => {
                                 </div>
                                 <div className={styles.fotoLine}>
                                     <label htmlFor="product-file" className={styles.label}>Foto:</label>
-                                    <input id="product-file" required tabIndex="9" type='file' name='image' className={styles.formFile}
+                                    <input id="product-file" tabIndex="9" type='file' name='image' className={styles.formFile}
                                         onChange={selectFile}
                                     />
                                 </div>

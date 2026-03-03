@@ -17,6 +17,7 @@ const CreateKit = () => {
     const [kitSlides, setKitSlides] = React.useState([]);
 
     const [kitId, setKitId] = React.useState('');
+    const [kit, setKit] = React.useState('');
     const [typeId, setTypeId] = React.useState(1);
     const [categoryId, setCategoryId] = React.useState(0);
     const [brandId, setBrandId] = React.useState(1);
@@ -319,12 +320,12 @@ const CreateKit = () => {
         window.alert('Ocorreu um erro!');        
     }
 
-    const success = (kit) => {
-        if (kit) {
-            setKitId(kit.id);
+    const success = (createdKit) => {
+        if (createdKit) {
+            setKit(createdKit);              
         }
         window.alert('O novo conjunto foi criado com sucesso!');
-        if (productsToCreate.length > 0 && kit) {
+        if (productsToCreate.length > 0 && createdKit) {
             productsToCreate.forEach((product) => {
                 const formData = new FormData(); 
                 formData.append('name', product.name);
@@ -354,11 +355,13 @@ const CreateKit = () => {
                         });
                     }                    
                 }
-                createProduct(formData).then(data => setSuccessfullyCreated([...successfullyCreated, product.code])).catch(err => setFailedToCreate([...failedToCreate, product.code])).finally(showListMsg);
+                createProduct(formData).then(data => setSuccessfullyCreated([...successfullyCreated, product.code])).catch(err => setFailedToCreate([...failedToCreate, product.code]));
             });
         }
+        //showListMsg();        
         setKitCreation(false);        
         setShowKitMenu(false); 
+        setKit('');
     }
 
     const generateVariants = () => {
@@ -382,7 +385,7 @@ const CreateKit = () => {
                 const duplicate = productsToCreate.find((product) => product.variant === current.join(','));
                 if (depth === groups.length && !duplicate) {
                     result.push({
-                        name: name + ' ' + current.join(' '),
+                        name: name + ' ' + current.join(','),
                         code: '',       
                         price: productPrice,          
                         discountPrice: promoPrice,
