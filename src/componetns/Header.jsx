@@ -46,7 +46,6 @@ const Header = () => {
   const totalCount = items.reduce((sum, item) => !item.available && item.available !== 'undefined' ? sum : sum + item.count, 0);
 
   React.useEffect(() => {
-    console.log(items)
     setIsLoading(true);
     axios.get(`${serverDomain}api/logo/1`)
       .then((res) => {

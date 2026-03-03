@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { camelize } from '../js/script';
 import { addFavorite, minusFavorite } from '../redux/slices/favoriteSlice';
 
-const ProductBlock = ({ path, id, code, info, related, name, rating, available, topProduct, exclusiveProduct, isLashes, price, brandId, img, discountPrice, isPromo, kitId, typeId, variant }) => {
+const ProductBlock = ({ type, path, id, code, info, related, name, rating, available, topProduct, exclusiveProduct, isLashes, price, brandId, img, discountPrice, isPromo, kitId, typeId, variant }) => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -103,7 +103,7 @@ const ProductBlock = ({ path, id, code, info, related, name, rating, available, 
             axios.get(`${serverDomain}api/type`)
                 .then((res) => {
                     const type = res.data.find((type) => type.id == activeVariant.typeId);
-                    setActiveVariantPath(`${type ? camelize(type.name) : 'produtos'}`);
+                    setActiveVariantPath(`${type ? `/${camelize(type.name)}/${activeVariant.id}` : `/produtos/${activeVariant.id}`}`);
                 });               
         }
     }, [serverDomain, activeVariant]);
@@ -146,7 +146,7 @@ const ProductBlock = ({ path, id, code, info, related, name, rating, available, 
     }
 
     const onClickAdd = () => {
-        dispatch(addItem({ ...activeVariant, available: activeVariant.available, price: finalPrice, prevPrice: price, company: company.name }));
+        dispatch(addItem({ ...activeVariant, available: activeVariant.available, price: finalPrice, prevPrice: price, company: company.name, path: activeVariantPath}));
     };
 
     const onClickMinus = (activeVariant) => { 
@@ -181,7 +181,7 @@ const ProductBlock = ({ path, id, code, info, related, name, rating, available, 
                     ''
                 }
                 <div className="item-product__image">
-                    <img onClick={() => navigate(`/${activeVariantPath}/${activeVariant.id}`)} className={activeVariant.available ? '' : 'faded'} src={`${imagesCloud}` + activeVariant.img} alt="product" />
+                    <img onClick={() => navigate(`${activeVariantPath}`)} className={activeVariant.available ? '' : 'faded'} src={`${imagesCloud}` + activeVariant.img} alt="product" />
                     <div className={isAuth && adminMode ? 'item-product__actions' : 'item-product__actions_hidden'}>
                         <svg className='delete-product' onClick={removeProduct} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                             <path d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z" />
@@ -240,7 +240,7 @@ const ProductBlock = ({ path, id, code, info, related, name, rating, available, 
                 <div className={activeVariant.available ? "item-product__info" : "item-product__info item-product__info-faded"}>
                     <div className='item-product__top'>
                         <div className="item-product__titles">
-                            <h2 onClick={() => navigate(`/${activeVariantPath}/${activeVariant.id}`)} className="item-product__title">
+                            <h2 onClick={() => navigate(`${activeVariantPath}`)} className="item-product__title">
                                 {isLashes && kitId > 0 && kitName ? kitName : activeVariant.name } 
                             </h2>
                         </div>

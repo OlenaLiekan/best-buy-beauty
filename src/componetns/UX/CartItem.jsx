@@ -41,11 +41,7 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
     }, [id, serverDomain]);
 
     const handleClick = () => {
-        if (!path.includes(id)) {
-            navigate(`/${path}/${id}`);
-        } else {
-            navigate(`${path}`);            
-        }
+        navigate(`${path}`);            
         window.scrollTo(0, 0);
     }
 

@@ -148,7 +148,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     }, [serverDomain]);
 
     const productType = types.find((type) => type.id === typeId);
-    const path = productType ? camelize(productType.name) : "produtos";
+    const path = productType ? `/${camelize(productType.name)}/${id}` : `/produtos/${id}`;
 
     const showCart = () => {
         if (isLashes && !kitId ? lashesCount : addedCount) {
