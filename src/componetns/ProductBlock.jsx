@@ -46,6 +46,7 @@ const ProductBlock = ({ path, id, code, info, related, name, rating, available, 
     });
 
     const { items } = useSelector((state) => state.cart);
+
     const { favoriteItems } = useSelector((state) => state.favorite);
 
     React.useEffect(() => {
@@ -56,7 +57,6 @@ const ProductBlock = ({ path, id, code, info, related, name, rating, available, 
     React.useEffect(() => {
         const favoritesData = JSON.stringify(favoriteItems);
         localStorage.setItem('favorite', favoritesData); 
-        console.log(favoriteItems);
     }, [favoriteItems, activeVariant]);
 
     const [activeVariantPath, setActiveVariantPath] = React.useState(path);
@@ -146,7 +146,8 @@ const ProductBlock = ({ path, id, code, info, related, name, rating, available, 
     }
 
     const onClickAdd = () => {
-        dispatch(addItem({ ...activeVariant, price: finalPrice, prevPrice: price }));
+        dispatch(addItem({ ...activeVariant, available: activeVariant.available, price: finalPrice, prevPrice: price }));
+        console.log(items);
     };
 
     const onClickMinus = (activeVariant) => { 

@@ -60,10 +60,8 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
         imagesCloud
     } = React.useContext(AuthContext);
     
-    const { items } = useSelector((state) => state.cart);
-    
     const cartItem = useSelector((state) => state.cart.items.find((obj) => obj.id === id));
-    const lashesItem = useSelector((state) => state.cart.items.find((obj) => obj.index === index));
+    const lashesItem = useSelector((state) => state.cart.items.find((lashesObj) => id === lashesObj.id && curlArr[activeCurl] === lashesObj.curlArr && thicknessArr[activeThickness] === lashesObj.thicknessArr && lengthArr[activeLength] === lashesObj.lengthArr));
     const addedCount = cartItem ? cartItem.count : 0;
     const lashesCount = lashesItem ? lashesItem.count : 0;
 
@@ -76,13 +74,15 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const data = localStorage.getItem("user");
     const user = JSON.parse(data);
 
+    const { items } = useSelector((state) => state.cart);
+
     React.useEffect(() => {
         const cartData = JSON.stringify(items);
         localStorage.setItem('cart', cartData); 
     }, [items]);
     
     const isOldLashesModel = (isLashes, kitId) => {
-        return isLashes && (!kitId || kitId === 0);
+        return isLashes && (!kitId);
     };
 
     React.useEffect(() => {
@@ -184,7 +184,6 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
         if (isOldLashesModel) {
             dispatch(addItem({
                 ...item,
-                index,
                 curlArr: curlArr[activeCurl],
                 thicknessArr: thicknessArr[activeThickness],
                 lengthArr: lengthArr[activeLength],

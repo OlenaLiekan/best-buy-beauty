@@ -26,7 +26,7 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const isOldLashesModel = isLashes && (!kitId || kitId === 0);
+    const isOldLashesModel = isLashes && (!kitId);
     const isNewLashesModel = isLashes && kitId > 0;
 
     React.useEffect(() => {
@@ -45,17 +45,29 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
     }
 
     const onClickPlus = () => {
-        dispatch(addItem(obj));
+        if (isLashes && !kitId) {
+            dispatch(addItem({ ...obj, curlArr, thicknessArr, lengthArr }));
+        } else {
+            dispatch(addItem(obj));            
+        }
     };
 
     const onClickMinus = () => {
-        dispatch(minusItem(obj));
+        if (isLashes && !kitId) {
+            dispatch(minusItem({ ...obj, curlArr, thicknessArr, lengthArr }));
+        } else {
+            dispatch(minusItem(obj));             
+        }
     };
     
 
     const onClickRemove = () => {
         if (window.confirm('Tem certeza de que deseja excluir o produto?')) {
-            dispatch(removeItem(obj));
+            if (isLashes && !kitId) {
+                dispatch(removeItem({...obj, curlArr, thicknessArr, lengthArr}));              
+            } else {
+                dispatch(removeItem(obj));
+            }
         }
     };
     
@@ -72,7 +84,7 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
     React.useEffect(() => {
         if (productUpdated === code) {
             if (isOldLashesModel) {
-                dispatch(removeItem({ 
+                dispatch(removeItem({...obj, 
                     id, 
                     isLashes: true, 
                     kitId: 0,
@@ -81,7 +93,7 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
                     curlArr 
                 }));
             } else {
-                dispatch(removeItem({ id, kitId }));
+                dispatch(removeItem(obj));
             }
             setProductUpdated('');
         }
@@ -90,7 +102,7 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
     React.useEffect(() => {
         if (productRemoved === code) {
             if (isOldLashesModel) {
-                dispatch(removeItem({ 
+                dispatch(removeItem({...obj, 
                     id, 
                     isLashes: true, 
                     kitId: 0,
@@ -99,7 +111,7 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
                     curlArr 
                 }));
             } else {
-                dispatch(removeItem({ id, kitId }));
+                dispatch(removeItem(obj));
             }
             setProductRemoved('');
         }
@@ -108,7 +120,7 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
     React.useEffect(() => {
         if (!itemLoading && !dbItem) {
             if (isOldLashesModel) {
-                dispatch(removeItem({ 
+                dispatch(removeItem({ ...obj,
                     id, 
                     isLashes: true, 
                     kitId: 0,
@@ -117,7 +129,7 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
                     curlArr 
                 }));
             } else {
-                dispatch(removeItem({ id, kitId }));
+                dispatch(removeItem(obj));
             }
         }
     }, [itemLoading, dbItem]);
@@ -137,7 +149,7 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
         }
     });
 
-    /*React.useEffect(() => {
+    React.useEffect(() => {
         setUpdatedCart(false);
         if (dbItem) {
             if (dbItem.available !== undefined && dbItem.available !== null) {
@@ -148,7 +160,13 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
                     itemCopy.available = dbItem.available;
                     itemCopy.price = +dbItem.discountPrice > 0 ? dbItem.discountPrice : (brandDiscount == 0 && !isBlackFriday ? dbItem.price : (dbItem.price * (100 - brandDiscount) / 100).toFixed(2));
                     const data = JSON.parse(localStorage.getItem('cart'));
-                    const itemPosition = data.findIndex((item) => item.id === id);
+                    let itemPosition;
+                    if (isLashes && !kitId) {
+                        itemPosition = data.findIndex((item) => item.id === id && item.curlArr === curlArr && item.thicknessArr === thicknessArr && item.lengthArr === lengthArr);
+                    } else {
+                        itemPosition = data.findIndex((item) => item.id === id);                        
+                    }
+
                     data.splice(itemPosition, 1, itemCopy);
                     localStorage.setItem('cart', JSON.stringify(data));
                     setUpdatedCart(true);
@@ -157,14 +175,23 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
         }
 
         if (!dbItem && !itemLoading && count > 0) {
-            dispatch(
-                removeItem(isLashes ? index : id)
-            );
+            if (isOldLashesModel) {
+                dispatch(removeItem({...obj, 
+                id, 
+                isLashes: true, 
+                kitId: 0,
+                lengthArr, 
+                thicknessArr, 
+                curlArr 
+                }));
+            } else {
+                dispatch(removeItem(obj));
+            }
         }
 
-    }, [dbItem, itemLoading]);*/
+    }, [dbItem, itemLoading]);
 
-    React.useEffect(() => {
+   /* React.useEffect(() => {
         setUpdatedCart(false);
         
         if (dbItem && currentItem) {
@@ -173,9 +200,9 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
             if (+dbItem.discountPrice > 0) {
                 actualPrice = dbItem.discountPrice;
             } else if (brandDiscount > 0 && isBlackFriday) {
-                actualPrice = (dbItem.price * (100 - brandDiscount) / 100).toFixed(2);
+                actualPrice = (+dbItem.price * (100 - brandDiscount) / 100).toFixed(2);
             } else {
-                actualPrice = dbItem.price;
+                actualPrice = +dbItem.price;
             }
 
             const priceChanged = currentItem.price !== actualPrice;
@@ -217,7 +244,7 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
 
         if (!dbItem && !itemLoading && count > 0) {
             if (isOldLashesModel) {
-                dispatch(removeItem({ 
+                dispatch(removeItem({...obj, 
                 id, 
                 isLashes: true, 
                 kitId: 0,
@@ -226,14 +253,14 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
                 curlArr 
                 }));
             } else {
-                dispatch(removeItem({ id, kitId }));
+                dispatch(removeItem(obj));
             }
         }
-    }, [dbItem, itemLoading, brandDiscount, isBlackFriday]);
+    }, [dbItem, itemLoading, brandDiscount, isBlackFriday]);*/
 
     if (count === 0) {
         if (isOldLashesModel) {
-            dispatch(removeItem({ 
+            dispatch(removeItem({ ...obj,
                 id, 
                 isLashes: true, 
                 kitId: 0,
@@ -242,13 +269,13 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
                 curlArr 
             }));
         } else {
-            dispatch(removeItem({ id, kitId }));
+            dispatch(removeItem(obj));
         }
     }
 
     if (dbItem && dbItem.available === false) {
         if (isOldLashesModel) {
-            dispatch(removeItem({ 
+            dispatch(removeItem({...obj,
                 id, 
                 isLashes: true, 
                 kitId: 0,
@@ -257,7 +284,7 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
                 curlArr 
             }));
         } else {
-            dispatch(removeItem({ id, kitId }));
+            dispatch(removeItem(obj));
         }
     }
 
