@@ -11,6 +11,7 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
     const [dbItem, setDBItem] = React.useState({});
     const [itemLoading, setItemLoading] = React.useState(false);
     const [brandDiscount, setBrandDiscount] = React.useState('');
+    const [brandName, setBrandName] = React.useState('');
     const {
         imagesCloud,
         serverDomain,
@@ -40,7 +41,11 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
     }, [id, serverDomain]);
 
     const handleClick = () => {
-        navigate(`/${path}/${id}`);
+        if (!path.includes(id)) {
+            navigate(`/${path}/${id}`);
+        } else {
+            navigate(`${path}`);            
+        }
         window.scrollTo(0, 0);
     }
 
@@ -75,6 +80,7 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
     React.useEffect(() => {
         axios.get(`${serverDomain}api/brand`)
             .then((res) => {
+                setBrandName(res.data.find((brand) => brand.id === obj.brandId)?.name);
                 if (dbItem && dbItem.brandId) {
                     setBrandDiscount(res.data.find((brand) => brand.id === dbItem.brandId).discount);
                 }
@@ -307,7 +313,7 @@ const CartItem = ({obj, path, info, isLashes, name, img, id, index, code, price,
                         </div>
                         <div className='info-cart__line'>
                             <span>Marca: </span>
-                            {company}
+                            {company ? company : brandName}
                         </div>
                         {
                             info && !isLashes
