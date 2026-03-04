@@ -241,7 +241,7 @@ const ProductBlock = ({ type, path, id, code, info, related, name, rating, avail
                     <div className='item-product__top'>
                         <div className="item-product__titles">
                             <h2 onClick={() => navigate(`${activeVariantPath}`)} className="item-product__title">
-                                {isLashes && kitId > 0 && kitName ? kitName : activeVariant.name } 
+                                {activeVariant.name } 
                             </h2>
                         </div>
                         <div className="item-product__brand">
