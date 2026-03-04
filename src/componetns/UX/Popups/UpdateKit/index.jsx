@@ -553,8 +553,8 @@ const UpdateKit = () => {
             for (j; j < productsToCreate.length; j++) {
                     let newNumber = +initialNumber + j; 
                     let newNumberLength = String(newNumber).length;
-                    let newZeroCount = 6 - newNumberLength;
-                    let prefix = '';
+                    let newZeroCount = 5 - newNumberLength;
+                    let prefix = initialCode[0];
                     for (let k = 0; k < newZeroCount; k++) {
                         prefix = prefix + '0';
                     }
