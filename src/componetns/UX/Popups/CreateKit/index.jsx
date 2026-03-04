@@ -321,9 +321,7 @@ const CreateKit = () => {
     }
 
     const success = (createdKit) => {
-        if (createdKit) {
-            setKit(createdKit);              
-        }
+
         window.alert('O novo conjunto foi criado com sucesso!');
         if (productsToCreate.length > 0 && createdKit) {
             productsToCreate.forEach((product) => {
@@ -336,7 +334,7 @@ const CreateKit = () => {
                 formData.append('brandId', brandId);
                 formData.append('typeId', typeId);
                 if (img) {
-                    formData.append('kitImg', kit.img);
+                    formData.append('kitImg', createdKit.img);
                 }
                 formData.append('related', JSON.stringify(related));
                 formData.append('info', JSON.stringify(info));
@@ -345,7 +343,7 @@ const CreateKit = () => {
                 formData.append('applying', applying);            
                 formData.append('compound', compound);            
                 formData.append('isLashes', isLashes);
-                formData.append('kitId', kit.id);
+                formData.append('kitId', createdKit.id);
                 formData.append('variant', product.variant);
                 formData.append('isPromo', promoPrice && +promoPrice > 0 ? true : false);
                 if (kitSlides) {
