@@ -108,7 +108,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
 
     React.useEffect(() => {
         if (kitId > 0) {
-            axios.get(`${serverDomain}api/product?limit=24&kitId=${kitId}`)
+            axios.get(`${serverDomain}api/product?limit=250&kitId=${kitId}`)
             .then((res) => {
                 setKitVariants(res.data.rows);
             });
@@ -293,7 +293,10 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                 if (kitId) {
                     if (firstSelectedOption && secondSelectedOption && thirdSelectedOption) {
                         const result = firstSelectedOption + secondSelectedOption + thirdSelectedOption;
+                        console.log(result);
+
                         const selectedVariant = kitVariants.find((kitVariant) => kitVariant.variant.split(',').join('').split(' ').join('').toLowerCase() === result.split(' ').join('').toLowerCase());
+                        console.log(kitVariants.map((kitVariant) => kitVariant.variant));                        
                         if (selectedVariant) {
                             if (selectedVariant.id != id) {
                                 navigate(productType ? `/${camelize(productType.name)}/${selectedVariant.id}` : `/produtos/${selectedVariant.id}`);                    
@@ -315,6 +318,10 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
             navigate(`${path}`);
         }
     }, [serverDomain, activeVariantId]);
+
+    React.useEffect(() => {
+        
+    }, []);
 
     return (
         <div className='product-card__content'>
