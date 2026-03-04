@@ -538,7 +538,7 @@ const UpdateKit = () => {
         if (initialCode) {
             let codeNumberArr = [];
             let initialNumber = '';
-            for (let i = 0; i < initialCode.length; i++) {
+            for (let i = 1; i < initialCode.length; i++) {
                 let number = initialCode[i];
                 if (number > 0) {
                     initialNumber = String(initialNumber) + String(number);
