@@ -739,7 +739,7 @@ const CreateKit = () => {
                             <>
                                 <div className={styles.line}>
                                     <label htmlFor="product-code" className={styles.label}>Código inicial:</label>
-                                    <input id="product-code" tabIndex="22" type='text' className={styles.formInputExtraSmall} placeholder='000001'
+                                    <input id="product-code" tabIndex="22" type='text' className={styles.formInputExtraSmall} placeholder='900001'
                                         ref={inputRef}
                                         value={initialCode}
                                         onChange={onChangeInitialCode}
@@ -760,7 +760,7 @@ const CreateKit = () => {
                                         <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
                                     </svg>         
                                     <div className={styles.line}>     
-                                        <input id="product-code" type='text' className={styles.formInputExtraSmall} placeholder='000001'
+                                        <input id="product-code" type='text' className={styles.formInputExtraSmall} placeholder='900001'
                                             ref={inputRef}
                                             value={product.code.slice(0,6)}
                                             onChange={(e) => changeCode('code', e.target.value, product.variant)}
