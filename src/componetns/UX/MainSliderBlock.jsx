@@ -36,7 +36,7 @@ const MainSliderBlock = () => {
     setIsLoading(true);
     axios.get(`${serverDomain}api/slide`)
       .then((res) => {
-        setSlides(res.data.length ? res.data.reverse() : res.data);
+        setSlides(res.data);
         setIsLoading(false);
       });
   }, [serverDomain]);
@@ -115,7 +115,7 @@ const MainSliderBlock = () => {
                 speed={2000}
                 loop={true}
               >
-                {slides.length ? slides.map((slide) =>
+                {slides.length > 0 ? slides.map((slide) =>
                   <SwiperSlide key={slide.id}>
                     <div className="block-main__slide slide-main-block">
                       <div className="slide-main-block__content">
