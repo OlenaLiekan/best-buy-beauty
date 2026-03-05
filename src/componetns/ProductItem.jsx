@@ -316,9 +316,6 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
         }
     }, [serverDomain, activeVariantId]);
 
-    React.useEffect(() => {
-        
-    }, []);
 
     return (
         <div className='product-card__content'>

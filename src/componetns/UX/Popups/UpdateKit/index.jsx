@@ -222,9 +222,14 @@ const UpdateKit = () => {
 
     React.useEffect(() => {
         if (kitId) {
-            axios.get(`${serverDomain}api/product?limit=50&kitId=${kitId}`)
+            axios.get(`${serverDomain}api/product?limit=1000&kitId=${kitId}`)
                 .then((res) => {
-                    setKitProducts(res.data.rows);
+                    const sortedProducts = [...res.data.rows].sort((a, b) => {
+                        const codeA = String(a.code);
+                        const codeB = String(b.code);
+                        return codeA.localeCompare(codeB);
+                    });
+                    setKitProducts(sortedProducts);
                 });            
         }
     }, [serverDomain, kitId]);
