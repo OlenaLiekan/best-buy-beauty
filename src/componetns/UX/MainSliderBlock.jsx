@@ -39,7 +39,7 @@ const MainSliderBlock = () => {
         setSlides(res.data);
         setIsLoading(false);
       });
-  }, [serverDomain]);
+  }, [serverDomain, createSlideMode, updateSlideMode]);
 
   React.useEffect(() => {
     if (id) {

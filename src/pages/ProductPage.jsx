@@ -81,15 +81,16 @@ const ProductPage = ({type}) => {
         const typeId = type.id ? `&typeId=${type.id}` : ''; 
         const category = categoryId ? `&categoryId=${categoryId}` : '';
         const promo = isPromoPage ? '&isPromo=true' : '';
-        axios.get(`${serverDomain}api/product?info&page=${currentPage}&limit=24${category}${typeId}${brandCategory}&sort=${sortBy}&order=${order}${search}${promo}`)
+        const uniqueByKitId = '&uniqueByKitId=true';
+        axios.get(`${serverDomain}api/product?info&page=${currentPage}${uniqueByKitId}${category}${typeId}${brandCategory}&sort=${sortBy}&order=${order}${search}${promo}`)
             .then((res) => {
-                setItems(res.data.rows);
+                setItems(res.data.rows);                    
             });
         setIsLoading(false);
-        window.scrollTo(0, 0);
     }, [categoryId, brandId, sort, currentPage, searchValue, type.id, serverDomain, isPromoPage]);
     
     React.useEffect(() => {
+        console.log(items);
         const typeId = type.id;
         const queryString = qs.stringify({
             sortProperty: sort.sortProperty,

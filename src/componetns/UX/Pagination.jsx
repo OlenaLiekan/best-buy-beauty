@@ -12,7 +12,7 @@ const Pagination = ({type, onChangePage}) => {
   const [itemsCount, setItemsCount] = React.useState(0);
 
   const contentPerPage = 24;
-  const totalPages = itemsCount ? Math.ceil(itemsCount / contentPerPage) : 1;
+  const totalPages = itemsCount ? Math.ceil(+itemsCount / contentPerPage) : 1;
   const forcePage = currentPage - 1;
 
   React.useEffect(() => {
@@ -21,16 +21,17 @@ const Pagination = ({type, onChangePage}) => {
     const typeId = type.id ? `&typeId=${type.id}` : ''; 
     const category = categoryId ? `&categoryId=${categoryId}` : '';
     const promo = isPromoPage ? '&isPromo=true' : '';
+    const uniqueByKitId = '&uniqueByKitId=true';
     axios
       .get(
-          `${serverDomain}api/product?${company}${category}${typeId}${search}${promo}`,
+          `${serverDomain}api/product?${company}${uniqueByKitId}${category}${typeId}${search}${promo}`,
       )
       .then((res) => {
         setItemsCount(res.data.count);   
     });
     window.scrollTo(0, 0);
 
-  }, [type, categoryId, brandId, searchValue, serverDomain, isPromoPage]);
+  }, [type, categoryId, brandId, searchValue, serverDomain, isPromoPage, currentPage]);
   
   return (
 
