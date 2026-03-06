@@ -1826,3 +1826,234 @@
     font-weight: 500;
 }
 
+.onIcon,
+.offIcon {
+    width: 24px;
+    height: 24px;
+} 
+
+.mainOnIcon,
+.mainOffIcon {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.onIcon,
+.mainOnIcon {
+    fill: #1560BD;
+}
+
+.offIcon,
+.mainOffIcon {
+    fill: #484848;
+    transform: scaleX(-1);;
+}
+
+.kitOptions {
+    position: absolute;
+    width: 200px;
+    max-height: 250px;
+    min-height: 100px;
+    overflow-y: auto;
+    padding-top: 15px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-left: 2px solid #f4f4f4;
+    border-right: 2px solid #f4f4f4;
+    border-bottom: 2px solid #f4f4f4;
+    box-shadow: 3px 3px 3px #f4f4f4a8;
+    border-radius: 0 0 20px 20px;
+    z-index: 6;
+    top: 20px;
+    left: 0;
+}
+
+.formSelectKit {
+    position: relative;
+    font-size: 13px;
+    height: 32px;
+    background-color: #fff;
+    border: 2px solid #dcdcdc;
+    border-radius: 20px;
+    padding: 0 10px;
+    outline: none;
+
+    &:not(:last-child) {
+        margin-right: 15px;
+    }
+
+    @media (max-width: 602.98px) {
+        font-size: 12px;
+        margin-right: 0;
+    }
+}
+
+.formSelectKit {
+    width: 200px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.formSelectKit {
+    z-index: 7;
+}
+
+.kitSearchInput,
+.adminStoreProductSearch {
+    padding: 10px 32px 10px 10px;
+    border-bottom: 1.5px solid #f0f0f0ab;
+    font-size: 14px;
+
+    &::placeholder {
+        font-size: 13px;
+    }
+
+    outline: none;
+    margin-bottom: 10px;
+}
+
+.searchWrapper {
+    display: flex;
+    position: relative;
+}
+
+.deleteIcon {
+    position: absolute;
+    top: 25px;
+    right: 10px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.deleteIconSearch {
+    position: absolute;
+    top: 10px;
+    right: 0px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.option {
+    cursor: pointer;
+    padding: 10px;
+    font-size: 14px;
+    background-color: #fff;
+
+    &:hover {
+        background-color: #f4f4f4;
+        color: #AD912B;
+    }
+
+    @media (max-width: 602.98px) {
+        font-size: 12px;
+    }
+}
+
+.adminStoreForm {
+    max-width: 450px;
+    @media(max-width: 767.98px) {
+        max-width: 250px;
+    }
+}
+
+.line {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.listMsg {
+    color: #252525;
+    font-size: 12px;
+    padding: 0 10px;
+}
+
+.adminStoreList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 50px;
+}
+
+.adminStoreItemsCount,
+.adminStoreText {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+    color: #252525;
+    margin-bottom: 15px;
+}
+
+.adminStoreText {
+    margin-top: 25px;
+}
+
+.adminStoreItem {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #f4f4f47b;
+    padding: 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.adminStoreItemBottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.adminStoreActions {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    max-width: 200px;
+    gap: 10px;
+}
+
+.adminStoreActionsLine {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 500;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.adminStoreAvailability {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.adminStoreProductName,
+.adminStoreProductActive {
+    line-height: 1.2;
+    font-weight: 500;
+}
+
+.adminStoreProductName {
+    color: #252525;
+}
+
+.adminStoreProductName {
+    color: #AD912B;
+}
+
+
+
+
+
+
+

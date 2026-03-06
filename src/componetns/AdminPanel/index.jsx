@@ -11,6 +11,7 @@ import AdminInitial from './AdminInitial';
 import AdminPromocodes from './AdminPromocodes';
 import AdminPromotion from './AdminPromotion';
 import AdminProductCategories from './AdminProductCategories';
+import AdminProductStore from './AdminProductStore';
 import AdminProductAvailability from './AdminProductAvailability';
 import AdminTestimonials from './AdminTestimonials';
 import AdminDeliveryPrices from './AdminDeliveryPrices';
@@ -41,19 +42,21 @@ const AdminPanel = () => {
 
                 { activeAuthOption === 0 && <AdminInitial/> }
 
-                { activeAuthOption === 1 && <AdminProductCategories/> }
+                {activeAuthOption === 1 && <AdminProductCategories />}
+            
+                { activeAuthOption === 2 && <AdminProductStore/> }
                 
-                { activeAuthOption === 2 && <AdminProductAvailability/> }
+                { activeAuthOption === 3 && <AdminProductAvailability/> }
                 
-                { activeAuthOption === 3 && <AdminPromocodes/> }
+                { activeAuthOption === 4 && <AdminPromocodes/> }
 
-                { activeAuthOption === 4 && <AdminPromotion/> }
+                { activeAuthOption === 5 && <AdminPromotion/> }
 
-                { activeAuthOption === 5 && <AdminTestimonials/> }
+                { activeAuthOption === 6 && <AdminTestimonials/> }
 
-                {activeAuthOption === 6 && <AdminDeliveryPrices />}
+                {activeAuthOption === 7 && <AdminDeliveryPrices />}
                 
-                { activeAuthOption === 7 && <AdminOrders/> }
+                { activeAuthOption === 8 && <AdminOrders/> }
 
         </div>
 

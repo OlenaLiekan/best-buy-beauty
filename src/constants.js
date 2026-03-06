@@ -1,6 +1,7 @@
 export const ADMIN_MENU_ITEMS = [
   'Seção inicial',
   'Menu de categorias',
+  'Gestão de armazém',
   'Disponibilidade do produto',
   'Códigos promocionais',
   'Lançamento da promoção',
