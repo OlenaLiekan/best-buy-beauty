@@ -249,6 +249,8 @@ const UpdateKit = () => {
             }
             if (selectedKit.variantsList) {
                 setOptionsList(selectedKit.variantsList);
+            } else {
+                setOptionsList('');
             }
             setKitImg(selectedKit.img);
             setKitSlides(selectedKit.slide);
