@@ -236,7 +236,7 @@ const UpdateKit = () => {
 
     React.useEffect(() => {
         if (kitId > 0 && kits.length > 0) {
-            const selectedKit = kits.find((kit) => kit.id == kitId);
+            const selectedKit = kits.find((kit) => kit.id === kitId);
             setBrandId(selectedKit.brandId);
             setTypeId(selectedKit.typeId);
             setName(selectedKit.name);
@@ -256,13 +256,26 @@ const UpdateKit = () => {
             setBrandName(kitBrandName);
             const kitTypeName = types.find((type) => type.id == selectedKit.typeId).name;
             setTypeName(kitTypeName);
-            setText(selectedKit.text ? selectedKit.text[0].text : '');
-            setApplying(selectedKit.applying ? selectedKit.applying[0].text : '');
-            setCompound(selectedKit.compound ? selectedKit.compound[0].text : '');
+            if (selectedKit.text.length > 0) {
+                setText(selectedKit.text[0].text);                
+            } else {
+                setText('');
+            }
+            if (selectedKit.applying.length > 0) {
+                setApplying(selectedKit.applying[0].text);                
+            } else {
+                setApplying('');
+            }
+            if (selectedKit.compound.length > 0) {
+                setCompound(selectedKit.compound[0].text);                
+            } else {
+                setCompound('');
+            }
             setInfo(selectedKit.info ? selectedKit.info : []);
             setRelated(selectedKit.related ? selectedKit.related : []);
             setProductsToUpdate([]);
             setNewPrice('');
+                    console.log(selectedKit);
         }
     }, [kitId]);
 
