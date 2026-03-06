@@ -43,7 +43,12 @@ const AdminProductStore = () => {
             const productName = searchValue ? `&name=${searchValue}` : '';
             axios.get(`${serverDomain}api/product?limit=1000${productName}&sort=${sortBy}&order=${order}&kitId=${kitId}`)
                 .then((res) => {
-                    setProductsList(res.data.rows);
+                    const sortedProducts = [...res.data.rows].sort((a, b) => {
+                        const codeA = String(a.code);
+                        const codeB = String(b.code);
+                        return codeA.localeCompare(codeB);
+                    });
+                    setProductsList(sortedProducts);
                     setListIsLoading(false);
                 });            
         }
