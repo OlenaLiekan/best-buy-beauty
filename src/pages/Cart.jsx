@@ -29,6 +29,7 @@ const Cart = () => {
         //if (isMounted.current) {
         const cartData = JSON.stringify(items);
         localStorage.setItem('cart', cartData); 
+        console.log(items);
         /*}
         isMounted.current = true;*/
     }, [items]);
@@ -61,7 +62,7 @@ const Cart = () => {
                         <div className="body-cart__items">
                             {
                                 items.map((item, i) => (
-                                    <CartItem key={item.isLashes && !item.kitId ? item.id + i : item.id } {...item} obj={item} />
+                                    <CartItem key={!item.kitId ? i : item.code } {...item} obj={item} />
                                 ))
                             }
                         </div>

@@ -83,9 +83,9 @@ const SubmitPage = () => {
 
   const promoItems = promocodeBrandName && promocodeBrandId > 0 
     ?
-    items.filter((item) => item.company === promocodeBrandName && !item.promoProduct).filter((item) => !item.exclusiveProduct)
+    items.filter((item) => item.company === promocodeBrandName && (item.promoProduct !== undefined ? !item.promoProduct : Number(item.prevPrice) === Number(item.price))).filter((item) => !item.exclusiveProduct)
     :
-    items.filter((item) => !item.promoProduct).filter((item) => !item.exclusiveProduct); 
+    items.filter((item) => item.promoProduct !== undefined ? !item.promoProduct : Number(item.prevPrice) === Number(item.price)).filter((item) => !item.exclusiveProduct); 
   
   const promoItemsPrices = promoItems ? promoItems.map((item) => item.price * item.count) : [];
   const promoItemsSum = promoItemsPrices.length > 0 ? promoItemsPrices.reduce((sum, price) => sum + Number(price), 0) : totalPrice;
@@ -1210,7 +1210,7 @@ const SubmitPage = () => {
                         </div>
 
                         <div className={
-                          usedPromocode && (promocodeBrandId === '0' && !item.promoProduct && !item.exclusiveProduct || item.company === promocodeBrandName && !item.promoProduct && !item.exclusiveProduct)
+                          usedPromocode && (promocodeBrandId === '0' && (item.promoProduct !== undefined ? !item.promoProduct : item.prevPrice === item.price) && !item.exclusiveProduct || item.company === promocodeBrandName && item.promoProduct && !item.exclusiveProduct)
                             ?
                             "item-aside-popup__price_strike"
                             :
@@ -1223,7 +1223,7 @@ const SubmitPage = () => {
                       {
                         usedPromocode && promocodeValue
                           ?
-                          (promocodeBrandId === '0' && !item.promoProduct && !item.exclusiveProduct || item.company === promocodeBrandName && !item.promoProduct && !item.exclusiveProduct
+                          (promocodeBrandId === '0' && (item.promoProduct !== undefined ? !item.promoProduct : item.prevPrice === item.price) && !item.exclusiveProduct || item.company === promocodeBrandName && !item.promoProduct && !item.exclusiveProduct
                             ?
                             <div className="item-aside-popup__info-bottom">
                               <div className="item-aside-popup__used-promocode">
