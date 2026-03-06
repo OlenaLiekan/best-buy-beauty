@@ -146,7 +146,7 @@ const ProductBlock = ({ type, path, id, code, info, related, name, rating, avail
     }
 
     const onClickAdd = () => {
-        dispatch(addItem({ ...activeVariant, available: activeVariant.available, price: finalPrice, prevPrice: price, company: company.name, path: activeVariantPath}));
+        dispatch(addItem({ ...activeVariant, available: activeVariant.available, price: finalPrice, prevPrice: activeVariant.price, company: company.name, path: activeVariantPath, promoProduct: finalPrice !== activeVariant.price ? true : false}));
     };
 
     const onClickMinus = (activeVariant) => { 
