@@ -193,7 +193,7 @@ const ProductBlock = ({ type, path, id, code, info, related, name, rating, avail
                     { 
                         activeVariant.available
                             && 
-                            !(activeVariant.isLashes && !activeVariant.kitId) 
+                            !activeVariant.isLashes
                         ?
                         (
                             

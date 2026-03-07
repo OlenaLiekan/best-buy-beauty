@@ -277,7 +277,6 @@ const UpdateKit = () => {
             setRelated(selectedKit.related ? selectedKit.related : []);
             setProductsToUpdate([]);
             setNewPrice('');
-                    console.log(selectedKit);
         }
     }, [kitId]);
 
