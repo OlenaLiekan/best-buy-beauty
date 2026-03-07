@@ -77,6 +77,20 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const { items } = useSelector((state) => state.cart);
 
     React.useEffect(() => {
+        if (variant) {
+            const activeVariantOptions = variant.split(',');
+            if (activeVariantOptions.length === 2) {
+                setFirstSelectedOption(activeVariantOptions[0].trim());
+                setSecondSelectedOption(activeVariantOptions[1].trim());
+            } else if (activeVariantOptions.length === 3) {
+                setFirstSelectedOption(activeVariantOptions[0].trim());
+                setSecondSelectedOption(activeVariantOptions[1].trim());
+                setThirdSelectedOption(activeVariantOptions[2].trim());
+            }
+        }
+    }, [id, variant]);
+
+    React.useEffect(() => {
         const cartData = JSON.stringify(items);
         localStorage.setItem('cart', cartData); 
     }, [items]);
@@ -285,8 +299,8 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                         }
                     } else {
                         window.alert(`Desculpe, esta opção [${firstSelectedOption.trim()} ${secondSelectedOption.trim()}] não está disponível. Por favor, escolha outra.`);
-                        setFirstSelectedOption('');
-                        setSecondSelectedOption('');
+                            setFirstSelectedOption(variant.split(',')[0].trim());
+                            setSecondSelectedOption(variant.split(',')[1].trim());
                     }
                 }                
             } else {
@@ -299,11 +313,11 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                 navigate(productType ? `/${camelize(productType.name)}/${selectedVariant.id}` : `/produtos/${selectedVariant.id}`);                    
                             }
                         } else {
-                        window.alert(`Desculpe, esta opção [${firstSelectedOption.trim()} ${secondSelectedOption.trim()} ${thirdSelectedOption.trim()}] não está disponível. Por favor, escolha outra.`);
-                        setFirstSelectedOption('');
-                        setSecondSelectedOption('');
-                        setThirdSelectedOption('');
-                    }
+                            window.alert(`Desculpe, esta opção [${firstSelectedOption.trim()} ${secondSelectedOption.trim()} ${thirdSelectedOption.trim()}] não está disponível. Por favor, escolha outra.`);
+                            setFirstSelectedOption(variant.split(',')[0].trim());
+                            setSecondSelectedOption(variant.split(',')[1].trim());
+                            setThirdSelectedOption(variant.split(',')[2].trim());
+                        }
                     } 
                 }
             }
@@ -320,7 +334,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     return (
         <div className='product-card__content'>
             <div className="product-card__go-back go-back">
-                <Link to={`/${path}`} className='go-back__link'>
+                <Link to={`/${path.split('/')[1]}`} className='go-back__link'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                         <path d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z" />
                     </svg>
@@ -381,16 +395,16 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                             <>
                                                 <ul className='variants__list list-variants'>
                                                     {firstOptionsList.map((option) => 
-                                                        <li key={option} onClick={() => setFirstSelectedOption(option)} className={firstSelectedOption === option ? 'activeVariant' : 'itemVariant'}>
-                                                            {option}
+                                                        <li key={option} onClick={() => setFirstSelectedOption(option.trim())} className={firstSelectedOption === option.trim() ? 'activeVariant' : 'itemVariant'}>
+                                                            {option.trim()}
                                                         </li>
                                                     )}
                                                 </ul>                                            
     
                                                 <ul className='variants__list list-variants'>
                                                     {secondOptionsList.map((option) => 
-                                                        <li key={option} onClick={() => setSecondSelectedOption(option)} className={secondSelectedOption === option ? 'activeVariant' : 'itemVariant'}>
-                                                            {option}
+                                                        <li key={option} onClick={() => setSecondSelectedOption(option.trim())} className={secondSelectedOption === option.trim() ? 'activeVariant' : 'itemVariant'}>
+                                                            {option.trim()}
                                                         </li>
                                                     )}
                                                 </ul>   
@@ -400,8 +414,8 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                                                     ?
                                                     <ul className='variants__list list-variants'>
                                                         {thirdOptionsList.map((option) => 
-                                                            <li key={option} onClick={() => setThirdSelectedOption(option)} className={thirdSelectedOption === option ? 'activeVariant' : 'itemVariant'}>
-                                                                {option}
+                                                            <li key={option} onClick={() => setThirdSelectedOption(option.trim())} className={thirdSelectedOption === option.trim() ? 'activeVariant' : 'itemVariant'}>
+                                                                {option.trim()}
                                                             </li>
                                                         )}
                                                     </ul>   
