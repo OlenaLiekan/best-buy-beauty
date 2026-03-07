@@ -90,7 +90,6 @@ const ProductPage = ({type}) => {
     }, [categoryId, brandId, sort, currentPage, searchValue, type.id, serverDomain, isPromoPage]);
     
     React.useEffect(() => {
-        console.log(items);
         const typeId = type.id;
         const queryString = qs.stringify({
             sortProperty: sort.sortProperty,

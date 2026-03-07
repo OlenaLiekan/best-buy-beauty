@@ -29,7 +29,6 @@ const Cart = () => {
         //if (isMounted.current) {
         const cartData = JSON.stringify(items);
         localStorage.setItem('cart', cartData); 
-        console.log(items);
         /*}
         isMounted.current = true;*/
     }, [items]);
