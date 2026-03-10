@@ -239,26 +239,28 @@ const ProductBlock = ({ type, path, id, code, info, related, name, rating, avail
                 </div>  
                 <div className={activeVariant.available ? "item-product__info" : "item-product__info item-product__info-faded"}>
                     <div className='item-product__top'>
-                        <div className="item-product__titles">
-                            <h2 onClick={() => navigate(`${activeVariantPath}`)} className="item-product__title">
-                                {activeVariant.isLashes ? kitName : activeVariant.name } 
-                            </h2>
-                        </div>
-                        <div className="item-product__brand">
-                            {company.name}
-                        </div>
-                        <div className="item-product__rating item-rating">
-                            <svg className={avarageRating === 0 ? 'empty-star' : 'rating-star'} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
-                                <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" />
-                            </svg>
-                            <span>{avarageRating}</span>
+                        <div className={activeVariant.available ? "item-product__segment" : "item-product__segment item-product__segment-faded"}>
+                            <div className="item-product__titles">
+                                <h2 onClick={() => navigate(`${activeVariantPath}`)} className="item-product__title">
+                                    {activeVariant.isLashes ? kitName : activeVariant.name } 
+                                </h2>
+                            </div>
+                            <div className="item-product__brand">
+                                {company.name}
+                            </div>
+                            <div className="item-product__rating item-rating">
+                                <svg className={avarageRating === 0 ? 'empty-star' : 'rating-star'} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
+                                    <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" />
+                                </svg>
+                                <span>{avarageRating}</span>
+                            </div>
                         </div>
                         { 
                             variants.length > 1 && !isLashes
                             &&
                             <>
                                 <ul className='item-product__variants'>
-                                    <li key={activeVariant.id} className={'activeVariant'}>
+                                    <li key={activeVariant.id} className={activeVariant.available ? 'activeVariant' : 'activeVariant activeVariant_faded'}>
                                         {activeVariant.variant}
                                     </li>
                                     {variants.length > 3 && variants[0].variant.length > 5 && !allVariants
@@ -287,58 +289,64 @@ const ProductBlock = ({ type, path, id, code, info, related, name, rating, avail
                                 }
                             </>
                         }
-                        <div className={activeVariant.info.length && !activeVariant.isLashes ? "item-product__sizes" : "sizes_hidden"}>
-                            {activeVariant.info.length
-                                ?
-                                activeVariant.info.map((obj) => 
-                                    <div key={obj.id} className='item-product__details'>
-                                        <span className="label-bold">
-                                            {obj.title}:
-                                        </span>
-                                        <div className="item-product__value">
-                                            {obj.description}
-                                        </div>                                      
-                                    </div>                                    
-                            ) :
-                                ''
-                            }
-                        </div>                                        
-                    </div>
-                    <div className='item-product__bottom'>
-                        <div className={activeVariant.available ? "item-product__available" : "item-product__available item-product__available_no"}>
-                            {activeVariant.available ? 'Disponível' : 'Esgotado'}
-                        </div> 
-                        <div className="item-product__price-block">
-                            <div className="item-product__price-row">
-                                {percents && !activeVariant.exclusiveProduct
+                        <div className={activeVariant.available ? 'item-product__info-segment' : 'item-product__info-segment item-product__info-segment_faded'}>
+                            <div className={activeVariant.info.length && !activeVariant.isLashes ? "item-product__sizes" : "sizes_hidden"}>
+                                {activeVariant.info.length
                                     ?
-                                    <div className='item-product__price_percents'>
-                                        -{percents}%
-                                    </div>
-                                    :
+                                    activeVariant.info.map((obj) => 
+                                        <div key={obj.id} className='item-product__details'>
+                                            <span className="label-bold">
+                                                {obj.title}:
+                                            </span>
+                                            <div className="item-product__value">
+                                                {obj.description}
+                                            </div>                                      
+                                        </div>                                    
+                                ) :
                                     ''
                                 }
-                                {
-                                    brandDiscount > 0 && isBlackFriday && !percents && !activeVariant.exclusiveProduct
-                                    ?
-                                    <div className='item-product__price_percents'>
-                                        -{brandDiscount}%
-                                    </div>
-                                    :
-                                    '' 
-                                }
-                                <div className={+activeVariant.discountPrice > 0 || (brandDiscount > 0 && isBlackFriday && !activeVariant.exclusiveProduct) ? ("item-product__price item-product__price_strike") : "item-product__price"}>
-                                    {activeVariant.price} €
-                                </div>
-                            </div>
-                            {+activeVariant.discountPrice > 0 || (+brandDiscount > 0 && isBlackFriday && !activeVariant.exclusiveProduct)
-                                ?
-                                <div className={activeVariant.exclusiveProduct ? "item-product__price item-product__price_red item-product__price_discount" : "item-product__price item-product__price_discount"}>     
-                                    {activeVariant.discountPrice > 0 ? activeVariant.discountPrice : finalPrice} €</div>
-                                : ''
-                            }
+                            </div>                            
                         </div>
-                    </div>                    
+                               
+                    </div>
+                    <div className={activeVariant.available ? "item-product__segment_b" : "item-product__segment_b item-product__segment_b-faded"}>
+                        <div className='item-product__bottom'>
+                            <div className={activeVariant.available ? "item-product__available" : "item-product__available item-product__available_no"}>
+                                {activeVariant.available ? 'Disponível' : 'Esgotado'}
+                            </div> 
+                            <div className="item-product__price-block">
+                                <div className="item-product__price-row">
+                                    {percents && !activeVariant.exclusiveProduct
+                                        ?
+                                        <div className='item-product__price_percents'>
+                                            -{percents}%
+                                        </div>
+                                        :
+                                        ''
+                                    }
+                                    {
+                                        brandDiscount > 0 && isBlackFriday && !percents && !activeVariant.exclusiveProduct
+                                        ?
+                                        <div className='item-product__price_percents'>
+                                            -{brandDiscount}%
+                                        </div>
+                                        :
+                                        '' 
+                                    }
+                                    <div className={+activeVariant.discountPrice > 0 || (brandDiscount > 0 && isBlackFriday && !activeVariant.exclusiveProduct) ? ("item-product__price item-product__price_strike") : "item-product__price"}>
+                                        {activeVariant.price} €
+                                    </div>
+                                </div>
+                                {+activeVariant.discountPrice > 0 || (+brandDiscount > 0 && isBlackFriday && !activeVariant.exclusiveProduct)
+                                    ?
+                                    <div className={activeVariant.exclusiveProduct ? "item-product__price item-product__price_red item-product__price_discount" : "item-product__price item-product__price_discount"}>     
+                                        {activeVariant.discountPrice > 0 ? activeVariant.discountPrice : finalPrice} €</div>
+                                    : ''
+                                }
+                            </div>
+                        </div>                     
+                    </div>
+                   
                 </div>
             </div>
         </div>                  

@@ -23,7 +23,7 @@ const AdminProductAvailability = () => {
         const order = 'ASC';
         axios.get(`${serverDomain}api/product?limit=1000&sort=${sortBy}&order=${order}`)
             .then((res) => {
-                setItems(res.data.rows);
+                setItems(res.data.rows.filter((item) => !item.isLashes));
                 setListLoading(false);
             });
     }, [serverDomain, deletedItemId]);

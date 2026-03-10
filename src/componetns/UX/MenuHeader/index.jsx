@@ -18,7 +18,7 @@ const MenuHeader = ({hideTicker}) => {
     const [brands, setBrands] = React.useState([]);
     const [areBrands, setAreBrands] = React.useState(false);
     const [activeItem, setActiveItem] = React.useState(0);
-    const { serverDomain, isPromoPage, setIsPromoPage } = React.useContext(AuthContext);
+    const { serverDomain, isPromoPage, setIsPromoPage, updateCategoryMode } = React.useContext(AuthContext);
     const { lockedSearch, setLockedSearch } = React.useContext(SearchContext);
 
     const skeletons = [...new Array(6)].map((_, index) => <MenuSkeleton key={index} />);
@@ -56,7 +56,7 @@ const MenuHeader = ({hideTicker}) => {
             .then((res) => {
                 setMenuList(res.data.sort((a, b) => a.position - b.position));
             });
-    }, [serverDomain]);
+    }, [serverDomain, updateCategoryMode]);
 
     React.useEffect(() => {
         axios.get(`${serverDomain}api/brand`)

@@ -135,6 +135,11 @@ export const updateLogo = async (logo, id) => {
   return data;
 };
 
+export const updateTicker = async (ticker, id) => {
+  const { data } = await $authHost.patch('api/ticker/' + id, ticker);
+  return data;
+};
+
 export const sendEmail = async mail => {
   const { data } = await $host.post('api/send-email', mail);
   return data;

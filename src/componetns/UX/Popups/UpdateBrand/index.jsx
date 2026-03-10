@@ -66,11 +66,11 @@ const UpdateBrand = ({brandItem}) => {
                 </div>
                 <div className={styles.line}>
                     <label htmlFor="brand-file" className={styles.label}>Imagem:</label>
-                    <input id="brand-file" tabIndex="6" type='file' className={styles.formFile}
+                    <input id="brand-file" tabIndex="2" type='file' className={styles.formFile}
                         onChange={selectFile}
                     />                   
                 </div>
-                <button type='submit'tabIndex='13' className={styles.button}>Atualizar marca</button>
+                <button type='submit'tabIndex='3' className={styles.button}>Atualizar marca</button>
             </form>            
         </div>
     );

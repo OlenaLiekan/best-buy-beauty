@@ -20,6 +20,7 @@ const AdminProductStore = () => {
     const [kitValue, setKitValue] = React.useState(''); 
     const [kitSearchValue, setKitSearchValue] = React.useState(''); 
     const [isAvailable, setIsAvailable] = React.useState(false);
+    const [productRemoved, setProductRemoved] = React.useState('');
 
     const { serverDomain } = React.useContext(AuthContext);
 
@@ -33,7 +34,7 @@ const AdminProductStore = () => {
                 setKits(res.data);
             });
         setKitsAreLoading(false);
-    }, [serverDomain, kitSearchValue, selectedProducts]);
+    }, [serverDomain, kitSearchValue, selectedProducts, productRemoved]);
 
     React.useEffect(() => {
         if (kitId) {
@@ -154,6 +155,22 @@ const AdminProductStore = () => {
         setSelectedProducts([]);
     };
 
+    const message = () => {
+        window.alert('Ocorreu um erro!');
+    };
+
+    const onClickRemoveProduct = (id) => {
+        if (window.confirm('Tem certeza de que deseja excluir o produto?')) {
+            axios.delete(`${serverDomain}api/product?id=${id}`)
+                .then(() => {
+                    window.alert('O produto foi excluído com sucesso!');
+                    setProductRemoved(id);
+                }).catch(err => message());      
+        } else {
+            window.alert('Cancelar exclusão.');
+        }
+    };
+
 
     return (
         <div className={styles.adminStoreBlock}>
@@ -216,6 +233,7 @@ const AdminProductStore = () => {
                             Resultados encontrados: {productsList.length}
                         </div>   
                         <div className={styles.adminStoreText}>Selecione opções</div>
+                        <div className={styles.adminStoreText}>{kitName}</div>
                     </>
                 }
 
@@ -223,8 +241,8 @@ const AdminProductStore = () => {
                     {productsList.length > 0
                         ?
                         productsList.map((product) => 
-                            <li key={product.id} onClick={() => onClickSelect(product)} className={styles.adminStoreItem}>
-                                <div className={selectedProducts.length > 0 && selectedProducts.includes(product) ? styles.adminStoreProductName : styles.adminStoreProductActive}>
+                            <li key={product.id} className={styles.adminStoreItem}>
+                                <div onClick={() => onClickSelect(product)} className={selectedProducts.length > 0 && selectedProducts.includes(product) ? styles.adminStoreProductName : styles.adminStoreProductActive}>
                                     {product.variant ? product.variant : product.name}
                                 </div>
                                 <div className={styles.adminStoreItemBottom}>
@@ -233,20 +251,40 @@ const AdminProductStore = () => {
                                         <div>{product.quantity && 'Quantity'}</div>
                                         <svg className={!product.available ? styles.offIcon : styles.onIcon} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                                             <path d="M384 64H192C86 64 0 150 0 256s86 192 192 192h192c106 0 192-86 192-192S490 64 384 64zm0 320c-70.8 0-128-57.3-128-128 0-70.8 57.3-128 128-128 70.8 0 128 57.3 128 128 0 70.8-57.3 128-128 128z" />
-                                        </svg>                                   
+                                        </svg>   
+                                        <svg onClick={() => onClickRemoveProduct(product.id)} className={styles.adminStoreRemoveIcon} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                            <path d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z" />
+                                        </svg>                                        
                                     </div>
                                 </div>
                             </li>                        
                         )
                         :
-                        listIsLoading && kitId ? <div className={styles.listMsg}>Carregando produtos...</div> : <div className={styles.listMsg}>{searchValue ? 'Nenhum produto encontrado' : ''}</div>
+                        listIsLoading && kitId
+                            ?
+                            <div className={styles.listMsg}>
+                                Carregando produtos...
+                            </div>
+                            :
+                            <div className={styles.listMsg}>
+                                {searchValue ? 'Nenhum produto encontrado' : ''}
+                            </div>
                     }
 
                 </ul>
                 {
                     selectedProducts.length > 0
-                    &&
-                    <div className={styles.adminStoreItemsCount}>Produtos selecionados: {selectedProducts.length}</div>                    
+                        ?   
+                        <>
+                            <div className={styles.adminStoreItemsCount}>
+                                Produtos selecionados: {selectedProducts.length}
+                            </div>
+                            <div onClick={() => setSelectedProducts([])} className={styles.adminStoreResetText}>
+                                Redefinir seleção
+                            </div>
+                        </>
+                        :
+                        ''    
                 }
 
 

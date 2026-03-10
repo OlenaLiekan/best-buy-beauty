@@ -254,10 +254,14 @@ const UpdateKit = () => {
             }
             setKitImg(selectedKit.img);
             setKitSlides(selectedKit.slide);
-            const kitBrandName = brands.find((brand) => brand.id == selectedKit.brandId).name;
-            setBrandName(kitBrandName);
-            const kitTypeName = types.find((type) => type.id == selectedKit.typeId).name;
-            setTypeName(kitTypeName);
+            if (brands.length > 0) {
+                const kitBrandName = brands.find((brand) => brand.id == selectedKit.brandId).name;
+                setBrandName(kitBrandName);                
+            }
+            if (types.length > 0) {
+                const kitTypeName = types.find((type) => type.id == selectedKit.typeId).name;
+                setTypeName(kitTypeName);                
+            }
             if (selectedKit.text.length > 0) {
                 setText(selectedKit.text[0].text);                
             } else {

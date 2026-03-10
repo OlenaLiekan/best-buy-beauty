@@ -29,6 +29,7 @@ function App() {
   const [updateProductMode, setUpdateProductMode] = React.useState(false);
   const [updateCompanyMode, setUpdateCompanyMode] = React.useState(false);
   const [updateTypeMode, setUpdateTypeMode] = React.useState(false);
+  const [updateCategoryMode, setUpdateCategoryMode] = React.useState(false);
 
   const [createAddressMode, setCreateAddressMode] = React.useState(false);
   const [updateAddressMode, setUpdateAddressMode] = React.useState(false);
@@ -188,6 +189,8 @@ function App() {
           setUpdateProductMode,
           updateCompanyMode,
           setUpdateCompanyMode,
+          updateCategoryMode,
+          setUpdateCategoryMode,
           updateTypeMode,
           setUpdateTypeMode,
           createAddressMode,

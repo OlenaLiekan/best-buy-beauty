@@ -51,6 +51,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
     const [firstSelectedOption, setFirstSelectedOption] = React.useState('');
     const [secondSelectedOption, setSecondSelectedOption] = React.useState('');
     const [thirdSelectedOption, setThirdSelectedOption] = React.useState('');
+
     const {
         isAuth,
         adminMode,
@@ -76,6 +77,22 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
 
     const { items } = useSelector((state) => state.cart);
 
+    const [resetKey, setResetKey] = React.useState(0);
+
+    React.useEffect(() => {
+        const savedScrollPos = sessionStorage.getItem('scrollPos');
+        if (savedScrollPos) {
+            requestAnimationFrame(() => {
+                window.scrollTo({
+                    top: parseInt(savedScrollPos),
+                    behavior: 'smooth'
+                });
+                sessionStorage.removeItem('scrollPos');
+            });
+        }
+    }, [id]);
+
+
     React.useEffect(() => {
         if (variant) {
             const activeVariantOptions = variant.split(',');
@@ -88,7 +105,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                 setThirdSelectedOption(activeVariantOptions[2].trim());
             }
         }
-    }, [id, variant]);
+    }, [id, variant, resetKey]);
 
     React.useEffect(() => {
         const cartData = JSON.stringify(items);
@@ -295,12 +312,14 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                     const selectedVariant = kitVariants.find((kitVariant) => kitVariant.variant.split(',').join('').split(' ').join('').toLowerCase() === result.split(' ').join('').toLowerCase());
                     if (selectedVariant) {
                         if (selectedVariant.id != id) {
+                            sessionStorage.setItem('scrollPos', window.scrollY);
                             navigate(productType ? `/${camelize(productType.name)}/${selectedVariant.id}` : `/produtos/${selectedVariant.id}`);                    
                         }
                     } else {
-                        window.alert(`Desculpe, esta opção [${firstSelectedOption.trim()} ${secondSelectedOption.trim()}] não está disponível. Por favor, escolha outra.`);
-                            setFirstSelectedOption(variant.split(',')[0].trim());
-                            setSecondSelectedOption(variant.split(',')[1].trim());
+                        window.alert(`Desculpe, esta opção [${firstSelectedOption.trim()} ${secondSelectedOption.trim()}] não existe.`);
+                        setFirstSelectedOption(variant.split(',')[0].trim());
+                        setSecondSelectedOption(variant.split(',')[1].trim());
+                        setResetKey(prev => prev + 1);
                     }
                 }                
             } else {
@@ -310,13 +329,15 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
                         const selectedVariant = kitVariants.find((kitVariant) => kitVariant.variant.split(',').join('').split(' ').join('').toLowerCase() === result.split(' ').join('').toLowerCase());                  
                         if (selectedVariant) {
                             if (selectedVariant.id != id) {
+                                sessionStorage.setItem('scrollPos', window.scrollY);
                                 navigate(productType ? `/${camelize(productType.name)}/${selectedVariant.id}` : `/produtos/${selectedVariant.id}`);                    
                             }
-                        } else {
-                            window.alert(`Desculpe, esta opção [${firstSelectedOption.trim()} ${secondSelectedOption.trim()} ${thirdSelectedOption.trim()}] não está disponível. Por favor, escolha outra.`);
+                        } else {                                                   
+                            window.alert(`Desculpe, esta opção [${firstSelectedOption.trim()} ${secondSelectedOption.trim()} ${thirdSelectedOption.trim()}] não existe.`);
                             setFirstSelectedOption(variant.split(',')[0].trim());
                             setSecondSelectedOption(variant.split(',')[1].trim());
                             setThirdSelectedOption(variant.split(',')[2].trim());
+                            setResetKey(prev => prev + 1);
                         }
                     } 
                 }
@@ -382,7 +403,7 @@ const ProductItem = ({ obj, id, info, text, applying, compound, slide, typeId, r
 
                             {kitId && kitVariants.length > 1 && kitVariantsList
                                 ?
-                                <div className='variants__select'>
+                                <div key={resetKey} className='variants__select'>
                                     <div className='variants__title'>
                                         ESCOLHER:
                                     </div>

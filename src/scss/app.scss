@@ -142,6 +142,13 @@
                 fill: #000;
             }
         }
+        ._icon-heart {
+            width: 30px;
+
+            &_red {
+                fill: #e53638;
+            }
+        }
     }
 }
 
@@ -2106,6 +2113,11 @@
             opacity: 50%;
         }
     }
+    &__info-segment {
+        &_faded {
+            opacity: 60%;
+        }
+    }
     &__info {
         display: flex;
         flex-direction: column;
@@ -2113,9 +2125,6 @@
         justify-self: flex-start;
         min-height: 60%;
         padding: 10px 15px;
-        &-faded {
-            opacity: 60%;
-        }
         @media (max-width: 379.98px) {
             padding: 8px;
             min-height: 62%;
@@ -2135,6 +2144,19 @@
             gap: 5px;
         }
     }
+    &__segment {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 8px;
+    
+        @media(max-width: 479.98px) {
+            gap: 5px;
+        }
+        &-faded {
+            opacity: 60%;
+        }
+    }
     &__brand {
         font-size: 12px;
         font-weight: 600;
@@ -2142,6 +2164,11 @@
         color: #484848;
         @media(max-width: 371.98px) {
             font-size: 10px;
+        }
+    }
+    &__segment_b {
+        &-faded {
+            opacity: 60%;
         }
     }
     &__bottom {
@@ -2308,6 +2335,9 @@
         }
         .activeVariant {
             background-color: #484848;
+            &_faded {
+                opacity: 60%;
+            }
         }
         @media(max-width: 579.98px) {
             font-size: 10px;
