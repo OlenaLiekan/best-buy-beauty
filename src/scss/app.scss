@@ -80,7 +80,7 @@
         @media (max-width: 419.98px) {                                    
             font-size: 1rem;
             letter-spacing: 0.5px;
-            width: 140px;
+            width: 160px;
         }
         @media (max-width: 379.98px) {
             display: none;
@@ -455,14 +455,14 @@
 
 @keyframes ad_mobile {
     0% {
-        left: 50%;
+        left: 80%;
         opacity: 0;
     }
     10% {
         opacity: 100%;
     }
     100% {
-        left: -35%;
+        left: -80%;
         opacity: 80%;
     }
 }
@@ -483,7 +483,8 @@
             position: absolute;
             bottom: 30%;
             left: 0;
-            width: 350px;
+            width: 100%;
+            white-space: nowrap;
             animation: ad_pc 20s linear infinite 0.5s;
             &:hover {
                 animation-play-state: paused;
@@ -497,12 +498,12 @@
         @media (max-width: 767.98px) {
             font-size: 12px;
             span {
-                animation: ad_mobile 17s linear infinite 0.5s;
+                animation: ad_mobile 20s linear infinite 0.5s;
             }
         }
         @media (max-width: 479.98px) {
             span {
-                animation: ad_mobile 12s linear infinite 0.5s;
+                animation: ad_mobile 17s linear infinite 0.5s;
             }
         }
     }
