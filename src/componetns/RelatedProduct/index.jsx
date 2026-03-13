@@ -15,7 +15,7 @@ const RelatedProduct = ({ referenceCode, id }) => {
     
     React.useEffect(() => {
         setIsLoading(true);
-        axios.get(`${serverDomain}api/product?limit=1000`)
+        axios.get(`${serverDomain}api/product?limit=2000`)
         .then((res) => {
             setRelatedProduct(res.data.rows.find(
                 (item) => String(item.code) === String(referenceCode)

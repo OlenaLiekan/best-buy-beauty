@@ -42,7 +42,7 @@ const AdminProductStore = () => {
             const sortBy = 'id';
             const order = 'ASC';
             const productName = searchValue ? `&name=${searchValue}` : '';
-            axios.get(`${serverDomain}api/product?limit=1000${productName}&sort=${sortBy}&order=${order}&kitId=${kitId}`)
+            axios.get(`${serverDomain}api/product?limit=2000${productName}&sort=${sortBy}&order=${order}&kitId=${kitId}`)
                 .then((res) => {
                     const sortedProducts = [...res.data.rows].sort((a, b) => {
                         const codeA = String(a.code);

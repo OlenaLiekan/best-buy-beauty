@@ -26,7 +26,7 @@ const AdminTestimonials = () => {
 
     React.useEffect(() => {
         setLoading(true);
-        axios.get(`${serverDomain}api/product?limit=1000`)
+        axios.get(`${serverDomain}api/product?limit=2000`)
             .then((res) => {             
                 setProducts(res.data.rows);
                 setLoading(false);

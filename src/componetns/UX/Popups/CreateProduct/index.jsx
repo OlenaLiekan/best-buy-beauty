@@ -71,7 +71,7 @@ const CreateProduct = () => {
     React.useEffect(() => {
         setProductListLoading(true);
         if (code.length >= 6) {
-            axios.get(`${serverDomain}api/product?limit=1000`)
+            axios.get(`${serverDomain}api/product?limit=2000`)
             .then((res) => {
                 setExistingProduct(res.data.rows.find(
                     (item) => String(item.code) === String(code)

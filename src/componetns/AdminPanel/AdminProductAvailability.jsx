@@ -21,7 +21,7 @@ const AdminProductAvailability = () => {
         setListLoading(true);
         const sortBy = 'id';
         const order = 'ASC';
-        axios.get(`${serverDomain}api/product?limit=1000&sort=${sortBy}&order=${order}`)
+        axios.get(`${serverDomain}api/product?limit=2000&sort=${sortBy}&order=${order}`)
             .then((res) => {
                 setItems(res.data.rows.filter((item) => !item.isLashes));
                 setListLoading(false);

@@ -110,7 +110,7 @@ const ProductBlock = ({ type, path, id, code, info, related, name, rating, avail
 
     React.useEffect(() => {
         if (activeVariant.kitId > 0) {
-            axios.get(`${serverDomain}api/product?limit=1000&kitId=${activeVariant.kitId}`)
+            axios.get(`${serverDomain}api/product?limit=2000&kitId=${activeVariant.kitId}`)
             .then((res) => {
                 setVariants(res.data.rows);
             });

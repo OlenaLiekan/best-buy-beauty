@@ -18,7 +18,7 @@ const BestSellersBlock = () => {
     setIsLoading(true);
     const sortBy = 'topProduct';        
     const order = 'DESC';
-    axios.get(`${serverDomain}api/product?limit=1000&sort=${sortBy}&order=${order}`)
+    axios.get(`${serverDomain}api/product?limit=2000&sort=${sortBy}&order=${order}`)
       .then((res) => {
         setItems(res.data.rows.filter((item) => item.topProduct).slice(0,8));
         setIsLoading(false);
