@@ -222,7 +222,7 @@ const UpdateKit = () => {
 
     React.useEffect(() => {
         if (kitId) {
-            axios.get(`${serverDomain}api/product?limit=1000&kitId=${kitId}`)
+            axios.get(`${serverDomain}api/product?limit=2000&kitId=${kitId}`)
                 .then((res) => {
                     const sortedProducts = [...res.data.rows].sort((a, b) => {
                         const codeA = String(a.code);
@@ -282,7 +282,7 @@ const UpdateKit = () => {
             setProductsToUpdate([]);
             setNewPrice('');
         }
-    }, [kitId]);
+    }, [kitId, brands, types]);
 
     const toggleBrandOptions = () => {
         if (brandsVisibility) {
