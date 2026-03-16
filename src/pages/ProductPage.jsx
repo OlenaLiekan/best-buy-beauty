@@ -26,7 +26,15 @@ const ProductPage = ({type}) => {
     const { categoryId, brandId, sort, currentPage } = useSelector((state) => state.filter);
 
     const { searchValue } = React.useContext(SearchContext);
-    const { isAuth, adminMode, createProductMode, setCreateProductMode, serverDomain, imagesCloud, isPromoPage } = React.useContext(AuthContext);
+    const {
+        isAuth,
+        adminMode,
+        createProductMode,
+        setCreateProductMode,
+        serverDomain,
+        imagesCloud,
+        isPromoPage,
+    } = React.useContext(AuthContext);
 
     const [items, setItems] = React.useState([]);
 

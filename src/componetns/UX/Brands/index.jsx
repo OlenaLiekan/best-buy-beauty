@@ -4,7 +4,7 @@ import axios from 'axios';
 import { AuthContext } from '../../../context';
 import BrandsSkeleton from '../../UI/Skeletons/BrandsSkeleton';
 
-function Brands({ type, brandId, onChangeBrand }) {
+function Brands({ type, brandId, onChangeBrand}) {
 
   const [brands, setBrands] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
@@ -32,7 +32,7 @@ function Brands({ type, brandId, onChangeBrand }) {
             Todos
           </button>
         </li>
-        {!isLoading
+        {!isLoading 
           ?
           brands.map((brandName) => (
             <li key={brandName.id} onClick={() => onChangeBrand(brandName.id)} className={brandId === brandName.id ? "active" : ""} >
