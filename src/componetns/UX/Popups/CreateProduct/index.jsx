@@ -129,9 +129,7 @@ const CreateProduct = () => {
                 });
             }
             if (kitSlides.length > 0) {
-                kitSlides.forEach((slide) => {
-                    formData.append('kitSlide', slide);
-                });
+                formData.append('kitSlide', JSON.stringify(slide));
             }
             createProduct(formData).then(data => success()).catch(err => message());                
         } else {

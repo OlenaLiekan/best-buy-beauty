@@ -348,9 +348,7 @@ const CreateKit = () => {
                 formData.append('isPromo', promoPrice && +promoPrice > 0 ? true : false);
                 if (kitSlides) {
                     if (kitSlides.length > 0) {
-                        kitSlides.forEach((slide) => {
-                            formData.append('kitSlide', slide);
-                        });
+                        formData.append('kitSlide', JSON.stringify(slide));
                     }                    
                 }
                 createProduct(formData).then(data => setSuccessfullyCreated([...successfullyCreated, product.code])).catch(err => setFailedToCreate([...failedToCreate, product.code]));

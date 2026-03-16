@@ -304,3 +304,78 @@
     align-items: center;
 }
 
+.imgMenu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;    
+    margin: 10px 0 30px 0;
+}
+
+.imgMenuOptions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.imgMenuOption,
+.imgMenuActiveOption,
+.cancelBtn {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    padding: 8px 10px;
+    border-radius: 20px;
+    background-color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+    width: 170px;
+    transition: all 0.3s ease 0s;    
+    cursor: pointer;
+}
+
+.imgMenuOption {
+    border: 2px solid #7f766a;
+    color: #7f766a;  
+    &:hover {
+        border: 2px solid #252525;
+        background-color: #fff;
+        color: #252525;
+    }  
+}
+
+.imgMenuActiveOption {
+    border: 2px solid #252525;
+    background-color: #fff;
+    color: #252525;
+}
+
+.cancelBtn {
+    border: 2px solid #252525;
+    color: #252525;
+    &:hover {
+        background-color: #252525;
+        color: #fff;
+    }
+}
+
+.batchImgBlock,
+.batchSlidesBlock {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.batchLabel {
+    font-weight: 500;
+}
+
+.batchSlidesList {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}

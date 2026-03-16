@@ -5,6 +5,7 @@ import axios from 'axios';
 import { AuthContext } from '../../../../context';
 import { updateKit, createProduct, updateProduct } from '../../../../http/productAPI';
 import debounce from 'lodash.debounce';
+import { v4 as uuidv4 } from 'uuid';
 
 const UpdateKit = () => {
 
@@ -15,6 +16,9 @@ const UpdateKit = () => {
 
     const [brands, setBrands] = React.useState([]);
     const [types, setTypes] = React.useState([]);
+
+    const [activeImgOption, setActiveImgOption] = React.useState('');
+    const [activeSlidesOption, setActiveSlidesOption] = React.useState('');
 
     const [kitSlides, setKitSlides] = React.useState([]);
     
@@ -79,6 +83,16 @@ const UpdateKit = () => {
 
     const [activeField, setActiveField] = React.useState('text');
     const [selectedColor, setSelectedColor] = React.useState('#000000');
+    const [batchImg, setBatchImg] = React.useState('');
+    const [batchSlides, setBatchSlides] = React.useState([]);
+
+    const activeImgOptionRef = React.useRef(activeImgOption);
+    const activeSlidesOptionRef = React.useRef(activeSlidesOption);
+  
+    React.useEffect(() => {
+        activeImgOptionRef.current = activeImgOption;
+        activeSlidesOptionRef.current = activeSlidesOption;
+    }, [activeImgOption, activeSlidesOption]);
     
     const selectFile = (event) => {
         setImg(event.target.files[0]);
@@ -424,11 +438,19 @@ const UpdateKit = () => {
     const success = () => {
         window.alert('Conjunto alterado com sucesso!');
 
-        if (productsToUpdate.length > 0 && kitId) {
+        if (productsToUpdate.length > 0) {
             productsToUpdate.forEach((productToUpdate) => {
+                const id = productToUpdate.id;
                 const formUpdateData = new FormData();
-                formUpdateData.set('price', newPrice);
-                updateProduct(formUpdateData, productToUpdate.id).then(data => setSuccessfullyUpdated([...successfullyUpdated, productToUpdate.code])).catch(err => setFailedToUpdate([...failedToUpdate, productToUpdate.code]));
+                formUpdateData.set('price', newPrice ? newPrice : productToUpdate.price);                    
+                if (batchImg) {
+                    formUpdateData.set('kitImg', batchImg);
+                }
+                if (batchSlides.length > 0) {
+                    console.log(batchSlides);
+                    formUpdateData.set('kitSlide', JSON.stringify(batchSlides));
+                }
+                updateProduct(formUpdateData, id).then(data => setSuccessfullyUpdated([...successfullyUpdated, productToUpdate.code])).catch(err => console.log(err));
             });
         }
         if (productsToCreate.length > 0 && kitId) {
@@ -463,9 +485,7 @@ const UpdateKit = () => {
                     });
                 }
                 if (kitSlides.length > 0) {
-                    kitSlides.forEach((slide) => {
-                        formCreateData.append('kitSlide', slide);
-                    });
+                    formCreateData.append('kitSlide', JSON.stringify(slide));
                 }
                 createProduct(formCreateData).then(data => setSuccessfullyCreated([...successfullyCreated, product.code])).catch(err => setFailedToCreate([...failedToCreate, product.code]));
             });
@@ -606,17 +626,13 @@ const UpdateKit = () => {
     };
 
     const selectOneProduct = (kitProduct) => {
-        if (newPrice) {
-            const result = productsToUpdate.find((selectedProduct) => selectedProduct.id == kitProduct.id);
-            if (!result) {
-                setProductsToUpdate([...productsToUpdate, { ...kitProduct, price: newPrice }]);
-            } else {
-                const updatedActiveProducts = productsToUpdate.filter((activeProduct) => activeProduct.id != kitProduct.id);
-                setProductsToUpdate(updatedActiveProducts);
-            }            
+        const result = productsToUpdate.find((selectedProduct) => selectedProduct.id == kitProduct.id);
+        if (!result) {
+            setProductsToUpdate([...productsToUpdate, { ...kitProduct, price: newPrice ? newPrice : kitProduct.price }]);
         } else {
-            setPriceMsg(true);
-        }
+            const updatedActiveProducts = productsToUpdate.filter((activeProduct) => activeProduct.id != kitProduct.id);
+            setProductsToUpdate(updatedActiveProducts);
+        }            
     };
 
     const selectAllProducts = () => {
@@ -677,6 +693,128 @@ const UpdateKit = () => {
 
             updateKit(formData, kitId).then(data => success()).catch(err => message());            
         }
+    };
+
+    React.useEffect(() => {
+
+        const script = document.createElement('script');
+        script.src = "https://upload-widget.cloudinary.com/global/all.js";
+        script.async = true;
+        document.body.appendChild(script);
+
+        let widgetRef = null;
+
+        script.onload = () => {
+
+        widgetRef = window.cloudinary?.createUploadWidget(
+            {
+                cloudName: "bbbptcloud",
+                uploadPreset: "batch_image_update",
+                folder: "static",
+                sources: ["local", "url", "camera"],
+                multiple: false,
+                maxFiles: 1,
+            },
+            (error, result) => {
+            if (!error && result && result.event === "success") {
+
+                const currentImgOption = activeImgOptionRef.current;
+                const currentSlidesOption = activeSlidesOptionRef.current;
+
+                const filePath = result.info.path;
+                const fileName = filePath ? filePath.split('/').pop() : '';
+                
+                if (currentImgOption === 'addNewImage') {
+                    setBatchImg(fileName);
+                } else if (currentSlidesOption === 'addNewSlides') {
+                    setBatchSlides(prev => [...prev, {
+                        id: uuidv4(),
+                        slideImg: fileName
+                    }]);
+                }
+            }
+            }
+        );
+        };
+
+        return () => {
+            if (widgetRef) {
+                widgetRef.close();
+            }
+        };
+    }, []);
+
+
+    const handleMainImageUpload = () => {
+        setActiveImgOption('addNewImage');
+        
+        setTimeout(() => {
+        if (window.cloudinary) {
+            const widget = window.cloudinary.createUploadWidget(
+            {
+                cloudName: "bbbptcloud",
+                uploadPreset: "batch_image_update",
+                folder: "static",
+            },
+            (error, result) => {
+                if (!error && result && result.event === "success") {
+                setTimeout(() => {
+                    const filePath = result.info.path;
+                    const fileName = filePath ? filePath.split('/').pop() : '';
+                    setBatchImg(fileName);
+                }, 100);
+                }
+            }
+            );
+            widget.open();
+        }
+        }, 100);
+    };
+
+    const handleSlideUpload = () => {
+        setActiveSlidesOption('addNewSlides');
+
+        setTimeout(() => {
+        if (window.cloudinary) {
+            const widget = window.cloudinary.createUploadWidget(
+            {
+                cloudName: "bbbptcloud",
+                uploadPreset: "batch_image_update",
+                folder: "static",
+            },
+            (error, result) => {
+                if (!error && result && result.event === "success") {
+                    setTimeout(() => {
+                        const filePath = result.info.path;
+                        const fileName = filePath ? filePath.split('/').pop() : '';
+                        setBatchSlides(prev => [...prev, {
+                        id: uuidv4(),
+                        slideImg: fileName
+                    }]);
+                }, 100);
+                }
+            }
+            );
+            widget.open();
+        }
+        }, 100);
+    };
+
+    const onClickApplyImg = (option) => {
+        setActiveImgOption(option);
+        setBatchImg(kitImg);
+    };
+
+    const onClickApplySlides = (option) => {
+        setActiveSlidesOption(option);
+        setBatchSlides(kitSlides);
+    };
+
+    const onClickRemoveOption = () => {
+        setActiveImgOption('');
+        setActiveSlidesOption('');
+        setBatchImg('');
+        setBatchSlides([]);
     };
 
     return (
@@ -1055,7 +1193,77 @@ const UpdateKit = () => {
                                     </>
                                     :
                                     ''
+                                }   
+                                {productsToUpdate.length > 0
+                                    &&        
+                                    <div className={kitStyles.imgMenu}>
+                                        <ul className={kitStyles.imgMenuOptions}>
+                                            {kitImg && <li onClick={() => onClickApplyImg('applyKitImg')} className={activeImgOption === 'applyKitImg' && batchImg ? kitStyles.imgMenuActiveOption : kitStyles.imgMenuOption}>
+                                                Aplicar imagem
+                                            </li>}
+                                            <li onClick={handleMainImageUpload} className={activeImgOption === 'addNewImage' && batchImg ? kitStyles.imgMenuActiveOption : kitStyles.imgMenuOption}>
+                                                Crie uma imagem
+                                            </li>   
+                                        </ul>
+                                        <ul className={kitStyles.imgMenuOptions}>    
+                                            {kitSlides && <li onClick={() => onClickApplySlides('applyKitSlides')} className={activeSlidesOption === 'applyKitSlides' && batchSlides.length > 0 ? kitStyles.imgMenuActiveOption : kitStyles.imgMenuOption}>
+                                                Aplicar slides
+                                            </li>}
+                                            <li onClick={handleSlideUpload} className={activeSlidesOption === 'addNewSlides' && batchSlides.length > 0 ? kitStyles.imgMenuActiveOption : kitStyles.imgMenuOption}>
+                                                Crie slides
+                                            </li>
+                                        </ul>  
+                                    </div> 
+                                }
+                                {
+                                    batchImg
+                                        &&
+                                    productsToUpdate.length > 0
+                                    ?
+                                    <div className={kitStyles.batchImgBlock}>
+                                        <div className={kitStyles.batchLabel}>
+                                            Imagem geral:
+                                        </div>
+                                        <div className={kitStyles.batchImgItem}>
+                                            {batchImg}
+                                        </div>
+                                    </div> 
+                                    :
+                                    ''        
                                 }    
+                                {
+                                    batchSlides.length > 0
+                                    &&
+                                    productsToUpdate.length > 0
+                                    ?
+                                    <div className={kitStyles.batchSlidesBlock}>
+                                        <div className={kitStyles.batchLabel}>
+                                            Diapositivos gerais:
+                                        </div> 
+                                        <ul className={kitStyles.batchSlidesList}>
+                                            {batchSlides.map((slide) =>
+                                                <li className={kitSlides.batchSlidesItem} key={slide.id}>
+                                                    {slide.slideImg}
+                                                </li>    
+                                            )}                                                
+                                        </ul>
+                                    </div>    
+                                    :
+                                    ''        
+                                } 
+                                    
+                                {
+                                    activeImgOption || activeSlidesOption
+                                    &&
+                                    productsToUpdate.length > 0
+                                    ?
+                                    <button onClick={onClickRemoveOption} className={kitStyles.cancelBtn} type='button'>
+                                        Cancelar
+                                    </button>
+                                    :
+                                    ''                                             
+                                }    
+
                                  
                             </div>
                             :
