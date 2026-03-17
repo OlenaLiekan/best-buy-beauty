@@ -636,15 +636,11 @@ const UpdateKit = () => {
     };
 
     const selectAllProducts = () => {
-        if (newPrice) {
-            let arrayWithNewPrices = [];
-            kitProducts.forEach((kitProduct) => {
-                arrayWithNewPrices = [...arrayWithNewPrices, {...kitProduct, price: newPrice}]
-            });
-            setProductsToUpdate(arrayWithNewPrices);            
-        } else {
-            setPriceMsg(true);
-        }
+        let arrayWithNewPrices = [];
+        kitProducts.forEach((kitProduct) => {
+            arrayWithNewPrices = [...arrayWithNewPrices, {...kitProduct, price: newPrice ? newPrice : kitProduct.price}]
+        });
+        setProductsToUpdate(arrayWithNewPrices);            
     };
 
     const removeAllSelected = () => {
@@ -816,6 +812,10 @@ const UpdateKit = () => {
         setBatchImg('');
         setBatchSlides([]);
     };
+
+    React.useEffect(() => {
+        if (batchImg) console.log(batchImg);
+    }, [batchImg]);
 
     return (
 

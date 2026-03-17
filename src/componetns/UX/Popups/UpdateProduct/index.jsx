@@ -436,7 +436,6 @@ const UpdateProduct = ({id, obj}) => {
 
     const updateProductItem = (e) => {
         e.preventDefault();
-
         if (price > +promoPrice) {
             const formData = new FormData();
             formData.set('name', name);
