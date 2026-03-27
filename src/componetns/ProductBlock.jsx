@@ -152,16 +152,7 @@ const ProductBlock = ({ type, path, id, code, info, related, name, rating, avail
             {
                 ...activeVariant,
                 available: activeVariant.available,
-                price: brandDiscount > 0 && isBlackFriday
-                    ?
-                    finalPrice
-                    :
-                    (discountPrice
-                        ?
-                        discountPrice
-                        :
-                        activeVariant.price
-                    ),
+                price: finalPrice,
                 prevPrice: activeVariant.price,
                 company: company.name,
                 path: activeVariantPath,
