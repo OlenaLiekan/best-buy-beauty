@@ -83,6 +83,10 @@
             width: 160px;
         }
         @media (max-width: 379.98px) {
+            font-size: 12px;
+            width: 120px;
+        }
+        @media (max-width: 319.98px) {
             display: none;
         }
     }
@@ -2405,6 +2409,11 @@
             &_checked {
                 fill: #e53638;
             }         
+        }
+        &-loader {
+            fill: #484848e5;
+            width: 20px;
+            height: 20px;
         }
         &:hover {
             background-color: #fff;
