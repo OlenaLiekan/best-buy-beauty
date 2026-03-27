@@ -225,19 +225,13 @@ const UserPanel = ({ user }) => {
                         )
                     ))
                     :
-                    <>
-                        <span className={isLoading ? styles.orderTitle : styles.hidden}>
-                            Por favor, aguarde. Informações do pedido carregando...
-                        </span>
-
-                        <h4 className={!isLoading ? styles.orderTitle : styles.hidden}>
-                            <span>
-                                Você ainda não fez nenhum pedido.
-                            </span>
-                        </h4>
-  
-                    </>  
-                    }  
+                    <span className={isLoading ? styles.orderTitle : styles.hidden}>
+                        Por favor, aguarde. Informações do pedido carregando...
+                    </span>
+                    }
+                    <li className={!isLoading && userPaidOrders.length < 1 ? styles.orderTitle : styles.hidden}>
+                        Você ainda não fez nenhum pedido.
+                    </li>
                 </ul>
                 
                 <button onClick={showAll} className={userPaidOrders.length > 10 ? styles.showOrders : styles.hidden}>

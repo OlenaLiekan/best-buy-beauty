@@ -80,7 +80,7 @@ function Brands({ type, brandId, onChangeBrand }) {
       }
       {!isLoading
         ?
-        selectedBrands.length > 0 && type
+        selectedBrands.length > 0 && type.id > 0
           ?
           brands.map((brandName) => (
             selectedBrands.includes(brandName.id) ?
