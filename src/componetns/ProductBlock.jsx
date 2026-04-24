@@ -64,7 +64,8 @@ const ProductBlock = ({ type, path, id, code, info, related, name, rating, avail
     const [activeVariantPath, setActiveVariantPath] = React.useState(path);
 
     const percents = +activeVariant.discountPrice > 0 ? 100 - (activeVariant.discountPrice * 100 / activeVariant.price).toFixed(0) : '';
-    const finalPrice = brandDiscount > 0 && isBlackFriday ? (activeVariant.price * (100 - brandDiscount) / 100).toFixed(2) : (activeVariant.discountPrice > 0 ? activeVariant.discountPrice : activeVariant.price);
+    const finalPrice = brandDiscount > 0 && isBlackFriday ? (activeVariant.price * (100 - brandDiscount) / 100).toFixed(2) : activeVariant.price;
+    const priceValue = +activeVariant.discountPrice > 0 ? activeVariant.discountPrice : ( brandDiscount > 0 && isBlackFriday && !activeVariant.exclusiveProduct ? finalPrice : activeVariant.price);
 
     const cartItem = useSelector((state) => state.cart.items.find((obj) => obj.id === activeVariant.id));
     
@@ -152,15 +153,16 @@ const ProductBlock = ({ type, path, id, code, info, related, name, rating, avail
             {
                 ...activeVariant,
                 available: activeVariant.available,
-                price: finalPrice,
+                price: priceValue,
                 prevPrice: activeVariant.price,
                 company: company.name,
                 path: activeVariantPath,
-                promoProduct: finalPrice !== activeVariant.price
+                promoProduct: priceValue !== activeVariant.price
                     ?
                     true
                     :
-                    false
+                    false,
+                exclusiveProduct: activeVariant.exclusiveProduct
             }));
     };
 
